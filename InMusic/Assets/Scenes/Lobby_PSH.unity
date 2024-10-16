@@ -129,7 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 54657190}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ButtonRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,9 +149,11 @@ RectTransform:
   m_Children:
   - {fileID: 430039304}
   - {fileID: 1824895492}
-  - {fileID: 437760744}
-  - {fileID: 997685764}
   - {fileID: 1227461852}
+  - {fileID: 191833399}
+  - {fileID: 1922637121}
+  - {fileID: 963487526}
+  - {fileID: 620272401}
   m_Father: {fileID: 511403220}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -277,7 +279,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 437760744}
+  m_Father: {fileID: 54657190}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -330,7 +332,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 511403221}
         m_TargetAssemblyTypeName: Lobby_UI, Assembly-CSharp
-        m_MethodName: Button
+        m_MethodName: ButtonEvent
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -599,7 +601,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 511403221}
         m_TargetAssemblyTypeName: Lobby_UI, Assembly-CSharp
-        m_MethodName: Button
+        m_MethodName: ButtonEvent
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -647,43 +649,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 430039303}
   m_CullTransparentMesh: 1
---- !u!1 &437760743
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 437760744}
-  m_Layer: 5
-  m_Name: Mode
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &437760744
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 437760743}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 191833399}
-  - {fileID: 1922637121}
-  m_Father: {fileID: 54657190}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &511403216
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,13 +765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 618fdbaa2ca5bef4bbedcabe1980319d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Gear: {fileID: 0}
-  Exit: {fileID: 0}
-  Solo: {fileID: 191833400}
-  Multi: {fileID: 1922637122}
-  Left_Arrow: {fileID: 0}
-  Right_Arrow: {fileID: 0}
-  Key_Guide: {fileID: 0}
+  buttonRoot: {fileID: 54657189}
 --- !u!1 &620272400
 GameObject:
   m_ObjectHideFlags: 0
@@ -838,7 +797,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 997685764}
+  m_Father: {fileID: 54657190}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -891,7 +850,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 511403221}
         m_TargetAssemblyTypeName: Lobby_UI, Assembly-CSharp
-        m_MethodName: Button
+        m_MethodName: ButtonEvent
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1045,7 +1004,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 997685764}
+  m_Father: {fileID: 54657190}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -1098,7 +1057,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 511403221}
         m_TargetAssemblyTypeName: Lobby_UI, Assembly-CSharp
-        m_MethodName: Button
+        m_MethodName: ButtonEvent
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1146,43 +1105,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963487525}
   m_CullTransparentMesh: 1
---- !u!1 &997685763
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 997685764}
-  m_Layer: 5
-  m_Name: Arrow
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &997685764
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 997685763}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 963487526}
-  - {fileID: 620272401}
-  m_Father: {fileID: 54657190}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1227461851
 GameObject:
   m_ObjectHideFlags: 0
@@ -1267,7 +1189,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 511403221}
         m_TargetAssemblyTypeName: Lobby_UI, Assembly-CSharp
-        m_MethodName: Button
+        m_MethodName: ButtonEvent
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1399,7 +1321,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 511403221}
         m_TargetAssemblyTypeName: Lobby_UI, Assembly-CSharp
-        m_MethodName: Button
+        m_MethodName: ButtonEvent
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1539,12 +1461,12 @@ GameObject:
   - component: {fileID: 1922637123}
   - component: {fileID: 1922637122}
   m_Layer: 5
-  m_Name: Mult
+  m_Name: Multi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1922637121
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1557,7 +1479,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 437760744}
+  m_Father: {fileID: 54657190}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1610,7 +1532,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 511403221}
         m_TargetAssemblyTypeName: Lobby_UI, Assembly-CSharp
-        m_MethodName: Button
+        m_MethodName: ButtonEvent
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

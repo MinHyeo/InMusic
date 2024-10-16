@@ -1,32 +1,43 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Lobby_UI : MonoBehaviour
 {
+    [Header("UI Mode")]
+    [SerializeField]private bool isSolo = true;
     [Header("UI Button")]
-    public Button Gear;
-    public Button Exit;
-    public Button Solo;
-    public Button Multi;
-    public Button Left_Arrow;
-    public Button Right_Arrow;
-    public Button Key_Guide;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [Tooltip("Start에서 자동으로 할당 됨")]
+    [SerializeField] private GameObject buttonRoot;
+    [SerializeField] private Dictionary<string, GameObject> buttons = new Dictionary<string, GameObject>();
+
+    [Tooltip("이거 GameManaer에서 받아올 예정")]
+    [SerializeField]public InputManager temp = new InputManager();
+
     void Start()
     {
-        Solo.gameObject.SetActive(true);
-        Multi.gameObject.SetActive(false);
+        buttonRoot = GameObject.Find("ButtonRoot");
+        int numOfChild = buttonRoot.transform.childCount;
+        for (int i = 0; i < numOfChild; i++) {
+            GameObject temp = buttonRoot.transform.GetChild(i).gameObject;
+            buttons.Add(temp.name, temp);
+        }
+        buttons["Solo"].gameObject.SetActive(isSolo);
+        buttons["Multi"].gameObject.SetActive(!isSolo);
+
+        //중복 입력 방지
+        temp.keyPress -= KeyEvent;
+        temp.keyPress += KeyEvent;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        temp.OnUpdate();
     }
 
-
     //버튼 기능
-    public void Button(string Type) {
+    public void ButtonEvent(string Type) {
         switch (Type) {
             //설정
             case "Gear":
@@ -39,13 +50,17 @@ public class Lobby_UI : MonoBehaviour
                 break;
             //왼쪽
             case "Left":
-                SetMode();
+                isSolo = !isSolo;
+                buttons["Solo"].gameObject.SetActive(!isSolo);
+                buttons["Multi"].gameObject.SetActive(isSolo);
                 //Animation Control
 
                 break;
             //오른쪽
             case "Right":
-                SetMode();
+                isSolo = !isSolo;
+                buttons["Solo"].gameObject.SetActive(!isSolo);
+                buttons["Multi"].gameObject.SetActive(isSolo);
                 //Animation Control
 
                 break;
@@ -68,8 +83,36 @@ public class Lobby_UI : MonoBehaviour
                 break;
         }
     }
-    public void SetMode() {
-        Solo.gameObject.SetActive(!Solo.gameObject.activeSelf);
-        Multi.gameObject.SetActive(!Solo.gameObject.activeSelf);
+
+    //ButtonEvent로 다 넘김
+    public void KeyEvent(Define.UIControl keyEven) {
+        switch (keyEven)
+        {
+            case Define.UIControl.Right:
+                ButtonEvent("Right");
+                break;
+            case Define .UIControl.Left:
+                ButtonEvent("Left");
+                break;
+            case Define.UIControl.Up:
+                
+                break;
+            case Define.UIControl.Down:
+                
+                break;
+            case Define.UIControl.Enter:
+                string Mode = isSolo ? "Solo" : "Multi";
+                ButtonEvent(Mode);
+                break;
+            case Define.UIControl.Esc:
+                ButtonEvent("Exit");
+                break;
+            case Define.UIControl.Guide:
+                ButtonEvent("KeyGuide");
+                break;
+            case Define.UIControl.Setting:
+                ButtonEvent("Gear");
+                break;
+        }
     }
 }
