@@ -10,7 +10,6 @@ public class Lobby_UI : MonoBehaviour
     [Tooltip("Start에서 자동으로 할당 됨")]
     [SerializeField] private GameObject buttonRoot;
     [SerializeField] private Dictionary<string, GameObject> buttons = new Dictionary<string, GameObject>();
-
     [Tooltip("이거 GameManaer에서 받아올 예정")]
     [SerializeField]public InputManager temp = new InputManager();
 
@@ -22,9 +21,6 @@ public class Lobby_UI : MonoBehaviour
             GameObject temp = buttonRoot.transform.GetChild(i).gameObject;
             buttons.Add(temp.name, temp);
         }
-        buttons["Solo"].gameObject.SetActive(isSolo);
-        buttons["Multi"].gameObject.SetActive(!isSolo);
-
         //중복 입력 방지
         temp.keyPress -= KeyEvent;
         temp.keyPress += KeyEvent;
@@ -50,19 +46,27 @@ public class Lobby_UI : MonoBehaviour
                 break;
             //왼쪽
             case "Left":
+                if (isSolo){ //Solo To Munti
+                    buttons["Solo"].gameObject.GetComponent<Animator>().Play("Exit_To_Right");
+                    buttons["Multi"].gameObject.GetComponent<Animator>().Play("Enter_From_Left");
+                }
+                else{ //Multi To Solo
+                    buttons["Solo"].gameObject.GetComponent<Animator>().Play("Enter_From_Left");
+                    buttons["Multi"].gameObject.GetComponent<Animator>().Play("Exit_To_Right");
+                }
                 isSolo = !isSolo;
-                buttons["Solo"].gameObject.SetActive(!isSolo);
-                buttons["Multi"].gameObject.SetActive(isSolo);
-                //Animation Control
-
                 break;
             //오른쪽
             case "Right":
+                if (isSolo) { //Solo To Munti
+                    buttons["Solo"].gameObject.GetComponent<Animator>().Play("Exit_To_Left");
+                    buttons["Multi"].gameObject.GetComponent<Animator>().Play("Enter_From_Right");
+                }
+                else{ //Multi To Solo
+                    buttons["Solo"].gameObject.GetComponent<Animator>().Play("Enter_From_Right");
+                    buttons["Multi"].gameObject.GetComponent<Animator>().Play("Exit_To_Left");
+                }
                 isSolo = !isSolo;
-                buttons["Solo"].gameObject.SetActive(!isSolo);
-                buttons["Multi"].gameObject.SetActive(isSolo);
-                //Animation Control
-
                 break;
             //솔로
             case "Solo":
