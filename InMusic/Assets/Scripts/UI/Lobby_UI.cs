@@ -58,7 +58,7 @@ public class Lobby_UI : MonoBehaviour
                 break;
             //¿À¸¥ÂÊ
             case "Right":
-                if (isSolo) { //Solo To Munti
+                if (isSolo) { //Solo To Multi
                     buttons["Solo"].gameObject.GetComponent<Animator>().Play("Exit_To_Left");
                     buttons["Multi"].gameObject.GetComponent<Animator>().Play("Enter_From_Right");
                 }
