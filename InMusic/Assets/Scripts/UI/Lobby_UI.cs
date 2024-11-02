@@ -11,7 +11,8 @@ public class Lobby_UI : MonoBehaviour
     [SerializeField] private GameObject buttonRoot;
     [SerializeField] private Dictionary<string, GameObject> buttons = new Dictionary<string, GameObject>();
     [Tooltip("이거 GameManaer에서 받아올 예정")]
-    [SerializeField]public InputManager temp = new InputManager();
+    [SerializeField]public InputManager itemp = new InputManager();
+    [SerializeField]public ResourceManager rtemp = new ResourceManager();
 
     void Start()
     {
@@ -22,14 +23,14 @@ public class Lobby_UI : MonoBehaviour
             buttons.Add(temp.name, temp);
         }
         //중복 입력 방지
-        temp.keyPress -= KeyEvent;
-        temp.keyPress += KeyEvent;
+        itemp.keyPress -= KeyEvent;
+        itemp.keyPress += KeyEvent;
     }
 
     // Update is called once per frame
     void Update()
     {
-        temp.OnUpdate();
+        itemp.OnUpdate();
     }
 
     //버튼 기능
@@ -42,7 +43,7 @@ public class Lobby_UI : MonoBehaviour
                 break;
             //나가기
             case "Exit":
-                Debug.Log("Exit function is not implemented");
+                    rtemp.Instantiate("Message_UI");
                 break;
             //왼쪽
             case "Left":
