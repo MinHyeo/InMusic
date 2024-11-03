@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Note
 {
-    public int Channel;
-    public int Measure;
-    public float Position;
-    public string Value;
+    public int bar;
+    public int channel;
+    public List<int> noteData;
 }
 
 public class NoteManager : MonoBehaviour
@@ -79,10 +78,10 @@ public class NoteManager : MonoBehaviour
                 // 노트 객체 생성 및 리스트에 추가
                 Note note = new Note
                 {
-                    Channel = channel,
-                    Measure = measure,
-                    Position = position,
-                    Value = noteValue
+                    //channel = channel,
+                    //measure = measure,
+                    //position = position,
+                    //value = noteValue
                 };
 
                 notes.Add(note);
