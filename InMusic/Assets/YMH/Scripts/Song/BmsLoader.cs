@@ -1,11 +1,8 @@
-using FMOD.Studio;
-using Microsoft.Unity.VisualStudio.Editor;
 using System.Collections.Generic;
 using System;
-using System.Data.Common;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Video;
+using FMOD.Studio;
 
 public enum Song 
 {
@@ -23,14 +20,14 @@ public enum Song
 
 public class SongInfo
 {
-    public string part;
+    public string Part;
     public string Title;
     public string Artist;
     public string Genre;
     public float BPM;
     public float PlayLevel;
     public float Rank;
-    public List<Note> noteList;
+    public List<Note> NoteList;
     public int NoteCount;
 
     public override string ToString()
@@ -50,6 +47,7 @@ public class BmsLoader : MonoBehaviour
     private string path;            // 곡 파일 path
     private string StrText;         // 파일 한 줄씩 읽어을 때 사용할 변수
     private string songName;        // 곡 제목
+    private int noteCount;           // 노트 개수
 
     private char[] seps;            // 구분자 저장할 배열
     private string[] tempSplit;     // 구분자로 나눈 문자열을 저장할 임시 문자열 배열
@@ -58,13 +56,6 @@ public class BmsLoader : MonoBehaviour
     private void Start()
     {
         SelectSong(Song.Heya);
-    }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log(songInfo);
-        }
     }
 
     public void SelectSong(Song song)
@@ -135,9 +126,46 @@ public class BmsLoader : MonoBehaviour
                 {
                     bmsData.Rank = float.Parse(data[1]);
                 }
+                else if (data[0].Equals("#PLAYER"))
+                {
+                }
+                else if (data[0].Equals("#TOTAL"))
+                {
+                }
+                else if (data[0].Equals("#VOLWAV"))
+                {
+                }
+                else if (data[0].Equals("#MIDIFILE"))
+                {
+                }
+                else if (data[0].StartsWith("#WAV"))
+                {
+                }
+                else if (data[0].Equals("#BMP"))
+                {
+                }
+                else if (data[0].Equals("#STAGEFILE"))
+                {
+                }
+                else if (data[0].Equals("#VIDEOFILE"))
+                {
+                }
+                else if (data[0].Equals("#BGA"))
+                {
+                }
+                else if (data[0].Equals("#STOP"))
+                {
+                }
+                else if (data[0].Equals("#LNTYPE"))
+                {
+                }
+                else if (data[0].Equals("#LNOBJ"))
+                {
+                }
                 else
                 {
                     // 위의 경우에 모두 해당하지 않을 경우, 데이터 섹션
+                    Debug.Log(data[0]);
                     int bar = 0;
                     Int32.TryParse(data[0].Substring(1, 3), out bar);
 
@@ -153,13 +181,14 @@ public class BmsLoader : MonoBehaviour
                         channel = channel,
                         noteData = noteData
                     };
-                    songInfo.noteList.Add(note);
+                    bmsData.NoteList = new List<Note>();
+                    bmsData.NoteList.Add(note);
+                    bmsData.NoteCount = noteCount;
                 }
             }
         }
 
         songInfo = bmsData;
-        Debug.Log(songInfo);
 
         return bmsData;
     }
@@ -187,13 +216,13 @@ public class BmsLoader : MonoBehaviour
             }
         }
 
-        songInfo.NoteCount = 0;
+        noteCount = 0;
         //총노트수 증가
         foreach (int note in noteList)
         {
             if(note != 0)
             {
-                songInfo.NoteCount++;
+                noteCount++;
             }
         }
 
