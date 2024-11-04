@@ -18,6 +18,7 @@ public enum Song
     Supernova = 9,
 }
 
+[System.Serializable]
 public class SongInfo
 {
     public string Part;
@@ -27,7 +28,7 @@ public class SongInfo
     public float BPM;
     public float PlayLevel;
     public float Rank;
-    public List<Note> NoteList;
+    public List<NoteData> NoteList;
     public int NoteCount;
 
     public override string ToString()
@@ -38,6 +39,12 @@ public class SongInfo
 
 public class BmsLoader : MonoBehaviour
 {
+    public static BmsLoader instance;
+    private void Awake()
+    {
+        instance = this;
+    }
+
     public SongInfo songInfo;
     public string[] songList;       // 곡 이름 리스트
     public int index;               // 선택된 곡 인덱스
@@ -87,6 +94,7 @@ public class BmsLoader : MonoBehaviour
     public SongInfo ParseBMS()
     {
         SongInfo bmsData = new SongInfo();
+        bmsData.NoteList = new List<NoteData>();
 
         while ((tempStr = reader.ReadLine()) != null)
         {
@@ -165,7 +173,6 @@ public class BmsLoader : MonoBehaviour
                 else
                 {
                     // 위의 경우에 모두 해당하지 않을 경우, 데이터 섹션
-                    Debug.Log(data[0]);
                     int bar = 0;
                     Int32.TryParse(data[0].Substring(1, 3), out bar);
 
@@ -175,13 +182,13 @@ public class BmsLoader : MonoBehaviour
                     string noteStr = data[0].Substring(7);
                     List<int> noteData = getNoteDataOfStr(noteStr);
 
-                    Note note = new Note
+                    NoteData note = new NoteData
                     {
                         bar = bar,
                         channel = channel,
                         noteData = noteData
                     };
-                    bmsData.NoteList = new List<Note>();
+
                     bmsData.NoteList.Add(note);
                     bmsData.NoteCount = noteCount;
                 }
@@ -215,6 +222,9 @@ public class BmsLoader : MonoBehaviour
                 break;
             }
         }
+        //임시 코드(4줄이 아니라 3줄이라 한 줄 추가)
+        noteList.Add(0);
+
 
         noteCount = 0;
         //총노트수 증가
