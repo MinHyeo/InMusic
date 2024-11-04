@@ -81,7 +81,7 @@ public class Lobby_UI : MonoBehaviour
                 break;
             case "KeyGuide":
                 //Todo
-                Debug.Log("KeyGuide function is not implemented");
+                rtemp.Instantiate("KeyGuide");
                 break;
             default:
                 Debug.Log("아직 기능이 없거나 잘못 입력");
