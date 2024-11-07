@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Lobby_UI : MonoBehaviour
+public class Lobby_UI : UI_Base
 {
     [Header("UI Mode")]
     [SerializeField]private bool isSolo = true;
@@ -12,7 +12,6 @@ public class Lobby_UI : MonoBehaviour
     [SerializeField] private Dictionary<string, GameObject> buttons = new Dictionary<string, GameObject>();
     [Tooltip("이거 GameManaer에서 받아올 예정")]
     [SerializeField]public InputManager itemp = new InputManager();
-    [SerializeField]public ResourceManager rtemp = new ResourceManager();
 
     void Start()
     {
@@ -39,7 +38,7 @@ public class Lobby_UI : MonoBehaviour
             //설정
             case "Gear":
                 //Todo
-                Debug.Log("Gear function is not implemented");
+                Gear();
                 break;
             //나가기
             case "Exit":
@@ -81,7 +80,7 @@ public class Lobby_UI : MonoBehaviour
                 break;
             case "KeyGuide":
                 //Todo
-                rtemp.Instantiate("KeyGuide");
+                Guide();
                 break;
             default:
                 Debug.Log("아직 기능이 없거나 잘못 입력");
