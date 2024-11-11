@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UI_BASE_PSH;
 public class Lobby_UI : UI_Base
 {
     [Header("UI Mode")]

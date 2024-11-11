@@ -1,4 +1,5 @@
 using UnityEngine;
+using UI_BASE_PSH;
 
 public class Multi_Lobby_UI : UI_Base
 {
@@ -14,9 +15,9 @@ public class Multi_Lobby_UI : UI_Base
         
     }
 
-    public void Button(string buttotype)
+    public void Button(string buttontype)
     {
-        switch (buttotype) {
+        switch (buttontype) {
             case "Gear":
                 Gear();
                 break;

@@ -50,4 +50,15 @@ public class InputManager
             keyPress.Invoke(Define.UIControl.Setting);
         }
     }
+
+    public void SetKeyEvent(Action<Define.UIControl> keyEventFunc) {
+        //Initialize
+        RemoveKeyEvent(keyEventFunc);
+        //SetKeyEvent
+        keyPress += keyEventFunc;
+    }
+
+    public void RemoveKeyEvent(Action<Define.UIControl> keyEventFunc) {
+        keyPress -= keyEventFunc;
+    }
 }
