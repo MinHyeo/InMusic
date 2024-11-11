@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: aeebc2cdfa983384db33683846ebf331
+guid: 3cf07cbc783a74342b75bb255770d1da
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2612257301339723111
-    second: Back_Button_0
+      213: -2834816866031520189
+    second: StartButton_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -84,33 +84,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: Win64
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Standalone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -126,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Back_Button_0
+      name: StartButton_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 333
-        height: 135
+        width: 280
+        height: 67
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 99aa9b323d56fbbd0800000000000000
-      internalID: -2612257301339723111
+      spriteID: 346b7e07415b8a8d0800000000000000
+      internalID: -2834816866031520189
       vertices: []
       indices: 
       edges: []
