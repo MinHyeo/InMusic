@@ -13,4 +13,12 @@ public class Define
         Guide,
         Setting
     }
+
+    public enum NoteControl
+    {
+        Key1,
+        Key2, 
+        Key3, 
+        Key4 
+    }
 }

@@ -1,64 +1,141 @@
 using System;
+using System.Collections.Generic;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InputManager
 {
     [Tooltip("Observer 역할을 하는 함수에 이 변수 할당")]
-    public Action<Define.UIControl> keyPress;
-    //키 입력 시 해당 키의 입력을 기다리는 함수들 모두 호출
-    public void OnUpdate()
+    public Action<Define.UIControl> uIKeyPress;
+    public Action<Define.NoteControl> noteKeyPress;
+
+    [Header("Note Key Map")]
+    [SerializeField]
+    private Dictionary<Define.NoteControl, KeyCode> keyMapping;
+    [Header("InputManager Mode")]
+    [SerializeField] 
+    private bool isSetMode = false;
+    private Define.NoteControl targetNoteKey;
+
+    public void Init() {
+        //Default Key
+        keyMapping.Add(Define.NoteControl.Key1, KeyCode.D);
+        keyMapping.Add(Define.NoteControl.Key2, KeyCode.F);
+        keyMapping.Add(Define.NoteControl.Key3, KeyCode.J);
+        keyMapping.Add(Define.NoteControl.Key4, KeyCode.K);
+    }
+
+    //키 입력 시 해당 키의 입력을 기다리는 함수 호출
+    #region GetKeyPress
+    //UI 조작할 때 사용할 메서드
+    public void UIUpdate()
     {
+        if (isSetMode) {
+            KeyCode newKey = FindKeyPress();
+            if (newKey != KeyCode.None) {
+                SetNewKey(targetNoteKey, newKey);
+            }
+            return;
+        }
         //LeftArrow
         if (Input.GetKeyDown(KeyCode.LeftArrow)) 
         {
-            keyPress.Invoke(Define.UIControl.Left);
+            uIKeyPress.Invoke(Define.UIControl.Left);
         }
         //RightArrow
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-           keyPress.Invoke(Define.UIControl.Right);
+            uIKeyPress.Invoke(Define.UIControl.Right);
         }
         //UpArrow
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-           keyPress.Invoke(Define.UIControl.Up);
+            uIKeyPress.Invoke(Define.UIControl.Up);
         }
         //DownArrow
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            keyPress.Invoke(Define.UIControl.Down);
+            uIKeyPress.Invoke(Define.UIControl.Down);
         }
         //Enter
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            keyPress.Invoke(Define.UIControl.Enter);
+            uIKeyPress.Invoke(Define.UIControl.Enter);
         }
         //ESC
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            keyPress.Invoke(Define.UIControl.Esc);
+            uIKeyPress.Invoke(Define.UIControl.Esc);
         }
         //F1: KeyGuide
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            keyPress.Invoke(Define.UIControl.Guide);
+            uIKeyPress.Invoke(Define.UIControl.Guide);
         }
         //F10: Setting
         if (Input.GetKeyDown(KeyCode.F10))
         {
-            keyPress.Invoke(Define.UIControl.Setting);
+            uIKeyPress.Invoke(Define.UIControl.Setting);
         }
     }
 
-    public void SetKeyEvent(Action<Define.UIControl> keyEventFunc) {
-        //Initialize
-        RemoveKeyEvent(keyEventFunc);
-        //SetKeyEvent
-        keyPress += keyEventFunc;
+    //건반 조작할 때 사용할 메서드
+    public void NoteUpdate() {
+        foreach (var entry in keyMapping)
+        {
+            if (Input.GetKeyDown(entry.Value))
+            {
+                noteKeyPress.Invoke(entry.Key);
+            }
+        }
+    }
+    #endregion
+
+    public KeyCode FindKeyPress() {
+        //누른 키 찾기
+        foreach (KeyCode keyCode in Enum.GetValues(typeof(KeyCode)))
+        {
+            if (Input.GetKeyDown(keyCode))
+            {
+                return keyCode; // 눌린 키를 반환
+            }
+        }
+        return KeyCode.None;
     }
 
-    public void RemoveKeyEvent(Action<Define.UIControl> keyEventFunc) {
-        keyPress -= keyEventFunc;
+    public void ChangeKey(Define.NoteControl noteKey) { 
+        isSetMode = true;
+        targetNoteKey = noteKey;
+    }
+
+    public void SetNewKey(Define.NoteControl noteKey, KeyCode newKey) {
+        keyMapping[noteKey] = newKey;
+        isSetMode = false;
+    }
+
+
+    public void SetUIKeyEvent(Action<Define.UIControl> keyEventFunc) {
+        //Initialize
+        RemoveUIKeyEvent(keyEventFunc);
+        //SetKeyEvent
+        uIKeyPress += keyEventFunc;
+    }
+
+    public void RemoveUIKeyEvent(Action<Define.UIControl> keyEventFunc) {
+        uIKeyPress -= keyEventFunc;
+    }
+
+    public void SetNoteKeyEvent(Action<Define.NoteControl> keyEventFunc)
+    {
+        //Initialize
+        RemoveNoteKeyEvent(keyEventFunc);
+        //SetKeyEvent
+        noteKeyPress += keyEventFunc;
+    }
+
+    public void RemoveNoteKeyEvent(Action<Define.NoteControl> keyEventFunc)
+    {
+        noteKeyPress -= keyEventFunc;
     }
 }

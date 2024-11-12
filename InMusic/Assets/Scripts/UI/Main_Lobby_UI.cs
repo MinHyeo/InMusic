@@ -22,14 +22,14 @@ public class Lobby_UI : UI_Base
             buttons.Add(temp.name, temp);
         }
         //중복 입력 방지
-        itemp.keyPress -= KeyEvent;
-        itemp.keyPress += KeyEvent;
+        itemp.uIKeyPress -= KeyEvent;
+        itemp.uIKeyPress += KeyEvent;
     }
 
     // Update is called once per frame
     void Update()
     {
-        itemp.OnUpdate();
+        itemp.UIUpdate();
     }
 
     //버튼 기능

@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class Setting_UI : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [Tooltip("이거 GameManaer에서 받아올 예정")]
+    [SerializeField] public InputManager itemp = new InputManager();
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
