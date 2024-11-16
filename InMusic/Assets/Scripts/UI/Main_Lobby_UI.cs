@@ -33,8 +33,8 @@ public class Lobby_UI : UI_Base
     }
 
     //버튼 기능
-    public void ButtonEvent(string Type) {
-        switch (Type) {
+    public void ButtonEvent(string type) {
+        switch (type) {
             //설정
             case "Gear":
                 //Todo
