@@ -23,6 +23,7 @@ public class Setting_UI : MonoBehaviour
             menuList[i] = transform.GetChild(i + 1).gameObject;
         }
 
+        curMenu = menuList[curMenuIndex];
         ChangeMenu();
 
         itemp.uIKeyPress -= KeyEvent;
@@ -57,8 +58,12 @@ public class Setting_UI : MonoBehaviour
         switch (type)
         {
             case "BeatSet":
+                //TODO
+                Debug.Log("박자 조절 미구현");
                 break;
             case "KeySet":
+                //TODO
+                Debug.Log("키 설정 미구현");
                 break;
             case "Exit":
                 Destroy(gameObject);
@@ -86,7 +91,12 @@ public class Setting_UI : MonoBehaviour
                 ControlMenu("Down");
                 break;
             case Define.UIControl.Enter:
-                ButtonEvent("Enter");
+                if (curMenuIndex == 3) {
+                    ButtonEvent("BeatSet");
+                }
+                else if (curMenuIndex == 4) { 
+                    ButtonEvent("KeySet");
+                }
                 break;
             case Define.UIControl.Esc:
                 ButtonEvent("Exit");
@@ -102,7 +112,8 @@ public class Setting_UI : MonoBehaviour
         if (curMenuIndex >= numOfMenuList) {
             curMenuIndex %= numOfMenuList;
         }
-
+        curMenu.GetComponent<Animator>().Play("Idle");
         curMenu = menuList[curMenuIndex];
+        curMenu.GetComponent<Animator>().Play("Select");
     }
 }
