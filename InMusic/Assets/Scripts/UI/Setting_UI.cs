@@ -1,6 +1,6 @@
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class Setting_UI : MonoBehaviour
 {
@@ -8,6 +8,8 @@ public class Setting_UI : MonoBehaviour
     [Tooltip("Start에서 자동으로 할당 됨")]
     [SerializeField] private GameObject[] menuList;
     [SerializeField] private int numOfMenuList;
+    [SerializeField] private Slider[] menuSliders;
+    [SerializeField] private Text[] menuValues;
     [Header("Currentyl Selected Menue")]
     [SerializeField] private GameObject curMenu;
     [SerializeField] int curMenuIndex = 0;
@@ -19,8 +21,15 @@ public class Setting_UI : MonoBehaviour
         //설정 항목 가져오기
         numOfMenuList = transform.childCount - 1;
         menuList = new GameObject[numOfMenuList];
+        menuSliders = new Slider[numOfMenuList - 2];
+        menuValues = new Text[numOfMenuList];
         for (int i = 0; i < numOfMenuList; i++) {
             menuList[i] = transform.GetChild(i + 1).gameObject;
+            Slider tmp = menuList[i].transform.GetChild(1).transform.GetChild(0).GetComponent<Slider>();
+            if (tmp != null) { 
+                menuSliders[i] = tmp;
+            }
+            menuValues[i] = menuList[i].transform.GetChild(1).transform.GetChild(2).GetComponent<Text>();
         }
 
         curMenu = menuList[curMenuIndex];
@@ -39,8 +48,16 @@ public class Setting_UI : MonoBehaviour
         switch (arrow)
         {
             case "Left":
+                if (curMenuIndex > 3) return;
+
+                menuSliders[curMenuIndex].value--;
+                menuValues[curMenuIndex].text = $"{menuSliders[curMenuIndex].value}%";
                 break;
             case "Right":
+                if (curMenuIndex > 3) return;
+                
+                menuSliders[curMenuIndex].value++;
+                menuValues[curMenuIndex].text = $"{menuSliders[curMenuIndex].value}%";
                 break;
             case "Up":
                 curMenuIndex--;
