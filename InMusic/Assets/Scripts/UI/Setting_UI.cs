@@ -42,22 +42,20 @@ public class Setting_UI : MonoBehaviour
     void Update()
     {
         itemp.UIUpdate();
+        UpdateSliderValues();
     }
+
     public void ControlMenu(string arrow)
     {
         switch (arrow)
         {
             case "Left":
                 if (curMenuIndex > 3) return;
-
-                menuSliders[curMenuIndex].value--;
-                menuValues[curMenuIndex].text = $"{menuSliders[curMenuIndex].value}%";
+                menuSliders[curMenuIndex].value -= 1.0f;
                 break;
             case "Right":
-                if (curMenuIndex > 3) return;
-                
-                menuSliders[curMenuIndex].value++;
-                menuValues[curMenuIndex].text = $"{menuSliders[curMenuIndex].value}%";
+                if (curMenuIndex > 3) return;                
+                menuSliders[curMenuIndex].value += 1.0f;
                 break;
             case "Up":
                 curMenuIndex--;
@@ -68,6 +66,17 @@ public class Setting_UI : MonoBehaviour
                 ChangeMenu();
                 break;
         }
+    }
+
+    void ChangeMenu()
+    {
+        if (curMenuIndex < 0) curMenuIndex = numOfMenuList - 1;
+
+        if (curMenuIndex >= numOfMenuList) curMenuIndex %= numOfMenuList;
+
+        curMenu.GetComponent<Animator>().Play("Idle");
+        curMenu = menuList[curMenuIndex];
+        curMenu.GetComponent<Animator>().Play("Select");
     }
 
     public void ButtonEvent(string type)
@@ -121,16 +130,10 @@ public class Setting_UI : MonoBehaviour
         }
     }
 
-    void ChangeMenu() {
-        if (curMenuIndex < 0) { 
-            curMenuIndex = numOfMenuList - 1;
+    void UpdateSliderValues() {
+        for (int i = 0; i < menuSliders.Length; i++) {
+            menuSliders[i].value = Mathf.Round(menuSliders[i].value);
+            menuValues[i].text = $"{menuSliders[i].value}%";
         }
-
-        if (curMenuIndex >= numOfMenuList) {
-            curMenuIndex %= numOfMenuList;
-        }
-        curMenu.GetComponent<Animator>().Play("Idle");
-        curMenu = menuList[curMenuIndex];
-        curMenu.GetComponent<Animator>().Play("Select");
     }
 }
