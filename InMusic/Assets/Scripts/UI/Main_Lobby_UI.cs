@@ -107,12 +107,6 @@ public class Main_Lobby_UI : UI_Base
                     isChange = true;
                 }
                 break;
-            case Define.UIControl.Up:
-                
-                break;
-            case Define.UIControl.Down:
-                
-                break;
             case Define.UIControl.Enter:
                 string Mode = isSolo ? "Solo" : "Multi";
                 ButtonEvent(Mode);

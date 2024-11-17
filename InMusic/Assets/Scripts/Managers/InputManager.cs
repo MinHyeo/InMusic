@@ -12,7 +12,7 @@ public class InputManager
 
     [Header("Note Key Map")]
     [SerializeField]
-    private Dictionary<Define.NoteControl, KeyCode> keyMapping;
+    private Dictionary<Define.NoteControl, KeyCode> keyMapping= new Dictionary<Define.NoteControl, KeyCode>();
     [Header("InputManager Mode")]
     [SerializeField] 
     private bool isSetMode = false;
@@ -33,8 +33,9 @@ public class InputManager
     {
         if (isSetMode) {
             KeyCode newKey = FindKeyPress();
-            if (newKey != KeyCode.None) {
+            if (newKey != KeyCode.None && newKey != KeyCode.Escape && newKey != KeyCode.KeypadEnter) {
                 SetNewKey(targetNoteKey, newKey);
+                uIKeyPress.Invoke(Define.UIControl.Any);
             }
             return;
         }
@@ -98,10 +99,16 @@ public class InputManager
         {
             if (Input.GetKeyDown(keyCode))
             {
-                return keyCode; // 눌린 키를 반환
+                Debug.Log($"New Key: {keyCode}");
+                return keyCode; //누른 키를 반환
             }
         }
         return KeyCode.None;
+    }
+
+    public string GetKey(Define.NoteControl noteKey) {
+        return keyMapping[noteKey].ToString();
+    
     }
 
     public void ChangeKey(Define.NoteControl noteKey) { 
@@ -114,7 +121,7 @@ public class InputManager
         isSetMode = false;
     }
 
-
+    #region KeyEventSet
     public void SetUIKeyEvent(Action<Define.UIControl> keyEventFunc) {
         //Initialize
         RemoveUIKeyEvent(keyEventFunc);
@@ -138,4 +145,5 @@ public class InputManager
     {
         noteKeyPress -= keyEventFunc;
     }
+    #endregion
 }

@@ -9,14 +9,16 @@ public class Key_Setting_UI : MonoBehaviour
     [Tooltip("Start에서 자동으로 할당 됨")]
     [SerializeField] private GameObject[] menuList;
     [SerializeField] private Text[] menuValues;
-    [SerializeField] private Text message;
+    [SerializeField] private GameObject message;
     [SerializeField] private int numOfMenuList;
     [Header("Currentyl selected menue")]
     [SerializeField] private GameObject curMenu;
     [SerializeField] int curMenuIndex = 0;
-
+    [SerializeField] Define.NoteControl curNote = Define.NoteControl.Key1;
+    [SerializeField] bool isSetMode = false;
     [Tooltip("이거 GameManaer에서 받아올 예정")]
     [SerializeField] public InputManager itemp = new InputManager();
+
 
     void Start()
     {
@@ -28,17 +30,22 @@ public class Key_Setting_UI : MonoBehaviour
             menuValues[i] = menuList[i].transform.GetChild(1).transform.GetChild(1).GetComponent<Text>();
         }
 
+        message = transform.GetChild(0).GetChild(2).gameObject;
+        message.SetActive(isSetMode);
+
         curMenu = menuList[curMenuIndex];
         ChangeMenu();
 
         itemp.uIKeyPress -= KeyEvent;
         itemp.uIKeyPress += KeyEvent;
+        itemp.Init();
     }
 
     void Update()
     {
         itemp.UIUpdate();
     }
+
     public void ControlMenu(string arrow)
     {
         switch (arrow)
@@ -58,6 +65,22 @@ public class Key_Setting_UI : MonoBehaviour
     {
         switch (type)
         {
+            case "Key1":
+                curNote = Define.NoteControl.Key1;
+                StartKeySet();
+                break;
+            case "Key2":
+                curNote = Define.NoteControl.Key2;
+                StartKeySet();
+                break;
+            case "Key3":
+                curNote = Define.NoteControl.Key3;
+                StartKeySet();
+                break;
+            case "Key4":
+                curNote = Define.NoteControl.Key4;
+                StartKeySet();
+                break;
             case "Exit":
                 Destroy(gameObject);
                 break;
@@ -77,6 +100,15 @@ public class Key_Setting_UI : MonoBehaviour
                 ControlMenu("Down");
                 break;
             case Define.UIControl.Enter:
+                if (curMenuIndex == 0) ButtonEvent("Key1");
+                if (curMenuIndex == 1) ButtonEvent("Key2");
+                if (curMenuIndex == 2) ButtonEvent("Key3");
+                if (curMenuIndex == 3) ButtonEvent("Key4");
+                break;
+            case Define.UIControl.Any:
+                if (isSetMode) {
+                    EndKeySet();
+                } 
                 break;
             case Define.UIControl.Esc:
                 ButtonEvent("Exit");
@@ -94,6 +126,21 @@ public class Key_Setting_UI : MonoBehaviour
         curMenu.GetComponent<Animator>().Play("Idle");
         curMenu = menuList[curMenuIndex];
         curMenu.GetComponent<Animator>().Play("Select");
+    }
+
+    void StartKeySet() {
+        isSetMode = true;
+        menuValues[curMenuIndex].text = $"<color=red>{menuValues[curMenuIndex].text}</color>";
+        message.SetActive(isSetMode);
+        itemp.ChangeKey(curNote);
+    }
+
+    void EndKeySet() {
+        isSetMode = false;
+        string newKey = itemp.GetKey(curNote);
+        menuValues[curMenuIndex].text = $"<color=black>{newKey}</color>";
+        Debug.Log($"New key: {newKey}");
+        message.SetActive(isSetMode);
     }
 
 }

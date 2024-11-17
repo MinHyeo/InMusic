@@ -11,7 +11,8 @@ public class Define
         Enter,
         Esc,
         Guide,
-        Setting
+        Setting,
+        Any
     }
 
     public enum NoteControl
@@ -19,6 +20,6 @@ public class Define
         Key1,
         Key2, 
         Key3, 
-        Key4 
+        Key4,
     }
 }
