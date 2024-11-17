@@ -19,12 +19,12 @@ public class Setting_UI : MonoBehaviour
     void Start()
     {
         //설정 항목 가져오기
-        numOfMenuList = transform.childCount - 1;
+        numOfMenuList = transform.childCount - 2;
         menuList = new GameObject[numOfMenuList];
         menuSliders = new Slider[numOfMenuList - 2];
         menuValues = new Text[numOfMenuList];
         for (int i = 0; i < numOfMenuList; i++) {
-            menuList[i] = transform.GetChild(i + 1).gameObject;
+            menuList[i] = transform.GetChild(i + 2).gameObject;
             Slider tmp = menuList[i].transform.GetChild(1).transform.GetChild(0).GetComponent<Slider>();
             if (tmp != null) { 
                 menuSliders[i] = tmp;
