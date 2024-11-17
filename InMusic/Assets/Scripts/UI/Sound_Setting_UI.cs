@@ -10,7 +10,7 @@ public class Sound_Setting_UI : MonoBehaviour
     [SerializeField] private int numOfMenuList;
     [SerializeField] private Slider[] menuSliders;
     [SerializeField] private Text[] menuValues;
-    [Header("Currentyl selected menue and mode")]
+    [Header("Currentyl selected menue")]
     [SerializeField] private GameObject curMenu;
     [SerializeField] int curMenuIndex = 0;
     [Tooltip("이거 GameManaer에서 받아올 예정")]
@@ -101,9 +101,9 @@ public class Sound_Setting_UI : MonoBehaviour
         }
     }
 
-    public void KeyEvent(Define.UIControl keyEven)
+    public void KeyEvent(Define.UIControl keyEvent)
     {
-        switch (keyEven)
+        switch (keyEvent)
         {
             case Define.UIControl.Right:
                 ControlMenu("Right");

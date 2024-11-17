@@ -90,8 +90,8 @@ public class Main_Lobby_UI : UI_Base
     }
 
     //ButtonEvent·Î ´Ù ³Ñ±è
-    public void KeyEvent(Define.UIControl keyEven) {
-        switch (keyEven)
+    public void KeyEvent(Define.UIControl keyEvent) {
+        switch (keyEvent)
         {
             case Define.UIControl.Right:
                 if (!isChange)
