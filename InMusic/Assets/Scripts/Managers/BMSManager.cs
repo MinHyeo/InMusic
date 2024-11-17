@@ -4,7 +4,23 @@ using UnityEngine;
 
 public class BMSManager : MonoBehaviour
 {
-    
+
+    public static BMSManager Instance { get; private set; }
+
+    void Awake()
+    {
+        // ΩÃ±€≈Ê ¿ŒΩ∫≈œΩ∫ º≥¡§
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         
