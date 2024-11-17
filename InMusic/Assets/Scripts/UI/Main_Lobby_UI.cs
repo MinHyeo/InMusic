@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UI_BASE_PSH;
-public class Lobby_UI : UI_Base
+public class Main_Lobby_UI : UI_Base
 {
     [Header("UI Mode")]
     [SerializeField]private bool isSolo = true;
+    [SerializeField]private bool isChange = false;
     [Header("UI Button")]
     [Tooltip("Start에서 자동으로 할당 됨")]
     [SerializeField] private GameObject buttonRoot;
@@ -93,10 +94,18 @@ public class Lobby_UI : UI_Base
         switch (keyEven)
         {
             case Define.UIControl.Right:
-                ButtonEvent("Right");
+                if (!isChange)
+                {
+                    ButtonEvent("Right");
+                    isChange = true;
+                }
                 break;
             case Define .UIControl.Left:
-                ButtonEvent("Left");
+                if (!isChange) 
+                {
+                    ButtonEvent("Left");
+                    isChange = true;
+                }
                 break;
             case Define.UIControl.Up:
                 
@@ -118,5 +127,8 @@ public class Lobby_UI : UI_Base
                 ButtonEvent("Gear");
                 break;
         }
+    }
+    public void GetChangeSignal() {
+        isChange = false;
     }
 }
