@@ -2,7 +2,7 @@ using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Setting_UI : MonoBehaviour
+public class Sound_Setting_UI : MonoBehaviour
 {
     [Header("Setting List")]
     [Tooltip("Start에서 자동으로 할당 됨")]
@@ -10,7 +10,7 @@ public class Setting_UI : MonoBehaviour
     [SerializeField] private int numOfMenuList;
     [SerializeField] private Slider[] menuSliders;
     [SerializeField] private Text[] menuValues;
-    [Header("Currentyl Selected Menue")]
+    [Header("Currentyl selected menue and mode")]
     [SerializeField] private GameObject curMenu;
     [SerializeField] int curMenuIndex = 0;
     [Tooltip("이거 GameManaer에서 받아올 예정")]
@@ -19,17 +19,17 @@ public class Setting_UI : MonoBehaviour
     void Start()
     {
         //설정 항목 가져오기
-        numOfMenuList = transform.childCount - 2;
+        numOfMenuList = transform.GetChild(0).childCount - 2;
         menuList = new GameObject[numOfMenuList];
         menuSliders = new Slider[numOfMenuList - 2];
         menuValues = new Text[numOfMenuList];
         for (int i = 0; i < numOfMenuList; i++) {
-            menuList[i] = transform.GetChild(i + 2).gameObject;
-            Slider tmp = menuList[i].transform.GetChild(1).transform.GetChild(0).GetComponent<Slider>();
+            menuList[i] = transform.GetChild(0).GetChild(i + 2).gameObject;
+            Slider tmp = menuList[i].transform.GetChild(1).GetChild(0).GetComponent<Slider>();
             if (tmp != null) { 
                 menuSliders[i] = tmp;
             }
-            menuValues[i] = menuList[i].transform.GetChild(1).transform.GetChild(2).GetComponent<Text>();
+            menuValues[i] = menuList[i].transform.GetChild(1).GetChild(2).GetComponent<Text>();
         }
 
         curMenu = menuList[curMenuIndex];
@@ -92,6 +92,7 @@ public class Setting_UI : MonoBehaviour
                 Debug.Log("키 설정 미구현");
                 break;
             case "Exit":
+                
                 Destroy(gameObject);
                 break;
             default:
@@ -130,10 +131,12 @@ public class Setting_UI : MonoBehaviour
         }
     }
 
-    void UpdateSliderValues() {
+    void UpdateSliderValues() 
+    {
         for (int i = 0; i < menuSliders.Length; i++) {
             menuSliders[i].value = Mathf.Round(menuSliders[i].value);
             menuValues[i].text = $"{menuSliders[i].value}%";
         }
     }
+
 }

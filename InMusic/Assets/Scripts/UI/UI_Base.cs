@@ -10,12 +10,12 @@ namespace UI_BASE_PSH
         //Setting UI Call
         public void Gear()
         {
-            Debug.Log("Gear function is not implemented");
+            rtemp.Instantiate("SoundSetting_UI");
         }
 
         public void Guide()
         {
-            rtemp.Instantiate("KeyGuide");
+            rtemp.Instantiate("KeyGuide_UI");
         }
     }
 }

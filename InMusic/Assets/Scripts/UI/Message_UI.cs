@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public class Message_UI : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     public void MessageKeyEvent(Define.UIControl keyEvent) {
         switch (keyEvent) {
             case Define.UIControl.Esc:
