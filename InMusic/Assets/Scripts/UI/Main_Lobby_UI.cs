@@ -44,7 +44,7 @@ public class Main_Lobby_UI : UI_Base
                 break;
             //³ª°¡±â
             case "Exit":
-                    popupUI = rtemp.Instantiate("Message_UI");
+                if (curUI == null && popupUI != null) popupUI = rtemp.Instantiate("Message_UI");
                 break;
             //¿ÞÂÊ
             case "Left":
@@ -92,7 +92,7 @@ public class Main_Lobby_UI : UI_Base
 
     //ButtonEvent·Î ´Ù ³Ñ±è
     public void KeyEvent(Define.UIControl keyEvent) {
-        if (popupUI != null) return;
+        if (popupUI != null && curUI != null) return;
         switch (keyEvent)
         {
             case Define.UIControl.Right:
