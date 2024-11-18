@@ -10,11 +10,14 @@ public class Sound_Setting_UI : MonoBehaviour
     [SerializeField] private int numOfMenuList;
     [SerializeField] private Slider[] menuSliders;
     [SerializeField] private Text[] menuValues;
-    [Header("Currentyl selected menue")]
+    [Header("Currentyl selected menue and UI")]
     [SerializeField] private GameObject curMenu;
     [SerializeField] int curMenuIndex = 0;
+    [SerializeField] GameObject keySet = null;
     [Tooltip("이거 GameManaer에서 받아올 예정")]
     [SerializeField] public InputManager itemp = new InputManager();
+    [SerializeField] public ResourceManager rtemp = new ResourceManager();
+
 
     void Start()
     {
@@ -80,7 +83,7 @@ public class Sound_Setting_UI : MonoBehaviour
     }
 
     public void ButtonEvent(string type)
-    {
+    { 
         switch (type)
         {
             case "BeatSet":
@@ -88,11 +91,10 @@ public class Sound_Setting_UI : MonoBehaviour
                 Debug.Log("박자 조절 미구현");
                 break;
             case "KeySet":
-                //TODO
-                Debug.Log("키 설정 미구현");
+                keySet = rtemp.Instantiate("KeySetting_UI");
+                Debug.Log(keySet.gameObject.name);
                 break;
             case "Exit":
-                
                 Destroy(gameObject);
                 break;
             default:
@@ -103,6 +105,9 @@ public class Sound_Setting_UI : MonoBehaviour
 
     public void KeyEvent(Define.UIControl keyEvent)
     {
+        //키 설정 UI가 활성화되어 있는 동안 키 입력 막음
+        if (keySet != null) return;
+
         switch (keyEvent)
         {
             case Define.UIControl.Right:

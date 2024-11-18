@@ -121,7 +121,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8002031973063200645}
+      - m_Target: {fileID: 5501879161013515729}
         m_TargetAssemblyTypeName: Message_UI, Assembly-CSharp
         m_MethodName: MessageButton
         m_Mode: 5
@@ -182,7 +182,6 @@ GameObject:
   - component: {fileID: 2031242127354771285}
   - component: {fileID: 784623710060183457}
   - component: {fileID: 7627049237184510029}
-  - component: {fileID: 8002031973063200645}
   m_Layer: 5
   m_Name: Box
   m_TagString: Untagged
@@ -261,18 +260,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &8002031973063200645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3619828871587488996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26952c23440711b4da19109d4ae9133c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5038962515535397854
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,6 +352,7 @@ GameObject:
   - component: {fileID: 957613705237827964}
   - component: {fileID: 8811085663973600500}
   - component: {fileID: 2245346430915466524}
+  - component: {fileID: 5501879161013515729}
   m_Layer: 5
   m_Name: Message_UI
   m_TagString: Untagged
@@ -477,6 +465,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5501879161013515729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5221200971984533103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26952c23440711b4da19109d4ae9133c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6174325061208178384
 GameObject:
   m_ObjectHideFlags: 0
@@ -598,7 +598,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8002031973063200645}
+      - m_Target: {fileID: 5501879161013515729}
         m_TargetAssemblyTypeName: Message_UI, Assembly-CSharp
         m_MethodName: MessageButton
         m_Mode: 5

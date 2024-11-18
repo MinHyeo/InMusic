@@ -7,6 +7,7 @@ public class Main_Lobby_UI : UI_Base
     [Header("UI Mode")]
     [SerializeField]private bool isSolo = true;
     [SerializeField]private bool isChange = false;
+    [SerializeField]GameObject popupUI = null;
     [Header("UI Button")]
     [Tooltip("Start에서 자동으로 할당 됨")]
     [SerializeField] private GameObject buttonRoot;
@@ -43,7 +44,7 @@ public class Main_Lobby_UI : UI_Base
                 break;
             //나가기
             case "Exit":
-                    rtemp.Instantiate("Message_UI");
+                    popupUI = rtemp.Instantiate("Message_UI");
                 break;
             //왼쪽
             case "Left":
@@ -91,6 +92,7 @@ public class Main_Lobby_UI : UI_Base
 
     //ButtonEvent로 다 넘김
     public void KeyEvent(Define.UIControl keyEvent) {
+        if (popupUI != null) return;
         switch (keyEvent)
         {
             case Define.UIControl.Right:
