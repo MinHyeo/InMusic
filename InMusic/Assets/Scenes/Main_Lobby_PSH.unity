@@ -688,7 +688,7 @@ GameObject:
   m_Component:
   - component: {fileID: 433448063}
   - component: {fileID: 433448064}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: BackGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -882,6 +882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 618fdbaa2ca5bef4bbedcabe1980319d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curUI: {fileID: 0}
   isSolo: 1
   isChange: 0
   popupUI: {fileID: 0}

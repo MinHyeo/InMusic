@@ -6,17 +6,18 @@ namespace UI_BASE_PSH
     public abstract class UI_Base : MonoBehaviour
     {
         [SerializeField] public ResourceManager rtemp = new ResourceManager();
-        [SerializeField] public GameObject curUI = null;
+        [SerializeField] public GameObject curSetUI = null;
+        [SerializeField] public GameObject guideUI = null;
 
         //Setting UI Call
         public void Gear()
         {
-            curUI = rtemp.Instantiate("SoundSetting_UI");
+            curSetUI = rtemp.Instantiate("SoundSetting_UI");
         }
 
         public void Guide()
         {
-            curUI = rtemp.Instantiate("KeyGuide_UI");
+            guideUI = rtemp.Instantiate("KeyGuide_UI");
         }
     }
 }

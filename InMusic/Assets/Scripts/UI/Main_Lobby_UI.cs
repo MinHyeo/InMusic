@@ -39,12 +39,11 @@ public class Main_Lobby_UI : UI_Base
         switch (type) {
             //설정
             case "Gear":
-                //Todo
                 Gear();
                 break;
             //나가기
             case "Exit":
-                if (curUI == null && popupUI != null) popupUI = rtemp.Instantiate("Message_UI");
+                if (curSetUI == null && popupUI == null) popupUI = rtemp.Instantiate("Message_UI");
                 break;
             //왼쪽
             case "Left":
@@ -92,7 +91,7 @@ public class Main_Lobby_UI : UI_Base
 
     //ButtonEvent로 다 넘김
     public void KeyEvent(Define.UIControl keyEvent) {
-        if (popupUI != null && curUI != null) return;
+        if (popupUI != null && curSetUI != null) return;
         switch (keyEvent)
         {
             case Define.UIControl.Right:
