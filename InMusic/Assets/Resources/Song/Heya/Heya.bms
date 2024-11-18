@@ -2,27 +2,25 @@
 *---------------------- HEADER FIELD
 
 #PLAYER 1
-#GENRE K-POP
-#TITLE Heya
-#ARTIST IVE
-#BPM 92
-#PLAYLEVEL 2
+#GENRE 
+#TITLE 
+#ARTIST 
+#BPM 120
+#PLAYLEVEL 
 #RANK 2
 
 
 #LNTYPE 1
 
-#WAV01 soft-hitclap.ogg
-#WAV02 Heya.ogg
 
 
 *---------------------- MAIN DATA FIELD
 
 
-#00011:02000001
+#00011:00000001
 
-#00111:01010101
-
-#00211:01
+#00112:01
+#00113:00010000
+#00114:0001
 
 

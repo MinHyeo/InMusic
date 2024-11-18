@@ -2,10 +2,11 @@ using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Metronome : MonoBehaviour
 {
+    public static Metronome instance;
+
     [SerializeField]
     private AudioSource hitSource;
     [SerializeField] 
@@ -20,7 +21,6 @@ public class Metronome : MonoBehaviour
     private TextMeshProUGUI text;
 
     private AudioSource audioSource;
-    private float offsetSample;
     private float nextSample;
     private float samplesPerBeat;
     private float songBpm = 92f;
@@ -33,10 +33,12 @@ public class Metronome : MonoBehaviour
     private int upperBeats = 1;
     private float measureInterval;
     private float travelTime;
-    private float preStartDelay = 2.0f;
+    public float preStartDelay = 2.0f;
 
     private void Awake()
     {
+        instance = this;
+
         audioSource = GetComponent<AudioSource>();
     }
 
@@ -65,6 +67,7 @@ public class Metronome : MonoBehaviour
 
         // 음악 재생 및 메트로놈 시작
         audioSource.Play();
+        NoteManager.instance.InitializeNotes(BmsLoader.instance.songInfo);
         isStart = true;
     }
     private void CalculateSync()
@@ -85,11 +88,13 @@ public class Metronome : MonoBehaviour
     {
         // 초기 딜레이 동안 마디 선을 미리 생성
         float currentTime = -travelTime;
+
+        // 인트로 딜레이 동안 필요한 마디 선을 생성
         while (currentTime < 0)
         {
             float spawnTime = Time.time + currentTime;
             StartCoroutine(SpawnMeasureLine(spawnTime));
-            currentTime += measureInterval / 4.0f; // 4/4박자 기준으로 1박자마다 생성
+            currentTime += measureInterval;
         }
 
         yield return null;

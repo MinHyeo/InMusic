@@ -1,21 +1,27 @@
 ﻿using System.Collections;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Note : MonoBehaviour
 {
     private float speed;
-    private Vector3 direction = Vector3.down;  // 노트가 내려오는 방향
+    private float targetY;
 
-    public void Initialize(NoteData noteData, float bpm)
+    public void Initialize(float noteSpeed, float judgementLineY)
     {
-        // 속도 계산 (BPM에 따라 조절)
-        float bps = bpm / 60.0f;
-        speed = bps * 2;  // 스피드 설정 (조정 가능)
+        speed = noteSpeed;
+        targetY = judgementLineY;
     }
 
     void Update()
     {
-        // 속도에 맞춰 노트를 아래로 이동
-        transform.Translate(direction * speed * Time.deltaTime);
+        // 노트가 내려오는 로직
+        transform.Translate(Vector3.down * speed * Time.deltaTime);
+
+        // 판정선에 도달하면 삭제
+        if (transform.position.y <= targetY)
+        {
+            Destroy(gameObject);
+        }
     }
 }
