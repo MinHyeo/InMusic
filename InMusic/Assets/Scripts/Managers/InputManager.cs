@@ -28,7 +28,10 @@ public class InputManager
 
     //키 입력 시 해당 키의 입력을 기다리는 함수 호출
     #region GetKeyPress
-    //UI 조작할 때 사용할 메서드
+
+    /// <summary>
+    /// 키 입력 감지 메서드
+    /// </summary>
     public void UIUpdate()
     {
         if (isSetMode) {
@@ -122,17 +125,28 @@ public class InputManager
     }
 
     #region KeyEventSet
+    /// <summary>
+    /// UI 조작시 사용할 키보드 입력 메소드, Define.UIControl을 전달
+    /// </summary>
+    /// <param name="keyEventFunc"></param>
     public void SetUIKeyEvent(Action<Define.UIControl> keyEventFunc) {
         //Initialize
         RemoveUIKeyEvent(keyEventFunc);
         //SetKeyEvent
         uIKeyPress += keyEventFunc;
     }
-
+    /// <summary>
+    /// 연결한 키보드 입력 함수를 제거하는 메서드
+    /// </summary>
+    /// <param name="keyEventFunc"></param>
     public void RemoveUIKeyEvent(Action<Define.UIControl> keyEventFunc) {
         uIKeyPress -= keyEventFunc;
     }
 
+    /// <summary>
+    /// 게임 플레이시 사용할 키보드 입력 메서드, Define.NoteControl를 전달함
+    /// </summary>
+    /// <param name="keyEventFunc"></param>
     public void SetNoteKeyEvent(Action<Define.NoteControl> keyEventFunc)
     {
         //Initialize
@@ -140,7 +154,10 @@ public class InputManager
         //SetKeyEvent
         noteKeyPress += keyEventFunc;
     }
-
+    /// <summary>
+    /// 연결한 키보드 입력 함수를 제거하는 메서드
+    /// </summary>
+    /// <param name="keyEventFunc"></param>
     public void RemoveNoteKeyEvent(Action<Define.NoteControl> keyEventFunc)
     {
         noteKeyPress -= keyEventFunc;

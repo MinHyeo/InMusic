@@ -10,10 +10,16 @@ public class Sound_Setting_UI : MonoBehaviour
     [SerializeField] private int numOfMenuList;
     [SerializeField] private Slider[] menuSliders;
     [SerializeField] private Text[] menuValues;
-    [Header("Currentyl selected menue and UI")]
+    [Tooltip("SoundManager에게 전달할 음량 값")]
+    public float[] curVolumes = new float[3];
+    [Header("현재 선택한 메뉴와 인덱스 및 설정 UI")]
     [SerializeField] private GameObject curMenu;
     [SerializeField] int curMenuIndex = 0;
     [SerializeField] GameObject keySet = null;
+
+    public float CurrentMainVolume { get { return curVolumes[0]; } }
+    public float CurrentEffectVolume { get { return curVolumes[1]; } }
+    public float CurrentBackgroundVolume { get { return curVolumes[2]; } }
 
     void Start()
     {
@@ -136,6 +142,7 @@ public class Sound_Setting_UI : MonoBehaviour
         for (int i = 0; i < menuSliders.Length; i++) {
             menuSliders[i].value = Mathf.Round(menuSliders[i].value);
             menuValues[i].text = $"{menuSliders[i].value}%";
+            curVolumes[i] = menuSliders[i].value;
         }
     }
 
