@@ -15,7 +15,6 @@ public class Sound_Setting_UI : MonoBehaviour
     [SerializeField] int curMenuIndex = 0;
     [SerializeField] GameObject keySet = null;
     [Tooltip("이거 GameManaer에서 받아올 예정")]
-    [SerializeField] public InputManager itemp = new InputManager();
     [SerializeField] public ResourceManager rtemp = new ResourceManager();
 
 
@@ -38,13 +37,11 @@ public class Sound_Setting_UI : MonoBehaviour
         curMenu = menuList[curMenuIndex];
         ChangeMenu();
 
-        itemp.uIKeyPress -= KeyEvent;
-        itemp.uIKeyPress += KeyEvent;
+        GameManager.Input.SetUIKeyEvent(SoundKeyEvent);
     }
 
     void Update()
     {
-        itemp.UIUpdate();
         UpdateSliderValues();
     }
 
@@ -95,6 +92,7 @@ public class Sound_Setting_UI : MonoBehaviour
                 Debug.Log(keySet.gameObject.name);
                 break;
             case "Exit":
+                GameManager.Input.RemoveUIKeyEvent(SoundKeyEvent);
                 Destroy(gameObject);
                 break;
             default:
@@ -103,7 +101,7 @@ public class Sound_Setting_UI : MonoBehaviour
         }
     }
 
-    public void KeyEvent(Define.UIControl keyEvent)
+    public void SoundKeyEvent(Define.UIControl keyEvent)
     {
         //키 설정 UI가 활성화되어 있는 동안 키 입력 막음
         if (keySet != null) return;

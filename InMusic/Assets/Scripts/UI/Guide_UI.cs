@@ -2,8 +2,14 @@ using UnityEngine;
 
 public class Guide_UI : MonoBehaviour
 {
+    private void Awake()
+    {
+        GameManager.Input.SetUIKeyEvent(GuideKeyEvent);
+    }
+
     public void GuideButton(string buttonname){
         if (buttonname == "Exit") {
+            GameManager.Input.RemoveUIKeyEvent(GuideKeyEvent);
             Destroy(gameObject);
         }
     }

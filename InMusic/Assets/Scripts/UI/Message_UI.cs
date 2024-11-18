@@ -8,15 +8,16 @@ public class Message_UI : MonoBehaviour
 {
     private void Awake()
     {
-        
+        GameManager.Input.SetUIKeyEvent(MessageKeyEvent);
     }
+
     public void MessageButton(string buttonname) {
         if (buttonname == "Exit") {
             EditorApplication.isPlaying = false; //에디터용
             Application.Quit();//인게임용
         }
         else if (buttonname == "Cancle") {
-            //Remove KeyEvent
+            GameManager.Input.RemoveUIKeyEvent(MessageKeyEvent);
             Destroy(gameObject);
         }
     }

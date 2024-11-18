@@ -12,8 +12,6 @@ public class Main_Lobby_UI : UI_Base
     [Tooltip("Start에서 자동으로 할당 됨")]
     [SerializeField] private GameObject buttonRoot;
     [SerializeField] private Dictionary<string, GameObject> buttons = new Dictionary<string, GameObject>();
-    [Tooltip("이거 GameManaer에서 받아올 예정")]
-    [SerializeField]public InputManager itemp = new InputManager();
 
     void Start()
     {
@@ -23,15 +21,7 @@ public class Main_Lobby_UI : UI_Base
             GameObject temp = buttonRoot.transform.GetChild(i).gameObject;
             buttons.Add(temp.name, temp);
         }
-        //중복 입력 방지
-        itemp.uIKeyPress -= KeyEvent;
-        itemp.uIKeyPress += KeyEvent;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        itemp.UIUpdate();
+        GameManager.Input.SetUIKeyEvent(MainLobbyKeyEvent);
     }
 
     //버튼 기능
@@ -90,7 +80,7 @@ public class Main_Lobby_UI : UI_Base
     }
 
     //ButtonEvent로 다 넘김
-    public void KeyEvent(Define.UIControl keyEvent) {
+    public void MainLobbyKeyEvent(Define.UIControl keyEvent) {
         if (popupUI != null || curSetUI != null || guideUI != null) return;
         switch (keyEvent)
         {
