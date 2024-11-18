@@ -91,7 +91,7 @@ public class Main_Lobby_UI : UI_Base
 
     //ButtonEvent·Î ´Ù ³Ñ±è
     public void KeyEvent(Define.UIControl keyEvent) {
-        if (popupUI != null && curSetUI != null) return;
+        if (popupUI != null || curSetUI != null || guideUI != null) return;
         switch (keyEvent)
         {
             case Define.UIControl.Right:

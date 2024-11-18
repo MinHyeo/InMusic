@@ -1,9 +1,15 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Windows;
 
 public class Message_UI : MonoBehaviour
 {
+    private void Awake()
+    {
+        
+    }
     public void MessageButton(string buttonname) {
         if (buttonname == "Exit") {
             EditorApplication.isPlaying = false; //에디터용
@@ -18,10 +24,10 @@ public class Message_UI : MonoBehaviour
     public void MessageKeyEvent(Define.UIControl keyEvent) {
         switch (keyEvent) {
             case Define.UIControl.Esc:
-                MessageButton("Exit");
+                MessageButton("Cancle");
                 break;
             case Define.UIControl.Enter:
-                MessageButton("Cancle");
+                MessageButton("Exit");
                 break;
         }
     }
