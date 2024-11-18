@@ -33,7 +33,7 @@ public class Main_Lobby_UI : UI_Base
                 break;
             //³ª°¡±â
             case "Exit":
-                if (curSetUI == null && popupUI == null) popupUI = rtemp.Instantiate("Message_UI");
+                if (curSetUI == null && popupUI == null) popupUI = GameManager.Resource.Instantiate("Message_UI");
                 break;
             //¿ÞÂÊ
             case "Left":

@@ -16,9 +16,6 @@ public class Key_Setting_UI : MonoBehaviour
     [SerializeField] int curMenuIndex = 0;
     [SerializeField] Define.NoteControl curNote = Define.NoteControl.Key1;
     [SerializeField] bool isSetMode = false;
-    [Tooltip("이거 GameManaer에서 받아올 예정")]
-    [SerializeField] public InputManager itemp = new InputManager();
-
 
     void Start()
     {
@@ -36,14 +33,7 @@ public class Key_Setting_UI : MonoBehaviour
         curMenu = menuList[curMenuIndex];
         ChangeMenu();
 
-        itemp.uIKeyPress -= KeyEvent;
-        itemp.uIKeyPress += KeyEvent;
-        itemp.Init();
-    }
-
-    void Update()
-    {
-        itemp.UIUpdate();
+        GameManager.Input.SetUIKeyEvent(KetSetKeyEvent);
     }
 
     public void ControlMenu(string arrow)
@@ -82,6 +72,7 @@ public class Key_Setting_UI : MonoBehaviour
                 StartKeySet();
                 break;
             case "Exit":
+                GameManager.Input.RemoveUIKeyEvent(KetSetKeyEvent);
                 Destroy(gameObject);
                 break;
             default:
@@ -90,7 +81,7 @@ public class Key_Setting_UI : MonoBehaviour
         }
     }
 
-    void KeyEvent(Define.UIControl keyEvent) {
+    void KetSetKeyEvent(Define.UIControl keyEvent) {
         switch (keyEvent)
         {
             case Define.UIControl.Up:
@@ -132,12 +123,12 @@ public class Key_Setting_UI : MonoBehaviour
         isSetMode = true;
         menuValues[curMenuIndex].text = $"<color=red>{menuValues[curMenuIndex].text}</color>";
         message.SetActive(isSetMode);
-        itemp.ChangeKey(curNote);
+        GameManager.Input.ChangeKey(curNote);
     }
 
     void EndKeySet() {
         isSetMode = false;
-        string newKey = itemp.GetKey(curNote);
+        string newKey = GameManager.Input.GetKey(curNote);
         menuValues[curMenuIndex].text = $"<color=black>{newKey}</color>";
         Debug.Log($"New key: {newKey}");
         message.SetActive(isSetMode);
