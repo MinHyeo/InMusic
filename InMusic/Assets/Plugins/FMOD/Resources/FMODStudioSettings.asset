@@ -453,20 +453,20 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: 
-  sourceBankPath: 
+  sourceProjectPath: ../../../FMOD Studio/examples/Examples.fspro
+  sourceBankPath: ../../../FMOD Studio/examples/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
-  AutomaticEventLoading: 1
-  BankLoadType: 0
+  AutomaticEventLoading: 0
+  BankLoadType: 1
   AutomaticSampleLoading: 0
   EncryptionKey: 
   ImportType: 0
   TargetAssetPath: FMODBanks
-  TargetBankFolder: 
+  TargetBankFolder: SFX
   EventLinkage: 0
-  LoggingLevel: 2
+  LoggingLevel: 4
   SpeakerModeSettings: []
   SampleRateSettings: []
   LiveUpdateSettings: []
@@ -492,18 +492,18 @@ MonoBehaviour:
   HideSetupWizard: 0
   LastEventReferenceScanVersion: 131620
   Platforms:
+  - {fileID: -8264529419716019935}
+  - {fileID: -8107440554157674422}
   - {fileID: -6228293839971754878}
+  - {fileID: -5254451219649015262}
+  - {fileID: -4002879190915039444}
   - {fileID: -1179724043526072876}
-  - {fileID: 9145295950050274753}
-  - {fileID: 8756311003347953891}
+  - {fileID: 3981075624763615640}
   - {fileID: 5253000760332158669}
   - {fileID: 7374529997391192452}
-  - {fileID: -8107440554157674422}
-  - {fileID: -5254451219649015262}
-  - {fileID: 3981075624763615640}
-  - {fileID: -8264529419716019935}
   - {fileID: 8340922605983375272}
-  - {fileID: -4002879190915039444}
+  - {fileID: 8756311003347953891}
+  - {fileID: 9145295950050274753}
   MigratedPlatforms: 080000001200000006000000050000000b000000000000000a000000090000000c000000150000000200000001000000
 --- !u!114 &3981075624763615640
 MonoBehaviour:
@@ -794,16 +794,16 @@ MonoBehaviour:
     HasValue: 0
   displaySortOrder: 0
   childIdentifiers:
+  - 46fbfdf3fc43db0458918377fd40293e
+  - b7716510a1f36934c87976f3a81dbf3d
   - 2c5177b11d81d824dbb064f9ac8527da
+  - 52eb9df5db46521439908db3a29a1bbb
   - e7a046c753c3c3d4aacc91f6597f310d
-  - c88d16e5272a4e241b0ef0ac2e53b73d
-  - fd7c55dab0fce234b8c25f6ffca523c1
+  - 2fea114e74ecf3c4f920e1d5cc1c4c40
   - 0f8eb3f400726694eb47beb1a9f94ce8
   - de700ef3f37a49b58a57ae3addf01ad9
-  - b7716510a1f36934c87976f3a81dbf3d
-  - 52eb9df5db46521439908db3a29a1bbb
-  - 2fea114e74ecf3c4f920e1d5cc1c4c40
-  - 46fbfdf3fc43db0458918377fd40293e
+  - fd7c55dab0fce234b8c25f6ffca523c1
+  - c88d16e5272a4e241b0ef0ac2e53b73d
   codecChannels:
     Value: []
     HasValue: 0

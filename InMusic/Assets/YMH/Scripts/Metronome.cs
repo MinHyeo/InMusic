@@ -26,7 +26,8 @@ public class Metronome : MonoBehaviour
     private float songBpm = 92f;
     private float stdBpm = 60;
 
-    private const float defaultOffset = 0.05f;
+    [SerializeField]
+    private float defaultOffset = 0.05f;
 
     private bool isStart = false;
     private int underBeats = 4;
@@ -67,8 +68,10 @@ public class Metronome : MonoBehaviour
 
         // 음악 재생 및 메트로놈 시작
         audioSource.Play();
-        NoteManager.instance.InitializeNotes(BmsLoader.instance.songInfo);
-        isStart = true;
+        //NoteManager.instance.InitializeNotes(BmsLoader.instance.songInfo);
+        //isStart = true;
+
+        yield return null;
     }
     private void CalculateSync()
     {
@@ -82,33 +85,36 @@ public class Metronome : MonoBehaviour
         // 마디 선이 판정선까지 도달하는 데 걸리는 시간 계산
         float distanceToJudgementLine = lineSpawnPoint.position.y - judgementLine.position.y;
         travelTime = distanceToJudgementLine / lineSpeed;
-
+        Debug.Log(travelTime);
     }
     private IEnumerator SpawnInitialMeasureLines()
     {
-        // 초기 딜레이 동안 마디 선을 미리 생성
-        float currentTime = -travelTime;
-
-        // 인트로 딜레이 동안 필요한 마디 선을 생성
-        while (currentTime < 0)
+        float initialSpawnTime = preStartDelay - travelTime;
+        Debug.Log(initialSpawnTime);
+        if (initialSpawnTime > 0)
         {
-            float spawnTime = Time.time + currentTime;
-            StartCoroutine(SpawnMeasureLine(spawnTime));
-            currentTime += measureInterval;
-        }
+            yield return new WaitForSeconds(initialSpawnTime);
 
-        yield return null;
+            // 마디 선 생성
+            GameObject newLine = Instantiate(linePrefab, lineSpawnPoint.position, Quaternion.identity);
+            newLine.GetComponent<Line>().Initialize(lineSpeed, judgementLine.position.y);
+            Debug.Log("마디 선 생성");
+        }
     }
     private IEnumerator PlayTicks()
     {
         hitSource.Play();
-        nextSample += (stdBpm / songBpm) * audioSource.clip.frequency;
-        text.text = $"BPM - 92 : {upperBeats++} / {underBeats}";
+        nextSample += samplesPerBeat;
+        text.text = $"BPM - 92 : {upperBeats} / {underBeats}";
+        if(upperBeats == 1)
+        {
+            float measureStartTime = Time.time + measureInterval;
+            StartCoroutine(SpawnMeasureLine(measureStartTime - travelTime));
+        }
+        upperBeats++;
         if (upperBeats > underBeats)
         {
             upperBeats = 1;
-            float measureStartTime = Time.time + measureInterval;
-            StartCoroutine(SpawnMeasureLine(measureStartTime - travelTime));
         }
 
         yield return null;
