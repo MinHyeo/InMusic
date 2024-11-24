@@ -39,10 +39,10 @@ public class SongInfo
 
 public class BmsLoader : MonoBehaviour
 {
-    public static BmsLoader instance;
+    public static BmsLoader Instance;
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     public SongInfo songInfo;

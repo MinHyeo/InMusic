@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -19,20 +18,28 @@ public class NoteData
 
 public class NoteManager : MonoBehaviour
 {
-    public static NoteManager instance;  // 싱글톤 인스턴스
-    [SerializeField] private GameObject notePrefab;
-    [SerializeField] private Transform[] noteSpawnPoints; // 각 채널별 노트 생성 위치
-    [SerializeField] private float noteSpeed = 5.0f;      // 노트 이동 속도
-    [SerializeField] private Transform judgementLine;
+    public static NoteManager Instance;  // 싱글톤 인스턴스
+    [SerializeField] 
+    private GameObject notePrefab;
+    [SerializeField] 
+    private Transform[] noteSpawnPoints; // 각 채널별 노트 생성 위치
+    [SerializeField]
+    private float noteSpeed;
+    [SerializeField] 
+    private Transform judgementLine;
 
     private List<NoteData> noteDataList;
     private float songStartTime;
-    private float travelTime; // 판정선까지 도달하는 시간
+
+    private float samplesPerBeat;   //한 박자의 샘플 간격 계산
+    private float measureInterval;  // 한 마디 간격 (4/4박자 기준)
+    private float travelTime;       // 판정선까지 도달하는 시간
+    
     private bool isPlaying = false;
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     public void InitializeNotes(SongInfo songInfo)
@@ -40,59 +47,64 @@ public class NoteManager : MonoBehaviour
         noteDataList = songInfo.NoteList;
 
         // 노트 생성 시 음악과의 타이밍 맞추기 위해 초기화
-        travelTime = (noteSpawnPoints[0].position.y - judgementLine.position.y) / noteSpeed;
-        songStartTime = Time.time + Metronome.instance.preStartDelay; // 노래 시작 시간 설정
+        songStartTime = Time.time + Metronome.Instance.preStartDelay; // 노래 시작 시간 설정
 
         StartCoroutine(SpawnNotes());
+    }
+
+    public void SetTimingInfo(float samplesPerBeat, float measureInterval, float travelTime)
+    {
+        this.samplesPerBeat = samplesPerBeat;
+        this.measureInterval = measureInterval;
+        this.travelTime = travelTime;
     }
 
     private IEnumerator SpawnNotes()
     {
         foreach (NoteData noteData in noteDataList)
         {
-            float barTime = GetBarTime(noteData.bar);
-            int divisions = noteData.noteData.Count;
+            // 각 마디(bar)에 대한 시작 시간을 계산
+            float barTime = GetBarTime(noteData.bar);  // 마디(bar) 번호에 따른 시간 계산
+
+            int divisions = noteData.noteData.Count;  // 해당 마디의 나누어진 개수 (노트의 분할 수)
 
             for (int i = 0; i < divisions; i++)
             {
                 int noteValue = noteData.noteData[i];
-                if (noteValue != 0)
+
+                if (noteValue != 0)  // 값이 0이 아니면 노트를 생성할 필요가 있음
                 {
                     int channel = noteData.channel;
 
-                    // 노트 생성 시점 계산
-                    float spawnTime = (barTime / divisions) * i;
-                    float noteAppearTime = songStartTime + barTime + spawnTime - travelTime;
+                    // 노트 생성 타이밍 계산
+                    float noteAppearTime = barTime + (measureInterval / divisions) * i;
 
-                    // 노트 생성 예약
-                    StartCoroutine(SpawnNoteCoroutine(channel, noteAppearTime));
+                    // 실제 소환 시점을 결정하기 위해 이동 시간을 고려
+                    float spawnTime = songStartTime + noteAppearTime - travelTime;
+
+                    // 노트 생성 예약 (코루틴 실행)
+                    StartCoroutine(SpawnNoteCoroutine(channel, spawnTime));
                 }
             }
 
-            yield return null;
+            yield return null;  // 각 마디를 처리한 후 한 프레임 대기
         }
+    }
+
+    private float GetBarTime(int barNumber)
+    {
+        // 각 마디의 시간을 계산하는 함수
+        return barNumber * measureInterval;
     }
 
     private IEnumerator SpawnNoteCoroutine(int channel, float spawnTime)
     {
         // spawnTime까지 대기
-        float waitTime = spawnTime - Time.time;
-        if (waitTime > 0)
-        {
-            yield return new WaitForSeconds(waitTime);
-        }
+        yield return new WaitForSeconds(spawnTime - Time.time);
 
         // 노트 생성
         GameObject note = Instantiate(notePrefab, noteSpawnPoints[channel - 11].position, Quaternion.identity);
         Note noteScript = note.GetComponent<Note>();
         noteScript.Initialize(noteSpeed, judgementLine.position.y);
-    }
-
-    private float GetBarTime(int bar)
-    {
-        // 한 마디의 길이 계산 (BPM에 따라 변경 가능)
-        float beatTime = 60f / BmsLoader.instance.songInfo.BPM;
-        float barTime = beatTime * 4.0f; // 4/4박자 기준
-        return barTime;
     }
 }

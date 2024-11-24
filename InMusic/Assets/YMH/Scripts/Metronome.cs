@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Metronome : MonoBehaviour
 {
-    public static Metronome instance;
+    public static Metronome Instance;
 
     [SerializeField]
     private AudioSource hitSource;
@@ -20,7 +20,6 @@ public class Metronome : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI text;
 
-    private AudioSource audioSource;
     private float nextSample;
     private float samplesPerBeat;
     private float songBpm = 92f;
@@ -32,15 +31,14 @@ public class Metronome : MonoBehaviour
     private bool isStart = false;
     private int underBeats = 4;
     private int upperBeats = 1;
+    private float frequency;
     private float measureInterval;
     private float travelTime;
-    public float preStartDelay = 2.0f;
+    public readonly float preStartDelay = 2.0f;
 
     private void Awake()
     {
-        instance = this;
-
-        audioSource = GetComponent<AudioSource>();
+        Instance = this;
     }
 
     private void Update()
@@ -49,7 +47,7 @@ public class Metronome : MonoBehaviour
             return;
 
         // 곡 진행시간 * 주파수가 다음 라인보다 크거나 같으면 작동.
-        if (audioSource.timeSamples >= nextSample)
+        if (SoundManager.Instance.positionInSamples >= nextSample)
         {
             StartCoroutine(PlayTicks());
         }
@@ -58,39 +56,34 @@ public class Metronome : MonoBehaviour
     public void OnClickButton()
     {
         CalculateSync();
-        StartCoroutine(SpawnInitialMeasureLines());
-        StartCoroutine(StartMusicWithIntroDelay());
     }
-    private IEnumerator StartMusicWithIntroDelay()
-    {
-        // 2초 인트로 시간 대기
-        yield return new WaitForSeconds(preStartDelay);
-
-        // 음악 재생 및 메트로놈 시작
-        audioSource.Play();
-        //NoteManager.instance.InitializeNotes(BmsLoader.instance.songInfo);
-        //isStart = true;
-
-        yield return null;
-    }
-    private void CalculateSync()
+    public void CalculateSync()
     {
         // 한 박자의 샘플 간격 계산
-        samplesPerBeat = (stdBpm / songBpm) * audioSource.clip.frequency;
-        nextSample = samplesPerBeat - (audioSource.clip.frequency * defaultOffset);
+        frequency = SoundManager.Instance.frequency;
+        samplesPerBeat = (stdBpm / songBpm) * frequency;
+        //nextSample = samplesPerBeat;// - (frequency * defaultOffset);
 
         // 한 마디 간격 (4/4박자 기준)
-        measureInterval = samplesPerBeat * 4.0f / audioSource.clip.frequency;
+        measureInterval = samplesPerBeat * 4.0f / frequency;
 
         // 마디 선이 판정선까지 도달하는 데 걸리는 시간 계산
         float distanceToJudgementLine = lineSpawnPoint.position.y - judgementLine.position.y;
         travelTime = distanceToJudgementLine / lineSpeed;
-        Debug.Log(travelTime);
+
+        NoteManager.Instance.SetTimingInfo(samplesPerBeat, measureInterval, travelTime);
+    }
+    public void StartMetronome()
+    {
+        isStart = true;
+    }
+    public void StartInitialMetronome()
+    {
+        StartCoroutine(SpawnInitialMeasureLines());
     }
     private IEnumerator SpawnInitialMeasureLines()
     {
         float initialSpawnTime = preStartDelay - travelTime;
-        Debug.Log(initialSpawnTime);
         if (initialSpawnTime > 0)
         {
             yield return new WaitForSeconds(initialSpawnTime);
@@ -104,7 +97,7 @@ public class Metronome : MonoBehaviour
     private IEnumerator PlayTicks()
     {
         hitSource.Play();
-        nextSample += samplesPerBeat;
+        nextSample += samplesPerBeat - (frequency * defaultOffset);
         text.text = $"BPM - 92 : {upperBeats} / {underBeats}";
         if(upperBeats == 1)
         {
