@@ -71,7 +71,7 @@ public class Metronome : MonoBehaviour
         float distanceToJudgementLine = lineSpawnPoint.position.y - judgementLine.position.y;
         travelTime = distanceToJudgementLine / lineSpeed;
 
-        NoteManager.Instance.SetTimingInfo(samplesPerBeat, measureInterval, travelTime);
+        NoteManager.Instance.SetTimingInfo(measureInterval, travelTime);
     }
     public void StartMetronome()
     {
@@ -97,7 +97,7 @@ public class Metronome : MonoBehaviour
     private IEnumerator PlayTicks()
     {
         hitSource.Play();
-        nextSample += samplesPerBeat - (frequency * defaultOffset);
+        nextSample += samplesPerBeat;// - (frequency * defaultOffset);
         text.text = $"BPM - 92 : {upperBeats} / {underBeats}";
         if(upperBeats == 1)
         {

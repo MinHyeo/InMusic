@@ -28,10 +28,10 @@ public class NoteManager : MonoBehaviour
     [SerializeField] 
     private Transform judgementLine;
 
+    public List<Note> NoteList = new List<Note>();
     private List<NoteData> noteDataList;
     private float songStartTime;
 
-    private float samplesPerBeat;   //한 박자의 샘플 간격 계산
     private float measureInterval;  // 한 마디 간격 (4/4박자 기준)
     private float travelTime;       // 판정선까지 도달하는 시간
     
@@ -52,9 +52,8 @@ public class NoteManager : MonoBehaviour
         StartCoroutine(SpawnNotes());
     }
 
-    public void SetTimingInfo(float samplesPerBeat, float measureInterval, float travelTime)
+    public void SetTimingInfo(float measureInterval, float travelTime)
     {
-        this.samplesPerBeat = samplesPerBeat;
         this.measureInterval = measureInterval;
         this.travelTime = travelTime;
     }
@@ -105,6 +104,15 @@ public class NoteManager : MonoBehaviour
         // 노트 생성
         GameObject note = Instantiate(notePrefab, noteSpawnPoints[channel - 11].position, Quaternion.identity);
         Note noteScript = note.GetComponent<Note>();
-        noteScript.Initialize(noteSpeed, judgementLine.position.y);
+        NoteList.Add(noteScript);
+        noteScript.Initialize(channel, noteSpeed, judgementLine.position.y);
+    }
+
+    public void RemoveNoteFromActiveList(Note note)
+    {
+        if (NoteList.Contains(note))
+        {
+            NoteList.Remove(note);
+        }
     }
 }

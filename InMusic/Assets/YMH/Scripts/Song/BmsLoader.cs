@@ -224,8 +224,6 @@ public class BmsLoader : MonoBehaviour
                 break;
             }
         }
-        //임시 코드(4줄이 아니라 3줄이라 한 줄 추가)
-        //noteList.Add(0);
 
 
         noteCount = 0;

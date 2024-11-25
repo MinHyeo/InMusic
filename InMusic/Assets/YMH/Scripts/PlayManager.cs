@@ -22,9 +22,10 @@ public class PlayManager : MonoBehaviour
     private float preStartDelay = 2.0f;
     private float noteSpeed = 5.0f;
 
-    private void Start()
-    {
-    }
+    private float greateThreshold = 53.3f;
+    private float goodThreshold = 41.6f;
+    private float badThreshold = 83.2f;
+    private float missThreshold = 41.6f;
 
     public void OnClickButton()
     {
@@ -60,5 +61,65 @@ public class PlayManager : MonoBehaviour
     private void PlaySong()
     {
         SoundManager.Instance.Play();
+    }
+
+    public void OnKeyPress(int channel, float pressTime)
+    {
+        // 해당 라인에 있는 노트 중 판정할 노트 검색
+        Note closestNote = FindClosestNoteToPressTime(channel, pressTime);
+
+        if (closestNote != null)
+        {
+            float timeDifference = Mathf.Abs(pressTime - closestNote.targetTime);
+
+            if (timeDifference <= greateThreshold)
+            {
+                HandleNoteHit(closestNote, "Perfect");
+            }
+            else if (timeDifference <= goodThreshold)
+            {
+                HandleNoteHit(closestNote, "Good");
+            }
+            else
+            {
+                HandleNoteMiss(channel);
+            }
+        }
+        else
+        {
+            HandleNoteMiss(channel);
+        }
+    }
+
+    private Note FindClosestNoteToPressTime(int channel, float pressTime)
+    {
+        Note closestNote = null;
+        float minTimeDifference = float.MaxValue;
+
+        foreach (Note note in NoteManager.Instance.NoteList)
+        {
+            if (note.channel == channel)
+            {
+                float timeDifference = Mathf.Abs(note.targetTime - pressTime);
+                if (timeDifference < minTimeDifference)
+                {
+                    minTimeDifference = timeDifference;
+                    closestNote = note;
+                }
+            }
+        }
+
+        return closestNote;
+    }
+
+    private void HandleNoteHit(Note note, string result)
+    {
+        Debug.Log($"Hit! {result}");
+        note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
+    }   
+
+    private void HandleNoteMiss(int line)
+    {
+        Debug.Log($"Miss on line {line}!");
     }
 }
