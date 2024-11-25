@@ -104,8 +104,9 @@ public class NoteManager : MonoBehaviour
         // 노트 생성
         GameObject note = Instantiate(notePrefab, noteSpawnPoints[channel - 11].position, Quaternion.identity);
         Note noteScript = note.GetComponent<Note>();
+
         NoteList.Add(noteScript);
-        noteScript.Initialize(channel, noteSpeed, judgementLine.position.y);
+        noteScript.Initialize(channel, noteSpeed, travelTime);
     }
 
     public void RemoveNoteFromActiveList(Note note)

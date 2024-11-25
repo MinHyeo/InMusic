@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using UnityEngine;
 using FMODUnity;
+using TMPro;
 
 public class PlayManager : MonoBehaviour
 {
@@ -17,15 +18,16 @@ public class PlayManager : MonoBehaviour
 
     [SerializeField]
     private Metronome metronome;
+    public TextMeshProUGUI text;
 
     private Song songName;
     private float preStartDelay = 2.0f;
     private float noteSpeed = 5.0f;
 
-    private float greateThreshold = 53.3f;
-    private float goodThreshold = 41.6f;
-    private float badThreshold = 83.2f;
-    private float missThreshold = 41.6f;
+    private float greateThreshold = 0.0533f;
+    private float goodThreshold = 0.0416f;
+    private float badThreshold = 0.0832f;
+    private float missThreshold = 0.0416f;
 
     public void OnClickButton()
     {
@@ -76,13 +78,17 @@ public class PlayManager : MonoBehaviour
             {
                 HandleNoteHit(closestNote, "Perfect");
             }
-            else if (timeDifference <= goodThreshold)
+            else if ((timeDifference -= greateThreshold) <= goodThreshold)
             {
                 HandleNoteHit(closestNote, "Good");
             }
-            else
+            else if((timeDifference -= goodThreshold) <= badThreshold)
             {
-                HandleNoteMiss(channel);
+                HandleNoteHit(closestNote, "Bad");
+            }
+            else if((timeDifference -= badThreshold) <= missThreshold)
+            {
+                HandleNoteHit(closestNote, "Miss");
             }
         }
         else
@@ -115,6 +121,7 @@ public class PlayManager : MonoBehaviour
     private void HandleNoteHit(Note note, string result)
     {
         Debug.Log($"Hit! {result}");
+        text.text = result;
         note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
     }   
 

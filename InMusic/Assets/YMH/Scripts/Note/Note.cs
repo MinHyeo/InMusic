@@ -6,15 +6,15 @@ public class Note : MonoBehaviour
 {
     public int channel;
     private float speed;
-    private float targetY;
+    private float travelTime;
 
-    public float targetTime { get { return Time.time; } }
+    public float targetTime;
 
-    public void Initialize(int channel, float noteSpeed, float judgementLineY)
+    public void Initialize(int channel, float noteSpeed, float travelTime)
     {
         this.channel = channel;
-        speed = noteSpeed;
-        targetY = judgementLineY;
+        this.speed = noteSpeed;
+        this.targetTime = travelTime + Time.time;
     }
 
     private void Update()
@@ -22,7 +22,7 @@ public class Note : MonoBehaviour
         // 노트가 내려오는 로직
         transform.Translate(Vector3.down * speed * Time.deltaTime);
 
-        // 판정선에 도달하면 삭제
+        // 특정 위치까지 도달하면 삭제
         if (transform.position.y <= -3.0f)
         {
             Destroy(gameObject);
