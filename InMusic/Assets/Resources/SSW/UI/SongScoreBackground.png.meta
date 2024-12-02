@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      SongScoreBackground_0: 8678751573714939821
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
