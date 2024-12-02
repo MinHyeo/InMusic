@@ -8,6 +8,7 @@ public class NoteData
 {
     public int bar;
     public int channel;
+    public int noteCount;
     public List<int> noteData;
 
     public override string ToString()
@@ -28,6 +29,7 @@ public class NoteManager : MonoBehaviour
     [SerializeField] 
     private Transform judgementLine;
 
+    private int noteCount;
     public List<Note> NoteList = new List<Note>();
     private List<NoteData> noteDataList;
     private float songStartTime;
@@ -45,6 +47,7 @@ public class NoteManager : MonoBehaviour
     public void InitializeNotes(SongInfo songInfo)
     {
         noteDataList = songInfo.NoteList;
+        noteCount = songInfo.NoteCount;
 
         // 노트 생성 시 음악과의 타이밍 맞추기 위해 초기화
         songStartTime = Time.time + Metronome.Instance.preStartDelay; // 노래 시작 시간 설정
@@ -106,7 +109,7 @@ public class NoteManager : MonoBehaviour
         Note noteScript = note.GetComponent<Note>();
 
         NoteList.Add(noteScript);
-        noteScript.Initialize(channel, noteSpeed, travelTime);
+        noteScript.Initialize(channel, noteSpeed, travelTime, 1000000 / noteCount);
     }
 
     public void RemoveNoteFromActiveList(Note note)

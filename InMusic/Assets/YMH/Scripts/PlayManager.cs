@@ -29,6 +29,9 @@ public class PlayManager : MonoBehaviour
     private float badThreshold = 0.0832f;
     private float missThreshold = 0.0416f;
 
+    private float score = 0;
+    private float accuracy = 100;
+
     public void OnClickButton()
     {
         StartGame();
@@ -76,19 +79,19 @@ public class PlayManager : MonoBehaviour
 
             if (timeDifference <= greateThreshold)
             {
-                HandleNoteHit(closestNote, "Perfect");
+                HandleNoteHit(closestNote, "Perfect" , 100);
             }
             else if ((timeDifference -= greateThreshold) <= goodThreshold)
             {
-                HandleNoteHit(closestNote, "Good");
+                HandleNoteHit(closestNote, "Good", 70);
             }
             else if((timeDifference -= goodThreshold) <= badThreshold)
             {
-                HandleNoteHit(closestNote, "Bad");
+                HandleNoteHit(closestNote, "Bad", 40);
             }
             else if((timeDifference -= badThreshold) <= missThreshold)
             {
-                HandleNoteHit(closestNote, "Miss");
+                HandleNoteHit(closestNote, "Miss", 0);
             }
         }
         else
@@ -118,11 +121,18 @@ public class PlayManager : MonoBehaviour
         return closestNote;
     }
 
-    private void HandleNoteHit(Note note, string result)
+    private void HandleNoteHit(Note note, string result, float percent)
     {
         Debug.Log($"Hit! {result}");
-        text.text = result;
-        note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
+        //text.text = result;
+        float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
+
+        score += noteScore * (percent / 100);
+        int scoreInt = (int)score;
+        accuracy = (accuracy + percent) / 2;
+
+        text.text = "Score : " + scoreInt.ToString() +"\n";
+        text.text += accuracy.ToString("F2") + "%";
     }   
 
     private void HandleNoteMiss(int line)

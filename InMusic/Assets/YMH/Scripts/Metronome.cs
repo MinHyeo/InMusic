@@ -121,6 +121,5 @@ public class Metronome : MonoBehaviour
         // 原巨 識 持失
         GameObject newLine = Instantiate(linePrefab, lineSpawnPoint.position, Quaternion.identity);
         newLine.GetComponent<Line>().Initialize(lineSpeed, judgementLine.position.y);
-        Debug.Log("原巨 識 持失");
     }
 }

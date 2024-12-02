@@ -57,7 +57,6 @@ public class SoundManager : MonoBehaviour
 
         //현재 샘플 계산
         musicSound.getDefaults(out frequency, out _);
-        UnityEngine.Debug.Log(frequency);
     }
 
     private void Update()
