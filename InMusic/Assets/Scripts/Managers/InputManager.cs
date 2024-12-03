@@ -86,11 +86,14 @@ public class InputManager
 
     //건반 조작할 때 사용할 메서드
     public void NoteUpdate() {
-        foreach (var entry in keyMapping)
+        if (noteKeyPress != null)
         {
-            if (Input.GetKeyDown(entry.Value))
+            foreach (var entry in keyMapping)
             {
-                noteKeyPress.Invoke(entry.Key);
+                if (Input.GetKeyDown(entry.Value))
+                {
+                    noteKeyPress.Invoke(entry.Key);
+                }
             }
         }
     }
