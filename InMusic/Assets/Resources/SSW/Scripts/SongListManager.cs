@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,26 +8,49 @@ namespace SongList
 {
     public class SongListManager : MonoBehaviour
     {
-        [Header("UI References")]
+        [Header("ScrollRect Settings")]
         [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private RectTransform _contentRect;
-        [SerializeField] private GameObject _songItemPrefab;
 
-        [Header("Settings")]
+
+        [Header("Slot Settings")]
+        [SerializeField] private GameObject _songItemPrefab;
         [SerializeField] private int _totalSongCount = 50;
-        [SerializeField] private int _bufferItemCount = 13;
-        [SerializeField] private float _itemHeight = 83f;
+        [SerializeField] private int _bufferItems = 3;
+        // [SerializeField] private float _itemHeight = 83f;
 
         private LinkedList<GameObject> _songList = new LinkedList<GameObject>();
+        private int _poolSize;
+        private float _itemHeight;
+        private int _firstVisibleIndexCached = 0;
+        private bool _isScrolling = false;
 
-        private void Start() {
+        private void Awake() {
+            // contentRect의 RectTransform 컴포넌트를 가져옴
             _contentRect = _contentRect.GetComponent<RectTransform>();
             
-            float  contentHeight = _totalSongCount * _itemHeight;
+            // itemPrefab의 높이를 계산
+            _itemHeight = _songItemPrefab.GetComponent<RectTransform>().sizeDelta.y;
+        }
 
+        // UI의 초기화를 위한 코루틴
+        private IEnumerator Start() {
+            yield return null;
+            // viewport의 높이를 계산
+            float viewportHeight = _scrollRect.viewport.rect.height;
+
+            // 한 번에 보여지는 아이템의 개수 계산
+            int visibleCount = Mathf.CeilToInt(viewportHeight / _itemHeight);
+
+            // 메모리에 생성할 아이템의 개수 계산
+            _poolSize = visibleCount + _bufferItems * 2;
+
+            // contentRect의 높이 설정
+            float contentHeight = _totalSongCount * _itemHeight;
             _contentRect.sizeDelta = new Vector2(_contentRect.sizeDelta.x, contentHeight);
 
-            for (int i = 0; i < _totalSongCount; i++) {
+            // 아이템 풀 초기화
+            for (int i = 0; i < _poolSize; i++) {
                 GameObject slotSong = Instantiate(_songItemPrefab, _contentRect);
 
                 RectTransform rt = slotSong.GetComponent<RectTransform>();
@@ -35,33 +59,207 @@ namespace SongList
 
                 Text txt = slotSong.GetComponentInChildren<Text>();
                 if (txt != null) { 
-                    txt.text = $"Item #{i}";
+                    txt.text = $"Item #{i + 1}";
                 }
                 _songList.AddLast(slotSong);
             }
 
-            // SlotInit();
+            // 스크롤 이벤트 플래그 체크
+            _scrollRect.onValueChanged.AddListener(SetScrollDirty);
 
-            _scrollRect.onValueChanged.AddListener(OnScroll);
+            Debug.Log($"Viewport height = {viewportHeight}"); 
+            Debug.Log($"ItemHeight = {_itemHeight}");
+            Debug.Log($"=> visibleCount = {visibleCount}, poolSize={_poolSize}");
         }
 
-        private void OnScroll(Vector2 scrollPosition) {
-            float scrollOffset = _contentRect.anchoredPosition.y;
-            float currentScrollIndex = Mathf.FloorToInt(scrollOffset / _itemHeight);
+        // private void Start() {
+        //     // viewport의 높이를 계산
+        //     float viewportHeight = _scrollRect.viewport.rect.height;
 
-            int startIndex = (int)currentScrollIndex;
-            int endIndex = startIndex + _bufferItemCount;
+        //     // 한 번에 보여지는 아이템의 개수를 계산
+        //     int visibleCount = Mathf.CeilToInt(viewportHeight / _itemHeight);
 
-            int index = 0;
-            foreach (GameObject song in _songList) {
-                if (index >= startIndex && index < endIndex) {
-                    song.SetActive(true);
-                } else {
-                    song.SetActive(false);
-                }
-                index++;
+        //     // 메모리에 생성할 아이템의 개수를 계산
+        //     _poolSize = visibleCount + _bufferItems * 2;
+
+        //     // contentRect의 높이를 계산
+        //     float contentHeight = _totalSongCount * _itemHeight;
+
+        //     // contentRect의 높이를 설정
+        //     _contentRect.sizeDelta = new Vector2(_contentRect.sizeDelta.x, contentHeight);
+
+        //     // 아이템 풀 초기화
+        //     for (int i = 0; i < _poolSize; i++) {
+        //         GameObject slotSong = Instantiate(_songItemPrefab, _contentRect);
+
+        //         RectTransform rt = slotSong.GetComponent<RectTransform>();
+        //         float yPos = -(i * _itemHeight);
+        //         rt.anchoredPosition = new Vector2(0, yPos);
+
+        //         Text txt = slotSong.GetComponentInChildren<Text>();
+        //         if (txt != null) { 
+        //             txt.text = $"Item #{i + 1}";
+        //         }
+        //         _songList.AddLast(slotSong);
+        //     }
+        //     // SlotInit();
+        //     // 스크롤 이벤트 플래그 체크
+        //     _scrollRect.onValueChanged.AddListener(SetScrollDirty);
+
+        //     Debug.Log($"Viewport height = {viewportHeight}"); 
+        //     Debug.Log($"ItemHeight = {_itemHeight}");
+        //     Debug.Log($"=> visibleCount = {visibleCount}, poolSize={_poolSize}");
+
+        // }
+
+        private void LateUpdate() {
+            if(_isScrolling) {
+                _isScrolling = false;
+                OnScroll();
+            }
+
+            float viewportHeight = _scrollRect.viewport.rect.height;
+            Debug.Log($"After ForceRebuild, viewportHeight = {viewportHeight}");
+        }
+
+        private void SetScrollDirty(Vector2 pos) {
+            _isScrolling = true;
+        }
+
+        private void OnScroll() {
+            float contentY = _contentRect.anchoredPosition.y;
+
+            int newFirstIndex = Mathf.FloorToInt(contentY / _itemHeight) - _bufferItems;
+
+            if (newFirstIndex < 0) {
+                newFirstIndex = 0;
+            }
+
+            if (newFirstIndex != _firstVisibleIndexCached) {
+                int diffIndex = _firstVisibleIndexCached - newFirstIndex;
+
+                bool scrollDown = (diffIndex < 0);
+
+                int shiftCount = Mathf.Abs(diffIndex);
+
+                ShiftSlots(shiftCount, scrollDown, newFirstIndex);
+
+                _firstVisibleIndexCached = newFirstIndex;
             }
         }
+
+        private void ShiftSlots(int shiftCount, bool scrollDown, int newFirstIndex) {
+
+            for (int i = 0; i < shiftCount; i++) {
+                if (scrollDown) {
+                    GameObject slot = _songList.First.Value;
+                    _songList.RemoveFirst();
+                    _songList.AddLast(slot);
+
+                    int newIndex = _firstVisibleIndexCached + _poolSize + i;
+
+                    RectTransform rt = slot.GetComponent<RectTransform>();
+                    rt.anchoredPosition = CalculateSlotPoisition(newIndex);
+
+                    UpdateSlotData(slot, newIndex);
+                } else {
+                    GameObject slot = _songList.Last.Value;
+                    _songList.RemoveLast();
+                    _songList.AddFirst(slot);
+
+                    int newIndex = newFirstIndex - i;
+
+                    RectTransform rt = slot.GetComponent<RectTransform>();
+                    rt.anchoredPosition = CalculateSlotPoisition(newIndex);
+
+                    UpdateSlotData(slot, newIndex);
+                }
+            }
+
+
+            // LinkedListNode<GameObject> firstNode = _songList.First;
+            // LinkedListNode<GameObject> lastNode = _songList.Last;
+
+            // if (scrollDown) {
+            //     for (int i = 0; i < shiftCount; i++) {
+            //         GameObject slotSong = firstNode.Value;
+            //         RectTransform rt = slotSong.GetComponent<RectTransform>();
+            //         float yPos = lastNode.Value.GetComponent<RectTransform>().anchoredPosition.y - _itemHeight;
+            //         rt.anchoredPosition = new Vector2(0, yPos);
+
+            //         Text txt = slotSong.GetComponentInChildren<Text>();
+            //         if (txt != null) {
+            //             txt.text = $"Item #{newFirstIndex + _poolSize + i + 1}";
+            //         }
+
+            //         _songList.RemoveFirst();
+            //         _songList.AddLast(slotSong);
+            //         firstNode = _songList.First;
+            //         lastNode = _songList.Last;
+            //     }
+            // } else {
+            //     for (int i = 0; i < shiftCount; i++) {
+            //         GameObject slotSong = lastNode.Value;
+            //         RectTransform rt = slotSong.GetComponent<RectTransform>();
+            //         float yPos = firstNode.Value.GetComponent<RectTransform>().anchoredPosition.y + _itemHeight;
+            //         rt.anchoredPosition = new Vector2(0, yPos);
+
+            //         Text txt = slotSong.GetComponentInChildren<Text>();
+            //         if (txt != null) {
+            //             txt.text = $"Item #{newFirstIndex - i}";
+            //         }
+
+            //         _songList.RemoveLast();
+            //         _songList.AddFirst(slotSong);
+            //         firstNode = _songList.First;
+            //         lastNode = _songList.Last;
+            //     }
+            // }
+        }
+
+        private Vector2 CalculateSlotPoisition(int index) {
+            float y = -(index * _itemHeight) - (_itemHeight * 0.5f);
+            return new Vector2(0, y);
+        }
+
+        private void UpdateSlotData(GameObject slot, int dataIndex) {
+            if (dataIndex < 0 || dataIndex >= _totalSongCount) {
+                slot.SetActive(false);
+                return;
+            } else {
+                slot.SetActive(true);
+                Text txt = slot.GetComponentInChildren<Text>();
+                if (txt != null) {
+                    txt.text = $"Item #{dataIndex + 1}";
+                }
+
+            }
+        }
+
+
+
+
+
+        // Onscroll 아직 수정안했음(나중에 고쳐야 함)
+        // 스크롤 이벤트가 발생할 때마다 호출되는 함수
+        // private void OnScroll(Vector2 scrollPosition) {
+        //     float contentY = _contentRect.anchoredPosition.y;
+        //     int firstVisibleIndex = Mathf.Max(0, Mathf.FloorToInt(contentY / _itemHeight) - _bufferItems);
+        //     float currentScrollIndex = Mathf.FloorToInt(contentY / _itemHeight);
+
+        //     int startIndex = (int)currentScrollIndex;
+        //     int endIndex = startIndex + _bufferItems;
+
+        //     int index = 0;
+        //     foreach (GameObject song in _songList) {
+        //         if (index >= startIndex && index < endIndex) {
+        //             song.SetActive(true);
+        //         } else {
+        //             song.SetActive(false);
+        //         }
+        //         index++;
+        //     }
+        // }
 
 
         // private void SlotInit() {
