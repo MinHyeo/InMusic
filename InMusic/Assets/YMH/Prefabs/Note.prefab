@@ -101,3 +101,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   channel: 0
+  noteScore: 0
+  targetTime: 0

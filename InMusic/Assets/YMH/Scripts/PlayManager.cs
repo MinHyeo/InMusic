@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using UnityEngine;
 using FMODUnity;
 using TMPro;
+using static Accuracy;
 
 public class PlayManager : MonoBehaviour
 {
@@ -24,13 +25,19 @@ public class PlayManager : MonoBehaviour
     private float preStartDelay = 2.0f;
     private float noteSpeed = 5.0f;
 
+    // 판정 기준
     private float greateThreshold = 0.0533f;
     private float goodThreshold = 0.0416f;
     private float badThreshold = 0.0832f;
     private float missThreshold = 0.0416f;
 
-    private float score = 0;
-    private float accuracy = 100;
+    //점수 관련
+    private float score = 0;            //점수
+    private float accuracy = 0;         //정확도
+    private float percentCount = 0;     //정확도 총합
+    private int noteCount = 0;          //노트 입력 횟수
+
+    //
 
     public void OnClickButton()
     {
@@ -79,19 +86,19 @@ public class PlayManager : MonoBehaviour
 
             if (timeDifference <= greateThreshold)
             {
-                HandleNoteHit(closestNote, "Perfect" , 100);
+                HandleNoteHit(closestNote, AccuracyType.Great, 100);
             }
             else if ((timeDifference -= greateThreshold) <= goodThreshold)
             {
-                HandleNoteHit(closestNote, "Good", 70);
+                HandleNoteHit(closestNote, AccuracyType.Good, 70);
             }
             else if((timeDifference -= goodThreshold) <= badThreshold)
             {
-                HandleNoteHit(closestNote, "Bad", 40);
+                HandleNoteHit(closestNote, AccuracyType.Bad, 40);
             }
             else if((timeDifference -= badThreshold) <= missThreshold)
             {
-                HandleNoteHit(closestNote, "Miss", 0);
+                HandleNoteHit(closestNote, AccuracyType.Miss, 0);
             }
         }
         else
@@ -121,15 +128,17 @@ public class PlayManager : MonoBehaviour
         return closestNote;
     }
 
-    private void HandleNoteHit(Note note, string result, float percent)
+    private void HandleNoteHit(Note note, AccuracyType accuracyResult, float percent)
     {
-        Debug.Log($"Hit! {result}");
+        Debug.Log($"Hit! {accuracyResult}");
         //text.text = result;
         float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
 
         score += noteScore * (percent / 100);
         int scoreInt = (int)score;
-        accuracy = (accuracy + percent) / 2;
+        noteCount++;
+        percentCount += percent;
+        accuracy = percentCount / (float)noteCount;
 
         text.text = "Score : " + scoreInt.ToString() +"\n";
         text.text += accuracy.ToString("F2") + "%";
