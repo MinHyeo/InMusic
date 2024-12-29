@@ -16,18 +16,20 @@ namespace SongList
         [Header("Slot Settings")]
         [SerializeField] private GameObject _songItemPrefab;
         [SerializeField] private int _totalSongCount = 50;
-        [SerializeField] private int _bufferItems = 3;
-        // [SerializeField] private float _itemHeight = 83f;
+        [SerializeField] private int _bufferItems = 2;
+        // [SerializeField] private float _itemHeight = 85f;
 
         private LinkedList<GameObject> _songList = new LinkedList<GameObject>();
         private int _poolSize;
         private float _itemHeight;
         private int _firstVisibleIndexCached = 0;
         private bool _isScrolling = false;
-
+        private float _scrollDebounceTime = 0.05f; // 50ms
+        private float _lastScrollTime = 0f;
+        private int _visibleCount;
         private void Awake() {
             // contentRect의 RectTransform 컴포넌트를 가져옴
-            _contentRect = _contentRect.GetComponent<RectTransform>();
+            //_contentRect = _contentRect.GetComponent<RectTransform>();
             
             // itemPrefab의 높이를 계산
             _itemHeight = _songItemPrefab.GetComponent<RectTransform>().sizeDelta.y;
@@ -40,10 +42,10 @@ namespace SongList
             float viewportHeight = _scrollRect.viewport.rect.height;
 
             // 한 번에 보여지는 아이템의 개수 계산
-            int visibleCount = Mathf.CeilToInt(viewportHeight / _itemHeight);
+            _visibleCount = Mathf.CeilToInt(viewportHeight / _itemHeight);
 
             // 메모리에 생성할 아이템의 개수 계산
-            _poolSize = visibleCount + _bufferItems * 2;
+            _poolSize = _visibleCount + _bufferItems * 2;
 
             // contentRect의 높이 설정
             float contentHeight = _totalSongCount * _itemHeight;
@@ -67,9 +69,9 @@ namespace SongList
             // 스크롤 이벤트 플래그 체크
             _scrollRect.onValueChanged.AddListener(SetScrollDirty);
 
-            Debug.Log($"Viewport height = {viewportHeight}"); 
+            Debug.Log($"Viewport height = {viewportHeight}");
             Debug.Log($"ItemHeight = {_itemHeight}");
-            Debug.Log($"=> visibleCount = {visibleCount}, poolSize={_poolSize}");
+            Debug.Log($"=> visibleCount = {_visibleCount}, poolSize={_poolSize}");
         }
 
         // private void Start() {
@@ -114,34 +116,41 @@ namespace SongList
 
         private void LateUpdate() {
             if(_isScrolling) {
-                _isScrolling = false;
-                OnScroll();
+                if(Time.time - _lastScrollTime > _scrollDebounceTime) {
+                    _isScrolling = false;
+                    SnapToNearestSlot();
+                    OnScroll();
+                }
             }
+        }
 
-            float viewportHeight = _scrollRect.viewport.rect.height;
-            Debug.Log($"After ForceRebuild, viewportHeight = {viewportHeight}");
+        private void SnapToNearestSlot() {
+            float contentY = _contentRect.anchoredPosition.y;
+            int nearestIndex = Mathf.RoundToInt(contentY / _itemHeight);
+            float newY = nearestIndex * _itemHeight;
+            _contentRect.anchoredPosition = new Vector2(0, newY);
         }
 
         private void SetScrollDirty(Vector2 pos) {
+            _lastScrollTime = Time.time;
             _isScrolling = true;
         }
 
         private void OnScroll() {
             float contentY = _contentRect.anchoredPosition.y;
 
-            int newFirstIndex = Mathf.FloorToInt(contentY / _itemHeight) - _bufferItems;
-
+            // ShiftSlots에서 Clamp로 제한하고 있지만, 오류 탐색을 위해 여기서도 한 번 더 제한
+            int newFirstIndex = Mathf.Max(0, Mathf.FloorToInt(contentY / _itemHeight) - _bufferItems); // 새로 보여줘야 할 첫 인덱스 계산
+            
             if (newFirstIndex < 0) {
                 newFirstIndex = 0;
             }
 
             if (newFirstIndex != _firstVisibleIndexCached) {
                 int diffIndex = _firstVisibleIndexCached - newFirstIndex;
-
                 bool scrollDown = (diffIndex < 0);
 
                 int shiftCount = Mathf.Abs(diffIndex);
-
                 ShiftSlots(shiftCount, scrollDown, newFirstIndex);
 
                 _firstVisibleIndexCached = newFirstIndex;
@@ -152,29 +161,46 @@ namespace SongList
 
             for (int i = 0; i < shiftCount; i++) {
                 if (scrollDown) {
-                    GameObject slot = _songList.First.Value;
+                    GameObject song = _songList.First.Value;
+                    song.SetActive(true);
                     _songList.RemoveFirst();
-                    _songList.AddLast(slot);
+                    _songList.AddLast(song);
 
                     int newIndex = _firstVisibleIndexCached + _poolSize + i;
+                    if (newIndex >= _totalSongCount) {
+                        song.SetActive(false);
+                        break;
+                    }
 
-                    RectTransform rt = slot.GetComponent<RectTransform>();
+                    // int newIndex = newFirstIndex + _visibleCount + i;
+                    newIndex = Mathf.Clamp(newIndex, 0, _totalSongCount - 1);
+                    Debug.Log($"new Index = {newIndex}");
+
+                    RectTransform rt = song.GetComponent<RectTransform>();
                     rt.anchoredPosition = CalculateSlotPoisition(newIndex);
 
-                    UpdateSlotData(slot, newIndex);
+                    UpdateSlotData(song, newIndex);
                 } else {
-                    GameObject slot = _songList.Last.Value;
+                    GameObject song = _songList.Last.Value;
                     _songList.RemoveLast();
-                    _songList.AddFirst(slot);
+                    _songList.AddFirst(song);
 
-                    int newIndex = newFirstIndex - i;
+                    int newIndex = _firstVisibleIndexCached - i;
 
-                    RectTransform rt = slot.GetComponent<RectTransform>();
+                    if (newIndex < 0) {
+                        song.SetActive(false);
+                        break;
+                    }
+                    // int newIndex = newFirstIndex - i;
+                    newIndex = Mathf.Clamp(newIndex, 0, _totalSongCount - 1);
+
+                    RectTransform rt = song.GetComponent<RectTransform>();
                     rt.anchoredPosition = CalculateSlotPoisition(newIndex);
 
-                    UpdateSlotData(slot, newIndex);
+                    UpdateSlotData(song, newIndex);
                 }
             }
+            // HideSlotsOutsideViewport();
 
 
             // LinkedListNode<GameObject> firstNode = _songList.First;
@@ -217,22 +243,36 @@ namespace SongList
             // }
         }
 
+        // private void HideSlotsOutsideViewport() {
+        //     float viewportHeight = _scrollRect.viewport.rect.height;
+        //     float contentY = _contentRect.anchoredPosition.y;
+
+        //     foreach (var slot in _songList) {
+        //         RectTransform rt = slot.GetComponent<RectTransform>();
+        //         float slotY = rt.anchoredPosition.y;
+
+        //         if (slotY < 0f || slotY > viewportHeight) {
+        //             slot.SetActive(false);
+        //         } else {
+        //             slot.SetActive(true);
+        //         }
+        //     }
+        // }
+
         private Vector2 CalculateSlotPoisition(int index) {
-            float y = -(index * _itemHeight) - (_itemHeight * 0.5f);
+            float y = -(index * _itemHeight);
             return new Vector2(0, y);
         }
 
         private void UpdateSlotData(GameObject slot, int dataIndex) {
             if (dataIndex < 0 || dataIndex >= _totalSongCount) {
                 slot.SetActive(false);
-                return;
             } else {
                 slot.SetActive(true);
                 Text txt = slot.GetComponentInChildren<Text>();
                 if (txt != null) {
                     txt.text = $"Item #{dataIndex + 1}";
                 }
-
             }
         }
 
