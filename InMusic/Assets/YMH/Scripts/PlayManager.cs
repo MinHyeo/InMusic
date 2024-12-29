@@ -17,6 +17,10 @@ public class PlayManager : MonoBehaviour
         Instance = this;
     }
 
+    //정확도 관련
+    [SerializeField]
+    private Accuracy accuracyScript;
+
     [SerializeField]
     private Metronome metronome;
     public TextMeshProUGUI text;
@@ -131,15 +135,19 @@ public class PlayManager : MonoBehaviour
     private void HandleNoteHit(Note note, AccuracyType accuracyResult, float percent)
     {
         Debug.Log($"Hit! {accuracyResult}");
-        //text.text = result;
         float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
 
+        //점수 계산
         score += noteScore * (percent / 100);
         int scoreInt = (int)score;
         noteCount++;
         percentCount += percent;
         accuracy = percentCount / (float)noteCount;
 
+        //정확도 표시
+        accuracyScript.ShowAccracy(accuracyResult);
+
+        //테스트용
         text.text = "Score : " + scoreInt.ToString() +"\n";
         text.text += accuracy.ToString("F2") + "%";
     }   
