@@ -171,8 +171,7 @@ MonoBehaviour:
   _contentRect: {fileID: 733476975}
   _songItemPrefab: {fileID: 6905251678252019351, guid: 3c7875108b5f26a4cbb4302d82eed171, type: 3}
   _totalSongCount: 30
-  _bufferItemCount: 13
-  _itemHeight: 83
+  _bufferItems: 2
 --- !u!1 &386415303
 GameObject:
   m_ObjectHideFlags: 0
