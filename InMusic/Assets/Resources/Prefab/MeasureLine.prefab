@@ -100,3 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96058a420d8b8794784ac3d9151abd36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scrollSpeed: 5
+  despawnYPosition: -2.1
+  objectPool: {fileID: 0}
+  isMoving: 0

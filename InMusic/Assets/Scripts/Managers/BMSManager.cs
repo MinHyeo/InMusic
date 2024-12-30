@@ -24,18 +24,18 @@ public class BMSManager : MonoBehaviour
     void Start()
     {
         
-        BMSData parsedData = ParseBMS("test1");
-        if (parsedData != null)
-        {
-            Debug.Log("BMS Parsing complete.");
-            Debug.Log("Title: " + parsedData.header.title);
-            Debug.Log("Artist: " + parsedData.header.artist);
-            Debug.Log("Number of notes: " + parsedData.notes.Count);
-            foreach (BMSNoteData note in parsedData.notes)
-            {
-                Debug.Log($"Measure: {note.measure}, Channel: {note.channel}, Notes: {note.noteString}");
-            }
-        }
+        //BMSData parsedData = ParseBMS("test");
+        //if (parsedData != null)
+        //{
+        //    Debug.Log("BMS Parsing complete.");
+        //    Debug.Log("Title: " + parsedData.header.title);
+        //    Debug.Log("Artist: " + parsedData.header.artist);
+        //    Debug.Log("Number of notes: " + parsedData.notes.Count);
+        //    foreach (BMSNoteData note in parsedData.notes)
+        //    {
+        //        Debug.Log($"Measure: {note.measure}, Channel: {note.channel}, Notes: {note.noteString}");
+        //    }
+        //}
     }
 
     // Update is called once per frame

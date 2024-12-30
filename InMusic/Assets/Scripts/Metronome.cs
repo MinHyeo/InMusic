@@ -23,7 +23,7 @@ public class Metronome : MonoBehaviour
         nextTickTime = Time.time + interval;  // 첫 박자 소리 시간
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // 현재 시간이 다음 박자 소리 시간 이상이면 틱 발생
         if (Time.time >= nextTickTime)

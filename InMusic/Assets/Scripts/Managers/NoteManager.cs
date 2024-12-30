@@ -13,6 +13,7 @@ public class NoteManager : MonoBehaviour
     public GameObject notePrefab1;
     public GameObject notePrefab2;
     public Transform spawnArea;
+    public Transform judgeLinePos;
 
     public int lineCount = 5;          // 초기 경계선 개수
     public float baseScrollSpeed = 5f; // 기본 스크롤 속도
@@ -22,9 +23,28 @@ public class NoteManager : MonoBehaviour
     public float secondsPerBeat;      // 1비트에 걸리는 시간(초)
     public float measureDuration;     // 한 마디의 지속 시간(초)
     public float lineInterval;        // 마디 간의 간격
+    public bool isMoving = false;   //노트 움직임 상태
 
-    private float startPositionY = -1.38f;
+    private float startPositionY = -1.38f; //노트 이미지에 따른 세부 위치 조절
 
+    public int totalNotes; // 총 노트 개수
+
+
+    public static NoteManager Instance { get; private set; }
+
+    void Awake()
+    {
+        // 싱글톤 인스턴스 설정
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
 
@@ -53,7 +73,7 @@ public class NoteManager : MonoBehaviour
         for (int i = 0; i < lineCount; i++)
         {
             
-            Vector3 spawnPosition = new Vector3(0, i * lineInterval - noteOffset+ startPositionY, 0);
+            Vector3 spawnPosition = new Vector3(0, i * lineInterval - noteOffset+ startPositionY+ spawnArea.position.y, 0);
 
             GameObject measureLine = measureLinePool.GetObject();
             measureLine.transform.position = spawnPosition;
@@ -69,6 +89,7 @@ public class NoteManager : MonoBehaviour
 
     public void SpawnNotes(BMSData bmsData, Transform spawnArea)
     {
+        totalNotes = 0; // 총 노트 개수 초기화
         foreach (var noteData in bmsData.notes)
         {
             string data = noteData.noteString;
@@ -80,8 +101,9 @@ public class NoteManager : MonoBehaviour
 
                 if (noteID != "00") // 노트가 있는 경우만 처리
                 {
+                    totalNotes++; // 유효한 노트 수 증가
                     float beatPosition = (float)i / divisions;
-                    float yPosition = noteData.measure * lineInterval + +(lineInterval / divisions) * i + startPositionY;
+                    float yPosition = noteData.measure * lineInterval + +(lineInterval / divisions) * i + startPositionY + spawnArea.position.y;
 
                     float xPosition = GetChannelPosition(noteData.channel);
 
@@ -92,6 +114,8 @@ public class NoteManager : MonoBehaviour
                 }
             }
         }
+        Debug.Log($"Total Notes: {totalNotes}");
+        GameManager.Instance.InitializeGame();
     }
 
     private float GetChannelPosition(int channel)

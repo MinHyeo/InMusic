@@ -3,18 +3,24 @@ using UnityEngine;
 public class ScrollDown : MonoBehaviour
 {
     public float scrollSpeed = 5f;
-    public float despawnYPosition = -2.1f; // 사라질 Y 위치
-
+    public float despawnYPosition = -2.0f; // 사라질 Y 위치
     public ObjectPool objectPool;
+
+    public bool isMoving = false;
+
     void Start()
     {
         objectPool = GetComponentInParent<ObjectPool>();
+        scrollSpeed = NoteManager.Instance.baseScrollSpeed;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        MoveDown();
+        if (NoteManager.Instance.isMoving)
+        {
+            MoveDown();
+        }
     }
 
     void MoveDown()
