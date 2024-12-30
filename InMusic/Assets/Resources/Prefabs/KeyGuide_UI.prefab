@@ -503,7 +503,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6070444229546094914}
         m_TargetAssemblyTypeName: Guide_UI, Assembly-CSharp
-        m_MethodName: Button
+        m_MethodName: GuideButton
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
