@@ -39,4 +39,13 @@ public class Note : MonoBehaviour
 
         return noteScore;
     }
+
+    private void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.CompareTag("EndLine"))
+        {
+            Debug.Log("Miss");
+            PlayManager.Instance.HandleNoteHit(this, AccuracyType.Miss, 0);
+        }
+    }
 }

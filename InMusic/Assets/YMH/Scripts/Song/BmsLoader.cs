@@ -214,10 +214,8 @@ public class BmsLoader : MonoBehaviour
                 int data = 0;
                 Int32.TryParse(tempStr.Substring(0, 2), out data);
 
-                Debug.Log(data);
                 if (data != 0)
                     noteCount++;
-                Debug.Log(noteCount);
 
                 noteList.Add(data);
                 tempStr = tempStr.Substring(2);

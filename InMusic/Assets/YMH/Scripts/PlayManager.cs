@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Security.Cryptography;
 using UnityEngine;
 using FMODUnity;
 using TMPro;
@@ -38,10 +37,12 @@ public class PlayManager : MonoBehaviour
     //점수 관련
     private float score = 0;            //점수
     private float accuracy = 0;         //정확도
-    private float percentCount = 0;     //정확도 총합
+    private float totalPercent = 0;     //정확도 총합
     private int noteCount = 0;          //노트 입력 횟수
+    private int combo = 0;              //콤보
+    private int maxCombo = 0;           //최대 콤보
 
-    //
+    private int[] inputCount = new int[4] { 0, 0, 0, 0 };
 
     public void OnClickButton()
     {
@@ -105,10 +106,6 @@ public class PlayManager : MonoBehaviour
                 HandleNoteHit(closestNote, AccuracyType.Miss, 0);
             }
         }
-        else
-        {
-            HandleNoteMiss(channel);
-        }
     }
 
     private Note FindClosestNoteToPressTime(int channel, float pressTime)
@@ -132,28 +129,37 @@ public class PlayManager : MonoBehaviour
         return closestNote;
     }
 
-    private void HandleNoteHit(Note note, AccuracyType accuracyResult, float percent)
+    public void HandleNoteHit(Note note, AccuracyType accuracyResult, float percent)
     {
-        Debug.Log($"Hit! {accuracyResult}");
         float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
 
         //점수 계산
         score += noteScore * (percent / 100);
         int scoreInt = (int)score;
         noteCount++;
-        percentCount += percent;
-        accuracy = percentCount / (float)noteCount;
+        totalPercent += percent;
+        accuracy = totalPercent / (float)noteCount;
 
         //정확도 표시
         accuracyScript.ShowAccracy(accuracyResult);
 
+        //콤보
+        if (accuracyResult != AccuracyType.Miss)
+        {
+            combo += 1;
+            if (combo > maxCombo)
+                maxCombo = combo;
+        }
+        else
+        {
+            combo = 0;
+        }
+
+        //입력 횟수 증가
+        inputCount[(int)accuracyResult] += 1;
+
         //테스트용
         text.text = "Score : " + scoreInt.ToString() +"\n";
         text.text += accuracy.ToString("F2") + "%";
-    }   
-
-    private void HandleNoteMiss(int line)
-    {
-        Debug.Log($"Miss on line {line}!");
     }
 }
