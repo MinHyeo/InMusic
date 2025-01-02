@@ -1,26 +1,29 @@
 ﻿using UnityEngine;
 
-public class Line : MonoBehaviour
+namespace Play
 {
-    private float speed;
-    private float targetY;
-    private Vector3 direction = Vector3.down;  // 아래로 이동하는 방향
-
-    public void Initialize(float lineSpeed, float judgementLineY)
+    public class Line : MonoBehaviour
     {
-        speed = lineSpeed;
-        targetY = judgementLineY;
-    }
+        private float speed;
+        private float targetY;
+        private Vector3 direction = Vector3.down;  // 아래로 이동하는 방향
 
-    void Update()
-    {
-        // 마디 선을 아래로 이동
-        transform.Translate(direction * speed * Time.deltaTime);
-
-        // 화면 아래로 사라지면 삭제
-        if (transform.position.y < -10.0f)
+        public void Initialize(float lineSpeed, float judgementLineY)
         {
-            Destroy(gameObject);
+            speed = lineSpeed;
+            targetY = judgementLineY;
+        }
+
+        void Update()
+        {
+            // 마디 선을 아래로 이동
+            transform.Translate(direction * speed * Time.deltaTime);
+
+            // 화면 아래로 사라지면 삭제
+            if (transform.position.y < -10.0f)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
