@@ -8,7 +8,7 @@ enum Key {
     K = 14,
 }
 
-public class InputManager : MonoBehaviour
+/*public class InputManager : MonoBehaviour
 {
     [Header("Key Objects")]
     [SerializeField]
@@ -64,3 +64,4 @@ public class InputManager : MonoBehaviour
         keyObjects[(int)key - (int)Key.D].SetActive(isKeyDown[(int)key - (int)Key.D]);
     }
 }
+*/

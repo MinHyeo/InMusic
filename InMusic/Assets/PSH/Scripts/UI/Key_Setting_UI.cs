@@ -105,7 +105,6 @@ public class Key_Setting_UI : MonoBehaviour
                 ButtonEvent("Exit");
                 break;
         }
-
     }
 
     void ChangeMenu()
@@ -133,5 +132,4 @@ public class Key_Setting_UI : MonoBehaviour
         Debug.Log($"New key: {newKey}");
         message.SetActive(isSetMode);
     }
-
 }

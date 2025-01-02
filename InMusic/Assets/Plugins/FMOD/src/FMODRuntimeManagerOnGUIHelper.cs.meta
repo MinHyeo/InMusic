@@ -13,6 +13,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 161631
   packageName: FMOD for Unity
-  packageVersion: 2.02.23
+  packageVersion: 2.02.26
   assetPath: Assets/Plugins/FMOD/src/FMODRuntimeManagerOnGUIHelper.cs
-  uploadId: 695525
+  uploadId: 717736

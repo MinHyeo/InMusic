@@ -25,6 +25,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 161631
   packageName: FMOD for Unity
-  packageVersion: 2.02.23
+  packageVersion: 2.02.26
   assetPath: Assets/Plugins/FMOD/platforms/android/lib/armeabi-v7a/libfmod.so
-  uploadId: 695525
+  uploadId: 717736
