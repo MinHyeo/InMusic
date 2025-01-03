@@ -107,8 +107,11 @@ public class Key_Setting_UI : MonoBehaviour
         }
     }
 
-    void ChangeMenu()
+    public void ChangeMenu(int index = -1)
     {
+        if (index != -1) {
+            curMenuIndex = index;
+        }
         if (curMenuIndex < 0) curMenuIndex = numOfMenuList - 1;
 
         if (curMenuIndex >= numOfMenuList) curMenuIndex %= numOfMenuList;
