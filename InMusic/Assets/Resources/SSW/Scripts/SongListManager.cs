@@ -16,7 +16,7 @@ namespace SongList
         [Header("Slot Settings")]
         [SerializeField] private GameObject _songItemPrefab;
         [SerializeField] private int _totalSongCount = 50;
-        [SerializeField] private int _bufferItems = 2;
+        [SerializeField] private int _bufferItems = 5;
         // [SerializeField] private float _itemHeight = 85f;
 
         private LinkedList<GameObject> _songList = new LinkedList<GameObject>();
@@ -129,6 +129,7 @@ namespace SongList
             int nearestIndex = Mathf.RoundToInt(contentY / _itemHeight);
             float newY = nearestIndex * _itemHeight;
             _contentRect.anchoredPosition = new Vector2(0, newY);
+            Debug.Log($"nearestIndex = {nearestIndex}");
         }
 
         private void SetScrollDirty(Vector2 pos) {
@@ -147,17 +148,20 @@ namespace SongList
             }
 
             if (newFirstIndex != _firstVisibleIndexCached) {
-                int diffIndex = _firstVisibleIndexCached - newFirstIndex;
-                bool scrollDown = (diffIndex < 0);
+                int diffIndex = newFirstIndex - _firstVisibleIndexCached;
+                Debug.Log($"diffIndex = {diffIndex}");
+                bool scrollDown = (diffIndex > 0);
+                Debug.Log($"scrollDown = {(scrollDown ? "Down" : "Up")}");
+
 
                 int shiftCount = Mathf.Abs(diffIndex);
-                ShiftSlots(shiftCount, scrollDown, newFirstIndex);
+                ShiftSlots(shiftCount, scrollDown);
 
                 _firstVisibleIndexCached = newFirstIndex;
             }
         }
 
-        private void ShiftSlots(int shiftCount, bool scrollDown, int newFirstIndex) {
+        private void ShiftSlots(int shiftCount, bool scrollDown) {
 
             for (int i = 0; i < shiftCount; i++) {
                 if (scrollDown) {
@@ -167,17 +171,19 @@ namespace SongList
                     _songList.AddLast(song);
 
                     int newIndex = _firstVisibleIndexCached + _poolSize + i;
+                    Debug.Log($"newIndex = {newIndex}");
                     if (newIndex >= _totalSongCount) {
+                        Debug.Log($"In newIndex = {newIndex}");
                         song.SetActive(false);
-                        break;
+                        continue;
                     }
 
                     // int newIndex = newFirstIndex + _visibleCount + i;
                     newIndex = Mathf.Clamp(newIndex, 0, _totalSongCount - 1);
-                    Debug.Log($"new Index = {newIndex}");
+                    Debug.Log($"If newIndex >= totalSongCount After Clamp new Index = {newIndex}");
 
                     RectTransform rt = song.GetComponent<RectTransform>();
-                    rt.anchoredPosition = CalculateSlotPoisition(newIndex);
+                    rt.anchoredPosition = CalculateSlotPosition(newIndex);
 
                     UpdateSlotData(song, newIndex);
                 } else {
@@ -185,17 +191,19 @@ namespace SongList
                     _songList.RemoveLast();
                     _songList.AddFirst(song);
 
-                    int newIndex = _firstVisibleIndexCached - i;
+                    int newIndex = _firstVisibleIndexCached - 1 - i;
+                    Debug.Log($"newIndex = {newIndex}");
 
                     if (newIndex < 0) {
                         song.SetActive(false);
-                        break;
+                        continue;
                     }
                     // int newIndex = newFirstIndex - i;
                     newIndex = Mathf.Clamp(newIndex, 0, _totalSongCount - 1);
+                    Debug.Log($"Else After Clamp new Index = {newIndex}");
 
                     RectTransform rt = song.GetComponent<RectTransform>();
-                    rt.anchoredPosition = CalculateSlotPoisition(newIndex);
+                    rt.anchoredPosition = CalculateSlotPosition(newIndex);
 
                     UpdateSlotData(song, newIndex);
                 }
@@ -259,8 +267,10 @@ namespace SongList
         //     }
         // }
 
-        private Vector2 CalculateSlotPoisition(int index) {
+        private Vector2 CalculateSlotPosition(int index) {
             float y = -(index * _itemHeight);
+            Debug.Log($"CalculateSlotPosition: index={index}, y={y}");
+
             return new Vector2(0, y);
         }
 
@@ -270,6 +280,7 @@ namespace SongList
             } else {
                 slot.SetActive(true);
                 Text txt = slot.GetComponentInChildren<Text>();
+                
                 if (txt != null) {
                     txt.text = $"Item #{dataIndex + 1}";
                 }

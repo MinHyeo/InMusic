@@ -171,7 +171,7 @@ MonoBehaviour:
   _contentRect: {fileID: 733476975}
   _songItemPrefab: {fileID: 6905251678252019351, guid: 3c7875108b5f26a4cbb4302d82eed171, type: 3}
   _totalSongCount: 30
-  _bufferItems: 2
+  _bufferItems: 5
 --- !u!1 &386415303
 GameObject:
   m_ObjectHideFlags: 0
@@ -1392,7 +1392,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1444149085
-  m_SortingLayer: -1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -1955448553306655712, guid: bebe9e4cd797cf54196c6dd00ff1848c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
