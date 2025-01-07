@@ -1,8 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UI_BASE_PSH;
 
 public class Single_Lobby_UI : UI_Base
 {
+    [SerializeField] private GameObject[] musicData = new GameObject[4];
+    [SerializeField] private Text[] logData = new Text[4];
     void Start()
     {
         //음악 목록 Load하기
@@ -25,9 +28,6 @@ public class Single_Lobby_UI : UI_Base
             case "Down":
                 //TODO
 
-                break;
-            case "Gear":
-                Gear();
                 break;
             case "Exit":
                 //TODO
@@ -59,7 +59,7 @@ public class Single_Lobby_UI : UI_Base
                 ButtonEvent("Exit");
                 break;
             case Define.UIControl.Guide:
-                ButtonEvent("KeyGuide");
+                Gear();
                 break;
             case Define.UIControl.Setting:
                 ButtonEvent("Gear");
