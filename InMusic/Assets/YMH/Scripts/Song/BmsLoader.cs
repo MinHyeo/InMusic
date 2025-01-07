@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using UnityEngine;
-using FMOD.Studio;
 
-public enum Song 
+
+public enum Song
 {
-    ³ª´Â¾ÆÇÂ°ÇµüÁú»öÀÌ´Ï±î = 0,
-    Ã¹¸¸³²Àº°èÈ¹´ë·ÎµÇÁö¾Ê¾Æ = 1,
-    Å¬¶ô¼Ç = 2,
+    sksmsdkvmsrjsEkrwlftordlslRk = 0,
+    cjtaksskadmsrPghlreofhehlwldksgdk = 1,
+    Klaxon = 2,
     Heya = 3,
     Armageddon = 4,
     BubbleGum = 5,
@@ -45,29 +45,26 @@ public class BmsLoader : MonoBehaviour
         Instance = this;
     }
 
-    public SongInfo songInfo;
-    public string[] songList;       // °î ÀÌ¸§ ¸®½ºÆ®
-    public int index;               // ¼±ÅÃµÈ °î ÀÎµ¦½º
+    private SongInfo songInfo;
 
     private FileInfo fileName = null;
     private StreamReader reader = null;
-    private string path;            // °î ÆÄÀÏ path
-    private string StrText;         // ÆÄÀÏ ÇÑ ÁÙ¾¿ ÀĞ¾îÀ» ¶§ »ç¿ëÇÒ º¯¼ö
-    private string songName;        // °î Á¦¸ñ
-    private int noteCount;           // ³ëÆ® °³¼ö
+    private string path;            // ê³¡ íŒŒì¼ path
+    private string StrText;         // íŒŒì¼ í•œ ì¤„ì”© ì½ì–´ì„ ë•Œ ì‚¬ìš©í•  ë³€ìˆ˜
+    private string songName;        // ê³¡ ì œëª©
+    private int noteCount;           // ë…¸íŠ¸ ê°œìˆ˜
 
-    private char[] seps;            // ±¸ºĞÀÚ ÀúÀåÇÒ ¹è¿­
-    private string[] tempSplit;     // ±¸ºĞÀÚ·Î ³ª´« ¹®ÀÚ¿­À» ÀúÀåÇÒ ÀÓ½Ã ¹®ÀÚ¿­ ¹è¿­
-    private string tempStr;         // ±¸ºĞÀÚ·Î ³ª´« ¹®ÀÚ¿­À» ÀúÀåÇÒ º¯¼ö
+    private char[] seps;            // êµ¬ë¶„ì ì €ì¥í•  ë°°ì—´
+    private string[] tempSplit;     // êµ¬ë¶„ìë¡œ ë‚˜ëˆˆ ë¬¸ìì—´ì„ ì €ì¥í•  ì„ì‹œ ë¬¸ìì—´ ë°°ì—´
+    private string tempStr;         // êµ¬ë¶„ìë¡œ ë‚˜ëˆˆ ë¬¸ìì—´ì„ ì €ì¥í•  ë³€ìˆ˜
 
     private void Start()
     {
         SelectSong(Song.Heya);
     }
 
-    public void SelectSong(Song song)
+    public SongInfo SelectSong(Song song)
     {
-        this.index = (int)song;  //ÀÓ½Ã °ª
         tempSplit = null;
         tempStr = "";
         StrText = "";
@@ -75,9 +72,9 @@ public class BmsLoader : MonoBehaviour
         path = "Assets/Resources/Song/";
         seps = new char[] { ' ', ':' };
 
-        songName = songList[index];
+        songName = song.ToString();
         path += songName + "/";
-        fileName = new FileInfo(path + songList[index] + ".bms");
+        fileName = new FileInfo(path + song.ToString() + ".bms");
 
         if (fileName != null)
         {
@@ -85,13 +82,15 @@ public class BmsLoader : MonoBehaviour
         }
         else
         {
-            Debug.Log("ÆÄÀÏÀÌ ¾ø½À´Ï´Ù.");
+            Debug.Log("íŒŒì¼ì´ ì—†ìŠµë‹ˆë‹¤.");
         }
 
-        ParseBMS();
+        songInfo = ParseBMS();
+
+        return songInfo;
     }
 
-    public SongInfo ParseBMS()
+    private SongInfo ParseBMS()
     {
         SongInfo bmsData = new SongInfo();
         bmsData.NoteList = new List<NoteData>();
@@ -104,13 +103,13 @@ public class BmsLoader : MonoBehaviour
             {
                 string[] data = trimmedLine.Split(' ');
 
-                // µ¥ÀÌÅÍ ¼½¼ÇÀÌ ¾Æ´Ï¸é¼­ Çì´õ µ¥ÀÌÅÍ°¡ ¾ø´Â °æ¿ì¿¡´Â °Ç³Ê ¶Ü.
+                // ë°ì´í„° ì„¹ì…˜ì´ ì•„ë‹ˆë©´ì„œ í—¤ë” ë°ì´í„°ê°€ ì—†ëŠ” ê²½ìš°ì—ëŠ” ê±´ë„ˆ ëœ€.
                 if (data[0].IndexOf(":") == -1 && data.Length == 1)
                 {
                     continue;
                 }
-                
-                // BMS ÆÄÀÏÀÇ Çì´õ Ã³¸®
+
+                // BMS íŒŒì¼ì˜ í—¤ë” ì²˜ë¦¬
                 if (data[0].Equals("#TITLE"))
                 {
                     bmsData.Title = data[1];
@@ -173,7 +172,7 @@ public class BmsLoader : MonoBehaviour
                 }
                 else
                 {
-                    // À§ÀÇ °æ¿ì¿¡ ¸ğµÎ ÇØ´çÇÏÁö ¾ÊÀ» °æ¿ì, µ¥ÀÌÅÍ ¼½¼Ç
+                    // ìœ„ì˜ ê²½ìš°ì— ëª¨ë‘ í•´ë‹¹í•˜ì§€ ì•Šì„ ê²½ìš°, ë°ì´í„° ì„¹ì…˜
                     int bar = 0;
                     Int32.TryParse(data[0].Substring(1, 3), out bar);
 

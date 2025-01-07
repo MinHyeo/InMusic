@@ -66,7 +66,7 @@ public class PlayManager : MonoBehaviour
     private IEnumerator StartMusicWithIntroDelay()
     {
         metronome.StartInitialMetronome();
-        NoteManager.Instance.InitializeNotes(BmsLoader.Instance.songInfo);
+        NoteManager.Instance.InitializeNotes(BmsLoader.Instance.SelectSong(songName));
         // 2초 인트로 시간 대기
         yield return new WaitForSeconds(preStartDelay);
 

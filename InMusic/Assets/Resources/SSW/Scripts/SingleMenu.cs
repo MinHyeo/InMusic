@@ -15,6 +15,6 @@ public class SingleMenu : MonoBehaviour
 
     public void OnClickOption()
     {
-        Debug.Log("Option Button Clicked");
+        Debug.Log("Option Button Clicked.");
     }
 }
