@@ -4,7 +4,8 @@ using UI_BASE_PSH;
 
 public class Single_Lobby_UI : UI_Base
 {
-    [SerializeField] private GameObject[] musicData = new GameObject[4];
+    [SerializeField] private GameObject[] curMusicData = new GameObject[4];
+    [SerializeField] private GameObject[] curMusic = new GameObject[3];
     [SerializeField] private Text[] logData = new Text[4];
     void Start()
     {
