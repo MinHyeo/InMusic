@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 namespace SongList
 {
@@ -34,9 +35,9 @@ namespace SongList
         private int _firstVisibleIndexCached = 0;
 
         private LinkedList<GameObject> _songList = new LinkedList<GameObject>();
-        private GameObject _selectedSlot;
-
         private List<SongInfo> songs;
+        private GameObject _selectedSlot;
+        public event Action<string> OnHighlightedSongChanged;
 
         private void Awake() {
             // 예: 실제 곡 목록 불러오기
@@ -219,7 +220,7 @@ namespace SongList
                 }
             }
 
-            // 5) 새 슬롯 하이라이트
+            // 4) 새 슬롯 하이라이트
             if (closestSlot != null) {
                 var img = closestSlot.GetComponentInChildren<Image>();
                 if (img == null) {
@@ -227,6 +228,16 @@ namespace SongList
                     img.sprite = _selectedSprite;
                 }
                 _selectedSlot = closestSlot;
+
+                // 슬롯의 Text 컴포넌트에서 곡 제목 추출
+                Text txt = closestSlot.GetComponentInChildren<Text>();
+                string highlightedSongTitle = txt != null ? txt.text : string.Empty;
+
+                if (!string.IsNullOrEmpty(highlightedSongTitle)) {
+                    Debug.Log($"[SongListManager] Highlighted Song Title: {highlightedSongTitle}");
+                    // 이벤트을 곡 제목으로 변경 (새로운 이벤트 생성)
+                    OnHighlightedSongChanged?.Invoke(highlightedSongTitle);
+                }
             }
 
         }
