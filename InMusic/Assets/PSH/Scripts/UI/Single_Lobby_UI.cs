@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UI_BASE_PSH;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Collections;
 
 public class Single_Lobby_UI : UI_Base
 {
@@ -12,24 +16,32 @@ public class Single_Lobby_UI : UI_Base
     //스크롤 관련
     [SerializeField]private RectTransform contentPos;
     private float itemGap = 40.0f;
-
+    [SerializeField] List<string> musicList = new List<string>();
+    private int  numOfitems;
+    [SerializeField] private int startIndex = 0;
+    Vector2 dest;
 
     void Start()
     {
         //음악 목록 Load하기
+        musicList = GameManager.Resource.GetMusicList();
+        numOfitems = musicList.Count;
+        ScrollUp();
 
-        curMusicItem = musicItems[3];
         GameManager.Input.SetUIKeyEvent(SingleLobbyKeyEvent);
     }
 
     void Update()
     {
-        //무한 스크롤 (위/아래로 2칸 이상 이동 시 작동)
+        //스크롤을 올리면
         if (contentPos.localPosition.y <= 1.45f) {
-            contentPos.localPosition = new Vector2(0, 200.0f);
+            //Content 위치 내리기 -> 스크롤은 올라감
+            ScrollUp();
         }
-        else if (contentPos.localPosition.y >= 395.0f) {
-            contentPos.localPosition = new Vector2(0, 200.0f);
+        //스크롤을 내리면
+        else if (contentPos.localPosition.y >= 415.0f) {
+            //Content 위치 올리기 -> 스크롤은 내려감
+            ScrollDown();
         }
     }
 
@@ -38,11 +50,13 @@ public class Single_Lobby_UI : UI_Base
         {
             case "Up":
                 //TODO
-                //contentPos.position -= new Vector2(0, itemGap);
+                dest = contentPos.localPosition;
+                dest += new Vector2 (0, itemGap);
                 break;
             case "Down":
                 //TODO
-                //contentPos.position += new Vector2(0, itemGap);
+                dest = contentPos.localPosition;
+                dest -= new Vector2(0, itemGap);
                 break;  
             case "Exit":
                 //TODO
@@ -81,4 +95,39 @@ public class Single_Lobby_UI : UI_Base
                 break;
         }
     }
+
+    void ScrollUp()
+    {
+        //Content 이동
+        contentPos.localPosition = new Vector2(0, 200.0f);
+        //목록 갱신
+        startIndex -= 5;
+        if (startIndex < 0) {
+            startIndex = numOfitems + startIndex;
+        }
+        for (int i = 0; i < musicItems.Length; i++) {
+            musicItems[i].GetComponent<Music_Item>().SetData(musicList[startIndex++]);
+            if (startIndex >= numOfitems) {
+                startIndex = 0;
+            }
+        }
+    }
+
+    void ScrollDown() {
+        //Content 이동
+        contentPos.localPosition = new Vector2(0, 200.0f);
+        //목록 갱신
+        startIndex -= 12; // 12 = 17 - 5
+        if (startIndex < 0) {
+            startIndex = numOfitems + startIndex;
+        }
+        for (int i = 0; i < musicItems.Length; i++)
+        {
+            musicItems[i].GetComponent<Music_Item>().SetData(musicList[startIndex++]);
+            if (startIndex >= numOfitems) {
+                startIndex = 0;
+            }
+        }
+    }
+
 }
