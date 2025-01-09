@@ -2101,8 +2101,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 188}
-  m_SizeDelta: {x: 0, y: 668.0751}
+  m_AnchoredPosition: {x: 0, y: 200}
+  m_SizeDelta: {x: 0, y: 690}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &346859751
 GameObject:
@@ -4516,7 +4516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 341532225}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
@@ -11942,6 +11942,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curSetUI: {fileID: 0}
   guideUI: {fileID: 0}
+  musicItems:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  curMusicItem: {fileID: 0}
   curMusicData:
   - {fileID: 0}
   - {fileID: 0}
@@ -11957,6 +11976,7 @@ MonoBehaviour:
   - {fileID: 557147252}
   - {fileID: 1283319709}
   - {fileID: 1257152489}
+  contentPos: {fileID: 341532225}
 --- !u!1 &1910152539
 GameObject:
   m_ObjectHideFlags: 0
@@ -12839,7 +12859,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2037418103}
   m_Layer: 5
-  m_Name: 'Music (+5\) '
+  m_Name: 'Music (+5) '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

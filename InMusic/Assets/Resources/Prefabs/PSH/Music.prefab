@@ -99,6 +99,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5064981203881762074}
+  - component: {fileID: 8114183916898800301}
   m_Layer: 5
   m_Name: Music
   m_TagString: Untagged
@@ -128,6 +129,23 @@ RectTransform:
   m_AnchoredPosition: {x: -172.00002, y: 123.999985}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8114183916898800301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3964619929280816202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c68207afcf1fa494aac32479bc5abecc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Title: {fileID: 4367786356659082575}
+  Artist: {fileID: 1871073648763632519}
+  Rank: {fileID: 1497052693153188062}
+  AlbumArt: {fileID: 5269297178053388339}
+  Back: {fileID: 2431535429716741832}
 --- !u!1 &5541863183562098843
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +436,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8313726, g: 0.6509804, b: 1, a: 0.7058824}
+  m_Color: {r: 0.8313726, g: 0.6509804, b: 1, a: 0.47843137}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
