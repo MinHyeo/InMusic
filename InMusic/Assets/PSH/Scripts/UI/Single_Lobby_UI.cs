@@ -50,16 +50,16 @@ public class Single_Lobby_UI : UI_Base
         switch (type)
         {
             case "Up":
-                //TODO
+                /*
                 dest = contentPos.localPosition;
                 dest -= new Vector2 (0, itemGap);
-                StartCoroutine(SmoothScrollMove());
+                StartCoroutine(SmoothScrollMove());*/
                 break;
             case "Down":
-                //TODO
+                /*
                 dest = contentPos.localPosition;
                 dest += new Vector2(0, itemGap);
-                StartCoroutine(SmoothScrollMove());
+                StartCoroutine(SmoothScrollMove());*/
                 break;  
             case "Exit":
                 //TODO
