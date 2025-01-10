@@ -51,10 +51,11 @@ public class Note : MonoBehaviour
             Debug.Log($"Miss");
             GameManager.Instance.AddScore("Miss");
         }
-        if (transform.position.y < line.position.y - badThresholdDistance)
-        {
-            Debug.Log($"Miss");
-            GameManager.Instance.AddScore("Miss");
-        }
+    }
+
+    public void MissNote()
+    {
+        Debug.Log($"Miss");
+        GameManager.Instance.AddScore("Miss");
     }
 }

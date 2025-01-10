@@ -8,10 +8,12 @@ public class ScrollDown : MonoBehaviour
 
     public bool isMoving = false;
 
+    private Note note;
     void Start()
     {
         objectPool = GetComponentInParent<ObjectPool>();
         scrollSpeed = NoteManager.Instance.baseScrollSpeed;
+        note = GetComponent<Note>();
     }
 
     // Update is called once per frame
@@ -29,6 +31,11 @@ public class ScrollDown : MonoBehaviour
 
         if (transform.position.y < despawnYPosition)
         {
+
+            if (note != null)
+            {
+                note.MissNote();
+            }
             objectPool.ReturnObject(gameObject);
         }
     }
