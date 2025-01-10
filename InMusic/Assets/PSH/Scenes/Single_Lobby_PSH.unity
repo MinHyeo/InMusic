@@ -1392,7 +1392,7 @@ GameObject:
   - component: {fileID: 504681491}
   - component: {fileID: 504681490}
   m_Layer: 5
-  m_Name: Name
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1848,9 +1848,9 @@ MonoBehaviour:
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
-  m_Inertia: 1
+  m_Inertia: 0
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 6.7
   m_Viewport: {fileID: 1741179596}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
@@ -3657,6 +3657,7 @@ GameObject:
   - component: {fileID: 1890810789}
   - component: {fileID: 1890810788}
   - component: {fileID: 1890810787}
+  - component: {fileID: 1890810792}
   - component: {fileID: 1890810791}
   m_Layer: 5
   m_Name: Single_lobby_UI
@@ -3784,15 +3785,10 @@ MonoBehaviour:
   - {fileID: 820336222}
   curMusicItem: {fileID: 0}
   curMusicData:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  curMusic:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 793296701}
+  - {fileID: 504681488}
+  - {fileID: 746905410}
+  - {fileID: 1910152539}
   logData:
   - {fileID: 1627315568}
   - {fileID: 557147252}
@@ -3801,6 +3797,52 @@ MonoBehaviour:
   contentPos: {fileID: 341532225}
   musicList: []
   startIndex: 0
+--- !u!61 &1890810792
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890810786}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 32
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 163, y: 10}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 373, y: 24}
+  m_EdgeRadius: 0
 --- !u!1 &1910152539
 GameObject:
   m_ObjectHideFlags: 0

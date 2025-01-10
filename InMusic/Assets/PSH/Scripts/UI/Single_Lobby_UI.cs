@@ -5,21 +5,22 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using TMPro;
 
 public class Single_Lobby_UI : UI_Base
 {
     [SerializeField] private GameObject[] musicItems = new GameObject[17];
     [SerializeField] private GameObject curMusicItem;
     [SerializeField] private GameObject[] curMusicData = new GameObject[4];
-    [SerializeField] private GameObject[] curMusic = new GameObject[3];
     [SerializeField] private Text[] logData = new Text[4];
     //스크롤 관련
     [SerializeField]private RectTransform contentPos;
-    private float itemGap = 40.0f;
     [SerializeField] List<string> musicList = new List<string>();
+    private float itemGap = 40.0f;
     private int  numOfitems;
     [SerializeField] private int startIndex = 0;
     Vector2 dest;
+    float duration = 0.3f;
 
     void Start()
     {
@@ -39,7 +40,7 @@ public class Single_Lobby_UI : UI_Base
             ScrollUp();
         }
         //스크롤을 내리면
-        else if (contentPos.localPosition.y >= 415.0f) {
+        else if (contentPos.localPosition.y >= 400.0f) {
             //Content 위치 올리기 -> 스크롤은 내려감
             ScrollDown();
         }
@@ -51,12 +52,14 @@ public class Single_Lobby_UI : UI_Base
             case "Up":
                 //TODO
                 dest = contentPos.localPosition;
-                dest += new Vector2 (0, itemGap);
+                dest -= new Vector2 (0, itemGap);
+                StartCoroutine(SmoothScrollMove());
                 break;
             case "Down":
                 //TODO
                 dest = contentPos.localPosition;
-                dest -= new Vector2(0, itemGap);
+                dest += new Vector2(0, itemGap);
+                StartCoroutine(SmoothScrollMove());
                 break;  
             case "Exit":
                 //TODO
@@ -96,6 +99,23 @@ public class Single_Lobby_UI : UI_Base
         }
     }
 
+    void OnTriggerEnter2D(Collider2D listItem)
+    {
+        curMusicItem = listItem.gameObject;
+        Debug.Log("Selected Item: " + curMusicItem.name);
+        UpdateInfo();
+    }
+
+    void UpdateInfo()
+    {
+        Debug.Log("Change Item");
+        Music_Item newData = curMusicItem.GetComponent<Music_Item>();
+        curMusicData[0].GetComponent<Image>().sprite = newData.Album.sprite;
+        curMusicData[1].GetComponent<Text>().text = newData.Title.text;
+        curMusicData[2].GetComponent<Text>().text = newData.Artist.text;
+        curMusicData[3].GetComponent<Text>().text = newData.Length.text;
+    }
+
     void ScrollUp()
     {
         //Content 이동
@@ -130,4 +150,32 @@ public class Single_Lobby_UI : UI_Base
         }
     }
 
+    IEnumerator SmoothScrollMove() {
+        //스크롤을 올리면
+        if (contentPos.localPosition.y <= 1.45f)
+        {
+            //Content 위치 내리기 -> 스크롤은 올라감
+            ScrollUp();
+            dest = contentPos.localPosition;
+            dest += new Vector2(0, itemGap);
+        }
+        //스크롤을 내리면
+        else if (contentPos.localPosition.y >= 400.0f)
+        {
+            //Content 위치 올리기 -> 스크롤은 내려감
+            ScrollDown();
+            dest = contentPos.localPosition;
+            dest -= new Vector2(0, itemGap);
+        }
+
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            contentPos.localPosition = Vector2.Lerp(contentPos.localPosition, dest, t);
+            yield return null;
+        }
+        contentPos.localPosition = dest;
+    }
 }

@@ -3,16 +3,29 @@ using UnityEngine.UI;
 
 public class Music_Item : MonoBehaviour
 {
-    public Text Title;
-    public Text Artist;
-    public Text Rank;
-    public Image AlbumArt;
-    public Image Back;
+    public Text title;
+    public Text artist;
+    public Text length;
+    public Text rank;
+    public Image albumArt;
+    public Image back;
+
+    #region Getter
+    public Text Title { get { return title; } set { title = value; } }
+    public Text Artist { get { return artist; } set { artist = value; } }
+    public Text Length { get { return length; } set { length = value; } }
+    public Image Album { get { return albumArt; } set { albumArt = value; } }
+    public Text Rank { get { return rank; } set { rank = value; } }     
+       
+    #endregion
+
     void Start()
     {
-        Title.text = "Title";
-        Artist.text = "Artist";
-        Rank.text = "-";
+        title.text = "Title";
+        artist.text = "Artist";
+        length = new GameObject("Length").AddComponent<Text>();
+        length.text = "00:00";
+        rank.text = "-";
     }
 
     public void ItemSelect()
@@ -33,9 +46,9 @@ public class Music_Item : MonoBehaviour
 
     }
 
-    public void SetData(string title = "Title", string artist = "Artist", string rank = "-") {
-        Title.text = title;
-        Artist.text = artist;
-        Rank.text = rank;
+    public void SetData(string newtitle = "Title", string newartist = "Artist", string newrank = "-") {
+        title.text = newtitle;
+        artist.text = newartist;
+        rank.text = newrank;
     }
 }

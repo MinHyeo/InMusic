@@ -99,6 +99,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5064981203881762074}
+  - component: {fileID: 4119890202325672502}
+  - component: {fileID: 6595579607874484369}
   - component: {fileID: 8114183916898800301}
   m_Layer: 5
   m_Name: Music
@@ -129,6 +131,79 @@ RectTransform:
   m_AnchoredPosition: {x: -172.00002, y: 123.999985}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!61 &4119890202325672502
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3964619929280816202}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 32
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 174.42978, y: -0.3117981}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 374.96783, y: 24.488464}
+  m_EdgeRadius: 0
+--- !u!50 &6595579607874484369
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3964619929280816202}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!114 &8114183916898800301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,11 +216,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c68207afcf1fa494aac32479bc5abecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Title: {fileID: 4367786356659082575}
-  Artist: {fileID: 1871073648763632519}
-  Rank: {fileID: 1497052693153188062}
-  AlbumArt: {fileID: 5269297178053388339}
-  Back: {fileID: 2431535429716741832}
+  title: {fileID: 4367786356659082575}
+  artist: {fileID: 1871073648763632519}
+  length: {fileID: 0}
+  rank: {fileID: 1497052693153188062}
+  albumArt: {fileID: 5269297178053388339}
+  back: {fileID: 2431535429716741832}
 --- !u!1 &5541863183562098843
 GameObject:
   m_ObjectHideFlags: 0
