@@ -49,6 +49,17 @@ public class Single_Lobby_UI : UI_Base
             ScrollDown();
         }
     }
+    void OnTriggerEnter2D(Collider2D listItem)
+    {
+        curMusicItem = listItem.gameObject;
+        curMusicItem.GetComponent<Music_Item>().ItemSelect();
+        UpdateInfo();
+    }
+
+    private void OnTriggerExit2D(Collider2D listItem)
+    {
+        listItem.gameObject.GetComponent<Music_Item>().ItemUnselect();
+    }
 
     public void ButtonEvent(string type) {
         switch (type)
@@ -97,18 +108,6 @@ public class Single_Lobby_UI : UI_Base
         }
     }
 
-    void OnTriggerEnter2D(Collider2D listItem)
-    {
-        curMusicItem = listItem.gameObject;
-        //Debug.Log("Selected Item: " + curMusicItem.name);
-        UpdateInfo();
-    }
-
-    private void OnTriggerExit2D(Collider2D listItem)
-    {
-        listItem.gameObject.GetComponent<Music_Item>().ItemUnselect();
-    }
-
     void UpdateInfo()
     {
         //Debug.Log("Change Item");
@@ -119,7 +118,10 @@ public class Single_Lobby_UI : UI_Base
         curMusicData[2].GetComponent<Text>().text = newData.Artist.text;
         curMusicData[3].GetComponent<Text>().text = newData.Length;
         //기록 정보 업데이트
-
+        logData[0].text = newData.Score;
+        logData[1].text = newData.Accuracy;
+        logData[2].text = newData.Combo;
+        logData[3].text = newData.Rank.text;
     }
 
     void ContentDown()

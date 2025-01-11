@@ -216,12 +216,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c68207afcf1fa494aac32479bc5abecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  background: {fileID: 9049549333984272962}
   title: {fileID: 4367786356659082575}
   artist: {fileID: 1871073648763632519}
-  length: {fileID: 0}
-  rank: {fileID: 1497052693153188062}
+  length: 
   albumArt: {fileID: 5269297178053388339}
   back: {fileID: 2431535429716741832}
+  wMint: {r: 104, g: 240, b: 235, a: 1}
+  sMint: {r: 57, g: 255, b: 255, a: 1}
+  purple: {r: 155, g: 48, b: 255, a: 1}
+  score: 
+  accuracy: 
+  combo: 
+  rank: {fileID: 1497052693153188062}
 --- !u!1 &5541863183562098843
 GameObject:
   m_ObjectHideFlags: 0
