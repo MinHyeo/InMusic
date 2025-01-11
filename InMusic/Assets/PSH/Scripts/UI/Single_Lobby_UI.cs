@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 
 public class Single_Lobby_UI : UI_Base
 {
@@ -14,34 +15,37 @@ public class Single_Lobby_UI : UI_Base
     [SerializeField] private GameObject[] curMusicData = new GameObject[4];
     [SerializeField] private Text[] logData = new Text[4];
     //스크롤 관련
-    [SerializeField]private RectTransform contentPos;
+    [SerializeField] private RectTransform contentPos;
     [SerializeField] List<string> musicList = new List<string>();
     private float itemGap = 40.0f;
-    private int  numOfitems;
+    private int numOfitems;
     [SerializeField] private int startIndex = 0;
     Vector2 dest;
     float duration = 0.3f;
+    bool isScrolling = false;
 
     void Start()
     {
         //음악 목록 Load하기
         musicList = GameManager.Resource.GetMusicList();
         numOfitems = musicList.Count;
-        ScrollUp();
+        ContentDown();
 
         GameManager.Input.SetUIKeyEvent(SingleLobbyKeyEvent);
     }
 
     void Update()
     {
-        //스크롤을 올리면
-        if (contentPos.localPosition.y <= 1.45f) {
-            //Content 위치 내리기 -> 스크롤은 올라감
+        //목록을 휠로 조작 처리
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+
+        if (scroll > 0) //휠을 위로 돌렸을 때
+        {
             ScrollUp();
         }
-        //스크롤을 내리면
-        else if (contentPos.localPosition.y >= 400.0f) {
-            //Content 위치 올리기 -> 스크롤은 내려감
+
+        else if (scroll < 0)  //휠을 아래로 돌렸을 때
+        {
             ScrollDown();
         }
     }
@@ -50,17 +54,11 @@ public class Single_Lobby_UI : UI_Base
         switch (type)
         {
             case "Up":
-                /*
-                dest = contentPos.localPosition;
-                dest -= new Vector2 (0, itemGap);
-                StartCoroutine(SmoothScrollMove());*/
+                ScrollUp();
                 break;
             case "Down":
-                /*
-                dest = contentPos.localPosition;
-                dest += new Vector2(0, itemGap);
-                StartCoroutine(SmoothScrollMove());*/
-                break;  
+                ScrollDown();
+                break;
             case "Exit":
                 //TODO
                 //로비 화면 Load하기
@@ -74,7 +72,7 @@ public class Single_Lobby_UI : UI_Base
         }
     }
 
-    void SingleLobbyKeyEvent(Define.UIControl keyEvent) 
+    void SingleLobbyKeyEvent(Define.UIControl keyEvent)
     {
         switch (keyEvent)
         {
@@ -102,21 +100,29 @@ public class Single_Lobby_UI : UI_Base
     void OnTriggerEnter2D(Collider2D listItem)
     {
         curMusicItem = listItem.gameObject;
-        Debug.Log("Selected Item: " + curMusicItem.name);
+        //Debug.Log("Selected Item: " + curMusicItem.name);
         UpdateInfo();
+    }
+
+    private void OnTriggerExit2D(Collider2D listItem)
+    {
+        listItem.gameObject.GetComponent<Music_Item>().ItemUnselect();
     }
 
     void UpdateInfo()
     {
-        Debug.Log("Change Item");
+        //Debug.Log("Change Item");
         Music_Item newData = curMusicItem.GetComponent<Music_Item>();
+        //음악 정보 업데이트
         curMusicData[0].GetComponent<Image>().sprite = newData.Album.sprite;
         curMusicData[1].GetComponent<Text>().text = newData.Title.text;
         curMusicData[2].GetComponent<Text>().text = newData.Artist.text;
-        curMusicData[3].GetComponent<Text>().text = newData.Length.text;
+        curMusicData[3].GetComponent<Text>().text = newData.Length;
+        //기록 정보 업데이트
+
     }
 
-    void ScrollUp()
+    void ContentDown()
     {
         //Content 이동
         contentPos.localPosition = new Vector2(0, 200.0f);
@@ -133,7 +139,7 @@ public class Single_Lobby_UI : UI_Base
         }
     }
 
-    void ScrollDown() {
+    void ContentUp() {
         //Content 이동
         contentPos.localPosition = new Vector2(0, 200.0f);
         //목록 갱신
@@ -150,32 +156,49 @@ public class Single_Lobby_UI : UI_Base
         }
     }
 
+    void ScrollDown() {
+        dest = contentPos.localPosition;
+        dest += new Vector2(0, itemGap);
+        StartCoroutine(SmoothScrollMove());
+    }
+
+    void ScrollUp(){
+        dest = contentPos.localPosition;
+        dest -= new Vector2(0, itemGap);
+        StartCoroutine(SmoothScrollMove());
+    }
+
+
+    //부드럽게 이동: 스크롤/마우스 조작
     IEnumerator SmoothScrollMove() {
-        //스크롤을 올리면
-        if (contentPos.localPosition.y <= 1.45f)
+        isScrolling = true;
+
+        //Content 위치 수정
+        if (contentPos.localPosition.y < 40.0f)
         {
-            //Content 위치 내리기 -> 스크롤은 올라감
-            ScrollUp();
+            ContentDown();
             dest = contentPos.localPosition;
-            dest += new Vector2(0, itemGap);
+            dest -= new Vector2(0, itemGap);
         }
         //스크롤을 내리면
         else if (contentPos.localPosition.y >= 400.0f)
         {
-            //Content 위치 올리기 -> 스크롤은 내려감
-            ScrollDown();
+            ContentUp();
             dest = contentPos.localPosition;
-            dest -= new Vector2(0, itemGap);
+            dest += new Vector2(0, itemGap);
         }
 
+        //이동
         float elapsedTime = 0f;
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsedTime / duration);
-            contentPos.localPosition = Vector2.Lerp(contentPos.localPosition, dest, t);
+            contentPos.localPosition = Vector2.MoveTowards(contentPos.localPosition, dest, itemGap * (Time.deltaTime / duration));
             yield return null;
         }
+        //위치 보정
         contentPos.localPosition = dest;
+
+        isScrolling = false;
     }
 }

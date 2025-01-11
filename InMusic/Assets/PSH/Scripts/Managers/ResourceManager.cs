@@ -41,7 +41,7 @@ public class ResourceManager
         List<string> list = new List<string>();
         //음악 목록 가져오기
         for (int tmp = 0; tmp < 17; tmp++) {
-            list.Add($"Title { tmp }");
+            list.Add($"Title { tmp + 1 }");
         }
         return list;
     }

@@ -3,19 +3,25 @@ using UnityEngine.UI;
 
 public class Music_Item : MonoBehaviour
 {
-    public Text title;
-    public Text artist;
-    public Text length;
-    public Text rank;
-    public Image albumArt;
-    public Image back;
-
+    //움악 정보
+    [SerializeField] private Text title;
+    [SerializeField] private Text artist;
+    [SerializeField] private string length;
+    [SerializeField] private Image albumArt;
+    [SerializeField] private Image back;
+    //기록 정보
+    [SerializeField] private Text rank;
+    [SerializeField] private string score;
+    [SerializeField] private string accuracy;
     #region Getter
     public Text Title { get { return title; } set { title = value; } }
     public Text Artist { get { return artist; } set { artist = value; } }
-    public Text Length { get { return length; } set { length = value; } }
+    public string Length { get { return length; } set { length = value; } }
     public Image Album { get { return albumArt; } set { albumArt = value; } }
-    public Text Rank { get { return rank; } set { rank = value; } }     
+    public Text Rank { get { return rank; } set { rank = value; } }
+    public string Score { get { return score; } set { score = value; } }
+    public string Accuracy { get { return accuracy; } set { accuracy = value; } }
+    
        
     #endregion
 
@@ -23,8 +29,7 @@ public class Music_Item : MonoBehaviour
     {
         title.text = "Title";
         artist.text = "Artist";
-        length = new GameObject("Length").AddComponent<Text>();
-        length.text = "00:00";
+        length= "00:00";
         rank.text = "-";
     }
 
