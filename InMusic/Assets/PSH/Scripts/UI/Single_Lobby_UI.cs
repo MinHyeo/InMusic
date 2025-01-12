@@ -76,6 +76,7 @@ public class Single_Lobby_UI : UI_Base
             case "Enter":
                 //TODO
                 //SceneManager.LoadScene("∞‘¿” æ¿");
+                SceneManager.LoadScene(1);
                 break;
             case "KeyGuide":
                 Guide();
