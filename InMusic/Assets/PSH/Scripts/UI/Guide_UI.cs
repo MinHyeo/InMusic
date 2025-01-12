@@ -4,12 +4,12 @@ public class Guide_UI : MonoBehaviour
 {
     private void Awake()
     {
-        GameManager.Input.SetUIKeyEvent(GuideKeyEvent);
+        GameManager_PSH.Input.SetUIKeyEvent(GuideKeyEvent);
     }
 
     public void GuideButton(string buttonname){
         if (buttonname == "Exit") {
-            GameManager.Input.RemoveUIKeyEvent(GuideKeyEvent);
+            GameManager_PSH.Input.RemoveUIKeyEvent(GuideKeyEvent);
             Destroy(gameObject);
         }
     }

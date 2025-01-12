@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager_PSH : MonoBehaviour
 {
     #region ManagerObject
-    public static GameManager GM_Instance;
-    public static GameManager Instance { get { Init(); return GM_Instance; } }
+    public static GameManager_PSH GM_Instance;
+    public static GameManager_PSH Instance { get { Init(); return GM_Instance; } }
 
     InputManager M_Input = new InputManager();
     public static InputManager Input { get { return Instance.M_Input; } }
@@ -21,10 +21,10 @@ public class GameManager : MonoBehaviour
             if (gmObject == null)
             {
                 gmObject = new GameObject { name = "GameManager" };
-                gmObject.AddComponent<GameManager>();
+                gmObject.AddComponent<GameManager_PSH>();
             }
             DontDestroyOnLoad(gmObject);
-            GM_Instance = gmObject.GetComponent<GameManager>();
+            GM_Instance = gmObject.GetComponent<GameManager_PSH>();
 
             GM_Instance.M_Input.Init();
         }
