@@ -38,8 +38,9 @@ public class ResourceManager
     }
 
     public List<string> GetMusicList() {
+        //string 대신 Music_Item 객체 사용
         List<string> list = new List<string>();
-        //음악 목록 가져오기
+        //음악 목록 가져오기(파일 읽기)
         for (int tmp = 0; tmp < 17; tmp++) {
             list.Add($"Title { tmp + 1 }");
         }

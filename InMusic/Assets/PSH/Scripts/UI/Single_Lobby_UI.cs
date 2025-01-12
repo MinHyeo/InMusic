@@ -3,14 +3,17 @@ using UnityEngine.UI;
 using UI_BASE_PSH;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Single_Lobby_UI : UI_Base
 {
     [SerializeField] private GameObject[] musicItems = new GameObject[17];
     [SerializeField] private GameObject curMusicItem;
+    [Tooltip("선택한 음악의 정보: 앨범, 제목, 아티스트, 길이")]
     [SerializeField] private GameObject[] curMusicData = new GameObject[4];
+    [Tooltip("선택한 음악의 기록: 점수, 정확도, 콤보, 랭크")]
     [SerializeField] private Text[] logData = new Text[4];
-    //스크롤 관련
+    [Tooltip("스크롤 관련 변수")]
     [SerializeField] private RectTransform contentPos;
     [SerializeField] List<string> musicList = new List<string>();
     private float itemGap = 40.0f;
@@ -68,7 +71,11 @@ public class Single_Lobby_UI : UI_Base
                 break;
             case "Exit":
                 //TODO
-                //로비 화면 Load하기
+                //SceneManager.LoadScene("로비 씬");
+                break;
+            case "Enter":
+                //TODO
+                //SceneManager.LoadScene("게임 씬");
                 break;
             case "KeyGuide":
                 Guide();
