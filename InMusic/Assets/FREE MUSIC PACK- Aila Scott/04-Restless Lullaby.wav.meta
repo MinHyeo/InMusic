@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: b6446132c76679e4288c580f181b7bb3
+AssetOrigin:
+  serializedVersion: 1
+  productId: 281109
+  packageName: FREE Music Pack (Lo-fi, Indie, Metal, Horror, Orchestral)
+  packageVersion: 1.0
+  assetPath: Assets/FREE MUSIC PACK- Aila Scott/04-Restless Lullaby.wav
+  uploadId: 675613
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 8
+  defaultSettings:
+    serializedVersion: 2
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+    preloadAudioData: 1
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

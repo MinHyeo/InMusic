@@ -64,8 +64,11 @@ public class MainMenuController : MonoBehaviour
 
     private void UpdateArrowStates()
     {
-        leftButton.interactable = currentButton > MainMenuButton.Multi;
-        rightButton.interactable = currentButton < MainMenuButton.Solo;
+        var firstEnumValue = (MainMenuButton)0;
+        var lastEnumValue = (MainMenuButton)(System.Enum.GetValues(typeof(MainMenuButton)).Length - 1);
+
+        leftButton.interactable = currentButton > firstEnumValue;
+        rightButton.interactable = currentButton < lastEnumValue;
     }
 
     private Button GetButtonFromEnum(MainMenuButton menuButton)

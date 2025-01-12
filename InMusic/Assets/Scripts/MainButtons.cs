@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class MainButtons: MonoBehaviour
 {
-    public GameObject keySettingPanel;
+    public GameObject SettingPanel;
     public GameObject keyGuidePanel;
     public GameObject mainCanvas;
     public GameObject soloCanvas;
     public GameObject multiCanvas;
 
-    public void OpenKeySettingPanel()
+    public void OpenSettingPanel()
     {
-        keySettingPanel.SetActive(true);
+        SettingPanel.SetActive(true);
     }
 
     // Open KeyGuide Panel
