@@ -36,7 +36,11 @@ public class ScrollDown : MonoBehaviour
             {
                 note.MissNote();
             }
-            objectPool.ReturnObject(gameObject);
+            if(objectPool != null)
+            {
+                objectPool.ReturnObject(gameObject);
+            }
+
         }
     }
 

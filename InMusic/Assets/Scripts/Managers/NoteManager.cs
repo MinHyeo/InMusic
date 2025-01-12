@@ -15,6 +15,8 @@ public class NoteManager : MonoBehaviour
     public Transform spawnArea;
     public Transform judgeLinePos;
 
+    [SerializeField] GameObject songStartNote;
+
     public int lineCount = 5;          // 초기 경계선 개수
     public float baseScrollSpeed = 5f; // 기본 스크롤 속도
     public float bpm = 120;            // BPM (비트 당 박자 수)
@@ -48,7 +50,7 @@ public class NoteManager : MonoBehaviour
     void Start()
     {
 
-        BMSData parsedData = BMSManager.Instance.ParseBMS("test");
+        BMSData parsedData = BMSManager.Instance.ParseBMS("test5");
         if (parsedData != null)
         {
             int lastMeasure = parsedData.notes.Last().measure;
@@ -101,16 +103,26 @@ public class NoteManager : MonoBehaviour
 
                 if (noteID != "00") // 노트가 있는 경우만 처리
                 {
-                    totalNotes++; // 유효한 노트 수 증가
+                   
                     float beatPosition = (float)i / divisions;
                     float yPosition = noteData.measure * lineInterval + +(lineInterval / divisions) * i + startPositionY + spawnArea.position.y;
 
                     float xPosition = GetChannelPosition(noteData.channel);
-
-                    GameObject selectedNote = SelectNotePool(noteData.channel).GetObject();
-                    selectedNote.GetComponent<ScrollDown>().SetScrollSpeed(baseScrollSpeed);
-                    selectedNote.transform.position = new Vector3(xPosition, yPosition, 0);
-                    selectedNote.SetActive(true);
+                    if (noteID == "02")
+                    {
+                        // "02"일 때 프리팹 생성
+                        GameObject specialNote = Instantiate(songStartNote, new Vector3(xPosition, yPosition, 0), Quaternion.identity, spawnArea);
+                        specialNote.GetComponent<ScrollDown>().SetScrollSpeed(baseScrollSpeed);
+                        specialNote.SetActive(true);
+                    }
+                    else
+                    {
+                        totalNotes++; // 유효한 노트 수 증가
+                        GameObject selectedNote = SelectNotePool(noteData.channel).GetObject();
+                        selectedNote.GetComponent<ScrollDown>().SetScrollSpeed(baseScrollSpeed);
+                        selectedNote.transform.position = new Vector3(xPosition, yPosition, 0);
+                        selectedNote.SetActive(true);
+                    }
                 }
             }
         }

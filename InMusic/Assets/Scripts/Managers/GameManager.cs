@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Video;
@@ -24,10 +26,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] VideoPlayer videoPlayer;
     [SerializeField] PlayUI playUI;
+    [SerializeField] SinglePlayResultUI resultUI;
+    [SerializeField] GameObject pauseUI;
 
     public bool isGameActive = false; // 게임 상태
     //public AudioClip hitSound;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioSource SongSource;
     void Awake()
     {
         if (Instance == null)
@@ -43,7 +48,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
    public void InitializeGame()
@@ -55,8 +60,14 @@ public class GameManager : MonoBehaviour
         totalNotesPlayed = 0;
         accuracy = 100f; // 초기 정확도
         curHP = maxHP;
+        if (SongSource.clip.loadState == AudioDataLoadState.Unloaded)
+        {
+            SongSource.clip.LoadAudioData(); // 오디오 데이터를 미리 로드
+        }
+        videoPlayer.Prepare();
         Debug.Log("Game Initialized");
     }
+
 
     public void AddScore(string judgement)
     {
@@ -92,6 +103,7 @@ public class GameManager : MonoBehaviour
                 curHP -= 10f;
                 combo = 0;
                 missCount++;
+                playUI.UpdatePlayUI();
                 break;
         }
         playUI.JudgeTextUpdate(judgement);
@@ -102,7 +114,6 @@ public class GameManager : MonoBehaviour
         totalScore += scoreToAdd;
         totalNotesPlayed++;
         accuracy = Mathf.Clamp(accuracy - accuracyPenalty, 0f, 100f);
-        Debug.Log($"+: {scoreToAdd} || combo: {totalNotesPlayed}");
         if(curHP <= 0)
         {
             GameOver();
@@ -112,6 +123,7 @@ public class GameManager : MonoBehaviour
         if (totalNotesPlayed == totalNotes)
         {
             totalScore = Mathf.Round(totalScore); // 최종 점수 반올림
+            accuracy = Mathf.Round(accuracy * 100f) / 100f;
             EndGame();
         }
     }
@@ -119,17 +131,54 @@ public class GameManager : MonoBehaviour
     void EndGame()
     {
         isGameActive = false;
+        playUI.countText.text = "End";
+        EndingGame();
     }
 
     public void StartGame()
     {
         isGameActive = true;
-        NoteManager.Instance.isMoving = true;
         videoPlayer.Play();
+        SongSource.Play();
     }
 
     private void GameOver()
     {
         EndGame();
     }
+    private async void EndingGame()
+    {
+        await Task.Delay(3000);
+        resultUI.InitResult();
+        
+    }
+    private async void ResumCount()
+    {
+        playUI.countText.text = "3";
+        await Task.Delay(1000);
+        playUI.countText.text = "2";
+        await Task.Delay(1000);
+        playUI.countText.text = "1";
+        await Task.Delay(1000);
+        playUI.countText.text = "";
+        Time.timeScale = 1f;
+        SongSource.Play();
+        videoPlayer.Play();
+     }
+
+    public void PauseGame()
+    {
+        Debug.Log("일시정지");
+        pauseUI.SetActive(true);
+        Time.timeScale = 0f;
+        SongSource.Pause();
+        videoPlayer.Pause();
+    }
+    public void ResumeGame()
+    {
+        Debug.Log("일시정지 해제");
+        pauseUI.SetActive(false);
+        ResumCount();
+    }
+
 }

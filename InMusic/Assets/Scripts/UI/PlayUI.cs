@@ -9,11 +9,13 @@ public class PlayUI : MonoBehaviour
     [SerializeField] Slider hpBar;
     [SerializeField] TextMeshProUGUI comboText; // 콤보 표시 텍스트
     [SerializeField] GameObject[] judgeText;
+    public TextMeshProUGUI countText;
 
     void Start()
     {
         hpBar.value = GameManager.Instance.maxHP;
         comboText.text = GameManager.Instance.combo.ToString();
+        countText.text = "";
     }
 
     void Update()
@@ -24,6 +26,7 @@ public class PlayUI : MonoBehaviour
     public void UpdatePlayUI()
     {
         comboText.text = GameManager.Instance.combo.ToString();
+        hpBar.value = GameManager.Instance.curHP/100f;
     }
 
     public void JudgeTextUpdate(string judgement)

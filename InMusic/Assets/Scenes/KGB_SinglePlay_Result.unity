@@ -1619,6 +1619,7 @@ MonoBehaviour:
   accuracy: {fileID: 93726339}
   combo: {fileID: 924140020}
   rate: {fileID: 1931624935}
+  fullCombo: {fileID: 4912094194206028610}
 --- !u!1 &868107240
 GameObject:
   m_ObjectHideFlags: 0
@@ -3487,6 +3488,11 @@ PrefabInstance:
 --- !u!224 &4912094194206028609 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7073163040106164729, guid: 34b1c009b4cc08c4384a5df44141383b, type: 3}
+  m_PrefabInstance: {fileID: 4912094194206028608}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4912094194206028610 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 836560941591082520, guid: 34b1c009b4cc08c4384a5df44141383b, type: 3}
   m_PrefabInstance: {fileID: 4912094194206028608}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
