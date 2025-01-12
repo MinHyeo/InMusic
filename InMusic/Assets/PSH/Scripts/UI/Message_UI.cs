@@ -8,7 +8,7 @@ public class Message_UI : MonoBehaviour
 {
     private void Awake()
     {
-        GameManager_PSH.Input.SetUIKeyEvent(MessageKeyEvent);
+        GameManager.Input.SetUIKeyEvent(MessageKeyEvent);
     }
 
     public void MessageButton(string buttonname) {
@@ -17,7 +17,7 @@ public class Message_UI : MonoBehaviour
             Application.Quit();//인게임용
         }
         else if (buttonname == "Cancle") {
-            GameManager_PSH.Input.RemoveUIKeyEvent(MessageKeyEvent);
+            GameManager.Input.RemoveUIKeyEvent(MessageKeyEvent);
             Destroy(gameObject);
         }
     }

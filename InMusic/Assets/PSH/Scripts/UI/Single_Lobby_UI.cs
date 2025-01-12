@@ -26,11 +26,11 @@ public class Single_Lobby_UI : UI_Base
     void Start()
     {
         //음악 목록 Load하기
-        musicList = GameManager_PSH.Resource.GetMusicList();
+        musicList = GameManager.Resource.GetMusicList();
         numOfitems = musicList.Count;
         ContentDown();
 
-        GameManager_PSH.Input.SetUIKeyEvent(SingleLobbyKeyEvent);
+        GameManager.Input.SetUIKeyEvent(SingleLobbyKeyEvent);
     }
 
     void Update()

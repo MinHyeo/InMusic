@@ -11,12 +11,12 @@ namespace UI_BASE_PSH
         //Setting UI Call
         public void Gear()
         {
-            curSetUI = GameManager_PSH.Resource.Instantiate("SoundSetting_UI");
+            curSetUI = GameManager.Resource.Instantiate("SoundSetting_UI");
         }
 
         public void Guide()
         {
-            guideUI = GameManager_PSH.Resource.Instantiate("KeyGuide_UI");
+            guideUI = GameManager.Resource.Instantiate("KeyGuide_UI");
         }
     }
 }

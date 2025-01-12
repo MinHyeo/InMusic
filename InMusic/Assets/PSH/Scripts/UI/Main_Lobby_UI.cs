@@ -21,7 +21,7 @@ public class Main_Lobby_UI : UI_Base
             GameObject temp = buttonRoot.transform.GetChild(i).gameObject;
             buttons.Add(temp.name, temp);
         }
-        GameManager_PSH.Input.SetUIKeyEvent(MainLobbyKeyEvent);
+        GameManager.Input.SetUIKeyEvent(MainLobbyKeyEvent);
     }
 
     //버튼 기능
@@ -33,7 +33,7 @@ public class Main_Lobby_UI : UI_Base
                 break;
             //나가기
             case "Exit":
-                if (curSetUI == null && popupUI == null) popupUI = GameManager_PSH.Resource.Instantiate("Message_UI");
+                if (curSetUI == null && popupUI == null) popupUI = GameManager.Resource.Instantiate("Message_UI");
                 break;
             //왼쪽
             case "Left":

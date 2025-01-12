@@ -40,7 +40,7 @@ public class Sound_Setting_UI : MonoBehaviour
         curMenu = menuList[curMenuIndex];
         ChangeMenu();
 
-        GameManager_PSH.Input.SetUIKeyEvent(SoundSetKeyEvent);
+        GameManager.Input.SetUIKeyEvent(SoundSetKeyEvent);
     }
 
     void Update()
@@ -91,11 +91,11 @@ public class Sound_Setting_UI : MonoBehaviour
                 Debug.Log("박자 조절 미구현");
                 break;
             case "KeySet":
-                keySet = GameManager_PSH.Resource.Instantiate("KeySetting_UI");
+                keySet = GameManager.Resource.Instantiate("KeySetting_UI");
                 Debug.Log(keySet.gameObject.name);
                 break;
             case "Exit":
-                GameManager_PSH.Input.RemoveUIKeyEvent(SoundSetKeyEvent);
+                GameManager.Input.RemoveUIKeyEvent(SoundSetKeyEvent);
                 Destroy(gameObject);
                 break;
             default:

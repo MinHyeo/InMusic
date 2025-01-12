@@ -33,7 +33,7 @@ public class Key_Setting_UI : MonoBehaviour
         curMenu = menuList[curMenuIndex];
         ChangeMenu();
 
-        GameManager_PSH.Input.SetUIKeyEvent(KetSetKeyEvent);
+        GameManager.Input.SetUIKeyEvent(KetSetKeyEvent);
     }
 
     public void ControlMenu(string arrow)
@@ -72,7 +72,7 @@ public class Key_Setting_UI : MonoBehaviour
                 StartKeySet();
                 break;
             case "Exit":
-                GameManager_PSH.Input.RemoveUIKeyEvent(KetSetKeyEvent);
+                GameManager.Input.RemoveUIKeyEvent(KetSetKeyEvent);
                 Destroy(gameObject);
                 break;
             default:
@@ -123,12 +123,12 @@ public class Key_Setting_UI : MonoBehaviour
         isSetMode = true;
         menuValues[curMenuIndex].text = $"<color=red>{menuValues[curMenuIndex].text}</color>";
         message.SetActive(isSetMode);
-        GameManager_PSH.Input.ChangeKey(curNote);
+        GameManager.Input.ChangeKey(curNote);
     }
 
     void EndKeySet() {
         isSetMode = false;
-        string newKey = GameManager_PSH.Input.GetKey(curNote);
+        string newKey = GameManager.Input.GetKey(curNote);
         menuValues[curMenuIndex].text = $"<color=black>{newKey}</color>";
         Debug.Log($"New key: {newKey}");
         message.SetActive(isSetMode);
