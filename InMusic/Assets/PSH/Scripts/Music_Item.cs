@@ -5,7 +5,7 @@ public class Music_Item : MonoBehaviour
 {
     //배경(?)
     [SerializeField] private Image background;
-    [Tooltip("음악 관련 정보")]
+    [Header("음악 관련 정보")]
     [SerializeField] private Text title;
     [SerializeField] private Text artist;
     [SerializeField] private string length;
@@ -14,14 +14,14 @@ public class Music_Item : MonoBehaviour
     [SerializeField] private Color wMint = new Color(104.0f, 240.0f, 235.0f, 0.08f);
     [SerializeField] private Color sMint = new Color(57, 255, 255, 1.0f);
     [SerializeField] private Color purple = new Color(155.0f, 48.0f, 255.0f, 1.0f);
-    [Tooltip("기록 관련 정보")]
+    [Header("기록 관련 정보")]
     [SerializeField] private string score;
     [SerializeField] private string accuracy;
     [SerializeField] private string combo;
     [SerializeField] private Text rank;
     
     
-    #region Getter
+    #region Get/Set
     public Text Title { get { return title; } set { title = value; } }
     public Text Artist { get { return artist; } set { artist = value; } }
     public string Length { get { return length; } set { length = value; } }
@@ -48,12 +48,14 @@ public class Music_Item : MonoBehaviour
 
     public void ItemSelect()
     {
+        
         SetColor(background, purple);
         SetColor(back, purple);
-
+        
         SetAlpha(title,1.0f);
         SetAlpha(artist,1.0f);
         SetAlpha(rank,1.0f);
+        
         SetAlpha(albumArt, 1.0f);
     }
 
@@ -61,19 +63,22 @@ public class Music_Item : MonoBehaviour
     {
         SetColor(background, wMint);
         SetColor(back, wMint);
-
+        
         SetAlpha(title, 0.5f);
         SetAlpha(artist, 0.5f);
         SetAlpha(rank, 0.5f);
+        
         SetAlpha(albumArt, 0.5f);
     }
 
+    //투명도만 바꾸기
     void SetAlpha(Graphic target, float alpha) {
         Color Temp = target.color;
         Temp.a = alpha;
         target.color = Temp;
     }
 
+    //색상 바꾸기
     void SetColor(Graphic target, Color color) {
         target.color = color;
     }
