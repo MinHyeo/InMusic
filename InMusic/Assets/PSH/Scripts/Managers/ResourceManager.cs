@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using System.IO;
+using System.Diagnostics;
 using UnityEngine;
 
 public class ResourceManager
 {
+    string mDataPath = "Assets/Resources/Music";
 
     public T Load<T>(string path) where T : Object
     {
@@ -27,7 +30,7 @@ public class ResourceManager
         GameObject original = Load<GameObject>($"Prefabs/PSH/{path}"); //Prefab
         if (original == null)
         {
-            Debug.Log($"Fail to load Prefab : {path}");
+            UnityEngine.Debug.Log($"Fail to load Prefab : {path}");
             return null;
         }
 
@@ -38,6 +41,41 @@ public class ResourceManager
     }
 
     public List<string> GetMusicList() {
+        List<Music_Item> mList = new List<Music_Item>();
+        //경로 설정
+        string fullPath = Application.dataPath+ mDataPath.Replace("Assets", "");
+        //음악 개수(디렉토리 개수), 제목(디렉토리 이름)
+        int numOfmusic = 17;
+        string[] mTitles = new string[17];
+
+        if (Directory.Exists(fullPath)) 
+        {
+            mTitles = Directory.GetDirectories(fullPath);
+            numOfmusic = mTitles.Length;
+        }
+        else
+        {
+            UnityEngine.Debug.Log("음악 디렉토리 열기 실패");
+            return null;
+        }
+
+        
+        /*for (int i = 0; i < numOfmusic; i++)
+        {
+            string mPath = fullPath + mTitles[i];
+            //음악 디렉토리 열기
+            Process.Start("explorer.exe", mPath);
+            string[] files = Directory.GetFiles(fullPath);
+            //1. BMS 파일 열기
+            //2. 앨범 사진 열기
+            //3. 뮤비 열기
+            //4. 기록 파일 열기
+            Music_Item temp = new Music_Item();
+
+            mList.Add(temp);
+        }*/
+        
+
         //string 대신 Music_Item 객체 사용
         List<string> list = new List<string>();
         //음악 목록 가져오기(파일 읽기)
