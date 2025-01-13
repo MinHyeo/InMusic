@@ -19,13 +19,17 @@ namespace Play
         {
             string part = "Song/" + songName + "/" + songName;
             videoClip = Resources.Load<VideoClip>(part);
-            Debug.Log(videoClip);
             videoPlayer.clip = videoClip;
         }
 
         public void Play()
         {
             videoPlayer.Play();
+        }
+
+        public void Pause()
+        {
+            videoPlayer.Pause();
         }
     }
 }

@@ -34,6 +34,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 161631
   packageName: FMOD for Unity
-  packageVersion: 2.02.23
+  packageVersion: 2.02.26
   assetPath: Assets/Plugins/FMOD/platforms/html5/lib/2.0.19/libfmodstudio.a
-  uploadId: 695525
+  uploadId: 717736

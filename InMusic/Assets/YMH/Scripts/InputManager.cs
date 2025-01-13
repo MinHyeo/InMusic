@@ -59,6 +59,23 @@ namespace Play
             {
                 InputKey(false, Key.K);
             }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                PlayManager.Instance.OnPause();
+            }
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                PauseManager.Instance.OnKeyPress(KeyCode.DownArrow);
+            }
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                PauseManager.Instance.OnKeyPress(KeyCode.UpArrow);
+            }
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                PauseManager.Instance.OnKeyPress(KeyCode.Return);
+            }
         }
 
         private void InputKey(bool isDown, Key key)

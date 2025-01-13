@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 namespace Play
 {
@@ -9,9 +11,11 @@ namespace Play
         public static PlayManager Instance;
         private void Awake()
         {
-            if (Instance != null)
+            if (Instance != null && Instance != this)
             {
                 Debug.LogError("Scene에 여러개의 PlayManager 존재");
+                Destroy(this.gameObject);
+                return;
             }
             Instance = this;
         }
@@ -30,25 +34,35 @@ namespace Play
         private Metronome metronome;
         public TextMeshProUGUI text;
 
+        //노래 정보
         private Song songName;
-        private float preStartDelay = 2.0f;
-        private float noteSpeed = 5.0f;
+        private const float preStartDelay = 2.0f;
+        private const float noteSpeed = 5.0f;
 
         // 판정 기준
-        private float greateThreshold = 0.0533f;
-        private float goodThreshold = 0.0416f;
-        private float badThreshold = 0.0832f;
-        private float missThreshold = 0.0416f;
+        private const float greateThreshold = 0.0533f;
+        private const float goodThreshold = 0.0416f;
+        private const float badThreshold = 0.0832f;
+        private const float missThreshold = 0.0416f;
 
         //점수 관련
         private float score = 0;            //점수
         private float accuracy = 0;         //정확도
         private float totalPercent = 0;     //정확도 총합
         private int noteCount = 0;          //노트 입력 횟수
-        private int combo = 0;              //콤보
-        private int maxCombo = 0;           //최대 콤보
 
+        //입력 횟수
         private int[] inputCount = new int[4] { 0, 0, 0, 0 };
+
+        //게임 상태
+        enum States
+        {
+            Ready,
+            Playing,
+            Pause,
+            End
+        }
+        private States state = States.Ready;
 
         public void OnClickButton()
         {
@@ -69,13 +83,30 @@ namespace Play
             metronome.CalculateSync();
 
             StartCoroutine(StartMusicWithIntroDelay());
+            //Task.Run(async () => await StartMusicWithIntroDelay());
         }
+
+        //private async Task StartMusicWithIntroDelay()
+        //{
+        //    metronome.StartInitialMetronome();
+        //    NoteManager.Instance.InitializeNotes(BmsLoader.Instance.SelectSong(songName));
+
+        //    await Task.Delay((int)(preStartDelay * 1000));
+        //    state = States.Playing;
+
+        //    PlaySong();
+        //    metronome.StartMetronome();
+        //}
+
         private IEnumerator StartMusicWithIntroDelay()
         {
             metronome.StartInitialMetronome();
-            NoteManager.Instance.InitializeNotes(BmsLoader.Instance.songInfo);
+            NoteManager.Instance.InitializeNotes(BmsLoader.Instance.SelectSong(songName));
             // 2초 인트로 시간 대기
             yield return new WaitForSeconds(preStartDelay);
+
+            //상태 변환
+            state = States.Playing;
 
             //노래 재생 및 마디선 생성
             PlaySong();
@@ -161,5 +192,34 @@ namespace Play
             text.text += accuracy.ToString("F2") + "%";
         }
 
+        //일시정지
+        public void OnPause()
+        {
+            //상태 변환
+            state = States.Pause;
+
+            //일시정지
+            PauseManager.Instance.Pause();
+            videoPlayScript.Pause();
+        }
+
+        public void Continue()
+        {
+            //상태 변환
+            state = States.Playing;
+
+            //계속하기
+            Time.timeScale = 1;
+            //노래 실행
+            SoundManager.Instance.Pause(false);
+            //비디오 실행
+            videoPlayScript.Play();
+        }
+
+        public void ReStart()
+        {
+            Time.timeScale = 1;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 }

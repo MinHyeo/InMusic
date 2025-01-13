@@ -32,6 +32,11 @@ namespace Play
         private void Start()
         {
             //FMOD 초기화
+            Init();
+        }
+
+        private void Init()
+        {
             FMOD.Factory.System_Create(out fmodSystem);
             fmodSystem.init(512, FMOD.INITFLAGS.NORMAL, System.IntPtr.Zero);
         }
@@ -46,6 +51,11 @@ namespace Play
             isPlaying = true;
         }
 
+        public void Pause(bool isPause)
+        {
+            musicChannel.setPaused(isPause);
+        }
+
         public void SongInit(string songName)
         {
             //노래 불러오기
@@ -53,7 +63,7 @@ namespace Play
             FMOD.RESULT result = fmodSystem.createSound(path, FMOD.MODE.DEFAULT, out musicSound);
             if (result != FMOD.RESULT.OK)
             {
-                UnityEngine.Debug.LogError("노래 불러오기 실패");
+                UnityEngine.Debug.LogError("노래 불러오기 실패" + result);
                 return;
             }
 
