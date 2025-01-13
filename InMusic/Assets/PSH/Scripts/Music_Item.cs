@@ -39,12 +39,17 @@ public class Music_Item : MonoBehaviour
         rank.text = "-";
     }
 
-    public void SetData(string newtitle = "Title", string newartist = "Artist", string newrank = "-")
+    public void SetData(string newtitle = "Title", string newartist = "Artist", string newrank = "-", Image newAlbum = null, string newscore = "0", string newaccuracy = "0", string newcombo = "0")
     {
         title.text = newtitle;
         artist.text = newartist;
         rank.text = newrank;
+        //albumArt = newAlbum;
+        score = newscore;
+        accuracy = newaccuracy;
+        combo = newcombo;
     }
+
 
     public void ItemSelect()
     {
