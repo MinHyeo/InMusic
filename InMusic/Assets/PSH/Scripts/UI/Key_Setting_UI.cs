@@ -33,7 +33,7 @@ public class Key_Setting_UI : MonoBehaviour
         curMenu = menuList[curMenuIndex];
         ChangeMenu();
 
-        GameManager.Input.SetUIKeyEvent(KetSetKeyEvent);
+        GameManager.Input.SetUIKeyEvent(KeySetKeyEvent);
     }
 
     public void ControlMenu(string arrow)
@@ -72,7 +72,7 @@ public class Key_Setting_UI : MonoBehaviour
                 StartKeySet();
                 break;
             case "Exit":
-                GameManager.Input.RemoveUIKeyEvent(KetSetKeyEvent);
+                GameManager.Input.RemoveUIKeyEvent(KeySetKeyEvent);
                 Destroy(gameObject);
                 break;
             default:
@@ -81,7 +81,7 @@ public class Key_Setting_UI : MonoBehaviour
         }
     }
 
-    void KetSetKeyEvent(Define.UIControl keyEvent) {
+    void KeySetKeyEvent(Define.UIControl keyEvent) {
         switch (keyEvent)
         {
             case Define.UIControl.Up:
@@ -96,13 +96,13 @@ public class Key_Setting_UI : MonoBehaviour
                 if (curMenuIndex == 2) ButtonEvent("Key3");
                 if (curMenuIndex == 3) ButtonEvent("Key4");
                 break;
+            //키 변경 시 입력 값
             case Define.UIControl.Any:
-                if (isSetMode) {
-                    EndKeySet();
-                } 
+                if (isSetMode) EndKeySet();
                 break;
             case Define.UIControl.Esc:
-                ButtonEvent("Exit");
+                if (isSetMode) EndKeySet();
+                else ButtonEvent("Exit");
                 break;
         }
     }
@@ -123,7 +123,8 @@ public class Key_Setting_UI : MonoBehaviour
 
     void StartKeySet() {
         isSetMode = true;
-        menuValues[curMenuIndex].text = $"<color=red>{menuValues[curMenuIndex].text}</color>";
+        string curKey = menuValues[curMenuIndex].text.Replace("black", "red");
+        menuValues[curMenuIndex].text = curKey;
         message.SetActive(isSetMode);
         GameManager.Input.ChangeKey(curNote);
     }
@@ -131,8 +132,15 @@ public class Key_Setting_UI : MonoBehaviour
     void EndKeySet() {
         isSetMode = false;
         string newKey = GameManager.Input.GetKey(curNote);
-        menuValues[curMenuIndex].text = $"<color=black>{newKey}</color>";
-        Debug.Log($"New key: {newKey}");
         message.SetActive(isSetMode);
+
+        if (newKey.Equals("Escape")) {
+            string curKey = menuValues[curMenuIndex].text.Replace("red", "black");
+            menuValues[curMenuIndex].text = curKey;
+            return;
+        }
+
+        menuValues[curMenuIndex].text = $"<color=black>{newKey}</color>";
+        Debug.Log($"Set New key: {newKey}");
     }
 }

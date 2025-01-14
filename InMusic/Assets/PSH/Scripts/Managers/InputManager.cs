@@ -1,10 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InputManager
+public class InputManager : MonoBehaviour
 {
     [Tooltip("Observer 역할을 하는 함수에 이 변수 할당")]
     public Action<Define.UIControl> uIKeyPress;
@@ -24,6 +25,8 @@ public class InputManager
         keyMapping.Add(Define.NoteControl.Key2, KeyCode.F);
         keyMapping.Add(Define.NoteControl.Key3, KeyCode.J);
         keyMapping.Add(Define.NoteControl.Key4, KeyCode.K);
+
+        //StartCoroutine(UIControl());
     }
 
     //키 입력 시 해당 키의 입력을 기다리는 함수 호출
@@ -32,13 +35,77 @@ public class InputManager
     /// <summary>
     /// 키 입력 감지 메서드
     /// </summary>
+    IEnumerator UIControl()
+    {
+        if (isSetMode)
+        {
+            KeyCode newKey = FindKeyPress();
+            if (newKey != KeyCode.None && newKey != KeyCode.KeypadEnter)
+            {
+                SetNewKey(targetNoteKey, newKey);
+                uIKeyPress.Invoke(Define.UIControl.Any);
+            }
+            //변경 취소
+            else if (newKey == KeyCode.Escape)
+            {
+                uIKeyPress.Invoke(Define.UIControl.Esc);
+            }
+            yield return null;
+        }
+        //LeftArrow
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            uIKeyPress.Invoke(Define.UIControl.Left);
+        }
+        //RightArrow
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            uIKeyPress.Invoke(Define.UIControl.Right);
+        }
+        //UpArrow
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            uIKeyPress.Invoke(Define.UIControl.Up);
+        }
+        //DownArrow
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            uIKeyPress.Invoke(Define.UIControl.Down);
+        }
+        //Enter
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            uIKeyPress.Invoke(Define.UIControl.Enter);
+        }
+        //ESC
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            uIKeyPress.Invoke(Define.UIControl.Esc);
+        }
+        //F1: KeyGuide
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            uIKeyPress.Invoke(Define.UIControl.Guide);
+        }
+        //F10: Setting
+        if (Input.GetKeyDown(KeyCode.F10))
+        {
+            uIKeyPress.Invoke(Define.UIControl.Setting);
+        }
+        yield return null;
+    }
+
     public void UIUpdate()
     {
         if (isSetMode) {
             KeyCode newKey = FindKeyPress();
-            if (newKey != KeyCode.None && newKey != KeyCode.Escape && newKey != KeyCode.KeypadEnter) {
+            if (newKey != KeyCode.None && newKey != KeyCode.KeypadEnter) {
                 SetNewKey(targetNoteKey, newKey);
                 uIKeyPress.Invoke(Define.UIControl.Any);
+            }
+            //변경 취소
+            else if (newKey == KeyCode.Escape) {
+                uIKeyPress.Invoke(Define.UIControl.Esc);
             }
             return;
         }
@@ -84,7 +151,7 @@ public class InputManager
         }
     }
 
-    //건반 조작할 때 사용할 메서드
+    //건반 조작
     public void NoteUpdate() {
         if (noteKeyPress != null)
         {
@@ -105,7 +172,7 @@ public class InputManager
         {
             if (Input.GetKeyDown(keyCode))
             {
-                Debug.Log($"New Key: {keyCode}");
+                Debug.Log($"Find New Key: {keyCode}");
                 return keyCode; //누른 키를 반환
             }
         }
@@ -157,6 +224,7 @@ public class InputManager
         //SetKeyEvent
         noteKeyPress += keyEventFunc;
     }
+
     /// <summary>
     /// 연결한 키보드 입력 함수를 제거하는 메서드
     /// </summary>

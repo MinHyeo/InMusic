@@ -99,7 +99,7 @@ public class Sound_Setting_UI : MonoBehaviour
                 break;
             case "KeySet":
                 self.transform.GetComponent<CanvasGroup>().alpha = 0.0f;
-                Debug.Log(self.transform.GetComponent<CanvasGroup>().alpha);
+                //Debug.Log(self.transform.GetComponent<CanvasGroup>().alpha);
                 keySet = GameManager.Resource.Instantiate("KeySetting_UI");
                 //Debug.Log(keySet.gameObject.name);
                 StartCoroutine(KeyUICheck());
