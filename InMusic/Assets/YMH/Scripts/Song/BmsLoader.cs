@@ -6,9 +6,9 @@ using Play;
 
 public enum Song
 {
-    ³ª´Â¾ÆÇÂ°ÇµüÁú»öÀÌ´Ï±î = 0,
-    Ã¹¸¸³²Àº°èÈ¹´ë·ÎµÇÁö¾Ê¾Æ = 1,
-    Å¬¶ô¼Ç = 2,
+    sksmsdkvmsRJsEkrwlftordlslRk = 0,
+    cjtaksskadmsrPghlreofhehlwldksgdk = 1,
+    Klaxon = 2,
     Heya = 3,
     Armageddon = 4,
     BubbleGum = 5,
@@ -43,13 +43,13 @@ public class BmsLoader : SingleTon<BmsLoader>
 
     private FileInfo fileName = null;
     private StreamReader reader = null;
-    private string path;            // °î ÆÄÀÏ path
-    private string StrText;         // ÆÄÀÏ ÇÑ ÁÙ¾¿ ÀÐ¾îÀ» ¶§ »ç¿ëÇÒ º¯¼ö
-    private string songName;        // °î Á¦¸ñ
-    private int noteCount;           // ³ëÆ® °³¼ö
+    private string path;            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ path
+    private string StrText;         // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ù¾ï¿½ ï¿½Ð¾ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    private string songName;        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    private int noteCount;           // ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 
-    private char[] seps;            // ±¸ºÐÀÚ ÀúÀåÇÒ ¹è¿­
-    private string tempStr;         // ±¸ºÐÀÚ·Î ³ª´« ¹®ÀÚ¿­À» ÀúÀåÇÒ º¯¼ö
+    private char[] seps;            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­
+    private string tempStr;         // ï¿½ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     private void Start()
     {
@@ -74,7 +74,7 @@ public class BmsLoader : SingleTon<BmsLoader>
         }
         else
         {
-            Debug.Log("ÆÄÀÏÀÌ ¾ø½À´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
         }
 
         songInfo = ParseBMS();
@@ -95,13 +95,13 @@ public class BmsLoader : SingleTon<BmsLoader>
             {
                 string[] data = trimmedLine.Split(' ');
 
-                // µ¥ÀÌÅÍ ¼½¼ÇÀÌ ¾Æ´Ï¸é¼­ Çì´õ µ¥ÀÌÅÍ°¡ ¾ø´Â °æ¿ì¿¡´Â °Ç³Ê ¶Ü.
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï¸é¼­ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½Ç³ï¿½ ï¿½ï¿½.
                 if (data[0].IndexOf(":") == -1 && data.Length == 1)
                 {
                     continue;
                 }
 
-                // BMS ÆÄÀÏÀÇ Çì´õ Ã³¸®
+                // BMS ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
                 if (data[0].Equals("#TITLE"))
                 {
                     bmsData.Title = data[1];
@@ -164,7 +164,7 @@ public class BmsLoader : SingleTon<BmsLoader>
                 }
                 else
                 {
-                    // À§ÀÇ °æ¿ì¿¡ ¸ðµÎ ÇØ´çÇÏÁö ¾ÊÀ» °æ¿ì, µ¥ÀÌÅÍ ¼½¼Ç
+                    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     int bar = 0;
                     Int32.TryParse(data[0].Substring(1, 3), out bar);
 

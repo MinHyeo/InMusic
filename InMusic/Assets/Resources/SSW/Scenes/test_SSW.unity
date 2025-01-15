@@ -203,7 +203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a4ab1db3e7ddd543aea2a791b0b9486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _songListManager: {fileID: 45358250}
+  _songListManager: {fileID: 0}
   _detailTitleText: {fileID: 1174743300}
   _detailImage: {fileID: 1868857856}
 --- !u!4 &328847100
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Content: {fileID: 733476975}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 2
+  m_MovementType: 0
   m_Elasticity: 0.1
   m_Inertia: 0
   m_DecelerationRate: 0.135
@@ -867,7 +867,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1395401814}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
