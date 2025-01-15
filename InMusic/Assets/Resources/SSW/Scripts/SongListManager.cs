@@ -21,8 +21,7 @@ namespace SongList
         [SerializeField] private Sprite _defaultSprite;
 
         [Header("Scrolling Settings")]
-        [SerializeField] private float _scrollDebounceTime = 0.05f; 
-        // 스크롤 멈춘 뒤 50ms 경과 시 스냅
+        [SerializeField] private float _scrollDebounceTime = 0.05f; // 스크롤 멈춤 판정 시간
 
         private bool _isScrolling = false;
         private float _lastScrollTime = 0f;
@@ -35,47 +34,45 @@ namespace SongList
         private int _firstVisibleIndexCached = 0;
 
         private LinkedList<GameObject> _songList = new LinkedList<GameObject>();
-        private List<SongInfo> songs;
+        private List<SongInfo> _songs;
         private GameObject _selectedSlot;
         public event Action<string> OnHighlightedSongChanged;
 
+        // 여기까지 되돌리면 됨됨
+
         private void Awake() {
-            // 예: 실제 곡 목록 불러오기
-            songs = LoadManager.Instance.Songs; 
-            _totalSongCount = songs.Count;
+            _songs = LoadManager.Instance.Songs; // 노래 호출
+            _totalSongCount = _songs.Count; // 노래 개수
 
-            // 프리팹 높이
-            _itemHeight = _songItemPrefab.GetComponent<RectTransform>().sizeDelta.y;
+            _itemHeight = _songItemPrefab.GetComponent<RectTransform>().sizeDelta.y; // 프리팹 높이
 
-            // 스크롤 이벤트 연결
-            _scrollRect.onValueChanged.AddListener(OnScrolled);
+            _scrollRect.onValueChanged.AddListener(OnScrolled); // 스크롤 이벤트
         }
 
         private IEnumerator Start() {
-            // 1프레임 대기 후, 뷰포트 사이즈를 정확히 계산
-            yield return null;
+            yield return null; // 1프레임 대기
 
-            float viewportHeight = _scrollRect.viewport.rect.height;
-            _visibleCount = Mathf.CeilToInt(viewportHeight / _itemHeight);
+            float viewportHeight = _scrollRect.viewport.rect.height; // 뷰포트 높이
+            _visibleCount = Mathf.CeilToInt(viewportHeight / _itemHeight); // 보이는 슬롯 수
 
             // 풀 사이즈 결정 (화면에 표시될 개수 + 버퍼)
-            // 단, 총 곡 수보다 많을 수 없으므로 Clamp
-            _poolSize = Mathf.Min(_visibleCount + _bufferItems * 2, _totalSongCount);
+            _poolSize = _visibleCount + _bufferItems * 2;
+            Debug.Log($"[SongListManager] Pool Size: {_poolSize}");
 
-            // contentRect의 높이
-            float contentHeight = _totalSongCount * _itemHeight;
+            float contentHeight = _poolSize * _itemHeight;
             _contentRect.sizeDelta = new Vector2(_contentRect.sizeDelta.x, contentHeight);
 
             // 아이템 풀 생성
             for (int i = 0; i < _poolSize; i++) {
-                GameObject slotSong = Instantiate(_songItemPrefab, _contentRect);
+                GameObject slotSong = Instantiate(_songItemPrefab, _contentRect); // 슬롯 생성 및 생성 위치
                 slotSong.name = $"SongItem_{i}";
 
+
                 RectTransform rt = slotSong.GetComponent<RectTransform>();
+                // 각 슬롯 위치
                 float yPos = -(i * _itemHeight);
                 rt.anchoredPosition = new Vector2(0, yPos);
 
-                // 초기 텍스트 및 배경
                 UpdateSlotData(slotSong, i);
                 _songList.AddLast(slotSong);
             }
@@ -83,9 +80,26 @@ namespace SongList
             // 초기 스냅 + 재배치
             SnapToNearestSlot();
             OnScroll();
+
             // 스냅 직후, 가운데 슬롯 하이라이트
             HighlightCenterSlotByPosition();
         }
+
+        // private void Update() {
+        //     HandleKeyboardInput();
+        // }
+
+        // private void HandleKeyboardInput() {
+        //     if (Input.GetKeyDown(KeyCode.UpArrow)) {
+        //         // 위로 스크롤
+        //         _contentRect.anchoredPosition += new Vector2(0, _itemHeight);
+        //         OnScroll();
+        //     } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
+        //         // 아래로 스크롤
+        //         _contentRect.anchoredPosition -= new Vector2(0, _itemHeight);
+        //         OnScroll();
+        //     }
+        // }
 
         private void LateUpdate() {
             if (_isScrolling) {
@@ -111,22 +125,23 @@ namespace SongList
 
         // 칸 단위 스냅 + 끝 범위 Clamp
         private void SnapToNearestSlot() {
-            float contentY = _contentRect.anchoredPosition.y;
-            int nearestIndex = Mathf.RoundToInt(contentY / _itemHeight);
+            float contentY = _contentRect.anchoredPosition.y; // 현재 위치
+            int nearestIndex = Mathf.RoundToInt(contentY / _itemHeight); // 가장 가까운 칸
 
             // 최대 인덱스 = (총곡 - 화면에서 보이는 슬롯 수)
             // 곡이 적으면 음수가 될 수 있으니 0으로 Clamp
-            int maxIndex = Mathf.Max(0, _totalSongCount - _visibleCount);
-            nearestIndex = Mathf.Clamp(nearestIndex, 0, maxIndex);
+            // int maxIndex = Mathf.Max(0, _totalSongCount - _visibleCount);
+            // nearestIndex = Mathf.Clamp(nearestIndex, 0, maxIndex);
 
-            float newY = nearestIndex * _itemHeight;
+            float newY = nearestIndex * _itemHeight; // 새로운 위치
+            Debug.Log($"[SongListManager] Snap to Index: {nearestIndex}");
             _contentRect.anchoredPosition = new Vector2(0, newY);
         }
 
         // 스크롤 위치 기반으로 슬롯 재배치
         
         private void OnScroll() {
-            float contentY = _contentRect.anchoredPosition.y;
+            float contentY = _contentRect.anchoredPosition.y; // Snap된 후의 위치
             // 한계치
             int newFirstIndex = Mathf.FloorToInt(contentY / _itemHeight) - _bufferItems;
             if (newFirstIndex < 0) newFirstIndex = 0;
@@ -138,6 +153,7 @@ namespace SongList
 
                 ShiftSlots(shiftCount, scrollDown);
                 _firstVisibleIndexCached = newFirstIndex;
+                Debug.Log($"[SongListManager] First Index: {_firstVisibleIndexCached}");
             }
         }
 
@@ -186,7 +202,6 @@ namespace SongList
         }
 
         private void HighlightCenterSlotByPosition() {
-
             // 1) 이전 슬롯 해제
             if (_selectedSlot != null) {
                 var prevImg = _selectedSlot.GetComponentInChildren<Image>();
@@ -239,26 +254,17 @@ namespace SongList
                     OnHighlightedSongChanged?.Invoke(highlightedSongTitle);
                 }
             }
-
         }
 
 
         // 슬롯에 표시할 텍스트/데이터
         private void UpdateSlotData(GameObject slot, int dataIndex) {
-            if (dataIndex < 0 || dataIndex >= _totalSongCount) {
-                slot.SetActive(false);
-                return;
-            }
-
-            // 디버그용으로 이름 붙이기
-            slot.name = $"SongItem_{dataIndex}"; 
-
-            // 텍스트
             Text txt = slot.GetComponentInChildren<Text>();
+
+            int songIndex = dataIndex % _totalSongCount;
             if (txt != null) {
-                txt.text = songs[dataIndex].Title;
+                txt.text = _songs[songIndex].Title;
             }
-            // 필요하다면 slot.name = $"Slot_{dataIndex}" 등으로 식별도 가능
         }
     }
 }
