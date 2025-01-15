@@ -21,5 +21,6 @@ public class Define
         Key2, 
         Key3, 
         Key4,
+        Esc,
     }
 }

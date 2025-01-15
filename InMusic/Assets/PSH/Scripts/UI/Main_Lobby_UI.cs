@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UI_BASE_PSH;
 public class Main_Lobby_UI : UI_Base
@@ -62,11 +63,13 @@ public class Main_Lobby_UI : UI_Base
             //솔로
             case "Solo":
                 //Todo
+                //SceneManager.LoadScene();
                 Debug.Log("Solo function is not implemented");
                 break;
             //멀티
             case "Multi":
                 //Todo
+                //SceneManager.LoadScene();
                 Debug.Log("Multi function is not implemented");
                 break;
             case "KeyGuide":

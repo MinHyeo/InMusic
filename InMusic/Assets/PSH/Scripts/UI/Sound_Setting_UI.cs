@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +7,7 @@ public class Sound_Setting_UI : MonoBehaviour
 {
     [Header("Setting List")]
     [Tooltip("Start에서 자동으로 할당 됨")]
+    [SerializeField] private GameObject self;
     [SerializeField] private GameObject[] menuList;
     [SerializeField] private int numOfMenuList;
     [SerializeField] private Slider[] menuSliders;
@@ -23,6 +25,7 @@ public class Sound_Setting_UI : MonoBehaviour
 
     void Start()
     {
+        self = transform.GetChild(0).gameObject;
         //설정 항목 가져오기
         numOfMenuList = transform.GetChild(0).childCount - 2;
         menuList = new GameObject[numOfMenuList];
@@ -71,8 +74,12 @@ public class Sound_Setting_UI : MonoBehaviour
         }
     }
 
-    void ChangeMenu()
+    public void ChangeMenu(int index = -1)
     {
+        if (index != -1) {
+            curMenuIndex = index;
+        };
+
         if (curMenuIndex < 0) curMenuIndex = numOfMenuList - 1;
 
         if (curMenuIndex >= numOfMenuList) curMenuIndex %= numOfMenuList;
@@ -91,8 +98,11 @@ public class Sound_Setting_UI : MonoBehaviour
                 Debug.Log("박자 조절 미구현");
                 break;
             case "KeySet":
+                self.transform.GetComponent<CanvasGroup>().alpha = 0.0f;
+                //Debug.Log(self.transform.GetComponent<CanvasGroup>().alpha);
                 keySet = GameManager.Resource.Instantiate("KeySetting_UI");
-                Debug.Log(keySet.gameObject.name);
+                //Debug.Log(keySet.gameObject.name);
+                StartCoroutine(KeyUICheck());
                 break;
             case "Exit":
                 GameManager.Input.RemoveUIKeyEvent(SoundSetKeyEvent);
@@ -145,5 +155,12 @@ public class Sound_Setting_UI : MonoBehaviour
             curVolumes[i] = menuSliders[i].value;
         }
     }
-
+    IEnumerator KeyUICheck()
+    {
+        if (keySet == null) {
+            gameObject.GetComponent<Animator>().Play("Show");
+            yield break;
+        }
+        yield return null;
+    }
 }
