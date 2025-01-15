@@ -4,19 +4,8 @@ using UnityEngine.Rendering.Universal;
 
 namespace Play 
 {
-    public class SoundManager : MonoBehaviour
+    public class SoundManager : SingleTon<SoundManager>
     {
-        [Header("Instance")]
-        public static SoundManager Instance;
-        private void Awake()
-        {
-            if (Instance != null)
-            {
-                UnityEngine.Debug.LogError("Scene에 여러개의 SoundManager 존재");
-            }
-            Instance = this;
-        }
-
         [Header("music")]
         FMOD.System fmodSystem;
         FMOD.ChannelGroup musicChannelGroup;
@@ -73,11 +62,27 @@ namespace Play
 
         private void Update()
         {
-            if (!isPlaying)
+            if (!this.isPlaying)
                 return;
 
             //현재 샘플링 주파수 계산
             musicChannel.getPosition(out positionInSamples, FMOD.TIMEUNIT.PCM);
+
+            //노래가 끝나는지 체크
+            bool isPlaying;
+            musicChannel.isPlaying(out isPlaying);
+
+            if (!isPlaying)
+                OnMusicEnd();
+
+
+            fmodSystem.update();
+        }
+
+        private void OnMusicEnd()
+        {
+            UnityEngine.Debug.Log("노래 끝");
+            PlayManager.Instance.End();
         }
 
         public void End()

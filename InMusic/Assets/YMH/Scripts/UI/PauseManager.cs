@@ -1,21 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
 
 namespace Play
 {
-    public class PauseManager : MonoBehaviour
+    public class PauseManager : SingleTon<PauseManager>
     {
-        public static PauseManager Instance;
-        private void Awake()
-        {
-            if (Instance != null)
-            {
-                Debug.LogError("Scene에 여러개의 PauseManager 존재");
-            }
-            Instance = this;
-        }
-
         [SerializeField]
         private GameObject pauseObject;
         private List<Button> buttons = new List<Button>();
@@ -31,6 +22,8 @@ namespace Play
         private bool isContinue = false;
 
         //일시정지에서 게임 시작까지 시간 계산 변수
+        [SerializeField]
+        private TextMeshProUGUI pauseCount;
         private float currentTime = 0;
         private float maxTime = 3;
 
@@ -48,18 +41,25 @@ namespace Play
             }
 
             pauseObject.gameObject.SetActive(false);
+            pauseCount.gameObject.SetActive(false);
         }
 
         private void Update()
         {
             if (isPause && isContinue)
             {
+                //시간 측정
                 currentTime += Time.unscaledDeltaTime;
 
-                if(currentTime >= maxTime)
+                //남은 시간 텍스트 표시
+                pauseCount.text = ((int)(maxTime - currentTime + 1)).ToString();
+
+                //일시정지 해체
+                if (currentTime >= maxTime)
                 {
                     isPause = false;
                     isContinue = false;
+                    pauseCount.gameObject.SetActive(false);
 
                     //게임 진행
                     PlayManager.Instance.Continue();
@@ -88,6 +88,7 @@ namespace Play
             currentTime = 0;
 
             pauseObject.gameObject.SetActive(false);
+            pauseCount.gameObject.SetActive(true);
         }
 
         public void OnKeyPress(KeyCode key)

@@ -62,7 +62,7 @@ namespace Play
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                PlayManager.Instance.OnPause();
+                PlayManager.Instance.Pause();
             }
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {

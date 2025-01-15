@@ -13,6 +13,18 @@ namespace Play
         private int combo = 0;
         private int maxCombo = 0;
 
+        public int MaxCombo { get { return maxCombo; } private set { } }
+        public bool IsFullCombo
+        {
+            get
+            {
+                if (maxCombo == 0)
+                    return false;
+                else
+                    return combo == maxCombo;
+            }
+        }
+
         //시간 변수
         private float currentTime = 0.0f;
         private float showTime = 1f;

@@ -97,7 +97,7 @@ namespace Play
         }
         private IEnumerator PlayTicks()
         {
-            hitSource.Play();
+            //hitSource.Play();
             nextSample += samplesPerBeat;// - (frequency * defaultOffset);
             text.text = $"BPM - 92 : {upperBeats} / {underBeats}";
             if (upperBeats == 1)

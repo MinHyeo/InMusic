@@ -3,23 +3,34 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using Play.Result;
 
 namespace Play
 {
-    public class PlayManager : MonoBehaviour
+    #region play result data class
+    public class ScoreData
     {
-        public static PlayManager Instance;
-        private void Awake()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Debug.LogError("Scene에 여러개의 PlayManager 존재");
-                Destroy(this.gameObject);
-                return;
-            }
-            Instance = this;
-        }
+        //노래 정보
+        public string songName;
+        public string artist;
+        //점수
+        public int score;
+        public float accuracy;
+        //판정별 입력 횟수
+        public int great;
+        public int good;
+        public int bad;
+        public int miss;
+        //최대 콤보
+        public int maxCombo;
+        //풀콤보 여부
+        public bool isFullCombo;
+    }
+    #endregion
 
+    public class PlayManager : SingleTon<PlayManager>
+    {
+        [Header("관련 Scripts")]
         //정확도 관련
         [SerializeField]
         private Accuracy accuracyScript;
@@ -29,10 +40,17 @@ namespace Play
         //비디오 관련
         [SerializeField]
         private VideoPlay videoPlayScript;
-
+        //박자선 관련
         [SerializeField]
         private Metronome metronome;
-        public TextMeshProUGUI text;
+
+        [Header("점수 관련")]
+        [SerializeField]
+        private TextMeshProUGUI scoreText;
+        [SerializeField]
+        private TextMeshProUGUI accuracyText;
+
+        private SongInfo songInfo;
 
         //노래 정보
         private Song songName;
@@ -81,6 +99,10 @@ namespace Play
             SoundManager.Instance.SongInit(songName.ToString());
             videoPlayScript.GetVideoClip(songName);
             metronome.CalculateSync();
+
+            //텍스트 초기화
+            scoreText.text = "0";
+            accuracyText.text = "0.00%";
 
             StartCoroutine(StartMusicWithIntroDelay());
             //Task.Run(async () => await StartMusicWithIntroDelay());
@@ -187,13 +209,13 @@ namespace Play
             //입력 횟수 증가
             inputCount[(int)accuracyResult] += 1;
 
-            //테스트용
-            text.text = "Score : " + scoreInt.ToString() + "\n";
-            text.text += accuracy.ToString("F2") + "%";
+            //점수 표시
+            scoreText.text = scoreInt.ToString();
+            accuracyText.text = accuracy.ToString("F2") + "%";
         }
 
         //일시정지
-        public void OnPause()
+        public void Pause()
         {
             //상태 변환
             state = States.Pause;
@@ -203,6 +225,9 @@ namespace Play
             videoPlayScript.Pause();
         }
 
+        /// <summary>
+        /// 계속하기
+        /// </summary>
         public void Continue()
         {
             //상태 변환
@@ -216,10 +241,49 @@ namespace Play
             videoPlayScript.Play();
         }
 
+        /// <summary>
+        /// 재시작
+        /// </summary>
         public void ReStart()
         {
             Time.timeScale = 1;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        //노래 종료
+        public void End()
+        {
+            //상태 변환
+            state = States.End;
+
+            //노래 종료
+            SoundManager.Instance.End();
+            //비디오 종료
+            //videoPlayScript.End();
+            //마디선 종료
+
+            //결과 점수 저장
+            ScoreData scoreData = SaveScore();
+            //결과창 띄우기
+            ResultManager.Instance.ReceiveResult(scoreData);
+        }
+
+        private ScoreData SaveScore()
+        {
+            ScoreData scoreData = new ScoreData();
+
+            scoreData.songName = songName.ToString();
+            scoreData.artist = "artist";
+            scoreData.score = (int)score;
+            scoreData.accuracy = accuracy;
+            scoreData.great = inputCount[0];
+            scoreData.good = inputCount[1];
+            scoreData.bad = inputCount[2];
+            scoreData.miss = inputCount[3];
+            scoreData.maxCombo = comboScript.MaxCombo;
+            scoreData.isFullCombo = comboScript.IsFullCombo;
+
+            return scoreData;
         }
     }
 }

@@ -19,9 +19,8 @@ namespace Play
         }
     }
 
-    public class NoteManager : MonoBehaviour
+    public class NoteManager : SingleTon<NoteManager>
     {
-        public static NoteManager Instance;  // 싱글톤 인스턴스
         [SerializeField]
         private GameObject notePrefab;
         [SerializeField]
@@ -38,13 +37,6 @@ namespace Play
 
         private float measureInterval;  // 한 마디 간격 (4/4박자 기준)
         private float travelTime;       // 판정선까지 도달하는 시간
-
-        private bool isPlaying = false;
-
-        private void Awake()
-        {
-            Instance = this;
-        }
 
         public void InitializeNotes(SongInfo songInfo)
         {

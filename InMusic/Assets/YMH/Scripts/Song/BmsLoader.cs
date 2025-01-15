@@ -37,14 +37,8 @@ public class SongInfo
     }
 }
 
-public class BmsLoader : MonoBehaviour
+public class BmsLoader : SingleTon<BmsLoader>
 {
-    public static BmsLoader Instance;
-    private void Awake()
-    {
-        Instance = this;
-    }
-
     private SongInfo songInfo;
 
     private FileInfo fileName = null;
@@ -55,7 +49,6 @@ public class BmsLoader : MonoBehaviour
     private int noteCount;           // 노트 개수
 
     private char[] seps;            // 구분자 저장할 배열
-    private string[] tempSplit;     // 구분자로 나눈 문자열을 저장할 임시 문자열 배열
     private string tempStr;         // 구분자로 나눈 문자열을 저장할 변수
 
     private void Start()
@@ -65,7 +58,6 @@ public class BmsLoader : MonoBehaviour
 
     public SongInfo SelectSong(Song song)
     {
-        tempSplit = null;
         tempStr = "";
         StrText = "";
         songName = "";
