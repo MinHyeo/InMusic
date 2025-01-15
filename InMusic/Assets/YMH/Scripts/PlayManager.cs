@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using Play.Result;
+using UnityEngine.InputSystem;
 
 namespace Play
 {
@@ -51,6 +52,9 @@ namespace Play
         private TextMeshProUGUI accuracyText;
 
         private SongInfo songInfo;
+
+        [Header("Key Objects")]
+        private GameObject[] keyObjects;
 
         //노래 정보
         private Song songName;
@@ -106,6 +110,10 @@ namespace Play
 
             StartCoroutine(StartMusicWithIntroDelay());
             //Task.Run(async () => await StartMusicWithIntroDelay());
+
+            //키 설정
+            GameManager.Input.SetNoteKeyEvent(OnKeyPress);
+            //GameManager.Input.SetUIKeyEvent();
         }
 
         //private async Task StartMusicWithIntroDelay()
@@ -141,10 +149,15 @@ namespace Play
             videoPlayScript.Play();
         }
 
-        public void OnKeyPress(int channel, float pressTime)
+        public void OnKeyPress(Define.NoteControl keyEvent)
         {
+            Debug.Log("키 입력");
+            float pressTime = Time.time;
             // 해당 라인에 있는 노트 중 판정할 노트 검색
-            Note closestNote = FindClosestNoteToPressTime(channel, pressTime);
+            Note closestNote = FindClosestNoteToPressTime((int)keyEvent, pressTime);
+
+            //키 입력 임팩트
+            keyObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(true);
 
             if (closestNote != null)
             {

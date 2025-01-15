@@ -17,10 +17,10 @@ public class Define
 
     public enum NoteControl
     {
-        Key1,
-        Key2, 
-        Key3, 
-        Key4,
+        Key1 = 11,
+        Key2 = 12, 
+        Key3 = 13, 
+        Key4 = 14,
         Esc,
     }
 }
