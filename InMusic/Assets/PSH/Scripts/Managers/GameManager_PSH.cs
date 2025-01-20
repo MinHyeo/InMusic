@@ -17,10 +17,10 @@ public class GameManager_PSH : MonoBehaviour
     {
         if (GM_Instance == null)
         {
-            GameObject gmObject = GameObject.Find("GameManager");
+            GameObject gmObject = GameObject.Find("GameManager_PSH");
             if (gmObject == null)
             {
-                gmObject = new GameObject { name = "GameManager" };
+                gmObject = new GameObject { name = "GameManager_PSH" };
                 gmObject.AddComponent<GameManager_PSH>();
             }
             DontDestroyOnLoad(gmObject);

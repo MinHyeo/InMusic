@@ -70,12 +70,13 @@ public class Single_Lobby_UI : UI_Base
                 ScrollDown();
                 break;
             case "Exit":
-                //TODO
+                //키 입력 이벤트 제거
+                GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
                 //SceneManager.LoadScene("로비 씬");
                 break;
             case "Enter":
-                //TODO
-                //SceneManager.LoadScene("게임 씬");
+                //키 입력 이벤트 제거
+                GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
                 SceneManager.LoadScene(1);
                 break;
             case "KeyGuide":
