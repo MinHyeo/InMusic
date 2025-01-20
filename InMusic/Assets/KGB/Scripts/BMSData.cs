@@ -29,5 +29,5 @@ public class BMSNoteData
 
 public class BMSWAV
 {
-    string wav;
+    public string wav;
 }

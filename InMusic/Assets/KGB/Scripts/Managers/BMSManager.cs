@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
@@ -108,9 +109,13 @@ public class BMSManager : MonoBehaviour
         {
             bmsData.header.LNType = int.Parse(line.Split(' ')[1]);
         }
-        else if (line.StartsWith("#WAV"))
+        else if (line.StartsWith("#WAV02"))
         {
-            // WAV 처리
+            //BMS에서 사용된 음원 파일 이름 세팅
+            string fileName = line.Split(' ')[1];
+            string result = Path.GetFileNameWithoutExtension(fileName);
+            Debug.Log(result);
+            bmsData.wavInfo.wav = result;
         }
         else
         {

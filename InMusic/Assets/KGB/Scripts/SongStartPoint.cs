@@ -18,7 +18,7 @@ public class SongStartPoint : MonoBehaviour
     {
         if (transform.position.y <= judgePos.position.y)
         {
-            GameManager.Instance.StartGame();
+            GameManager.Instance.StartMusic();
             gameObject.SetActive(false);
             Debug.Log("½ÃÀÛ");
         }

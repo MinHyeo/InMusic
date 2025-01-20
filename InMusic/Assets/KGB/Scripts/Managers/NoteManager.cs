@@ -40,7 +40,6 @@ public class NoteManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -50,17 +49,17 @@ public class NoteManager : MonoBehaviour
     void Start()
     {
 
-        BMSData parsedData = BMSManager.Instance.ParseBMS("test5");
-        if (parsedData != null)
-        {
-            int lastMeasure = parsedData.notes.Last().measure;
-            lineCount = lastMeasure +5 ; //전체 마디 수
-            secondsPerBeat = 60f / parsedData.header.bpm; //bpm
-            measureDuration = secondsPerBeat * beatsPerMeasure;
-            lineInterval = baseScrollSpeed * measureDuration;
-            SpawnNotes(parsedData, spawnArea);
-            SpawnMeasureLines();
-        }
+        //BMSData parsedData = BMSManager.Instance.ParseBMS("test5");
+        //if (parsedData != null)
+        //{
+        //    int lastMeasure = parsedData.notes.Last().measure;
+        //    lineCount = lastMeasure +5 ; //전체 마디 수
+        //    secondsPerBeat = 60f / parsedData.header.bpm; //bpm
+        //    measureDuration = secondsPerBeat * beatsPerMeasure;
+        //    lineInterval = baseScrollSpeed * measureDuration;
+        //    SpawnNotes(parsedData, spawnArea);
+        //    SpawnMeasureLines();
+        //}
 
     }
 
@@ -68,6 +67,20 @@ public class NoteManager : MonoBehaviour
     void FixedUpdate()
     {
         UpdateMeasureLines();
+    }
+
+    public void SetNote(BMSData bms)
+    {
+        if (bms != null)
+        {
+            int lastMeasure = bms.notes.Last().measure;
+            lineCount = lastMeasure + 5; //전체 마디 수
+            secondsPerBeat = 60f / bms.header.bpm; //bpm
+            measureDuration = secondsPerBeat * beatsPerMeasure;
+            lineInterval = baseScrollSpeed * measureDuration;
+            SpawnNotes(bms, spawnArea);
+            SpawnMeasureLines();
+        }
     }
 
     void SpawnMeasureLines()

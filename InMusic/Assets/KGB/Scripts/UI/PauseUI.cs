@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseUI : MonoBehaviour
@@ -40,6 +41,16 @@ public class PauseUI : MonoBehaviour
                 case 1:
                     Continue();
                     break;
+                case 2:
+                    Restart();
+                    break;
+                case 3:
+                    MusicSelect();
+                    break;
+                case 4:
+                    Exit();
+                    break;
+
             }
         }
     }
@@ -50,15 +61,18 @@ public class PauseUI : MonoBehaviour
     }
     public void Restart()
     {
+        Debug.Log("re");
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
 
     }
     public void MusicSelect()
     {
-
+        SceneManager.LoadScene(0);
     }
     public void Exit()
     {
-
+        SceneManager.LoadScene(0); //메인화면으로 가야함 임시로 선택화면
     }
  
 

@@ -19,6 +19,10 @@ public class ScrollDown : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if ((!GameManager.Instance.isGameActive))
+        {
+            return;
+        }
         if (NoteManager.Instance.isMoving)
         {
             MoveDown();

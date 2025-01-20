@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SinglePlayResultUI : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class SinglePlayResultUI : MonoBehaviour
 
     void Start()
     {
+        resultUI.SetActive(false);
         fullCombo.SetActive(false);
     }
 
@@ -74,5 +76,11 @@ public class SinglePlayResultUI : MonoBehaviour
     {
         UpdateResult();
         resultUI.SetActive(true);
+    }
+
+    public void NextButton()
+    {
+        //게임 결과 표시후 종료 버튼
+        SceneManager.LoadScene(0);
     }
 }

@@ -76,6 +76,7 @@ public class Single_Lobby_UI : UI_Base
             case "Enter":
                 //TODO
                 //SceneManager.LoadScene("게임 씬");
+                SelectMusic();
                 SceneManager.LoadScene(1);
                 break;
             case "KeyGuide":
@@ -126,6 +127,8 @@ public class Single_Lobby_UI : UI_Base
         logData[1].text = newData.Accuracy;
         logData[2].text = newData.Combo;
         logData[3].text = newData.Rank.text;
+
+        SelectMusic();
     }
 
     void ContentDown()
@@ -206,5 +209,12 @@ public class Single_Lobby_UI : UI_Base
         contentPos.localPosition = dest;
 
         isScrolling = false;
+    }
+
+    void SelectMusic() //by KGB. 선택한 노래 정보를 플레이씬에 전달하기 위한 메서드 추가함.(Gamemanager_PSH과 연계)
+    {
+        string musicName;
+        musicName = curMusicData[1].GetComponent<Text>().text;
+        GameManager_PSH.Instance.SetSelectedMusic(musicName);
     }
 }

@@ -1,44 +1,55 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public int totalNotes; // 총 노트 개수
-    public float totalScore = 0; // 현재 점수
-    public float accuracy = 100f; // 현재 정확도 (100%)
-    public float curHP;
-    public float maxHP = 100;
-    public int combo = 0;
-    public int greatCount = 0;
-    public int goodCount = 0;
-    public int badCount = 0;
-    public int missCount = 0;
-    public int maxCombo = 0;
+    public BMSData curBMS;
 
+    public int totalNotes; // 총 노트 개수
     private float maxScorePerNote; // 노트 하나당 최대 점수
     private int totalNotesPlayed = 0; // 플레이된 총 노트 개수
+
+    public float curHP;
+    public float maxHP = 100;
+
+
+
+    public float totalScore = 0; // 최종 점수
+    public float accuracy = 100f; // 현재 정확도 (100%)
+    public int greatCount = 0; //Great 횟수
+    public int goodCount = 0;  //Good 횟수
+    public int badCount = 0;   //bad 획수
+    public int missCount = 0;  //miss 횟수
+    public int maxCombo = 0;   //최대 콤보수
+
+    public int combo = 0; //현재 콤포
+
+
     
 
     [SerializeField] VideoPlayer videoPlayer;
     [SerializeField] PlayUI playUI;
     [SerializeField] SinglePlayResultUI resultUI;
     [SerializeField] GameObject pauseUI;
+    [SerializeField] GameObject gameoverUI;
+    [SerializeField] PlayManager playManager;
 
     public bool isGameActive = false; // 게임 상태
     //public AudioClip hitSound;
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioSource SongSource;
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -48,11 +59,26 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        string musicName = GameManager_PSH.Instance.GetSelectedMusic();
+        Debug.Log(musicName);
+        SetBMS(musicName); //지정된 노래 //BMS파일을 만들때 노래가 시작되는 지점에 WAV02 노트로 찍어놔야함.(노트생성시 필요)
 
+        playManager = GetComponent<PlayManager>();
+        playManager.SetResources(); // 노래 리소스 세팅
+        NoteManager.Instance.SetNote(curBMS); //노트생성
+        Debug.Log("씬스타트");
+
+    }
+
+    public void SetBMS(string music)
+    {
+        curBMS = BMSManager.Instance.ParseBMS(music); //BMS 파싱 
     }
 
    public void InitializeGame()
     {
+        pauseUI.SetActive(false);
+        gameoverUI.SetActive(false);
         // 초기화 (노트 데이터 가져오기)
         totalNotes = NoteManager.Instance.totalNotes; // NoteManager에서 총 노트 수 가져오기
         maxScorePerNote = 1000000f / totalNotes; // 노트 하나당 최대 점수 계산
@@ -60,11 +86,12 @@ public class GameManager : MonoBehaviour
         totalNotesPlayed = 0;
         accuracy = 100f; // 초기 정확도
         curHP = maxHP;
-        if (SongSource.clip.loadState == AudioDataLoadState.Unloaded)
+        if (playManager.musicSound.clip.loadState == AudioDataLoadState.Unloaded)
         {
-            SongSource.clip.LoadAudioData(); // 오디오 데이터를 미리 로드
+            playManager.musicSound.clip.LoadAudioData(); // 오디오 데이터를 미리 로드
         }
         videoPlayer.Prepare();
+        StartGame();
         Debug.Log("Game Initialized");
     }
 
@@ -81,19 +108,19 @@ public class GameManager : MonoBehaviour
                 accuracyPenalty = 0f;
                 combo++;
                 greatCount++;
-                audioSource.Play();
+                playManager.hitSound.Play();
                 break;
             case "Good":
                 scoreToAdd = maxScorePerNote * 0.8f;
                 accuracyPenalty = 20f / totalNotes;
-                audioSource.Play();
+                playManager.hitSound.Play();
                 combo++;
                 goodCount++;
                 break;
             case "Bad":
                 scoreToAdd = maxScorePerNote * 0.5f;
                 accuracyPenalty = 50f / totalNotes;
-                audioSource.Play();
+                playManager.hitSound.Play();
                 combo++;
                 badCount++;
                 break;
@@ -131,20 +158,25 @@ public class GameManager : MonoBehaviour
     void EndGame()
     {
         isGameActive = false;
+        playManager.musicSound.Stop();
         playUI.countText.text = "End";
         EndingGame();
     }
-
     public void StartGame()
     {
         isGameActive = true;
+    }
+    public void StartMusic()
+    {
         videoPlayer.Play();
-        SongSource.Play();
+        playManager.musicSound.Play();
     }
 
     private void GameOver()
     {
-        EndGame();
+        isGameActive = false;
+        playManager.musicSound.Stop();
+        gameoverUI.SetActive(true);
     }
     private async void EndingGame()
     {
@@ -162,7 +194,7 @@ public class GameManager : MonoBehaviour
         await Task.Delay(1000);
         playUI.countText.text = "";
         Time.timeScale = 1f;
-        SongSource.Play();
+        playManager.musicSound.Play();
         videoPlayer.Play();
      }
 
@@ -171,7 +203,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("일시정지");
         pauseUI.SetActive(true);
         Time.timeScale = 0f;
-        SongSource.Pause();
+        playManager.musicSound.Pause();
         videoPlayer.Pause();
     }
     public void ResumeGame()
@@ -180,5 +212,14 @@ public class GameManager : MonoBehaviour
         pauseUI.SetActive(false);
         ResumCount();
     }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Time.timeScale = 1f; // 씬 로드 후 타임스케일 초기화
+    }
 
+    private void OnDestroy()
+    {
+        // 이벤트 해제
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 }

@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class GameManager_PSH : MonoBehaviour
 {
+    string selectedMusic;
+
     #region ManagerObject
     public static GameManager_PSH GM_Instance;
     public static GameManager_PSH Instance { get { Init(); return GM_Instance; } }
@@ -34,5 +36,15 @@ public class GameManager_PSH : MonoBehaviour
     {
         M_Input.UIUpdate();
         M_Input.NoteUpdate();
+    }
+
+    //by KGB. 선택한 노래정보를 씬 이동후에도 유지(Single_Lobby_UI와 연계)
+    public void SetSelectedMusic(string musicName)
+    {
+        selectedMusic = musicName;
+    }
+    public string GetSelectedMusic()
+    {
+        return selectedMusic;
     }
 }
