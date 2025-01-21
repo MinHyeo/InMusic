@@ -99,7 +99,8 @@ namespace Play
             yield return new WaitForSeconds(spawnTime - Time.time);
 
             // 노트 생성
-            var note = ObjectPool.Instance.Pool.Get();
+            //var note = ObjectPool.Instance.Pool.Get();
+            GameObject note = Instantiate(notePrefab, noteSpawnPoints[channel - 11].position, Quaternion.identity);
             Note noteScript = note.GetComponent<Note>();
 
             NoteList.Add(noteScript);
