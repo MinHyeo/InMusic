@@ -13,7 +13,7 @@ public enum Song
     Armageddon = 4,
     BubbleGum = 5,
     HotSweet = 6,
-    Magentic = 7,
+    Magnetic = 7,
     Sticky = 8,
     Supernova = 9,
 }
