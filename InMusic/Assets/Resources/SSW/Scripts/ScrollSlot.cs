@@ -26,7 +26,7 @@ namespace SongList {
         public void SetData(SongInfo data, int index) {
             _currentData = data;
             _currentIndex = index;
-            
+
             UpdateUI();
         }
 
