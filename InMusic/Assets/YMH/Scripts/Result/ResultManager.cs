@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -14,6 +16,8 @@ namespace Play.Result
         private GameObject resultCanvas;
         private ScoreData scoreData;
 
+        private WaitForSeconds delayTime = new WaitForSeconds(3f); //3s
+
         private void Start()
         {
             resultCanvas.SetActive(false);
@@ -23,11 +27,14 @@ namespace Play.Result
         public void ReceiveResult(ScoreData scoreData)
         {
             this.scoreData = scoreData;
-            ShowResult();
+            StartCoroutine(ShowResult());
         }
 
-        private void ShowResult()
+        private IEnumerator ShowResult()
         {
+            //딜레이
+            yield return delayTime;
+
             //Canvas 활성화
             resultCanvas.SetActive(true);
 

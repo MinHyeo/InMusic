@@ -9,6 +9,8 @@ namespace Play
     {
         private VideoPlayer videoPlayer;
         private VideoClip videoClip;
+        [SerializeField]
+        private RenderTexture renderTexture;
 
         private void Start()
         {
@@ -30,6 +32,23 @@ namespace Play
         public void Pause()
         {
             videoPlayer.Pause();
+        }
+
+        public void Restart()
+        {
+            videoPlayer.Stop();
+            videoPlayer.Play();
+        }
+
+        public void End()
+        {
+            videoPlayer.Stop();
+
+            // RenderTexture 초기화 (검은 화면으로 덮기)
+            RenderTexture activeRenderTexture = RenderTexture.active;
+            RenderTexture.active = renderTexture;
+            GL.Clear(true, true, Color.black);
+            RenderTexture.active = activeRenderTexture;
         }
     }
 }

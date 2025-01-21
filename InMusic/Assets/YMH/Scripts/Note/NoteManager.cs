@@ -99,7 +99,7 @@ namespace Play
             yield return new WaitForSeconds(spawnTime - Time.time);
 
             // 노트 생성
-            GameObject note = Instantiate(notePrefab, noteSpawnPoints[channel - 11].position, Quaternion.identity);
+            var note = ObjectPool.Instance.Pool.Get();
             Note noteScript = note.GetComponent<Note>();
 
             NoteList.Add(noteScript);
@@ -112,6 +112,11 @@ namespace Play
             {
                 NoteList.Remove(note);
             }
+        }
+
+        public void RemoveJudgementLine()
+        {
+            judgementLine.gameObject.SetActive(false);
         }
     }
 }

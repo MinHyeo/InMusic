@@ -8,6 +8,7 @@ public class InputManager : MonoBehaviour
     [Tooltip("Observer 역할을 하는 함수에 이 변수 할당")]
     public Action<Define.UIControl> uIKeyPress;
     public Action<Define.NoteControl> noteKeyPress;
+    public Action<Define.NoteControl> noteKeyRelease;
 
     [Header("Note Key Map")]
     [SerializeField]
@@ -161,6 +162,17 @@ public class InputManager : MonoBehaviour
                 }
             }
         }
+
+        if(noteKeyRelease != null)
+        {
+            foreach(var entry in keyMapping)
+            {
+                if (Input.GetKeyUp(entry.Value))
+                {
+                    noteKeyRelease.Invoke(entry.Key);
+                }
+            }
+        }
     }
     #endregion
 
@@ -215,12 +227,20 @@ public class InputManager : MonoBehaviour
     /// 게임 플레이시 사용할 키보드 입력 메서드, Define.NoteControl를 전달함
     /// </summary>
     /// <param name="keyEventFunc"></param>
-    public void SetNoteKeyEvent(Action<Define.NoteControl> keyEventFunc)
+    public void SetNoteKeyPressEvent(Action<Define.NoteControl> keyEventFunc)
     {
         //Initialize
         RemoveNoteKeyEvent(keyEventFunc);
         //SetKeyEvent
         noteKeyPress += keyEventFunc;
+    }
+
+    public void SetNoteKeyReleaseEvent(Action<Define.NoteControl> keyEventFunc)
+    {
+        //Initialize
+        RemoveNoteKeyEvent(noteKeyRelease);
+        //SetKeyEvent
+        noteKeyRelease += keyEventFunc;
     }
 
     /// <summary>

@@ -48,5 +48,17 @@ TagManager:
   - name: PlayGround
     uniqueID: 595417383
     locked: 0
+  - name: Result UI
+    uniqueID: 2414843113
+    locked: 0
+  - name: Note
+    uniqueID: 199497777
+    locked: 0
+  - name: Judgment Line
+    uniqueID: 786031429
+    locked: 0
+  - name: New Layer 6
+    uniqueID: 777750811
+    locked: 0
   m_RenderingLayers:
   - Default

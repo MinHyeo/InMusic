@@ -80,6 +80,9 @@ namespace Play
 
             //첫번째 버튼 선택 효과
             buttonsAnim[buttonIndex].SetTrigger("Select");
+
+            //키 입력 설정
+            GameManager.Input.SetUIKeyEvent(OnKeyPress);
         }
 
         public void Continue()
@@ -91,17 +94,22 @@ namespace Play
             pauseCount.gameObject.SetActive(true);
         }
 
-        public void OnKeyPress(KeyCode key)
+        public void Restart()
         {
-            switch (key)
+            pauseObject.gameObject.SetActive(false);
+        }
+
+        public void OnKeyPress(Define.UIControl keyEvent)
+        {
+            switch (keyEvent)
             {
-                case KeyCode.Return:
+                case Define.UIControl.Enter:
                     InputKeyEnter();
                     break;
-                case KeyCode.UpArrow:
+                case Define.UIControl.Up:
                     InputKeyArrow(-1);
                     break;
-                case KeyCode.DownArrow:
+                case Define.UIControl.Down:
                     InputKeyArrow(1);
                     break;
             }

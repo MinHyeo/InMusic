@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
+﻿using UnityEngine;
+using UnityEngine.Pool;
 
 namespace Play 
 {
     public class Note : MonoBehaviour
     {
+        public IObjectPool<GameObject> Pool { get; set; }
+
         public int channel;
         private float speed;
         private float travelTime;

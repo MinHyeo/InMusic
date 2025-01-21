@@ -54,6 +54,7 @@ namespace Play
         private SongInfo songInfo;
 
         [Header("Key Objects")]
+        [SerializeField]
         private GameObject[] keyObjects;
 
         //노래 정보
@@ -109,24 +110,12 @@ namespace Play
             accuracyText.text = "0.00%";
 
             StartCoroutine(StartMusicWithIntroDelay());
-            //Task.Run(async () => await StartMusicWithIntroDelay());
 
             //키 설정
-            GameManager.Input.SetNoteKeyEvent(OnKeyPress);
-            //GameManager.Input.SetUIKeyEvent();
+            GameManager.Input.SetNoteKeyPressEvent(OnKeyPress);
+            GameManager.Input.SetNoteKeyReleaseEvent(OnKeyRelase);
+            GameManager.Input.SetUIKeyEvent(OnUIKkeyPress);
         }
-
-        //private async Task StartMusicWithIntroDelay()
-        //{
-        //    metronome.StartInitialMetronome();
-        //    NoteManager.Instance.InitializeNotes(BmsLoader.Instance.SelectSong(songName));
-
-        //    await Task.Delay((int)(preStartDelay * 1000));
-        //    state = States.Playing;
-
-        //    PlaySong();
-        //    metronome.StartMetronome();
-        //}
 
         private IEnumerator StartMusicWithIntroDelay()
         {
@@ -149,9 +138,8 @@ namespace Play
             videoPlayScript.Play();
         }
 
-        public void OnKeyPress(Define.NoteControl keyEvent)
+        private void OnKeyPress(Define.NoteControl keyEvent)
         {
-            Debug.Log("키 입력");
             float pressTime = Time.time;
             // 해당 라인에 있는 노트 중 판정할 노트 검색
             Note closestNote = FindClosestNoteToPressTime((int)keyEvent, pressTime);
@@ -179,6 +167,25 @@ namespace Play
                 {
                     HandleNoteHit(closestNote, AccuracyType.Miss, 0);
                 }
+            }
+        }
+
+        private void OnKeyRelase(Define.NoteControl keyEvent)
+        {
+            Debug.Log("키 입력 끝");
+            keyObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(false);
+        }
+
+        private void OnUIKkeyPress(Define.UIControl keyEvent)
+        {
+            switch (keyEvent)
+            {
+                case Define.UIControl.Esc:
+                    if (state == States.Pause)
+                        break;
+
+                    Pause();
+                    break;
             }
         }
 
@@ -260,7 +267,15 @@ namespace Play
         public void ReStart()
         {
             Time.timeScale = 1;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+            //fade in-out
+
+            //영상 초기화
+            videoPlayScript.End();
+            //노래 초기화
+            //점수 초기화
+            //재시작
         }
 
         //노래 종료
@@ -272,8 +287,9 @@ namespace Play
             //노래 종료
             SoundManager.Instance.End();
             //비디오 종료
-            //videoPlayScript.End();
-            //마디선 종료
+            videoPlayScript.End();
+            //판정선 안보에기 표시
+            NoteManager.Instance.RemoveJudgementLine();
 
             //결과 점수 저장
             ScoreData scoreData = SaveScore();

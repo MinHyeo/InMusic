@@ -12,6 +12,7 @@ namespace Play
 
         public void Restart()
         {
+            PauseManager.Instance.Restart();
             PlayManager.Instance.ReStart();
         }
 
