@@ -63,7 +63,7 @@ public class Main_Lobby_UI : UI_Base
             //솔로
             case "Solo":
                 //Todo
-                //SceneManager.LoadScene();
+                SceneManager.LoadScene("LoadScene");
                 Debug.Log("Solo function is not implemented");
                 break;
             //멀티

@@ -98,7 +98,7 @@ namespace Play
             SoundManager.Instance.End();
         }
 
-        private void StartGame(Song songName)
+        public void StartGame(Song songName)
         {
             this.songName = songName;
             SoundManager.Instance.SongInit(songName.ToString());

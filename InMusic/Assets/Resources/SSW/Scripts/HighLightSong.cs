@@ -8,6 +8,7 @@ namespace SongList{
     [SerializeField] private SongListManager _songListManager; // SongListManager 참조
     [SerializeField] private Text _detailTitleText; // 좌측에 표시할 제목 Text
     [SerializeField] private Image _detailImage; // 좌측에 표시할 이미지
+    [SerializeField] private Button startButton;
 
     private void OnEnable()
     {
@@ -46,6 +47,7 @@ namespace SongList{
                 if (_detailTitleText != null)
                 {
                     _detailTitleText.text = songInfo.Title;
+                    startButton.onClick.AddListener(() => GameManager.Instance.StartGame(songInfo.Title));
                 }
 
                 // 이미지 업데이트

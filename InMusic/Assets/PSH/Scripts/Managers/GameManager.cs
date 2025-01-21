@@ -1,4 +1,7 @@
+using Play;
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -34,5 +37,22 @@ public class GameManager : MonoBehaviour
     {
         M_Input.UIUpdate();
         M_Input.NoteUpdate();
+    }
+
+    public void StartGame(string SongTitle)
+    {
+        SceneManager.LoadScene("YMH");
+
+        Enum.TryParse(SongTitle, out Song song);
+        SceneManager.sceneLoaded += OnPlaySceneLoaded;  //옵저버 패턴
+    }
+
+    private void OnPlaySceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "PlayScene")
+        {
+            PlayManager.Instance.StartGame(Song.Heya);
+            SceneManager.sceneLoaded -= OnPlaySceneLoaded; // 이벤트 구독 해제
+        }
     }
 }

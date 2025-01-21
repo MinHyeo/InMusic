@@ -286,6 +286,7 @@ MonoBehaviour:
   _songListManager: {fileID: 45358250}
   _detailTitleText: {fileID: 1174743300}
   _detailImage: {fileID: 1868857856}
+  startButton: {fileID: 1494042081}
 --- !u!4 &328847100
 Transform:
   m_ObjectHideFlags: 0
