@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Play
 {
@@ -18,7 +19,9 @@ namespace Play
 
         public void MusicSelect()
         {
-
+            PauseManager.Instance.DestroyKeyEvent();
+            SoundManager.Instance.End();
+            GameManager.Instance.SelectSong(PlayManager.Instance.SongTitle);
         }
 
         public void Exit()

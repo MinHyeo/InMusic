@@ -34,7 +34,8 @@ public class Main_Lobby_UI : UI_Base
                 break;
             //³ª°¡±â
             case "Exit":
-                if (curSetUI == null && popupUI == null) popupUI = GameManager.Resource.Instantiate("Message_UI");
+                if (curSetUI == null && popupUI == null) 
+                    popupUI = GameManager.Resource.Instantiate("Message_UI");
                 break;
             //¿ÞÂÊ
             case "Left":
@@ -84,6 +85,8 @@ public class Main_Lobby_UI : UI_Base
 
     //ButtonEvent·Î ´Ù ³Ñ±è
     public void MainLobbyKeyEvent(Define.UIControl keyEvent) {
+        if (SceneManager.GetActiveScene().name != "Main_Lobby_PSH")
+            return;
         if (popupUI != null || curSetUI != null || guideUI != null) return;
         switch (keyEvent)
         {

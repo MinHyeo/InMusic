@@ -19,6 +19,7 @@ public class ReuseScrollView : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Debug.Log("dddddddddddddd");
         dataList.Clear();
         for(int i = 0; i < 10000; i++) {
             dataList.Add(i);

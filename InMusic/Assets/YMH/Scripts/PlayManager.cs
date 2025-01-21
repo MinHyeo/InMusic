@@ -59,6 +59,7 @@ namespace Play
 
         //노래 정보
         private Song songName;
+        public Song SongTitle { get { return songName; } private set { } }
         private const float preStartDelay = 2.0f;
         private const float noteSpeed = 5.0f;
 

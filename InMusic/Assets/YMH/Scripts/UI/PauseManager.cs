@@ -117,6 +117,11 @@ namespace Play
             //나중에 enter키에 대한 처리도 추가해야함
         }
 
+        public void DestroyKeyEvent()
+        {
+            GameManager.Input.RemoveUIKeyEvent(OnKeyPress);
+        }
+
         private void InputKeyArrow(int keyNum)
         {
             //전 버튼 선택 효과 제거

@@ -12,6 +12,8 @@ namespace SongList{
 
     private void OnEnable()
     {
+        Debug.Log("ddddddddddddddddddddd");
+
         if (_songListManager != null)
         {
             _songListManager.OnHighlightedSongChanged += HandleHighlightedSongChanged;

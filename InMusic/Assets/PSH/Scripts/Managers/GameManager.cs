@@ -1,5 +1,6 @@
 using Play;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -54,5 +55,11 @@ public class GameManager : MonoBehaviour
             PlayManager.Instance.StartGame(Song.Heya);
             SceneManager.sceneLoaded -= OnPlaySceneLoaded; // 이벤트 구독 해제
         }
+    }
+
+    public void SelectSong(Song songTitle)
+    {
+        Debug.Log("Try Scene Load");
+        SceneManager.LoadScene(0);
     }
 }
