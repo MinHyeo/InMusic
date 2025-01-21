@@ -60,6 +60,6 @@ public class GameManager : MonoBehaviour
     public void SelectSong(Song songTitle)
     {
         Debug.Log("Try Scene Load");
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("test_SSW");
     }
 }
