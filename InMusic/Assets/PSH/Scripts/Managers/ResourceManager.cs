@@ -4,10 +4,13 @@ using Unity.VisualScripting;
 using System.IO;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class ResourceManager
 {
+    string appPath = Application.dataPath;
     string mDataPath = "Assets/Resources/Music";
+    GameObject ItemPool;
 
     public T Load<T>(string path) where T : Object
     {
@@ -40,18 +43,22 @@ public class ResourceManager
         return gameObject;
     }
 
-    public List<string> GetMusicList() {
+    public List<Music_Item> GetMusicList() {
+        ItemPool = new GameObject("ItemPool");
+
         List<Music_Item> mList = new List<Music_Item>();
         //경로 설정
-        string fullPath = Application.dataPath+ mDataPath.Replace("Assets", "");
-        //음악 개수(디렉토리 개수), 제목(디렉토리 이름)
-        int numOfmusic = 17;
-        string[] mTitles = new string[17];
+        string fullPath = appPath + mDataPath.Replace("Assets", "");
+        //음악 개수
+        int min = 17; //최소값
+        int numOfMusic = 0;  //디렉토리 개수 == 음악 폴더 개수
+        int result;
+        string[] mTitles = new string[17]; //제목(디렉토리 이름)
 
         if (Directory.Exists(fullPath)) 
         {
             mTitles = Directory.GetDirectories(fullPath);
-            numOfmusic = mTitles.Length;
+            numOfMusic = mTitles.Length;
         }
         else
         {
@@ -59,29 +66,63 @@ public class ResourceManager
             return null;
         }
 
-        
-        /*for (int i = 0; i < numOfmusic; i++)
+        result = min > numOfMusic ? min : numOfMusic;
+        for (int i = 0; i < result; i++)
         {
-            string mPath = fullPath + mTitles[i];
-            //음악 디렉토리 열기
-            Process.Start("explorer.exe", mPath);
-            string[] files = Directory.GetFiles(fullPath);
-            //1. BMS 파일 열기
-            //2. 앨범 사진 열기
-            //3. 뮤비 열기
-            //4. 기록 파일 열기
-            Music_Item temp = new Music_Item();
+            GameObject item = Instantiate("Music", ItemPool.transform);
+            Music_Item tmpMusic = item.GetComponent<Music_Item>();
 
-            mList.Add(temp);
-        }*/
-        
+            /*//최값보다 음악의 수가 적으면 파일 Load 안함
+            if (i < numOfMusic) {
+                string mPath = fullPath + mTitles[i];
+                //음악 디렉토리 열기
+                Process.Start("explorer.exe", mPath);
+                string[] files = Directory.GetFiles(fullPath);
 
-        //string 대신 Music_Item 객체 사용
-        List<string> list = new List<string>();
-        //음악 목록 가져오기(파일 읽기)
-        for (int tmp = 0; tmp < 17; tmp++) {
-            list.Add($"Title { tmp + 1 }");
+                //1. BMS 파일 열기
+                BMSData tmpBMS = LoadBMS(mTitles[i]);
+                tmpMusic.Title.text = tmpBMS.header.title;
+                tmpMusic.Artist.text = tmpBMS.header.artist;
+
+                //2. 앨범 사진 열기
+                if (LoadAlbumArt(mPath) != null)
+                {
+                    tmpMusic.Album.sprite = LoadAlbumArt(mPath);
+                }
+
+                //3. 뮤비 열기
+                if (LoadMusicVideo(mPath) != null)
+                {
+                    tmpMusic.MuVi = LoadMusicVideo(mPath);
+                }
+                //4. 기록 파일 열기
+            }*/
+
+            mList.Add(tmpMusic);
         }
-        return list;
+        return mList;
     }
+
+    #region FileLoader
+    //BMS 파일 Load
+    public BMSData LoadBMS(string path) {
+        return BMSManager.Instance.ParseBMS(path);
+    }
+
+    //음원 파일 Load
+    public AudioClip LoadAudioClip(string path)
+    {
+        return Load<AudioClip>(path);
+    }
+
+    //앨범 사진 Load
+    public Sprite LoadAlbumArt(string path) {
+        return Load<Sprite>(path);
+    }
+
+    //뮤비 Load
+    public VideoClip LoadMusicVideo(string path) {
+        return Load<VideoClip>(path);
+    }
+    #endregion
 }

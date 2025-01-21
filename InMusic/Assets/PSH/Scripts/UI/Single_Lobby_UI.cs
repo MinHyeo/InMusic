@@ -15,7 +15,7 @@ public class Single_Lobby_UI : UI_Base
     [SerializeField] private Text[] logData = new Text[4];
     [Tooltip("스크롤 관련 변수")]
     [SerializeField] private RectTransform contentPos;
-    [SerializeField] List<string> musicList = new List<string>();
+    [SerializeField] List<Music_Item> musicList = new List<Music_Item>();
     private float itemGap = 40.0f;
     private int numOfitems;
     [SerializeField] private int startIndex = 0;
@@ -27,6 +27,12 @@ public class Single_Lobby_UI : UI_Base
     {
         //음악 목록 Load하기
         musicList = GameManager_PSH.Resource.GetMusicList();
+
+        if (musicList == null) {
+            Debug.Log("음악 목록 Load 실패");
+            return;
+        }
+
         numOfitems = musicList.Count;
         ContentDown();
 
@@ -48,6 +54,8 @@ public class Single_Lobby_UI : UI_Base
             ScrollDown();
         }
     }
+
+    #region ItemDetect
     void OnTriggerEnter2D(Collider2D listItem)
     {
         curMusicItem = listItem.gameObject;
@@ -59,6 +67,8 @@ public class Single_Lobby_UI : UI_Base
     {
         listItem.gameObject.GetComponent<Music_Item>().ItemUnselect();
     }
+
+    #endregion
 
     public void ButtonEvent(string type) {
         switch (type)
@@ -139,7 +149,7 @@ public class Single_Lobby_UI : UI_Base
             startIndex = numOfitems + startIndex;
         }
         for (int i = 0; i < musicItems.Length; i++) {
-            musicItems[i].GetComponent<Music_Item>().SetData(musicList[startIndex++]);
+            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicList[startIndex++]);
             if (startIndex >= numOfitems) {
                 startIndex = 0;
             }
@@ -156,7 +166,7 @@ public class Single_Lobby_UI : UI_Base
         }
         for (int i = 0; i < musicItems.Length; i++)
         {
-            musicItems[i].GetComponent<Music_Item>().SetData(musicList[startIndex++]);
+            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicList[startIndex++]);
             if (startIndex >= numOfitems) {
                 startIndex = 0;
             }
@@ -175,6 +185,17 @@ public class Single_Lobby_UI : UI_Base
         StartCoroutine(SmoothScrollMove());
     }
 
+    void UpdateItems(Music_Item oldItem, Music_Item newItem) {
+        oldItem.Title.text = newItem.Title.text;
+        oldItem.Artist.text = newItem.Artist.text;
+        oldItem.Length = newItem.Length;
+        oldItem.Album.sprite = newItem.Album.sprite;
+        oldItem.MuVi = newItem.MuVi;
+        oldItem.Score = newItem.Score;
+        oldItem.Accuracy = newItem.Accuracy;
+        oldItem.Combo = newItem.Combo;
+        oldItem.Rank.text = newItem.Rank.text;
+    }
 
     //부드럽게 이동: 스크롤/마우스 조작
     IEnumerator SmoothScrollMove() {

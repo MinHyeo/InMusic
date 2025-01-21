@@ -1,5 +1,7 @@
+using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class Music_Item : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class Music_Item : MonoBehaviour
     [SerializeField] private Text artist;
     [SerializeField] private string length;
     [SerializeField] private Image albumArt;
+    [SerializeField] private VideoClip musicVideo;
     [SerializeField] private Image back;
     [SerializeField] private Color wMint = new Color(104.0f, 240.0f, 235.0f, 0.08f);
     [SerializeField] private Color sMint = new Color(57, 255, 255, 1.0f);
@@ -26,41 +29,62 @@ public class Music_Item : MonoBehaviour
     public Text Artist { get { return artist; } set { artist = value; } }
     public string Length { get { return length; } set { length = value; } }
     public Image Album { get { return albumArt; } set { albumArt = value; } }
+    public VideoClip MuVi { get { return musicVideo; } set { musicVideo = value; } }
     public string Score { get { return score; } set { score = value; } }
     public string Accuracy { get { return accuracy; } set { accuracy = value; } }
     public string Combo { get { return combo; } set { combo = value; } }
     public Text Rank { get { return rank; } set { rank = value; } }
     #endregion
 
-    void Start()
+    void Awake()
     {
+         Initialize();
+    }
+
+    //기본값 설정
+    public void Initialize()
+    {
+        //Debug.Log(gameObject.name + "초기화");
         title.text = "Title";
         artist.text = "Artist";
+        length = "00:00";
+        musicVideo = null;
+        score = "0";
+        accuracy = "0";
+        combo = "0";
         rank.text = "-";
     }
 
-    public void SetData(string newtitle = "Title", string newartist = "Artist", string newrank = "-", Image newAlbum = null, string newscore = "0", string newaccuracy = "0", string newcombo = "0")
+    /*
+    //List에서 Item값 바꿀 때 사용할 메서드
+    public void SetData(string newTitle = "Title", string newArtist = "Artist", string newLength = "00:00",
+                        Sprite newAlbum = null, VideoClip newMuvi = null, 
+                        string newScore = "0", string newAccuracy = "0", string newCombo = "-", string newRank = "0")
     {
-        title.text = newtitle;
-        artist.text = newartist;
-        rank.text = newrank;
-        //albumArt = newAlbum;
-        score = newscore;
-        accuracy = newaccuracy;
-        combo = newcombo;
-    }
+        title.text = newTitle;
+        artist.text = newArtist;
+        length = newLength;
+        if (newAlbum != null) {
+            albumArt.sprite = newAlbum;
+        }
+        musicVideo = newMuvi;
+        score = newScore;
+        accuracy = newAccuracy;
+        combo = newCombo;
+        rank.text = newRank;
+    }*/
 
-
+    #region Select Reaction
     public void ItemSelect()
     {
         
         SetColor(background, purple);
         SetColor(back, purple);
-        
-        SetAlpha(title,1.0f);
-        SetAlpha(artist,1.0f);
-        SetAlpha(rank,1.0f);
-        
+
+        SetAlpha(title, 1.0f);
+        SetAlpha(artist, 1.0f);
+        SetAlpha(rank, 1.0f);
+
         SetAlpha(albumArt, 1.0f);
     }
 
@@ -75,6 +99,8 @@ public class Music_Item : MonoBehaviour
         
         SetAlpha(albumArt, 0.5f);
     }
+
+    #endregion
 
     //투명도만 바꾸기
     void SetAlpha(Graphic target, float alpha) {
