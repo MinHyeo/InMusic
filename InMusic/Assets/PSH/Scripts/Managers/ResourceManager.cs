@@ -5,6 +5,7 @@ using System.IO;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Video;
+using System.Linq;
 
 public class ResourceManager
 {
@@ -57,12 +58,13 @@ public class ResourceManager
 
         if (Directory.Exists(fullPath)) 
         {
+            //파일 갯수가 아닌 디렉토리 갯수를 구함
             mTitles = Directory.GetDirectories(fullPath);
             numOfMusic = mTitles.Length;
         }
         else
         {
-            UnityEngine.Debug.Log("음악 디렉토리 열기 실패");
+            UnityEngine.Debug.Log("음악 디렉토리 없음");
             return null;
         }
 
@@ -72,14 +74,17 @@ public class ResourceManager
             GameObject item = Instantiate("Music", ItemPool.transform);
             Music_Item tmpMusic = item.GetComponent<Music_Item>();
 
-            /*//최값보다 음악의 수가 적으면 파일 Load 안함
+            //최값보다 음악의 수가 적으면 파일 Load 안함
             if (i < numOfMusic) {
-                string mPath = fullPath + mTitles[i];
-                //음악 디렉토리 열기
-                Process.Start("explorer.exe", mPath);
-                string[] files = Directory.GetFiles(fullPath);
+                //5개의 파일들 이름 가져오기
+                string[] files = Directory.GetFiles(mTitles[i].Replace("\\", "/"))
+                                          .Where(file => !file.EndsWith(".meta")) //.meta파일 제외
+                                          .ToArray();
+                /*for (int j = 0; j < files.Length; j++) {
+                    UnityEngine.Debug.Log($"파일 이름: {files[j]}");
+                }*/
 
-                //1. BMS 파일 열기
+                /*//1. BMS 파일 열기
                 BMSData tmpBMS = LoadBMS(mTitles[i]);
                 tmpMusic.Title.text = tmpBMS.header.title;
                 tmpMusic.Artist.text = tmpBMS.header.artist;
@@ -96,7 +101,8 @@ public class ResourceManager
                     tmpMusic.MuVi = LoadMusicVideo(mPath);
                 }
                 //4. 기록 파일 열기
-            }*/
+                */
+            }
 
             mList.Add(tmpMusic);
         }
