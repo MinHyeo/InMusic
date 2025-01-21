@@ -89,7 +89,7 @@ namespace Play
 
         public void OnClickButton()
         {
-            StartGame();
+            StartGame(Song.Heya);
         }
 
         private void OnApplicationQuit()
@@ -98,9 +98,9 @@ namespace Play
             SoundManager.Instance.End();
         }
 
-        private void StartGame()
+        private void StartGame(Song songName)
         {
-            songName = Song.Heya;
+            this.songName = songName;
             SoundManager.Instance.SongInit(songName.ToString());
             videoPlayScript.GetVideoClip(songName);
             metronome.CalculateSync();
