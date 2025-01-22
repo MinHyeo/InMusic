@@ -80,30 +80,38 @@ public class ResourceManager
                 string[] files = Directory.GetFiles(mTitles[i].Replace("\\", "/"))
                                           .Where(file => !file.EndsWith(".meta")) //.meta파일 제외
                                           .ToArray();
-                /*for (int j = 0; j < files.Length; j++) {
+
+                for (int j = 0; j < files.Length; j++) {
                     UnityEngine.Debug.Log($"파일 이름: {files[j]}");
+                }
+                BMSData tmpBMS = null;
+                /*
+                //1. BMS 파일 열기
+                if ((tmpBMS = LoadBMS(files[0]))!= null) {
+                    tmpMusic.Title.text = tmpBMS.header.title;
+                    tmpMusic.Artist.text = tmpBMS.header.artist;
+                }
+                //2. 음원 파일 열기
+                if (LoadAudioClip(files[1])!= null) { 
+                    tmpMusic.Audio = LoadAudioClip(files[1]);
+                }
+                //3. 엘범 사진 열기
+                if (LoadAlbumArt(files[2]) != null)
+                {
+                    tmpMusic.Album.sprite = LoadAlbumArt(files[2]);
+                }
+                //4. 동영상 파일 열기
+                if (LoadMusicVideo(files[3]) != null)
+                {
+                    tmpMusic.MuVi = LoadMusicVideo(files[3]);
+                }
+                //5. 기록 파일 열기
+                if (false) {
+                    //files[4];
                 }*/
 
-                /*//1. BMS 파일 열기
-                BMSData tmpBMS = LoadBMS(mTitles[i]);
-                tmpMusic.Title.text = tmpBMS.header.title;
-                tmpMusic.Artist.text = tmpBMS.header.artist;
-
-                //2. 앨범 사진 열기
-                if (LoadAlbumArt(mPath) != null)
-                {
-                    tmpMusic.Album.sprite = LoadAlbumArt(mPath);
-                }
-
-                //3. 뮤비 열기
-                if (LoadMusicVideo(mPath) != null)
-                {
-                    tmpMusic.MuVi = LoadMusicVideo(mPath);
-                }
-                //4. 기록 파일 열기
-                */
+                UnityEngine.Debug.Log($"{i + 1}번째 폴더 확인 완료");
             }
-
             mList.Add(tmpMusic);
         }
         return mList;

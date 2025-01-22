@@ -10,6 +10,7 @@ public class Music_Item : MonoBehaviour
     [SerializeField] private Text artist;
     [SerializeField] private string length;
     [SerializeField] private Image albumArt;
+    [SerializeField] private AudioClip audioClip;
     [SerializeField] private VideoClip musicVideo;
     [Header("기록 관련 정보")]
     [SerializeField] private string score;
@@ -29,6 +30,7 @@ public class Music_Item : MonoBehaviour
     public Text Artist { get { return artist; } set { artist = value; } }
     public string Length { get { return length; } set { length = value; } }
     public Image Album { get { return albumArt; } set { albumArt = value; } }
+    public AudioClip Audio { get { return audioClip;  }set { audioClip = value; } }
     public VideoClip MuVi { get { return musicVideo; } set { musicVideo = value; } }
     public string Score { get { return score; } set { score = value; } }
     public string Accuracy { get { return accuracy; } set { accuracy = value; } }
