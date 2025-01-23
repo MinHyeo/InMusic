@@ -96,8 +96,13 @@ public class ResourceManager
                 }
 
                 //2. 음원 파일 열기 (필수)
-                if (fileMap.ContainsKey("audio"))
+                if (fileMap.ContainsKey("audio")) { 
                     tmpMusic.Audio = LoadAudioClip(fileMap["audio"]);
+                    float audioLength = tmpMusic.Audio.length;
+                    int minutes = Mathf.FloorToInt(audioLength / 60);
+                    int seconds = Mathf.FloorToInt(audioLength % 60);
+                    tmpMusic.Length = string.Format("{0:00}:{1:00}", minutes, seconds);
+                }
 
                 //3. 엘범 사진 열기 (선택)
                 if (fileMap.ContainsKey("album"))
