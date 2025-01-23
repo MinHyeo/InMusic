@@ -77,50 +77,48 @@ public class ResourceManager
             //최값보다 음악의 수가 적으면 파일 Load 안함
             if (i < numOfMusic) {
                 //파일들 이름 가져오기
-                string[] files = Directory.GetFiles(mTitles[i].Replace("\\", "/"))
+                string[] files = Directory.GetFiles(mTitles[i])
+                                          //LINQ문 (Language-Integrated Query)
+                                          .Select(file=> file.Replace("\\", "/"))
                                           .Where(file => !file.EndsWith(".meta")) //.meta파일 제외
                                           .ToArray();
-
                 Dictionary<string, string> fileMap = FileMapping(files);
-
-
-                int numOfFiles = files.Length;
-                for (int j = 0; j < numOfFiles; j++) {
+                
+                for (int j = 0; j < files.Length; j++) {
                     UnityEngine.Debug.Log($"{j}번째 파일 이름: {files[j]}");
                 }
 
-                BMSData tmpBMS = null;
-                
-                
-                //1. BMS 파일 열기
+                //1. BMS 파일 열기 (필수)
                 if (fileMap.ContainsKey("bms")) {
+                    //BMSData tmpBMS = LoadBMS(fileMap["bms"]);
                     //tmpMusic.Title.text = tmpBMS.header.title;
                     //tmpMusic.Artist.text = tmpBMS.header.artist;
                 }
 
-                //2. 음원 파일 열기
-                if (fileMap.ContainsKey("audio")) { 
+                //2. 음원 파일 열기 (필수)
+                if (fileMap.ContainsKey("audio"))
                     tmpMusic.Audio = LoadAudioClip(fileMap["audio"]);
-                }
 
-                //3. 엘범 사진 열기
+                //3. 엘범 사진 열기 (선택)
                 if (fileMap.ContainsKey("album"))
-                {
                     tmpMusic.Album.sprite = LoadAlbumArt(fileMap["album"]);
-                }
-                
-                //4. 기록 파일 열기
+                else //사진이 없으면 기본 사진 사용
+                    tmpMusic.Album.sprite = LoadAlbumArt("Default_IMG");
+
+
+                //4. 기록 파일 열기 (선택)
                 if (fileMap.ContainsKey("log")) {
                     //files[4];
                 }
                 
-                //5. 동영상 파일 열기
+                //5. 뮤비 파일 열기 (선택)
                 if (fileMap.ContainsKey("video"))
                 {
                     tmpMusic.MuVi = LoadMusicVideo(fileMap["video"]);
                 }
 
-                UnityEngine.Debug.Log($"{i + 1}번째 폴더 확인 완료");
+                UnityEngine.Debug.Log($"{i + 1}번째 폴더 확인 완료\n");
+
             }
             mList.Add(tmpMusic);
         }
@@ -134,10 +132,14 @@ public class ResourceManager
 
         foreach (string fullFilePath in fileList)
         {
-            //"Music/노래이름/파일이름"까지만 경로 남기기
-            string filePath = fullFilePath.Replace(appPath + "/Resources/" , "");
             //확장자만 가져오기
             string fileExt = Path.GetExtension(fullFilePath);
+            //"Music/노래이름/파일이름"까지만 경로 남기기
+            string filePath = fullFilePath.Replace(appPath + "/Resources/" , "");
+            //확장자 제거
+            filePath = filePath.Replace(fileExt , "");
+            //UnityEngine.Debug.Log(filePath);
+            
 
             //BMS
             if (fileExt == ".bms") 
