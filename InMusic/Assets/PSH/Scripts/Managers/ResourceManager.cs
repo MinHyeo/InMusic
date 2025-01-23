@@ -84,20 +84,21 @@ public class ResourceManager
                                           .ToArray();
                 Dictionary<string, string> fileMap = FileMapping(files);
                 
-                for (int j = 0; j < files.Length; j++) {
+                /*for (int j = 0; j < files.Length; j++) {
                     UnityEngine.Debug.Log($"{j}번째 파일 이름: {files[j]}");
-                }
+                }*/
 
                 //1. BMS 파일 열기 (필수)
                 if (fileMap.ContainsKey("bms")) {
-                    //BMSData tmpBMS = LoadBMS(fileMap["bms"]);
+                    //BMSData tmpBMS = BMSManager.Instance.ParseBMS(fileMap["bms"]);
                     //tmpMusic.Title.text = tmpBMS.header.title;
                     //tmpMusic.Artist.text = tmpBMS.header.artist;
+                    //tmpMusic.Rank.text = tmpBMS.header.rank.ToString();
                 }
 
                 //2. 음원 파일 열기 (필수)
                 if (fileMap.ContainsKey("audio")) { 
-                    tmpMusic.Audio = LoadAudioClip(fileMap["audio"]);
+                    tmpMusic.Audio = Load<AudioClip>(fileMap["audio"]);
                     float audioLength = tmpMusic.Audio.length;
                     int minutes = Mathf.FloorToInt(audioLength / 60);
                     int seconds = Mathf.FloorToInt(audioLength % 60);
@@ -106,31 +107,30 @@ public class ResourceManager
 
                 //3. 엘범 사진 열기 (선택)
                 if (fileMap.ContainsKey("album"))
-                    tmpMusic.Album.sprite = LoadAlbumArt(fileMap["album"]);
+                    tmpMusic.Album.sprite = Load<Sprite>(fileMap["album"]);
                 else //사진이 없으면 기본 사진 사용
-                    tmpMusic.Album.sprite = LoadAlbumArt("Default_IMG");
+                    tmpMusic.Album.sprite = Load<Sprite>("Default_IMG");
 
 
                 //4. 기록 파일 열기 (선택)
                 if (fileMap.ContainsKey("log")) {
-                    //files[4];
+                    //TODO
+                    MusicLog tmpLog = LoadLog(fileMap["log"]);
+                    tmpMusic.Score = tmpLog.Score;
+                    tmpMusic.Accuracy = tmpLog.Accuracy;
+                    tmpMusic.Rank = tmpMusic.Rank;
                 }
                 
                 //5. 뮤비 파일 열기 (선택)
                 if (fileMap.ContainsKey("video"))
-                {
-                    tmpMusic.MuVi = LoadMusicVideo(fileMap["video"]);
-                }
+                    tmpMusic.MuVi = Load<VideoClip>(fileMap["video"]);
 
                 UnityEngine.Debug.Log($"{i + 1}번째 폴더 확인 완료\n");
-
             }
             mList.Add(tmpMusic);
         }
         return mList;
     }
-
-    
     //파일경로와 확장자 분류
     Dictionary<string, string> FileMapping(string[] fileList) { 
         Dictionary<string, string> fileMap = new Dictionary<string, string>();
@@ -144,8 +144,6 @@ public class ResourceManager
             //확장자 제거
             filePath = filePath.Replace(fileExt , "");
             //UnityEngine.Debug.Log(filePath);
-            
-
             //BMS
             if (fileExt == ".bms") 
                 fileMap["bms"] = filePath;
@@ -156,7 +154,7 @@ public class ResourceManager
             else if (fileExt == ".png" || fileExt == ".jpg" || fullFilePath == ".jpeg")
                 fileMap["album"] = filePath;
             //기록 파일
-            else if (fileExt == ".txt")
+            else if (fileExt == ".json")
                 fileMap["log"] = filePath;
             //뮤비 파일
             else if (fileExt == ".mp4" || fileExt == ".avi" || fileExt == ".mov")
@@ -164,27 +162,12 @@ public class ResourceManager
         }
         return fileMap;
     }
-
-    #region FileLoader
-    //BMS 파일 Load
-    public BMSData LoadBMS(string path) {
-        return BMSManager.Instance.ParseBMS(path);
-    }
-
-    //음원 파일 Load
-    public AudioClip LoadAudioClip(string path)
+    
+    MusicLog LoadLog(string path)
     {
-        return Load<AudioClip>(path);
+        //Json파일 읽기
+        TextAsset jsonText = Load<TextAsset>(path);
+        //내용을 객체로 만들어서 전달
+        return JsonUtility.FromJson<MusicLog>(jsonText.text);
     }
-
-    //앨범 사진 Load
-    public Sprite LoadAlbumArt(string path) {
-        return Load<Sprite>(path);
-    }
-
-    //뮤비 Load
-    public VideoClip LoadMusicVideo(string path) {
-        return Load<VideoClip>(path);
-    }
-    #endregion
 }

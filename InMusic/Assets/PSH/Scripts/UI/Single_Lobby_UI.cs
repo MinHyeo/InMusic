@@ -193,7 +193,7 @@ public class Single_Lobby_UI : UI_Base
         oldItem.Audio = newItem.Audio;
         oldItem.MuVi = newItem.MuVi;
         oldItem.Score = newItem.Score;
-        oldItem.Accuracy = newItem.Accuracy;
+        oldItem.Accuracy = newItem.Accuracy + "%";
         oldItem.Combo = newItem.Combo;
         oldItem.Rank.text = newItem.Rank.text;
     }

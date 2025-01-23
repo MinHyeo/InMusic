@@ -48,7 +48,7 @@ public class BMSManager : MonoBehaviour
     {
         BMSData bmsData = new BMSData();
 
-        TextAsset bmsFile = Resources.Load<TextAsset>($"Music/{fileName}");
+        TextAsset bmsFile = Resources.Load<TextAsset>(fileName);
         if (bmsFile == null)
         {
             Debug.LogError($"BMS ¸ø Ã£À½: {fileName}");
