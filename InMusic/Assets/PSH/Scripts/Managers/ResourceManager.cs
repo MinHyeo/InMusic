@@ -44,6 +44,14 @@ public class ResourceManager
         return gameObject;
     }
 
+    MusicLog LoadLog(string path)
+    {
+        //Json파일 읽기
+        TextAsset jsonText = Load<TextAsset>(path);
+        //내용을 객체로 만들어서 전달
+        return JsonUtility.FromJson<MusicLog>(jsonText.text);
+    }
+
     public List<Music_Item> GetMusicList() {
         ItemPool = new GameObject("ItemPool");
 
@@ -144,6 +152,7 @@ public class ResourceManager
             //확장자 제거
             filePath = filePath.Replace(fileExt , "");
             //UnityEngine.Debug.Log(filePath);
+
             //BMS
             if (fileExt == ".bms") 
                 fileMap["bms"] = filePath;
@@ -161,13 +170,5 @@ public class ResourceManager
                 fileMap["video"] = filePath;
         }
         return fileMap;
-    }
-    
-    MusicLog LoadLog(string path)
-    {
-        //Json파일 읽기
-        TextAsset jsonText = Load<TextAsset>(path);
-        //내용을 객체로 만들어서 전달
-        return JsonUtility.FromJson<MusicLog>(jsonText.text);
     }
 }
