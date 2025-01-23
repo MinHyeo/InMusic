@@ -9,6 +9,7 @@ namespace SongList
 {
     public class SongListManager : MonoBehaviour
     {
+        #region Variables
         [Header("ScrollRect Settings")]
         [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private RectTransform _contentRect;
@@ -39,10 +40,12 @@ namespace SongList
         private List<GameObject> _songList = new List<GameObject>();
         private List<SongInfo> _songs;
         private GameObject _selectedSlot;
-        public event Action<string> OnHighlightedSongChanged;
+        public event Action<SongInfo> OnHighlightedSongChanged;
+        #endregion
 
+        #region Unity Methods
         private void Awake() {
-            _songs = LoadManager.Instance.Songs; 
+            _songs = LoadManager.Instance.Songs;
             _totalSongCount = _songs.Count;
 
             _itemHeight = _songItemPrefab.GetComponent<RectTransform>().sizeDelta.y;
@@ -79,8 +82,8 @@ namespace SongList
             SnapToNearestSlot();
             OnScroll();
 
-            // 스냅 후 가운데 슬롯 하이라이트
-            HighlightCenterSlotByPosition();
+            // 중앙 슬롯 즉시 하이라이트
+            HighlightCenterSlotByPosition(isImmediate: true);
         }
         
         private void Update() {
@@ -93,7 +96,9 @@ namespace SongList
                 }
             }
         }
+        #endregion
 
+        #region Scroll Methods
         private void OnScrolled(Vector2 pos) {
             _isScrolling = true;
             _lastScrollTime = Time.time;
@@ -210,12 +215,16 @@ namespace SongList
             Debug.Log($"[SongListManager] Calculate Slot Position: {dataIndex} -> {y}");
             return new Vector2(0, y);
         }
+        #endregion
 
-        private void HighlightCenterSlotByPosition() {
+        #region Highlighting
+
+        private void HighlightCenterSlotByPosition(bool isImmediate = false) {
             if (_selectedSlot != null) {
-                var prevImg = _selectedSlot.GetComponentInChildren<Image>();
-                if (prevImg != null) {
-                    prevImg.sprite = _defaultSprite;
+                ScrollSlot oldSlotComp = _selectedSlot.GetComponent<ScrollSlot>();
+                if (oldSlotComp != null) {
+                    // 기존 슬롯에 대해 '게이지가 줄어드는' 애니메이션을 실행
+                    oldSlotComp.SetHighlight(false, isImmediate);
                 }
                 _selectedSlot = null;
             }
@@ -229,6 +238,7 @@ namespace SongList
 
             foreach (var slotObj in _songList) {
                 if (!slotObj.activeSelf) continue;
+
                 RectTransform rt = slotObj.GetComponent<RectTransform>();
                 float slotY = rt.anchoredPosition.y + contentY;
                 float dist = Mathf.Abs(slotY - viewportCenterY);
@@ -240,21 +250,29 @@ namespace SongList
             }
 
             if (closestSlot != null) {
-                var img = closestSlot.GetComponentInChildren<Image>();
-                if (img != null) {
-                    img.sprite = _selectedSprite;
-                }
+                if(closestSlot == _selectedSlot) return;
                 _selectedSlot = closestSlot;
 
-                Text txt = closestSlot.GetComponentInChildren<Text>();
-                string highlightedSongTitle = (txt != null) ? txt.text : "";
-                if (!string.IsNullOrEmpty(highlightedSongTitle)) {
-                    Debug.Log($"[SongListManager] Highlighted Song Title: {highlightedSongTitle}");
-                    OnHighlightedSongChanged?.Invoke(highlightedSongTitle);
+                ScrollSlot slotComponent = closestSlot.GetComponent<ScrollSlot>();
+                if (slotComponent != null) {
+                    slotComponent.SetHighlight(true, isImmediate);
+
+                    SongInfo highlightSong = slotComponent.GetHighlightedSong();
+                    if (highlightSong != null) {
+                        Debug.Log($"[SongListManager] Highlighted Song Title: {highlightSong.Title}");
+                        OnHighlightedSongChanged?.Invoke(highlightSong);
+                    } else {
+                        Debug.LogWarning("[SongListManager] highlightSong is null - maybe slot.SetData() didn't set anything yet?");
+                    }
+                }
+                else {
+                    Debug.LogWarning("[SongListManager] closestSlot has no ScrollSlot component attached?");
                 }
             }
         }
+        #endregion
 
+        #region Slot Data Setting
         private void UpdateSlotData(GameObject slotObj, int dataIndex) {
             int songIndex = ((dataIndex % _totalSongCount) + _totalSongCount) % _totalSongCount;
             
@@ -263,12 +281,10 @@ namespace SongList
 
             // ScrollSlot 컴포넌트를 가져와서 데이터 세팅
             ScrollSlot slot = slotObj.GetComponent<ScrollSlot>();
-            if (slot != null)
-            {
+            if (slot != null) {
                 slot.SetData(currentSong, songIndex);
-                // 필요하다면, 초기 하이라이트 상태 해제
-                slot.SetHighlight(false);
             }
         }
+        #endregion
     }
 }

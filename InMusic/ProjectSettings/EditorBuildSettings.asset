@@ -9,14 +9,17 @@ EditorBuildSettings:
     path: Assets/PSH/Scene/Main_Lobby_PSH.unity
     guid: d0551487d6bb03640bc45f254fa6eabd
   - enabled: 1
+    path: Assets/YMH/Scene/YMH.unity
+    guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
     path: Assets/Resources/SSW/Scenes/LoadScene.unity
     guid: 2c49950c51068614e9c68ded057f381f
   - enabled: 1
     path: Assets/Resources/SSW/Scenes/test_SSW.unity
     guid: 76814152083bb554e913addef99efc6d
   - enabled: 1
-    path: Assets/YMH/Scene/YMH.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Resources/SSW/Scenes/Next_Scene.unity
+    guid: 604f377763af5ee4a9e81713d0653243
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
