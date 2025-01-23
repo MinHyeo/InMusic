@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class Single_Lobby_UI : UI_Base
 {
+    [SerializeField] private GameObject popupUI;
     [SerializeField] private GameObject[] musicItems = new GameObject[17];
     [SerializeField] private GameObject curMusicItem;
     [Tooltip("선택한 음악의 정보: 앨범, 제목, 아티스트, 길이")]
@@ -85,9 +86,16 @@ public class Single_Lobby_UI : UI_Base
                 //SceneManager.LoadScene("로비 씬");
                 break;
             case "Enter":
-                //키 입력 이벤트 제거
-                GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-                SceneManager.LoadScene(1);
+                if (curMusicItem.GetComponent<Music_Item>().HasBMS) {
+                    //키 입력 이벤트 제거
+                    GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
+                    SceneManager.LoadScene(1);
+                }
+                else
+                {
+                    //popupUI = GameManager_PSH.Resource.Instantiate("Notice_UI");
+                    Debug.Log("BMS 파일이 없는 곡");
+                }
                 break;
             case "KeyGuide":
                 Guide();
@@ -100,6 +108,8 @@ public class Single_Lobby_UI : UI_Base
 
     void SingleLobbyKeyEvent(Define.UIControl keyEvent)
     {
+        if (popupUI != null || SettingUI != null || guideUI != null) return;
+
         switch (keyEvent)
         {
             case Define.UIControl.Up:
@@ -192,6 +202,7 @@ public class Single_Lobby_UI : UI_Base
         oldItem.Album.sprite = newItem.Album;
         oldItem.Audio = newItem.Audio;
         oldItem.MuVi = newItem.MuVi;
+        oldItem.HasBMS = newItem.HasBMS;
         oldItem.Score = newItem.Score;
         oldItem.Accuracy = newItem.Accuracy + "%";
         oldItem.Combo = newItem.Combo;

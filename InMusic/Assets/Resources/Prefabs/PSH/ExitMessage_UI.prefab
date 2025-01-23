@@ -354,7 +354,7 @@ GameObject:
   - component: {fileID: 2245346430915466524}
   - component: {fileID: 5501879161013515729}
   m_Layer: 5
-  m_Name: Message_UI
+  m_Name: ExitMessage_UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

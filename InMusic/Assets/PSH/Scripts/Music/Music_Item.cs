@@ -12,6 +12,7 @@ public class Music_Item : MonoBehaviour
     [SerializeField] private Image albumArt;
     [SerializeField] private AudioClip audioClip;
     [SerializeField] private VideoClip musicVideo;
+    [SerializeField] private bool hasBMS = false;
     [Header("기록 관련 정보")]
     [SerializeField] private string score;
     [SerializeField] private string accuracy;
@@ -32,6 +33,7 @@ public class Music_Item : MonoBehaviour
     public Image Album { get { return albumArt; } set { albumArt = value; } }
     public AudioClip Audio { get { return audioClip;  }set { audioClip = value; } }
     public VideoClip MuVi { get { return musicVideo; } set { musicVideo = value; } }
+    public bool HasBMS { get { return hasBMS; } set { hasBMS = value; } }
     public string Score { get { return score; } set { score = value; } }
     public string Accuracy { get { return accuracy; } set { accuracy = value; } }
     public string Combo { get { return combo; } set { combo = value; } }

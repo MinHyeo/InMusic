@@ -109,6 +109,7 @@ public class ResourceManager
                     /*tmpMusic.Title = tmpBMS.header.title;
                     tmpMusic.Artist = tmpBMS.header.artist;
                     tmpMusic.Rank = tmpBMS.header.rank.ToString();*/
+                    tmpMusic.HasBMS = true;
                 }
 
                 //2. 음원 파일 열기 (필수)
