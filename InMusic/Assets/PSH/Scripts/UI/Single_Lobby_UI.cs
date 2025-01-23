@@ -190,6 +190,7 @@ public class Single_Lobby_UI : UI_Base
         oldItem.Artist.text = newItem.Artist.text;
         oldItem.Length = newItem.Length;
         oldItem.Album.sprite = newItem.Album.sprite;
+        oldItem.Audio = newItem.Audio;
         oldItem.MuVi = newItem.MuVi;
         oldItem.Score = newItem.Score;
         oldItem.Accuracy = newItem.Accuracy;
