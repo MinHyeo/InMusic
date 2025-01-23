@@ -11,7 +11,7 @@ public class ResourceManager
 {
     string appPath = Application.dataPath;
     string mDataPath = "Assets/Resources/Music";
-    GameObject ItemPool;
+    GameObject musicDataRoot;
 
     public T Load<T>(string path) where T : Object
     {
@@ -52,10 +52,10 @@ public class ResourceManager
         return JsonUtility.FromJson<MusicLog>(jsonText.text);
     }
 
-    public List<Music_Item> GetMusicList() {
-        ItemPool = new GameObject("ItemPool");
+    public List<MusicData> GetMusicList() {
+        musicDataRoot = new GameObject("musicDataRoot");
 
-        List<Music_Item> mList = new List<Music_Item>();
+        List<MusicData> mList = new List<MusicData>();
         //경로 설정
         string fullPath = appPath + mDataPath.Replace("Assets", "");
         //음악 개수
@@ -79,8 +79,15 @@ public class ResourceManager
         result = min > numOfMusic ? min : numOfMusic;
         for (int i = 0; i < result; i++)
         {
-            GameObject item = Instantiate("Music", ItemPool.transform);
-            Music_Item tmpMusic = item.GetComponent<Music_Item>();
+            GameObject item = Instantiate("MusicDataBox", musicDataRoot.transform);
+            MusicData tmpMusic = item.GetComponent<MusicData>();
+
+            //BMS내용 임시
+            {
+                tmpMusic.Title = $"{i + 1} 제목";
+                tmpMusic.Artist = $"{i + 1} 작곡가";
+                tmpMusic.Rank = "-";
+            }
 
             //최값보다 음악의 수가 적으면 파일 Load 안함
             if (i < numOfMusic) {
@@ -91,7 +98,7 @@ public class ResourceManager
                                           .Where(file => !file.EndsWith(".meta")) //.meta파일 제외
                                           .ToArray();
                 Dictionary<string, string> fileMap = FileMapping(files);
-                
+
                 /*for (int j = 0; j < files.Length; j++) {
                     UnityEngine.Debug.Log($"{j}번째 파일 이름: {files[j]}");
                 }*/
@@ -99,9 +106,9 @@ public class ResourceManager
                 //1. BMS 파일 열기 (필수)
                 if (fileMap.ContainsKey("bms")) {
                     //BMSData tmpBMS = BMSManager.Instance.ParseBMS(fileMap["bms"]);
-                    //tmpMusic.Title.text = tmpBMS.header.title;
-                    //tmpMusic.Artist.text = tmpBMS.header.artist;
-                    //tmpMusic.Rank.text = tmpBMS.header.rank.ToString();
+                    /*tmpMusic.Title = tmpBMS.header.title;
+                    tmpMusic.Artist = tmpBMS.header.artist;
+                    tmpMusic.Rank = tmpBMS.header.rank.ToString();*/
                 }
 
                 //2. 음원 파일 열기 (필수)
@@ -115,9 +122,9 @@ public class ResourceManager
 
                 //3. 엘범 사진 열기 (선택)
                 if (fileMap.ContainsKey("album"))
-                    tmpMusic.Album.sprite = Load<Sprite>(fileMap["album"]);
+                    tmpMusic.Album = Load<Sprite>(fileMap["album"]);
                 else //사진이 없으면 기본 사진 사용
-                    tmpMusic.Album.sprite = Load<Sprite>("Default_IMG");
+                    tmpMusic.Album = Load<Sprite>("Default_IMG");
 
 
                 //4. 기록 파일 열기 (선택)

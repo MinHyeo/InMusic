@@ -15,7 +15,7 @@ public class Single_Lobby_UI : UI_Base
     [SerializeField] private Text[] logData = new Text[4];
     [Tooltip("스크롤 관련 변수")]
     [SerializeField] private RectTransform contentPos;
-    [SerializeField] List<Music_Item> musicList = new List<Music_Item>();
+    [SerializeField] List<MusicData> musicList = new List<MusicData>();
     private float itemGap = 40.0f;
     private int numOfitems;
     [SerializeField] private int startIndex = 0;
@@ -185,17 +185,17 @@ public class Single_Lobby_UI : UI_Base
         StartCoroutine(SmoothScrollMove());
     }
 
-    void UpdateItems(Music_Item oldItem, Music_Item newItem) {
-        oldItem.Title.text = newItem.Title.text;
-        oldItem.Artist.text = newItem.Artist.text;
+    void UpdateItems(Music_Item oldItem, MusicData newItem) {
+        oldItem.Title.text = newItem.Title;
+        oldItem.Artist.text = newItem.Artist;
         oldItem.Length = newItem.Length;
-        oldItem.Album.sprite = newItem.Album.sprite;
+        oldItem.Album.sprite = newItem.Album;
         oldItem.Audio = newItem.Audio;
         oldItem.MuVi = newItem.MuVi;
         oldItem.Score = newItem.Score;
         oldItem.Accuracy = newItem.Accuracy + "%";
         oldItem.Combo = newItem.Combo;
-        oldItem.Rank.text = newItem.Rank.text;
+        oldItem.Rank.text = newItem.Rank;
     }
 
     //부드럽게 이동: 스크롤/마우스 조작

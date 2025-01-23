@@ -38,25 +38,6 @@ public class Music_Item : MonoBehaviour
     public Text Rank { get { return rank; } set { rank = value; } }
     #endregion
 
-    void Awake()
-    {
-         Initialize();
-    }
-
-    //기본값 설정
-    public void Initialize()
-    {
-        //Debug.Log(gameObject.name + "초기화");
-        title.text = "Title";
-        artist.text = "Artist";
-        length = "00:00";
-        musicVideo = null;
-        score = "0";
-        accuracy = "0";
-        combo = "0";
-        rank.text = "-";
-    }
-
     /*
     //List에서 Item값 바꿀 때 사용할 메서드
     public void SetData(string newTitle = "Title", string newArtist = "Artist", string newLength = "00:00",

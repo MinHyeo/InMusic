@@ -3,6 +3,7 @@ using UnityEngine.Video;
 
 public class MusicData : MonoBehaviour
 {
+    /*MusicDataBox Prefab의 Inspactor창에서 기본값 할당*/
     [Header("음악 관련 정보")]
     [SerializeField] private string title;
     [SerializeField] private string artist;
