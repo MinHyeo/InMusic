@@ -78,12 +78,28 @@ namespace SongList
                 _songList.Add(slotSong);
             }
 
+            int rememeberedIndex = IndexSaveTest.Instance.GetLastSelectedIndex();
+            Debug.Log($"[SongListManager] Remembered Index: {rememeberedIndex}");
+
+            //TODO: 아래 주석 풀고, 맨 밑에 있는 연산 식 확인
+            // 현재 선택된 슬롯 위의 내용들이 사라지면서 그 다음항목부터 보이는 것으로 추정됨
             // 초기 스냅 + 재배치
             SnapToNearestSlot();
             OnScroll();
 
             // 중앙 슬롯 즉시 하이라이트
             HighlightCenterSlotByPosition(isImmediate: true);
+
+            // if (rememeberedIndex >= 0) {
+            //     ForceCenterAtIndex(rememeberedIndex);
+            // } else {
+            //     // 초기 스냅 + 재배치
+            //     SnapToNearestSlot();
+            //     OnScroll();
+
+            //     // 중앙 슬롯 즉시 하이라이트
+            //     HighlightCenterSlotByPosition(isImmediate: true);
+            // }
         }
         
         private void Update() {
@@ -285,6 +301,36 @@ namespace SongList
                 slot.SetData(currentSong, songIndex);
             }
         }
+
+        // private void ForceCenterAtIndex(int index) {
+        //     int realIndex = ((index % _totalSongCount) + _totalSongCount) % _totalSongCount;
+        //     float newY = realIndex * _itemHeight;
+        //     _contentRect.anchoredPosition = new Vector2(0, -newY);
+        //     OnScroll();
+        //     HighlightCenterSlotByPosition(true);
+        // }
+
+        /// <summary>
+        /// 특정 곡 인덱스를 "가운데"에 오도록 contentRect 위치를 강제 세팅
+        /// 그리고 슬롯 재배치 + 하이라이트까지 연결
+        /// </summary>
+        // private void ForceCenterAtIndex(int index)
+        // {
+        //     // 1) “index”에 해당하는 슬롯이 화면 중앙에 오도록, contentRect를 이동
+        //     //    아래는 예시 계산이며, 프로젝트 구조에 맞게 조정 필요
+        //     float topOffset = 93f * _bufferItems; 
+        //     float y = -(index * _itemHeight) + topOffset;
+
+        //     // anchoredPosition 즉시 세팅
+        //     _contentRect.anchoredPosition = new Vector2(0, y);
+            
+        //     // 2) 슬롯 재배치
+        //     OnScroll();  
+        //     // 내부에서 ShiftSlots()가 실행되어, 실제 배열 인덱스 → 슬롯 위치 등이 업데이트됨
+
+        //     // 3) 즉시 하이라이트
+        //     HighlightCenterSlotByPosition(true);
+        // }
         #endregion
     }
 }

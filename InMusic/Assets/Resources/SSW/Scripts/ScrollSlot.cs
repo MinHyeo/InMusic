@@ -129,6 +129,8 @@ namespace SongList {
             if (_isHighlighted) {
                 if (_currentData != null) {
                 Debug.Log($"[ScrollSlot] GetHighlightedSong: {_currentData.Title}");
+                IndexSaveTest.Instance.SelectSong(_currentIndex);
+                Debug.Log($"[ScrollSlot] GetHighlightedSong: {_currentIndex}");
                 return _currentData;
                 }
             }

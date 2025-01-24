@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("YMH");
 
         Enum.TryParse(SongTitle, out Song song);
-        SceneManager.sceneLoaded += OnPlaySceneLoaded;  //¿ÉÀú¹ö ÆÐÅÏ
+        SceneManager.sceneLoaded += OnPlaySceneLoaded;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     }
 
     private void OnPlaySceneLoaded(Scene scene, LoadSceneMode mode)
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
         if (scene.name == "PlayScene")
         {
             PlayManager.Instance.StartGame(Song.Heya);
-            SceneManager.sceneLoaded -= OnPlaySceneLoaded; // ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦
+            SceneManager.sceneLoaded -= OnPlaySceneLoaded; // ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
     }
 
