@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public BMSData curBMS;
+    public string resourcePath;
 
     public int totalNotes; // 총 노트 개수
     private float maxScorePerNote; // 노트 하나당 최대 점수
@@ -32,9 +33,6 @@ public class GameManager : MonoBehaviour
     public int combo = 0; //현재 콤포
 
 
-    
-
-    [SerializeField] VideoPlayer videoPlayer;
     [SerializeField] PlayUI playUI;
     [SerializeField] SinglePlayResultUI resultUI;
     [SerializeField] GameObject pauseUI;
@@ -59,9 +57,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        string musicName = GameManager_PSH.Instance.GetSelectedMusic();
-        Debug.Log(musicName);
-        SetBMS(musicName); //지정된 노래 //BMS파일을 만들때 노래가 시작되는 지점에 WAV02 노트로 찍어놔야함.(노트생성시 필요)
+        //string musicName = GameManager_PSH.Instance.GetSelectedMusic(); //노래 선택 씬에서 선택한 노래이름 받아옴.
+        //Debug.Log(musicName);
+        string path = "Music_KGB/Heya"; //임시경로, 경로를 받았을때 세팅 
+        SetResourcePath(path);
+        SetBMS(path); //지정된 노래 //BMS파일을 만들때 노래가 시작되는 지점에 WAV02 노트로 찍어놔야함.(노트생성시 필요)
 
         playManager = GetComponent<PlayManager>();
         playManager.SetResources(); // 노래 리소스 세팅
@@ -70,9 +70,16 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void SetBMS(string music)
+    public void SetBMS(string path)
     {
-        curBMS = BMSManager.Instance.ParseBMS(music); //BMS 파싱 
+        //curBMS = BMSManager.Instance.ParseBMS(music); //BMS 파싱 //노래 이름 받을때 쓴거
+        Debug.Log(path + "/BMS");
+        curBMS = BMSManager.Instance.ParseBMS(path+"/BMS");
+        
+    }
+    public void SetResourcePath(string path) //선택한 노래 경로받아서 저장
+    {
+        resourcePath = path;
     }
 
    public void InitializeGame()
@@ -86,11 +93,22 @@ public class GameManager : MonoBehaviour
         totalNotesPlayed = 0;
         accuracy = 100f; // 초기 정확도
         curHP = maxHP;
+        greatCount = 0; //Great 횟수
+        goodCount = 0;  //Good 횟수
+        badCount = 0;   //bad 획수
+        missCount = 0;  //miss 횟수
+        maxCombo = 0;   //최대 콤보수
+        combo = 0; //현재 콤포
+
         if (playManager.musicSound.clip.loadState == AudioDataLoadState.Unloaded)
         {
             playManager.musicSound.clip.LoadAudioData(); // 오디오 데이터를 미리 로드
         }
-        videoPlayer.Prepare();
+        if(playManager.videoPlayer.clip != null)
+        {
+            playManager.videoPlayer.Prepare();
+        }
+
         StartGame();
         Debug.Log("Game Initialized");
     }
@@ -168,7 +186,8 @@ public class GameManager : MonoBehaviour
     }
     public void StartMusic()
     {
-        videoPlayer.Play();
+        if (playManager.videoPlayer.clip != null)
+            playManager.videoPlayer.Play();
         playManager.musicSound.Play();
     }
 
@@ -195,7 +214,8 @@ public class GameManager : MonoBehaviour
         playUI.countText.text = "";
         Time.timeScale = 1f;
         playManager.musicSound.Play();
-        videoPlayer.Play();
+        if (playManager.videoPlayer.clip != null)
+            playManager.videoPlayer.Play();
      }
 
     public void PauseGame()
@@ -204,7 +224,8 @@ public class GameManager : MonoBehaviour
         pauseUI.SetActive(true);
         Time.timeScale = 0f;
         playManager.musicSound.Pause();
-        videoPlayer.Pause();
+        if (playManager.videoPlayer.clip != null)
+            playManager.videoPlayer.Pause();
     }
     public void ResumeGame()
     {

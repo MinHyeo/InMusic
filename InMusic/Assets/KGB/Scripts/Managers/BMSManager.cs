@@ -48,8 +48,10 @@ public class BMSManager : MonoBehaviour
     public BMSData ParseBMS(string fileName)
     {
         BMSData bmsData = new BMSData();
+        
+        TextAsset bmsFile = Resources.Load<TextAsset>($"{fileName}"); //폴더 경로 수정 필요
+        //TextAsset bmsFile2 = Resources.Load<TextAsset>($"Music/BMS_{fileName}"); //폴더 테스트경로
 
-        TextAsset bmsFile = Resources.Load<TextAsset>($"BMS/{fileName}");
         if (bmsFile == null)
         {
             Debug.LogError($"BMS 못 찾음: {fileName}");

@@ -7,7 +7,7 @@ public class PlayManager : MonoBehaviour
     [SerializeField] VideoClip playBackgroundVideo;
     [SerializeField] Image playBackgroundImage;
 
-    [SerializeField] VideoPlayer videoPlayer;
+    public VideoPlayer videoPlayer;
     public AudioSource hitSound;
     public AudioSource musicSound;
     void Awake()
@@ -47,7 +47,7 @@ public class PlayManager : MonoBehaviour
     {
         //선택한 노래 리소스 세팅
         string musicName = GameManager.Instance.curBMS.wavInfo.wav;
-        string path = $"Sound/Music/{musicName}";
+        string path = $"{GameManager.Instance.resourcePath}/{musicName}";
         musicSound.clip = Resources.Load<AudioClip>(path);
         Debug.Log(path);
     }
@@ -62,6 +62,23 @@ public class PlayManager : MonoBehaviour
     
     void SetBackground()
     {
-
+        string musicName = GameManager.Instance.curBMS.wavInfo.wav;
+        string path = GameManager.Instance.resourcePath + $"/Back_{musicName}";
+        Debug.Log(path);
+        playBackgroundVideo = Resources.Load<VideoClip>(path);
+        if (playBackgroundVideo != null) {
+            videoPlayer.clip = playBackgroundVideo;
+        }
+        else if (playBackgroundVideo == null) {
+            Sprite backgroundSprite = Resources.Load<Sprite>(path);
+        if (backgroundSprite != null)
+        {
+            playBackgroundImage.sprite = backgroundSprite;
+        }
+        else
+        {
+            Debug.LogError($"'{path}' 경로에서 VideoClip 또는 Sprite 파일을 찾을 수 없습니다.");
+        }
+        }
     }
 }

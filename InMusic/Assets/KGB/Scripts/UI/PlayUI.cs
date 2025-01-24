@@ -9,6 +9,7 @@ public class PlayUI : MonoBehaviour
     [SerializeField] Slider hpBar;
     [SerializeField] TextMeshProUGUI comboText; // 콤보 표시 텍스트
     [SerializeField] GameObject[] judgeText;
+    public Image BackImage;
     public TextMeshProUGUI countText;
 
     void Start()
