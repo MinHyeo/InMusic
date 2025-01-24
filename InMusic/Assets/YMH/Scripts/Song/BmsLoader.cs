@@ -16,6 +16,17 @@ public enum Song
     Magnetic = 7,
     Sticky = 8,
     Supernova = 9,
+    dummy10 = 10,
+    dummy11 = 11,
+    dummy12 = 12,
+    dummy13 = 13,
+    dummy14 = 14,
+    dummy15 = 15,
+    dummy16 = 16,
+    dummy17 = 17,
+    dummy18 = 18,
+    dummy19 = 19,
+    dummy20 = 20,
 }
 
 [System.Serializable]
@@ -56,6 +67,31 @@ public class BmsLoader : SingleTon<BmsLoader>
         SelectSong(Song.Heya);
     }
 
+    // public SongInfo SelectSong(Song song)
+    // {
+    //     tempStr = "";
+    //     StrText = "";
+    //     songName = "";
+    //     path = "Assets/Resources/Song/";
+    //     seps = new char[] { ' ', ':' };
+
+    //     songName = song.ToString();
+    //     path += songName + "/";
+    //     fileName = new FileInfo(path + song.ToString() + ".bms");
+
+    //     if (fileName != null)
+    //     {
+    //         reader = fileName.OpenText();
+    //     }
+    //     else
+    //     {
+    //         Debug.Log("������ �����ϴ�.");
+    //     }
+
+    //     songInfo = ParseBMS();
+
+    //     return songInfo;
+    // }
     public SongInfo SelectSong(Song song)
     {
         tempStr = "";
@@ -68,19 +104,40 @@ public class BmsLoader : SingleTon<BmsLoader>
         path += songName + "/";
         fileName = new FileInfo(path + song.ToString() + ".bms");
 
-        if (fileName != null)
+        if (!fileName.Exists) // 디렉토리나 파일이 없는 경우 처리
         {
-            reader = fileName.OpenText();
-        }
-        else
-        {
-            Debug.Log("������ �����ϴ�.");
+            Debug.LogWarning($"File not found: {fileName.FullName}. Returning dummy data for testing.");
+            return GenerateDummyData(songName);
         }
 
+        reader = fileName.OpenText();
         songInfo = ParseBMS();
 
         return songInfo;
     }
+
+    private SongInfo GenerateDummyData(string songName)
+    {
+        // 테스트용 기본 SongInfo 데이터를 생성
+        SongInfo dummyData = new SongInfo
+        {
+            Title = songName,
+            Artist = "Unknown Artist",
+            Genre = "Test Genre",
+            BPM = 120,
+            PlayLevel = 5,
+            Rank = 1,
+            NoteList = new List<NoteData>
+            {
+                new NoteData { bar = 1, channel = 1, noteData = new List<int> { 1, 2, 3 } },
+                new NoteData { bar = 2, channel = 2, noteData = new List<int> { 4, 5, 6 } }
+            },
+            NoteCount = 2
+        };
+
+        return dummyData;
+    }
+
 
     private SongInfo ParseBMS()
     {
