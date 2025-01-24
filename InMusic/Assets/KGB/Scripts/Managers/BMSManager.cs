@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
@@ -48,10 +47,8 @@ public class BMSManager : MonoBehaviour
     public BMSData ParseBMS(string fileName)
     {
         BMSData bmsData = new BMSData();
-        
-        TextAsset bmsFile = Resources.Load<TextAsset>($"{fileName}"); //폴더 경로 수정 필요
-        //TextAsset bmsFile2 = Resources.Load<TextAsset>($"Music/BMS_{fileName}"); //폴더 테스트경로
 
+        TextAsset bmsFile = Resources.Load<TextAsset>(fileName);
         if (bmsFile == null)
         {
             Debug.LogError($"BMS 못 찾음: {fileName}");
@@ -111,13 +108,9 @@ public class BMSManager : MonoBehaviour
         {
             bmsData.header.LNType = int.Parse(line.Split(' ')[1]);
         }
-        else if (line.StartsWith("#WAV02"))
+        else if (line.StartsWith("#WAV"))
         {
-            //BMS에서 사용된 음원 파일 이름 세팅
-            string fileName = line.Split(' ')[1];
-            string result = Path.GetFileNameWithoutExtension(fileName);
-            Debug.Log(result);
-            bmsData.wavInfo.wav = result;
+            // WAV 처리
         }
         else
         {

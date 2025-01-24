@@ -34,6 +34,10 @@ public class InputManager
     /// </summary>
     public void UIUpdate()
     {
+        if (uIKeyPress == null) {
+            return;
+        }
+
         if (isSetMode) {
             KeyCode newKey = FindKeyPress();
             if (newKey != KeyCode.None && newKey != KeyCode.Escape && newKey != KeyCode.KeypadEnter) {
