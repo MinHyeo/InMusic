@@ -89,6 +89,10 @@ public class Single_Lobby_UI : UI_Base
                 if (curMusicItem.GetComponent<Music_Item>().HasBMS) {
                     //키 입력 이벤트 제거
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
+                    GameManager_PSH.Instance.GetComponent<MusicData>().BMS = curMusicItem.GetComponent<Music_Item>().Data.BMS;
+                    GameManager_PSH.Instance.GetComponent<MusicData>().Album = curMusicItem.GetComponent<Music_Item>().Album.sprite;
+                    GameManager_PSH.Instance.GetComponent<MusicData>().Audio = curMusicItem.GetComponent<Music_Item>().Audio;
+                    GameManager_PSH.Instance.GetComponent<MusicData>().MuVi = curMusicItem.GetComponent<Music_Item>().MuVi;
                     SceneManager.LoadScene(1);
                 }
                 else
@@ -196,8 +200,11 @@ public class Single_Lobby_UI : UI_Base
     }
 
     void UpdateItems(Music_Item oldItem, MusicData newItem) {
-        oldItem.Title.text = newItem.Title;
-        oldItem.Artist.text = newItem.Artist;
+        //Debug.Log(newItem.BMS.header.title);
+        if (newItem.HasBMS) {
+            oldItem.Title.text = newItem.BMS.header.title;
+            oldItem.Artist.text = newItem.BMS.header.artist;
+        }
         oldItem.Length = newItem.Length;
         oldItem.Album.sprite = newItem.Album;
         oldItem.Audio = newItem.Audio;
@@ -207,6 +214,8 @@ public class Single_Lobby_UI : UI_Base
         oldItem.Accuracy = newItem.Accuracy + "%";
         oldItem.Combo = newItem.Combo;
         oldItem.Rank.text = newItem.Rank;
+
+        oldItem.Data = newItem;
     }
 
     //부드럽게 이동: 스크롤/마우스 조작

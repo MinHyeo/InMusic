@@ -10,7 +10,11 @@ public class GameManager_PSH : MonoBehaviour
     public static InputManager Input { get { return Instance.M_Input; } }
 
     ResourceManager M_Resource = new ResourceManager();
+
     public static ResourceManager Resource { get { return Instance.M_Resource; } }
+
+    BMSManager M_BMS = new BMSManager();
+    public static BMSManager BMS { get { return Instance.M_BMS; } }
     #endregion
 
     static void Init()
@@ -22,9 +26,11 @@ public class GameManager_PSH : MonoBehaviour
             {
                 gmObject = new GameObject { name = "GameManager_PSH" };
                 gmObject.AddComponent<GameManager_PSH>();
+                gmObject.AddComponent<MusicData>();
             }
             DontDestroyOnLoad(gmObject);
             GM_Instance = gmObject.GetComponent<GameManager_PSH>();
+
 
             GM_Instance.M_Input.Init();
         }

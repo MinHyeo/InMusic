@@ -24,6 +24,7 @@ public class Music_Item : MonoBehaviour
     [SerializeField] private Color wMint = new Color(104.0f, 240.0f, 235.0f, 0.08f);
     [SerializeField] private Color sMint = new Color(57, 255, 255, 1.0f);
     [SerializeField] private Color purple = new Color(155.0f, 48.0f, 255.0f, 1.0f);
+    [SerializeField] public MusicData mData;
 
 
     #region Get/Set
@@ -38,6 +39,7 @@ public class Music_Item : MonoBehaviour
     public string Accuracy { get { return accuracy; } set { accuracy = value; } }
     public string Combo { get { return combo; } set { combo = value; } }
     public Text Rank { get { return rank; } set { rank = value; } }
+    public MusicData Data { get { return mData; }set { mData = value; } }
     #endregion
 
     /*

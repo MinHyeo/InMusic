@@ -82,19 +82,19 @@ public class ResourceManager
             GameObject item = Instantiate("MusicDataBox", musicDataRoot.transform);
             MusicData tmpMusic = item.GetComponent<MusicData>();
 
-            //BMS내용 임시
+            /*//BMS내용 임시
             {
                 tmpMusic.Title = $"{i + 1} 제목";
                 tmpMusic.Artist = $"{i + 1} 작곡가";
                 tmpMusic.Rank = "-";
-            }
+            }*/
 
             //최값보다 음악의 수가 적으면 파일 Load 안함
             if (i < numOfMusic) {
                 //파일들 이름 가져오기
                 string[] files = Directory.GetFiles(mTitles[i])
                                           //LINQ문 (Language-Integrated Query)
-                                          .Select(file=> file.Replace("\\", "/"))
+                                          .Select(file => file.Replace("\\", "/"))
                                           .Where(file => !file.EndsWith(".meta")) //.meta파일 제외
                                           .ToArray();
                 Dictionary<string, string> fileMap = FileMapping(files);
@@ -105,12 +105,18 @@ public class ResourceManager
 
                 //1. BMS 파일 열기 (필수)
                 if (fileMap.ContainsKey("bms")) {
-                    //BMSData tmpBMS = BMSManager.Instance.ParseBMS(fileMap["bms"]);
-                    /*tmpMusic.Title = tmpBMS.header.title;
-                    tmpMusic.Artist = tmpBMS.header.artist;
-                    tmpMusic.Rank = tmpBMS.header.rank.ToString();*/
+                    tmpMusic.BMS = GameManager_PSH.BMS.ParseBMS(fileMap["bms"]);
+                    UnityEngine.Debug.Log(tmpMusic.Title);
+                    //UnityEngine.Debug.Log("BMS 파일 찾음");
                     tmpMusic.HasBMS = true;
                 }
+                //else
+                //{
+                //    tmpMusic.BMS = new BMSData();
+                //    tmpMusic.BMS.header.title = $"{i + 1}번째 음악";
+                //    UnityEngine.Debug.Log(tmpMusic.BMS.header.title);
+                //    tmpMusic.BMS.header.artist = $"{i + 1}번째 작곡가";
+                //}
 
                 //2. 음원 파일 열기 (필수)
                 if (fileMap.ContainsKey("audio")) { 
@@ -162,7 +168,7 @@ public class ResourceManager
             //UnityEngine.Debug.Log(filePath);
 
             //BMS
-            if (fileExt == ".bms") 
+            if (fileExt == ".txt") 
                 fileMap["bms"] = filePath;
             //음원 파일
             else if (fileExt == ".wav" || fileExt == ".mp3" || fileExt == ".ogg")
