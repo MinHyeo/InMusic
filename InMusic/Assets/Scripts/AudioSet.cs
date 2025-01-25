@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AudioSettings : MonoBehaviour
+public class AudioSet : MonoBehaviour
 {
     // Scrollbars for volume control
     public Scrollbar masterVolumeScrollbar;
@@ -30,12 +30,12 @@ public class AudioSettings : MonoBehaviour
 
         UpdateMasterVolume();
         UpdateSFXVolume();
-        //UpdateBGMVolume();
+        UpdateBGMVolume();
 
         // Add listeners for scrollbars
         masterVolumeScrollbar.onValueChanged.AddListener(delegate { UpdateMasterVolume(); });
         sfxVolumeScrollbar.onValueChanged.AddListener(delegate { UpdateSFXVolume(); });
-        //bgmVolumeScrollbar.onValueChanged.AddListener(delegate { UpdateBGMVolume(); });
+        bgmVolumeScrollbar.onValueChanged.AddListener(delegate { UpdateBGMVolume(); });
     }
 
     // Update Master Volume
@@ -58,13 +58,13 @@ public class AudioSettings : MonoBehaviour
     }
 
     // Update BGM Volume
-    //public void UpdateBGMVolume()
-    //{
-    //    bgmVolume = bgmVolumeScrollbar.value;
-    //    if (bgmAudioSource != null)
-    //    {
-    //        bgmAudioSource.volume = bgmVolume; // Sets BGM volume
-    //    }
-    //    bgmVolumeText.text = Mathf.RoundToInt(bgmVolume * 100) + "%";
-    //}
+    public void UpdateBGMVolume()
+    {
+        bgmVolume = bgmVolumeScrollbar.value;
+        if (bgmAudioSource != null)
+        {
+            bgmAudioSource.volume = bgmVolume; // Sets BGM volume
+        }
+        bgmVolumeText.text = Mathf.RoundToInt(bgmVolume * 100) + "%";
+    }
 }
