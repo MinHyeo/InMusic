@@ -21,8 +21,13 @@ namespace Play
 
     public class NoteManager : SingleTon<NoteManager>
     {
+        [Header("Prefabs")]
         [SerializeField]
-        private GameObject notePrefab;
+        private GameObject note1Prefab;
+        [SerializeField]
+        private GameObject note2Prefab;
+
+        [Header("Note datas")]
         [SerializeField]
         private Transform[] noteSpawnPoints; // 각 채널별 노트 생성 위치
         [SerializeField]
@@ -40,6 +45,11 @@ namespace Play
 
         public void InitializeNotes(SongInfo songInfo)
         {
+            //노트 오브젝트풀 생성
+            ObjectPoolManager.Instance.CreatePool(note1Prefab);
+            ObjectPoolManager.Instance.CreatePool(note2Prefab);
+
+            // 노트 데이터 초기화
             noteDataList = songInfo.NoteList;
             noteCount = songInfo.NoteCount;
 
@@ -99,12 +109,31 @@ namespace Play
             yield return new WaitForSeconds(spawnTime - Time.time);
 
             // 노트 생성
-            //var note = ObjectPool.Instance.Pool.Get();
-            GameObject note = Instantiate(notePrefab, noteSpawnPoints[channel - 11].position, Quaternion.identity);
+            var note = GetNote(channel);
+            note.transform.position = noteSpawnPoints[channel - 11].position;
+            //GameObject note = Instantiate(notePrefab, noteSpawnPoints[channel - 11].position, Quaternion.identity);
             Note noteScript = note.GetComponent<Note>();
 
             NoteList.Add(noteScript);
             noteScript.Initialize(channel, noteSpeed, travelTime, 1000000 / noteCount);
+        }
+
+        private GameObject GetNote(int channel)
+        {
+            GameObject note = null;
+            switch (channel)
+            {
+                case 11:
+                case 14:
+                    note = ObjectPoolManager.Instance.GetFromPool("note1Prefab");
+                    break;
+                case 12:
+                case 13:
+                    note = ObjectPoolManager.Instance.GetFromPool("note2Prefab");
+                    break;
+            }
+
+            return note;
         }
 
         public void RemoveNoteFromActiveList(Note note)
