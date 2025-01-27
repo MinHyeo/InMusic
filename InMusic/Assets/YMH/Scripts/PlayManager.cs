@@ -106,6 +106,10 @@ namespace Play
             videoPlayScript.GetVideoClip(songName);
             metronome.CalculateSync();
 
+            //점수 관련 초기화
+            score = 0;
+            comboScript.Init();
+
             //텍스트 초기화
             scoreText.text = "0";
             accuracyText.text = "0.00%";
@@ -268,15 +272,19 @@ namespace Play
         public void ReStart()
         {
             Time.timeScale = 1;
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
             //fade in-out
 
             //영상 초기화
             videoPlayScript.End();
             //노래 초기화
-            //점수 초기화
+            SoundManager.Instance.End();
+            //노트 초기화
+            NoteManager.Instance.RemoveAllNote();
+
+
             //재시작
+            StartGame(songName);
         }
 
         //노래 종료

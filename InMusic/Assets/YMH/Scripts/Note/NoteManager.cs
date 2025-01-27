@@ -136,11 +136,17 @@ namespace Play
             return note;
         }
 
+        public void RemoveAllNote()
+        {
+           
+        }
+
         public void RemoveNoteFromActiveList(Note note)
         {
             if (NoteList.Contains(note))
             {
                 NoteList.Remove(note);
+                ObjectPoolManager.Instance.ReleaseToPool(note.gameObject.name, note.gameObject);
             }
         }
 

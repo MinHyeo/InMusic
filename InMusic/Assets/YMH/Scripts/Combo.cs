@@ -27,9 +27,16 @@ namespace Play
 
         //시간 변수
         private float currentTime = 0.0f;
-        private float showTime = 1f;
+        private const float showTime = 1f;
 
         private bool isShow = false;
+
+        public void Init()
+        {
+            currentTime = 0;
+            combo = 0;
+            maxCombo = 0;
+        }
 
         //초기화
         private void Start()
