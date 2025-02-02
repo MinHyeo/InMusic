@@ -201,7 +201,7 @@ namespace Play
 
             foreach (Note note in NoteManager.Instance.NoteList)
             {
-                if (note.channel == channel)
+                if (note.Channel == channel)
                 {
                     float timeDifference = Mathf.Abs(note.targetTime - pressTime);
                     if (timeDifference < minTimeDifference)
@@ -280,7 +280,7 @@ namespace Play
             //노래 초기화
             SoundManager.Instance.End();
             //노트 초기화
-            NoteManager.Instance.RemoveAllNote();
+            NoteManager.Instance.Restart();
 
 
             //재시작

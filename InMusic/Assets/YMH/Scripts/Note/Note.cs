@@ -7,19 +7,24 @@ namespace Play
     {
         public IObjectPool<GameObject> Pool { get; set; }
 
-        public int channel;
+        //노트 변수
+        private int channel;
         private float speed;
-        private float travelTime;
-        public float noteScore;
+        private float noteScore;
 
         public float targetTime;
 
-        public void Initialize(int channel, float noteSpeed, float travelTime, float noteScore)
+        //외부 접근용 변수
+        public int Channel { get { return channel; } }
+        public float Speed { get { return speed; } }
+        public float NoteScore { get { return noteScore; } }
+
+        public void Initialize(int channel, float speed, float noteScore, float travelTime)
         {
             this.channel = channel;
-            this.speed = noteSpeed;
-            this.targetTime = travelTime + Time.time;
+            this.speed = speed;
             this.noteScore = noteScore;
+            targetTime = travelTime + Time.time;
         }
 
         private void Update()
