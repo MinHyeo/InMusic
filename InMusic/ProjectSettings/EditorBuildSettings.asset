@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Resources/SSW/Scenes/Test Scenes/Test1.unity
+    guid: a62edb2f3575da54ba3430e7a9e859ab
+  - enabled: 1
+    path: Assets/Resources/SSW/Scenes/Test Scenes/Test2.unity
+    guid: a183413865554c2479606022313e6086
+  - enabled: 1
     path: Assets/PSH/Scene/Main_Lobby_PSH.unity
     guid: d0551487d6bb03640bc45f254fa6eabd
   - enabled: 1
