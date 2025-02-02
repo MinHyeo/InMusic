@@ -37,6 +37,7 @@ namespace Play
         private int noteCount;
         public List<Note> NoteList = new List<Note>();
         private List<NoteData> noteDataList;
+        private List<Coroutine> coroutines = new List<Coroutine>();
         private float songStartTime;
 
         private float measureInterval;  // 한 마디 간격 (4/4박자 기준)
@@ -126,7 +127,7 @@ namespace Play
                         float spawnTime = songStartTime + noteAppearTime - travelTime;
 
                         // 노트 생성 예약 (코루틴 실행)
-                        StartCoroutine(SpawnNoteCoroutine(channel, spawnTime));
+                        coroutines.Add(StartCoroutine(SpawnNoteCoroutine(channel, spawnTime)));
                     }
                 }
 
@@ -148,7 +149,6 @@ namespace Play
             // 노트 생성
             var note = GetNote(channel);
             note.transform.position = noteSpawnPoints[channel - 11].position;
-            //GameObject note = Instantiate(notePrefab, noteSpawnPoints[channel - 11].position, Quaternion.identity);
             Note noteScript = note.GetComponent<Note>();
 
             NoteList.Add(noteScript);
@@ -157,7 +157,10 @@ namespace Play
 
         public void Restart()
         {
-            StopCoroutine("SpawnNoteCoroutine");
+            foreach(Coroutine coroutine in coroutines)
+            {
+                StopCoroutine(coroutine);
+            }
             foreach (Note note in NoteList)
             {
                 ObjectPoolManager.Instance.ReleaseToPool(note.gameObject.name, note.gameObject);

@@ -155,6 +155,7 @@ namespace Play
             if (closestNote != null)
             {
                 float timeDifference = Mathf.Abs(pressTime - closestNote.targetTime);
+                Debug.Log(timeDifference);
 
                 if (timeDifference <= greateThreshold)
                 {
@@ -217,6 +218,7 @@ namespace Play
 
         public void HandleNoteHit(Note note, AccuracyType accuracyResult, float percent)
         {
+            Debug.Log(accuracyResult.ToString());
             float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
 
             //점수 계산
