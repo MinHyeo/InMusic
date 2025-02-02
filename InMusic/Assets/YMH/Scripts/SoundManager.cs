@@ -47,6 +47,9 @@ namespace Play
 
         public void SongInit(string songName)
         {
+            //FMOD 초기화
+            Init();
+
             //노래 불러오기
             string path = "Assets/Resources/Song/" + songName + "/" + songName + ".ogg";
             FMOD.RESULT result = fmodSystem.createSound(path, FMOD.MODE.DEFAULT, out musicSound);
@@ -75,7 +78,6 @@ namespace Play
             if (!isPlaying)
                 OnMusicEnd();
 
-
             fmodSystem.update();
         }
 
@@ -87,8 +89,11 @@ namespace Play
 
         public void End()
         {
+            musicChannel.stop();
             musicChannelGroup.release();
+
             musicSound.release();
+
             fmodSystem.close();
             fmodSystem.release();
 

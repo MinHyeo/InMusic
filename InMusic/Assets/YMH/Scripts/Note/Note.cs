@@ -25,7 +25,6 @@ namespace Play
             this.speed = speed;
             this.noteScore = noteScore;
             targetTime = travelTime + Time.time;
-            Debug.Log($".........{travelTime}...........{Time.time}");
         }
 
         private void Update()

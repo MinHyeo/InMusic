@@ -70,6 +70,7 @@ namespace Play
         public void Pause()
         {
             isPause = true;
+            buttonIndex = 0;
 
             //노래 정지
             SoundManager.Instance.Pause(isPause);
@@ -139,6 +140,7 @@ namespace Play
 
         private void InputKeyEnter()
         {
+            buttonsSlider[buttonIndex].value = 0;
             buttons[buttonIndex].onClick.Invoke();
         }
     }
