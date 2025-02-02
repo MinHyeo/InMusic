@@ -25,6 +25,7 @@ namespace Play
             this.speed = speed;
             this.noteScore = noteScore;
             targetTime = travelTime + Time.time;
+            Debug.Log($".........{travelTime}...........{Time.time}");
         }
 
         private void Update()
@@ -51,7 +52,6 @@ namespace Play
         {
             if (collider.CompareTag("EndLine"))
             {
-                Debug.Log("Miss");
                 PlayManager.Instance.HandleNoteHit(this, AccuracyType.Miss, 0);
             }
         }

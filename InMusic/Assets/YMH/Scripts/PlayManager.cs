@@ -155,7 +155,8 @@ namespace Play
             if (closestNote != null)
             {
                 float timeDifference = Mathf.Abs(pressTime - closestNote.targetTime);
-                Debug.Log(timeDifference);
+                Debug.Log($"{pressTime} - {closestNote.targetTime} = {timeDifference}");
+
 
                 if (timeDifference <= greateThreshold)
                 {
