@@ -25,8 +25,8 @@ namespace SongList
         [Header("Scrolling Settings")]
         [SerializeField] private float _scrollDebounceTime = 0.05f; // 스크롤 멈춤 판정 시간
 
-        // === 추가: 일정 범위 이상 넘어가면 텔레포트
-        [SerializeField] private float _teleportThreshold = 2000f; 
+        // // === 추가: 일정 범위 이상 넘어가면 텔레포트
+        // [SerializeField] private float _teleportThreshold = 2000f; 
 
         private bool _isScrolling = false;
         private float _lastScrollTime = 0f;
@@ -49,6 +49,7 @@ namespace SongList
             _totalSongCount = _songs.Count;
 
             _itemHeight = _songItemPrefab.GetComponent<RectTransform>().sizeDelta.y;
+            Debug.Log($"[SongListManager] Item Height: {_itemHeight}");
             _scrollRect.onValueChanged.AddListener(OnScrolled);
         }
 
@@ -72,34 +73,37 @@ namespace SongList
 
                 RectTransform rt = slotSong.GetComponent<RectTransform>();
                 float yPos = -(i * _itemHeight);
-                rt.anchoredPosition = new Vector2(0, yPos + (93 * 5));
+                rt.anchoredPosition = new Vector2(0, yPos + (_bufferItems * _itemHeight));
 
                 UpdateSlotData(slotSong, i);
                 _songList.Add(slotSong);
             }
 
-            int rememeberedIndex = IndexSaveTest.Instance.GetLastSelectedIndex();
-            Debug.Log($"[SongListManager] Remembered Index: {rememeberedIndex}");
+            int rememberedIndex = IndexSaveTest.Instance.GetLastSelectedIndex();
+            Debug.Log($"[SongListManager] Remembered Index: {rememberedIndex}");
+
+            Canvas.ForceUpdateCanvases();
 
             //TODO: 아래 주석 풀고, 맨 밑에 있는 연산 식 확인
             // 현재 선택된 슬롯 위의 내용들이 사라지면서 그 다음항목부터 보이는 것으로 추정됨
             // 초기 스냅 + 재배치
-            SnapToNearestSlot();
-            OnScroll();
+            // SnapToNearestSlot();
+            // OnScroll();
 
-            // 중앙 슬롯 즉시 하이라이트
-            HighlightCenterSlotByPosition(isImmediate: true);
+            // // 중앙 슬롯 즉시 하이라이트
+            // HighlightCenterSlotByPosition(isImmediate: true);
 
-            // if (rememeberedIndex >= 0) {
-            //     ForceCenterAtIndex(rememeberedIndex);
-            // } else {
-            //     // 초기 스냅 + 재배치
-            //     SnapToNearestSlot();
-            //     OnScroll();
+            if (rememberedIndex >= 0) {
+                ForceCenterAtIndex(rememberedIndex);
+            } else {
+                // 초기 스냅 + 재배치
+                SnapToNearestSlot();
+                _firstVisibleIndexCached = Mathf.FloorToInt(_contentRect.anchoredPosition.y / _itemHeight);
+                OnScroll();
 
-            //     // 중앙 슬롯 즉시 하이라이트
-            //     HighlightCenterSlotByPosition(isImmediate: true);
-            // }
+                // 중앙 슬롯 즉시 하이라이트
+                HighlightCenterSlotByPosition(isImmediate: true);
+            }
         }
         
         private void Update() {
@@ -125,44 +129,44 @@ namespace SongList
 
         // === 추가 함수: contentRect를 ±2000 범위를 벗어날 때 중앙으로 되돌리기
         // TODO: 수정 필요
-        private void TeleportIfNeeded()
-        {
-            float contentY = _contentRect.anchoredPosition.y;
-            _teleportThreshold = _itemHeight * _poolSize * 2;
-            if (contentY > _teleportThreshold)
-            {
-                // 1) ContentRect를 _teleportThreshold만큼 아래로 이동
-                _contentRect.anchoredPosition -= new Vector2(0, _teleportThreshold);
+        // private void TeleportIfNeeded()
+        // {
+        //     float contentY = _contentRect.anchoredPosition.y;
+        //     _teleportThreshold = _itemHeight * _poolSize * 2;
+        //     if (contentY > _teleportThreshold)
+        //     {
+        //         // 1) ContentRect를 _teleportThreshold만큼 아래로 이동
+        //         _contentRect.anchoredPosition -= new Vector2(0, _teleportThreshold);
 
-                // 2) 슬롯들은 그만큼 위로 이동 (결과적으로 화면 위치 변화 X)
-                foreach (var slotObj in _songList)
-                {
-                    var rt = slotObj.GetComponent<RectTransform>();
-                    rt.anchoredPosition += new Vector2(0, _teleportThreshold);
-                }
+        //         // 2) 슬롯들은 그만큼 위로 이동 (결과적으로 화면 위치 변화 X)
+        //         foreach (var slotObj in _songList)
+        //         {
+        //             var rt = slotObj.GetComponent<RectTransform>();
+        //             rt.anchoredPosition += new Vector2(0, _teleportThreshold);
+        //         }
 
-                // 3) firstVisibleIndexCached도 그만큼 "칸 수"만큼 변경
-                int shiftCount = Mathf.RoundToInt(_teleportThreshold / _itemHeight);
-                _firstVisibleIndexCached += shiftCount;
-            }
-            else if (contentY < -_teleportThreshold)
-            {
-                _contentRect.anchoredPosition += new Vector2(0, _teleportThreshold);
+        //         // 3) firstVisibleIndexCached도 그만큼 "칸 수"만큼 변경
+        //         int shiftCount = Mathf.RoundToInt(_teleportThreshold / _itemHeight);
+        //         _firstVisibleIndexCached += shiftCount;
+        //     }
+        //     else if (contentY < -_teleportThreshold)
+        //     {
+        //         _contentRect.anchoredPosition += new Vector2(0, _teleportThreshold);
 
-                foreach (var slotObj in _songList)
-                {
-                    var rt = slotObj.GetComponent<RectTransform>();
-                    rt.anchoredPosition -= new Vector2(0, _teleportThreshold);
-                }
+        //         foreach (var slotObj in _songList)
+        //         {
+        //             var rt = slotObj.GetComponent<RectTransform>();
+        //             rt.anchoredPosition -= new Vector2(0, _teleportThreshold);
+        //         }
 
-                int shiftCount = Mathf.RoundToInt(_teleportThreshold / _itemHeight);
-                _firstVisibleIndexCached -= shiftCount;
-                if (_firstVisibleIndexCached < 0) _firstVisibleIndexCached = 0;
-            }
-        }
+        //         int shiftCount = Mathf.RoundToInt(_teleportThreshold / _itemHeight);
+        //         _firstVisibleIndexCached -= shiftCount;
+        //         if (_firstVisibleIndexCached < 0) _firstVisibleIndexCached = 0;
+        //     }
+        // }
 
         private void SnapToNearestSlot() {
-            float topOffset = 93f * _bufferItems; 
+            float topOffset = _bufferItems * _itemHeight; 
             float contentY = _contentRect.anchoredPosition.y;
             float tempOffset = contentY - topOffset;
             Debug.Log($"[SongListManager] Snap to Nearest Slot: {tempOffset}");
@@ -227,7 +231,8 @@ namespace SongList
 
         private Vector2 CalculateSlotPosition(int dataIndex) {
             // dataIndex = 논리 인덱스(계속 커질 수 있음), 실제 표시 위치는 - (dataIndex * slotHeight)
-            float y = -(dataIndex * _itemHeight);
+            float topOffset = _bufferItems * _itemHeight;
+            float y = -(dataIndex * _itemHeight) + topOffset;
             Debug.Log($"[SongListManager] Calculate Slot Position: {dataIndex} -> {y}");
             return new Vector2(0, y);
         }
@@ -278,7 +283,7 @@ namespace SongList
                         Debug.Log($"[SongListManager] Highlighted Song Title: {highlightSong.Title}");
                         OnHighlightedSongChanged?.Invoke(highlightSong);
                     } else {
-                        Debug.LogWarning("[SongListManager] highlightSong is null - maybe slot.SetData() didn't set anything yet?");
+                        Debug.LogWarning("[SongListManager] highlightSong is null");
                     }
                 }
                 else {
@@ -302,35 +307,41 @@ namespace SongList
             }
         }
 
-        // private void ForceCenterAtIndex(int index) {
-        //     int realIndex = ((index % _totalSongCount) + _totalSongCount) % _totalSongCount;
-        //     float newY = realIndex * _itemHeight;
-        //     _contentRect.anchoredPosition = new Vector2(0, -newY);
-        //     OnScroll();
-        //     HighlightCenterSlotByPosition(true);
-        // }
-
         /// <summary>
         /// 특정 곡 인덱스를 "가운데"에 오도록 contentRect 위치를 강제 세팅
         /// 그리고 슬롯 재배치 + 하이라이트까지 연결
         /// </summary>
-        // private void ForceCenterAtIndex(int index)
-        // {
-        //     // 1) “index”에 해당하는 슬롯이 화면 중앙에 오도록, contentRect를 이동
-        //     //    아래는 예시 계산이며, 프로젝트 구조에 맞게 조정 필요
-        //     float topOffset = 93f * _bufferItems; 
-        //     float y = -(index * _itemHeight) + topOffset;
+        private void ForceCenterAtIndex(int index) {
+            float topOffset = _bufferItems * _itemHeight;
+            int centerSlotIndex = _visibleCount / 2;
+            float targetContentY = (index - centerSlotIndex) * _itemHeight - topOffset;
+            _contentRect.anchoredPosition = new Vector2(0, targetContentY);
 
-        //     // anchoredPosition 즉시 세팅
-        //     _contentRect.anchoredPosition = new Vector2(0, y);
-            
-        //     // 2) 슬롯 재배치
-        //     OnScroll();  
-        //     // 내부에서 ShiftSlots()가 실행되어, 실제 배열 인덱스 → 슬롯 위치 등이 업데이트됨
+            int newFirstIndex = Mathf.FloorToInt(targetContentY / _itemHeight);
 
-        //     // 3) 즉시 하이라이트
-        //     HighlightCenterSlotByPosition(true);
-        // }
+            ReLayoutAllSlots(newFirstIndex);
+
+            SnapToNearestSlot();
+            HighlightCenterSlotByPosition(isImmediate: true);
+        }
+
+        private void ReLayoutAllSlots(int startIndex)
+        {
+            for (int i = 0; i < _poolSize; i++)
+            {
+                GameObject slotObj = _songList[i];
+
+                int dataIndex = startIndex + i;
+                int realIndex = ((dataIndex % _totalSongCount) + _totalSongCount) % _totalSongCount;
+
+                RectTransform rt = slotObj.GetComponent<RectTransform>();
+                rt.anchoredPosition = CalculateSlotPosition(dataIndex);
+
+                UpdateSlotData(slotObj, realIndex);
+            }
+
+            _firstVisibleIndexCached = startIndex;
+        }
         #endregion
     }
 }

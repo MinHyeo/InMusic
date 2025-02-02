@@ -14,6 +14,7 @@ namespace SongList {
         }
 
         public int GetLastSelectedIndex() {
+            Debug.Log("GetLastSelectedIndex: " + _lastSelectedIndex);
             return _lastSelectedIndex;
         }
     }
