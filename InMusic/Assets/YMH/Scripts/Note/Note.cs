@@ -51,7 +51,6 @@ namespace Play
         {
             if (collider.CompareTag("EndLine"))
             {
-                Debug.Log("Miss");
                 PlayManager.Instance.HandleNoteHit(this, AccuracyType.Miss, 0);
             }
         }

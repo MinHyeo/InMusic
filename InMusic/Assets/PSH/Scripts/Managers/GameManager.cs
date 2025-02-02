@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public static ResourceManager Resource { get { return Instance.M_Resource; } }
     #endregion
 
+    private Song songTitle;
+
     static void Init()
     {
         if (GM_Instance == null)
@@ -42,19 +44,32 @@ public class GameManager : MonoBehaviour
 
     public void StartGame(string SongTitle)
     {
-        SceneManager.LoadScene("YMH");
-
-        Enum.TryParse(SongTitle, out Song song);
+        Enum.TryParse(SongTitle, out songTitle);
         SceneManager.sceneLoaded += OnPlaySceneLoaded;  //������ ����
+
+        SceneManager.LoadScene("YMH");
     }
 
     private void OnPlaySceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "PlayScene")
+        if (scene.name == "YMH")
         {
-            PlayManager.Instance.StartGame(Song.Heya);
+            StartCoroutine(WaitForPlayManagerAndStartGame());
             SceneManager.sceneLoaded -= OnPlaySceneLoaded; // �̺�Ʈ ���� ����
         }
+    }
+
+    private IEnumerator WaitForPlayManagerAndStartGame()
+    {
+        // PlayManager가 존재할 때까지 대기
+        while (PlayManager.Instance == null)
+        {
+            yield return null;  // 다음 프레임까지 대기
+        }
+
+        Debug.Log("dddd");
+        // PlayManager가 초기화되면 메서드 호출
+        PlayManager.Instance.StartGame(songTitle);
     }
 
     public void SelectSong(Song songTitle)

@@ -101,6 +101,7 @@ namespace Play
 
         public void StartGame(Song songName)
         {
+            Debug.Log("Game Start");
             this.songName = songName;
             SoundManager.Instance.SongInit(songName.ToString());
             videoPlayScript.GetVideoClip(songName);
@@ -155,7 +156,6 @@ namespace Play
             if (closestNote != null)
             {
                 float timeDifference = Mathf.Abs(pressTime - closestNote.targetTime);
-                Debug.Log(timeDifference);
 
                 if (timeDifference <= greateThreshold)
                 {
@@ -178,7 +178,6 @@ namespace Play
 
         private void OnKeyRelase(Define.NoteControl keyEvent)
         {
-            Debug.Log("키 입력 끝");
             keyObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(false);
         }
 
@@ -218,7 +217,6 @@ namespace Play
 
         public void HandleNoteHit(Note note, AccuracyType accuracyResult, float percent)
         {
-            Debug.Log(accuracyResult.ToString());
             float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
 
             //점수 계산
