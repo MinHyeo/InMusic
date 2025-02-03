@@ -1,0 +1,133 @@
+using System;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class LoadingSong : SongList.Singleton<LoadingSong>
+{
+    [SerializeField] private CanvasGroup _canvasGroup;
+    [SerializeField] private Image _loadingBar;
+    [SerializeField] private Text _loadingText;
+    [SerializeField] private Text progressText;
+    [SerializeField] private RectTransform _fillAreaRect;
+
+
+    private string loadSceneName;
+    private Coroutine dotCoroutine;
+    private float _defaultLoadingTextX;
+
+    protected override void Awake() {
+        base.Awake();
+    }
+
+    /// <summary>
+    // 외부에서 호출하여 씬을 로드하는 함수
+    /// </summary>
+    public void LoadPlay(string sceneName) {
+        gameObject.SetActive(true);
+
+        if (dotCoroutine != null) {
+            StopCoroutine(dotCoroutine);
+            dotCoroutine = null;
+        }
+
+        _loadingBar.fillAmount = 0f;
+        progressText.text = "0%";
+        _loadingText.text = "Loading";
+        _defaultLoadingTextX = _loadingText.rectTransform.anchoredPosition.x;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        loadSceneName = sceneName;
+        StartCoroutine(LoadSceneProcess());
+    }
+
+    private IEnumerator LoadSceneProcess()
+    {
+        yield return StartCoroutine(Fade(true));
+
+        dotCoroutine = StartCoroutine(Animate_LoadingText());
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(loadSceneName);
+        operation.allowSceneActivation = false; // 씬 로딩 끝나도 자동 전환 x
+
+        float timer = 0f;
+        while(!operation.isDone) {
+            yield return null;
+            UpdateProgressTextAndPosition();
+
+            if(operation.progress < 0.87f) {
+                _loadingBar.fillAmount = operation.progress;
+            } else {
+                timer += Time.unscaledDeltaTime / 13;
+                _loadingBar.fillAmount = Mathf.Lerp(0.87f, 1f, timer);
+
+                if(_loadingBar.fillAmount >= 1f) {
+                    operation.allowSceneActivation = true;
+                    yield break;
+                }
+            }
+        }
+    }
+
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        if(arg0.name == loadSceneName) {
+            StartCoroutine(Fade(false));
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+
+            if (dotCoroutine != null) {
+                StopCoroutine(dotCoroutine);
+                dotCoroutine = null;
+            }
+        }
+    }
+
+    private IEnumerator Fade(bool isFadeIn)
+    {
+        float timer = 0f;
+        while (timer <= 1f)
+        {
+            yield return null;
+            timer += Time.unscaledDeltaTime; // unscaledDeltaTime: The timeScale-independent interval in seconds from the last frame to the current one
+            _canvasGroup.alpha = isFadeIn ? Mathf.Lerp(0, 1, timer) : Mathf.Lerp(1, 0, timer);
+        }
+
+        if (!isFadeIn)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// "Loading"에 점(`.`)을 1개~3개까지 반복해서 붙이는 코루틴
+    /// </summary>
+    private IEnumerator Animate_LoadingText()
+    {
+        int dotCount = 0;
+        while (true)
+        {
+            // 1 ~ 3개 점 반복
+            dotCount = (dotCount % 3) + 1;
+            _loadingText.text = "Loading" + new string('.', dotCount);
+            yield return new WaitForSeconds(0.4f); 
+        }
+    }
+
+    /// <summary>
+    /// 진행도(%) 텍스트 갱신 및 텍스트 위치 이동
+    /// </summary>
+    private void UpdateProgressTextAndPosition()
+    {
+        // 퍼센트 표기 (예: "75%")
+        float percentage = _loadingBar.fillAmount * 100f;
+        progressText.text = Mathf.RoundToInt(percentage) + "%";
+        
+        float fillWidth = _fillAreaRect.rect.width * _loadingBar.fillAmount;
+
+
+        Vector2 pos = progressText.rectTransform.anchoredPosition;
+        pos.x = fillWidth;
+        progressText.rectTransform.anchoredPosition = pos;
+    }
+}

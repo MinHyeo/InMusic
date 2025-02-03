@@ -10,7 +10,7 @@ public class Main_Lobby_UI : UI_Base
     [SerializeField]private bool isChange = false;
     [SerializeField]GameObject popupUI = null;
     [Header("UI Button")]
-    [Tooltip("Start¿¡¼­ ÀÚµ¿À¸·Î ÇÒ´ç µÊ")]
+    [Tooltip("Startï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½ ï¿½ï¿½")]
     [SerializeField] private GameObject buttonRoot;
     [SerializeField] private Dictionary<string, GameObject> buttons = new Dictionary<string, GameObject>();
 
@@ -25,19 +25,19 @@ public class Main_Lobby_UI : UI_Base
         GameManager.Input.SetUIKeyEvent(MainLobbyKeyEvent);
     }
 
-    //¹öÆ° ±â´É
+    //ï¿½ï¿½Æ° ï¿½ï¿½ï¿½
     public void ButtonEvent(string type) {
         switch (type) {
-            //¼³Á¤
+            //ï¿½ï¿½ï¿½ï¿½
             case "Gear":
                 Gear();
                 break;
-            //³ª°¡±â
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             case "Exit":
                 if (curSetUI == null && popupUI == null) 
                     popupUI = GameManager.Resource.Instantiate("Message_UI");
                 break;
-            //¿ÞÂÊ
+            //ï¿½ï¿½ï¿½ï¿½
             case "Left":
                 if (isSolo){ //Solo To Munti
                     buttons["Solo"].gameObject.GetComponent<Animator>().Play("Exit_To_Right");
@@ -49,7 +49,7 @@ public class Main_Lobby_UI : UI_Base
                 }
                 isSolo = !isSolo;
                 break;
-            //¿À¸¥ÂÊ
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             case "Right":
                 if (isSolo) { //Solo To Multi
                     buttons["Solo"].gameObject.GetComponent<Animator>().Play("Exit_To_Left");
@@ -61,13 +61,13 @@ public class Main_Lobby_UI : UI_Base
                 }
                 isSolo = !isSolo;
                 break;
-            //¼Ö·Î
+            //ï¿½Ö·ï¿½
             case "Solo":
                 //Todo
-                SceneManager.LoadScene("LoadScene");
+                SceneManager.LoadScene("test_SSW");
                 Debug.Log("Solo function is not implemented");
                 break;
-            //¸ÖÆ¼
+            //ï¿½ï¿½Æ¼
             case "Multi":
                 //Todo
                 //SceneManager.LoadScene();
@@ -78,12 +78,12 @@ public class Main_Lobby_UI : UI_Base
                 Guide();
                 break;
             default:
-                Debug.Log("¾ÆÁ÷ ±â´ÉÀÌ ¾ø°Å³ª Àß¸ø ÀÔ·Â");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å³ï¿½ ï¿½ß¸ï¿½ ï¿½Ô·ï¿½");
                 break;
         }
     }
 
-    //ButtonEvent·Î ´Ù ³Ñ±è
+    //ButtonEventï¿½ï¿½ ï¿½ï¿½ ï¿½Ñ±ï¿½
     public void MainLobbyKeyEvent(Define.UIControl keyEvent) {
         if (SceneManager.GetActiveScene().name != "Main_Lobby_PSH")
             return;
