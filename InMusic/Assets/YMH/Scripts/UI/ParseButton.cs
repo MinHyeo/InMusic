@@ -20,7 +20,10 @@ namespace Play
         public void MusicSelect()
         {
             Time.timeScale = 1;
+
             PauseManager.Instance.DestroyKeyEvent();
+            PlayManager.Instance.DestroyKeyEvent();
+
             SoundManager.Instance.End();
             GameManager.Instance.SelectSong(PlayManager.Instance.SongTitle);
         }

@@ -238,7 +238,7 @@ public class InputManager : MonoBehaviour
     public void SetNoteKeyReleaseEvent(Action<Define.NoteControl> keyEventFunc)
     {
         //Initialize
-        RemoveNoteKeyEvent(noteKeyRelease);
+        RemoveNoteKeyEvent(keyEventFunc);
         //SetKeyEvent
         noteKeyRelease += keyEventFunc;
     }
@@ -250,6 +250,11 @@ public class InputManager : MonoBehaviour
     public void RemoveNoteKeyEvent(Action<Define.NoteControl> keyEventFunc)
     {
         noteKeyPress -= keyEventFunc;
+    }
+
+    public void RemoveNoteKeyReleaseEvent(Action<Define.NoteControl> keyEventFunc)
+    {
+        noteKeyRelease -= keyEventFunc;
     }
     #endregion
 }

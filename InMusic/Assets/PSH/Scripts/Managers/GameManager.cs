@@ -67,7 +67,6 @@ public class GameManager : MonoBehaviour
             yield return null;  // 다음 프레임까지 대기
         }
 
-        Debug.Log("dddd");
         // PlayManager가 초기화되면 메서드 호출
         PlayManager.Instance.StartGame(songTitle);
     }

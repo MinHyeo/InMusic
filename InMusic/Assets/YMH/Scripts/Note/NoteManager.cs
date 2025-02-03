@@ -151,7 +151,6 @@ namespace Play
             note.transform.position = noteSpawnPoints[channel - 11].position;
             Note noteScript = note.GetComponent<Note>();
             NoteList.Add(noteScript);
-            Debug.Log(travelTime);
             noteScript.Initialize(channel, noteSpeed, 1000000 / noteCount, travelTime);
         }
 

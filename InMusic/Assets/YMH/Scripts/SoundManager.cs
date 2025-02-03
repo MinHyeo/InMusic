@@ -52,6 +52,7 @@ namespace Play
 
             //노래 불러오기
             string path = "Assets/Resources/Song/" + songName + "/" + songName + ".ogg";
+            UnityEngine.Debug.Log(path);
             FMOD.RESULT result = fmodSystem.createSound(path, FMOD.MODE.DEFAULT, out musicSound);
             if (result != FMOD.RESULT.OK)
             {

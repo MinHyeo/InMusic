@@ -150,6 +150,7 @@ namespace Play
             // 해당 라인에 있는 노트 중 판정할 노트 검색
             Note closestNote = FindClosestNoteToPressTime((int)keyEvent, pressTime);
 
+            Debug.Log(keyObjects[0]);
             //키 입력 임팩트
             keyObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(true);
 
@@ -178,6 +179,7 @@ namespace Play
 
         private void OnKeyRelase(Define.NoteControl keyEvent)
         {
+            Debug.Log(keyObjects[0]);
             keyObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(false);
         }
 
@@ -192,6 +194,13 @@ namespace Play
                     Pause();
                     break;
             }
+        }
+
+        public void DestroyKeyEvent()
+        {
+            GameManager.Input.RemoveNoteKeyEvent(OnKeyPress);
+            GameManager.Input.RemoveNoteKeyEvent(OnKeyRelase);
+            GameManager.Input.RemoveUIKeyEvent(OnUIKkeyPress);
         }
 
         private Note FindClosestNoteToPressTime(int channel, float pressTime)
