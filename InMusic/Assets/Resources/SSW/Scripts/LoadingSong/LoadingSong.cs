@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Play;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,10 +13,17 @@ public class LoadingSong : SongList.Singleton<LoadingSong>
     [SerializeField] private Text progressText;
     [SerializeField] private RectTransform _fillAreaRect;
 
+    [Header("UI Settings")]
+    [SerializeField] private Image _songImage;
+    [SerializeField] private Text _songTitle;
+    [SerializeField] private Text _songArtist;
+    
+
 
     private string loadSceneName;
     private Coroutine dotCoroutine;
     private float _defaultLoadingTextX;
+    private Song songTitle;
 
     protected override void Awake() {
         base.Awake();
@@ -24,8 +32,9 @@ public class LoadingSong : SongList.Singleton<LoadingSong>
     /// <summary>
     // 외부에서 호출하여 씬을 로드하는 함수
     /// </summary>
-    public void LoadPlay(string sceneName) {
+    public void LoadPlay(string sceneName, string SongTitle, string Artist, Sprite songSprite) {
         gameObject.SetActive(true);
+        Enum.TryParse(SongTitle, out songTitle);
 
         if (dotCoroutine != null) {
             StopCoroutine(dotCoroutine);
@@ -35,14 +44,17 @@ public class LoadingSong : SongList.Singleton<LoadingSong>
         _loadingBar.fillAmount = 0f;
         progressText.text = "0%";
         _loadingText.text = "Loading";
+        _songImage.sprite = songSprite;
+        _songTitle.text = SongTitle;
+        _songArtist.text = Artist;
         _defaultLoadingTextX = _loadingText.rectTransform.anchoredPosition.x;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
         loadSceneName = sceneName;
-        StartCoroutine(LoadSceneProcess());
+        StartCoroutine(LoadSceneProcess(songTitle));
     }
 
-    private IEnumerator LoadSceneProcess()
+    private IEnumerator LoadSceneProcess(Song songTitle)
     {
         yield return StartCoroutine(Fade(true));
 
@@ -50,6 +62,7 @@ public class LoadingSong : SongList.Singleton<LoadingSong>
 
         AsyncOperation operation = SceneManager.LoadSceneAsync(loadSceneName);
         operation.allowSceneActivation = false; // 씬 로딩 끝나도 자동 전환 x
+        StartCoroutine(WaitForPlayManagerAndStartGame());
 
         float timer = 0f;
         while(!operation.isDone) {
@@ -59,7 +72,7 @@ public class LoadingSong : SongList.Singleton<LoadingSong>
             if(operation.progress < 0.87f) {
                 _loadingBar.fillAmount = operation.progress;
             } else {
-                timer += Time.unscaledDeltaTime / 13;
+                timer += Time.unscaledDeltaTime / 3;
                 _loadingBar.fillAmount = Mathf.Lerp(0.87f, 1f, timer);
 
                 if(_loadingBar.fillAmount >= 1f) {
@@ -68,6 +81,18 @@ public class LoadingSong : SongList.Singleton<LoadingSong>
                 }
             }
         }
+    }
+
+    public IEnumerator WaitForPlayManagerAndStartGame()
+    {
+        // PlayManager가 존재할 때까지 대기
+        while (PlayManager.Instance == null)
+        {
+            yield return null;  // 다음 프레임까지 대기
+        }
+
+        // PlayManager가 초기화되면 메서드 호출
+        PlayManager.Instance.StartGame(songTitle);
     }
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)

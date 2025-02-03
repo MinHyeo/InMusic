@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace SongList{
     public class HighlightSong : MonoBehaviour
@@ -13,7 +14,7 @@ namespace SongList{
         [SerializeField] private Text _detailArtistText; // 좌측에 표시할 아티스트 Text
         //[SerializeField] private Text _detailPlayTimeText; // 좌측에 표시할 플레이 시간 Text
         [SerializeField] private Image _detailImage; // 좌측에 표시할 이미지
-
+        [SerializeField] private LoadingSong loadingSongObj;
         // [Header("Score UI")]
         // [SerializeField] private Text _songHighScoreText; // 좌측 하단에 표시할 최고 점수 Text
         // [SerializeField] private Text _songMaxComboText; // 좌측 하단에 표시할 최대 콤보 Text
@@ -63,7 +64,8 @@ namespace SongList{
             // 버튼 리스너 세팅
             if (startButton != null) {
                 startButton.onClick.RemoveAllListeners();
-                startButton.onClick.AddListener(() => GameManager.Instance.StartGame(songInfo.Title));
+                string playSceneName = "YMH";
+                startButton.onClick.AddListener(() => loadingSongObj.LoadPlay(playSceneName, songInfo.Title, _detailArtistText.text, _detailImage.sprite));
             }
         }
 

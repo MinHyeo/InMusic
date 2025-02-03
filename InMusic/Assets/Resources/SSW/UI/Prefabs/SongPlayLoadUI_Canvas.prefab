@@ -228,6 +228,9 @@ MonoBehaviour:
   _loadingText: {fileID: 7220566198697851148}
   progressText: {fileID: 7536674009902830287}
   _fillAreaRect: {fileID: 5601100059026451602}
+  _songImage: {fileID: 4168889042751509804}
+  _songTitle: {fileID: 6355101904690914475}
+  _songArtist: {fileID: 963364964843698803}
 --- !u!1 &2149049872998651701
 GameObject:
   m_ObjectHideFlags: 0

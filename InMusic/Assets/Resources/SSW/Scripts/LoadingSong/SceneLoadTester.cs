@@ -11,17 +11,17 @@ public class SceneLoadTester : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            string currentScene = SceneManager.GetActiveScene().name;
-            string nextScene = (currentScene == "Test1") ? "Test2" : "Test1";
+    // void Update()
+    // {
+    //     if(Input.GetKeyDown(KeyCode.Space))
+    //     {
+    //         string currentScene = SceneManager.GetActiveScene().name;
+    //         string nextScene = (currentScene == "Test1") ? "Test2" : "Test1";
 
-            GameObject loadingUI = Instantiate(loadingUIPrefab);
-            LoadingSong loadingSong = loadingUI.GetComponent<LoadingSong>();
-            loadingSong.LoadPlay(nextScene);
-            // LoadingSong.Instance.LoadPlay("Test2");
-        }
-    }
+    //         GameObject loadingUI = Instantiate(loadingUIPrefab);
+    //         LoadingSong loadingSong = loadingUI.GetComponent<LoadingSong>();
+    //         loadingSong.LoadPlay(nextScene);
+    //         // LoadingSong.Instance.LoadPlay("Test2");
+    //     }
+    // }
 }

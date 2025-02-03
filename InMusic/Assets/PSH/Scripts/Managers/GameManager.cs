@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitForPlayManagerAndStartGame()
+    public IEnumerator WaitForPlayManagerAndStartGame()
     {
         // PlayManager가 존재할 때까지 대기
         while (PlayManager.Instance == null)
