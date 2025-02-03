@@ -92,11 +92,18 @@ public class Single_Lobby_UI : UI_Base
                     //다음 씬에 넘겨줄 MusicData 값 설정
                     //GameManager_PSH.LogData.SendData(curMusicItem.GetComponent<Music_Item>());
                     Music_Item tmp = curMusicItem.GetComponent<Music_Item>();
-                    GameManager_PSH.Instance.GetComponent<MusicData>().DirPath = tmp.DirPath;
-                    GameManager_PSH.Instance.GetComponent<MusicData>().BMS = tmp.Data.BMS;
-                    GameManager_PSH.Instance.GetComponent<MusicData>().Album = tmp.Album.sprite;
-                    GameManager_PSH.Instance.GetComponent<MusicData>().Audio = tmp.Audio;
-                    GameManager_PSH.Instance.GetComponent<MusicData>().MuVi = tmp.MuVi;
+                    //최적화 필요
+                    {
+                        GameManager_PSH.Instance.GetComponent<MusicData>().DirPath = tmp.DirPath;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().BMS = tmp.Data.BMS;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().Album = tmp.Album.sprite;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().Audio = tmp.Audio;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().MuVi = tmp.MuVi;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().Score = tmp.Score;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().Accuracy = tmp.Accuracy;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().Combo = tmp.Combo;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().Rank = tmp.Rank.text;
+                    }
                     SceneManager.LoadScene(1);
                 }
                 else
@@ -254,5 +261,30 @@ public class Single_Lobby_UI : UI_Base
         contentPos.localPosition = dest;
 
         isScrolling = false;
+    }
+
+
+    public void LogSaveTestButton()
+    {
+        //MusicData 설정(GameManager가 갖고 있는 값)
+        Music_Item tmp = curMusicItem.GetComponent<Music_Item>();
+        GameManager_PSH.Instance.GetComponent<MusicData>().DirPath = tmp.DirPath;
+        GameManager_PSH.Instance.GetComponent<MusicData>().BMS = tmp.Data.BMS;
+        GameManager_PSH.Instance.GetComponent<MusicData>().Album = tmp.Album.sprite;
+        GameManager_PSH.Instance.GetComponent<MusicData>().Audio = tmp.Audio;
+        GameManager_PSH.Instance.GetComponent<MusicData>().MuVi = tmp.MuVi;
+        GameManager_PSH.Instance.GetComponent<MusicData>().Score = tmp.Score;
+        GameManager_PSH.Instance.GetComponent<MusicData>().Accuracy = tmp.Accuracy;
+        GameManager_PSH.Instance.GetComponent<MusicData>().Combo = tmp.Combo;
+        GameManager_PSH.Instance.GetComponent<MusicData>().Rank = tmp.Rank.text;
+
+        //게임 종료 후 입력받는 값
+        MusicLog test = new MusicLog();
+        test.Combo = "100";
+        test.Accuracy = "10%";
+        test.Score = "1000";
+        test.Rank = "A";
+        //저장
+        GameManager_PSH.LogData.SaveData(test);
     }
 }

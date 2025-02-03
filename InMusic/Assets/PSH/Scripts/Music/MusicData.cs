@@ -15,7 +15,7 @@ public class MusicData : MonoBehaviour
     [SerializeField] private bool hasBMS = false;
     [Header("기록 관련 정보")]
     [SerializeField] private string score = "0";
-    [SerializeField] private string accuracy = "0%";
+    [SerializeField] private string accuracy = "0";
     [SerializeField] private string combo = "0";
     [SerializeField] private string rank = "-";
 

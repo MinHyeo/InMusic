@@ -13,4 +13,7 @@ public class MusicLog
     public string Accuracy { get { return accuracy; } set { accuracy = value; } }
     public string Combo { get { return combo; } set {combo = value; } }
     public string Rank { get { return rank; } set { rank = value; } }
+
+    //기본 생성자
+    public MusicLog() { }
 }
