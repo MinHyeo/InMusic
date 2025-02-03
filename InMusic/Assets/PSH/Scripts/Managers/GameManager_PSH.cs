@@ -15,6 +15,9 @@ public class GameManager_PSH : MonoBehaviour
 
     BMSManager M_BMS = new BMSManager();
     public static BMSManager BMS { get { return Instance.M_BMS; } }
+
+    DataManager M_Data = new DataManager();
+    public static DataManager LogData { get { return Instance.M_Data; } }
     #endregion
 
     static void Init()

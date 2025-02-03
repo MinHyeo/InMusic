@@ -16,7 +16,7 @@ public class Single_Lobby_UI : UI_Base
     [SerializeField] private Text[] logData = new Text[4];
     [Tooltip("스크롤 관련 변수")]
     [SerializeField] private RectTransform contentPos;
-    [SerializeField] List<MusicData> musicList = new List<MusicData>();
+    [SerializeField] List<MusicData> musicDataList = new List<MusicData>();
     private float itemGap = 40.0f;
     private int numOfitems;
     [SerializeField] private int startIndex = 0;
@@ -27,14 +27,14 @@ public class Single_Lobby_UI : UI_Base
     void Start()
     {
         //음악 목록 Load하기
-        musicList = GameManager_PSH.Resource.GetMusicList();
+        musicDataList = GameManager_PSH.Resource.GetMusicList();
 
-        if (musicList == null) {
+        if (musicDataList == null) {
             Debug.Log("음악 목록 Load 실패");
             return;
         }
 
-        numOfitems = musicList.Count;
+        numOfitems = musicDataList.Count;
         ContentDown();
 
         GameManager_PSH.Input.SetUIKeyEvent(SingleLobbyKeyEvent);
@@ -90,6 +90,7 @@ public class Single_Lobby_UI : UI_Base
                     //키 입력 이벤트 제거
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
                     //다음 씬에 넘겨줄 MusicData 값 설정
+                    //GameManager_PSH.LogData.SendData(curMusicItem.GetComponent<Music_Item>());
                     Music_Item tmp = curMusicItem.GetComponent<Music_Item>();
                     GameManager_PSH.Instance.GetComponent<MusicData>().DirPath = tmp.DirPath;
                     GameManager_PSH.Instance.GetComponent<MusicData>().BMS = tmp.Data.BMS;
@@ -166,7 +167,7 @@ public class Single_Lobby_UI : UI_Base
             startIndex = numOfitems + startIndex;
         }
         for (int i = 0; i < musicItems.Length; i++) {
-            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicList[startIndex++]);
+            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicDataList[startIndex++]);
             if (startIndex >= numOfitems) {
                 startIndex = 0;
             }
@@ -183,7 +184,7 @@ public class Single_Lobby_UI : UI_Base
         }
         for (int i = 0; i < musicItems.Length; i++)
         {
-            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicList[startIndex++]);
+            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicDataList[startIndex++]);
             if (startIndex >= numOfitems) {
                 startIndex = 0;
             }

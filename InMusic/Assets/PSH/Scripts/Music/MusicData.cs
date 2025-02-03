@@ -1,7 +1,4 @@
-using System.Globalization;
-using System.IO;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.Video;
 
 public class MusicData : MonoBehaviour
@@ -17,10 +14,10 @@ public class MusicData : MonoBehaviour
     [SerializeField] private VideoClip musicVideo;
     [SerializeField] private bool hasBMS = false;
     [Header("기록 관련 정보")]
-    [SerializeField] private string score;
-    [SerializeField] private string accuracy;
-    [SerializeField] private string combo;
-    [SerializeField] private string rank;
+    [SerializeField] private string score = "0";
+    [SerializeField] private string accuracy = "0%";
+    [SerializeField] private string combo = "0";
+    [SerializeField] private string rank = "-";
 
 
     public string DirPath { get { return mPath; } set { mPath = value; } }
