@@ -61,13 +61,23 @@ namespace SongList{
                 _detailImage.sprite = songSprite;
             }
 
+            // TODO: 버튼 클릭 부분 리팩토링 필요 (버튼 관련 코드는 다른 클래스로 분리하여야 함)
             // 버튼 리스너 세팅
             if (startButton != null) {
                 startButton.onClick.RemoveAllListeners();
                 string playSceneName = "YMH";
-                startButton.onClick.AddListener(() => loadingSongObj.LoadPlay(playSceneName, songInfo.Title, _detailArtistText.text, _detailImage.sprite));
+                startButton.onClick.AddListener(() =>
+                {
+                    // 1. 효과음 재생
+                    SoundManager.Instance.PlaySFX(SFXType.PlayStart);
+                    // 2. 씬 로드
+                    loadingSongObj.LoadPlay(playSceneName, songInfo.Title, _detailArtistText.text, _detailImage.sprite);
+                });
+
             }
         }
+
+
 
         /// <summary>
         /// 곡 정보를 찾지 못했거나, 제목이 비어있을 때 UI를 초기화/정리
@@ -76,7 +86,6 @@ namespace SongList{
             if (_detailTitleText != null)   _detailTitleText.text   = string.Empty;
             if (_detailArtistText != null)  _detailArtistText.text  = string.Empty;
             if (_detailImage != null)       _detailImage.sprite     = null;
-
             if (startButton != null) {
                 // 버튼 리스너 제거
                 startButton.onClick.RemoveAllListeners();
