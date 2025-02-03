@@ -31,7 +31,6 @@ public class GameManager_PSH : MonoBehaviour
             DontDestroyOnLoad(gmObject);
             GM_Instance = gmObject.GetComponent<GameManager_PSH>();
 
-
             GM_Instance.M_Input.Init();
         }
     }

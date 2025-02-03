@@ -3,9 +3,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
+//MusicItem Prefab에 사용할 스크립트
 public class Music_Item : MonoBehaviour
 {
     [Header("음악 관련 정보")]
+    private string mPath;
     [SerializeField] private Text title;
     [SerializeField] private Text artist;
     [SerializeField] private string length;
@@ -28,6 +30,7 @@ public class Music_Item : MonoBehaviour
 
 
     #region Get/Set
+    public string DirPath { get { return mPath; } set { mPath = value; } }
     public Text Title { get { return title; } set { title = value; } }
     public Text Artist { get { return artist; } set { artist = value; } }
     public string Length { get { return length; } set { length = value; } }

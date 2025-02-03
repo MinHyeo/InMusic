@@ -89,10 +89,13 @@ public class Single_Lobby_UI : UI_Base
                 if (curMusicItem.GetComponent<Music_Item>().HasBMS) {
                     //키 입력 이벤트 제거
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-                    GameManager_PSH.Instance.GetComponent<MusicData>().BMS = curMusicItem.GetComponent<Music_Item>().Data.BMS;
-                    GameManager_PSH.Instance.GetComponent<MusicData>().Album = curMusicItem.GetComponent<Music_Item>().Album.sprite;
-                    GameManager_PSH.Instance.GetComponent<MusicData>().Audio = curMusicItem.GetComponent<Music_Item>().Audio;
-                    GameManager_PSH.Instance.GetComponent<MusicData>().MuVi = curMusicItem.GetComponent<Music_Item>().MuVi;
+                    //다음 씬에 넘겨줄 MusicData 값 설정
+                    Music_Item tmp = curMusicItem.GetComponent<Music_Item>();
+                    GameManager_PSH.Instance.GetComponent<MusicData>().DirPath = tmp.DirPath;
+                    GameManager_PSH.Instance.GetComponent<MusicData>().BMS = tmp.Data.BMS;
+                    GameManager_PSH.Instance.GetComponent<MusicData>().Album = tmp.Album.sprite;
+                    GameManager_PSH.Instance.GetComponent<MusicData>().Audio = tmp.Audio;
+                    GameManager_PSH.Instance.GetComponent<MusicData>().MuVi = tmp.MuVi;
                     SceneManager.LoadScene(1);
                 }
                 else
@@ -200,6 +203,7 @@ public class Single_Lobby_UI : UI_Base
     }
 
     void UpdateItems(Music_Item oldItem, MusicData newItem) {
+        oldItem.DirPath = newItem.DirPath;
         //Debug.Log(newItem.BMS.header.title);
         if (newItem.HasBMS) {
             oldItem.Title.text = newItem.BMS.header.title;
