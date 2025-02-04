@@ -11,6 +11,7 @@ public class PlayUI : MonoBehaviour
     [SerializeField] GameObject[] judgeText;
     public Image BackImage;
     public TextMeshProUGUI countText;
+    
 
     void Start()
     {

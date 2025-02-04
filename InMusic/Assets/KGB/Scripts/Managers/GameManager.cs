@@ -59,9 +59,9 @@ public class GameManager : MonoBehaviour
     {
         //string musicName = GameManager_PSH.Instance.GetSelectedMusic(); //노래 선택 씬에서 선택한 노래이름 받아옴.
         //Debug.Log(musicName);
-        string path = "Music_KGB/Heya"; //임시경로, 경로를 받았을때 세팅 
-        SetResourcePath(path);
-        SetBMS(path); //지정된 노래 //BMS파일을 만들때 노래가 시작되는 지점에 WAV02 노트로 찍어놔야함.(노트생성시 필요)
+        //string path = "Music_KGB/Heya"; //임시경로, 경로를 받았을때 세팅 
+        //SetResourcePath(path);
+        SetBMS(); //지정된 노래 //BMS파일을 만들때 노래가 시작되는 지점에 WAV02 노트로 찍어놔야함.(노트생성시 필요)
 
         playManager = GetComponent<PlayManager>();
         playManager.SetResources(); // 노래 리소스 세팅
@@ -70,11 +70,21 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void SetBMS(string path)
+    public void Update()
     {
-        //curBMS = BMSManager.Instance.ParseBMS(music); //BMS 파싱 //노래 이름 받을때 쓴거
-        Debug.Log(path + "/BMS");
-        curBMS = BMSManager.Instance.ParseBMS(path+"/BMS");
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(!pauseUI.activeSelf)
+                PauseGame();
+        }
+    }
+
+    public void SetBMS()
+    {
+        ////curBMS = BMSManager.Instance.ParseBMS(music); //BMS 파싱 //노래 이름 받을때 쓴거
+        //Debug.Log(path + "/BMS");
+        //curBMS = BMSManager.Instance.ParseBMS(path+"/BMS");
+        curBMS = GameManager_PSH.Instance.GetComponent<MusicData>().BMS;
         
     }
     public void SetResourcePath(string path) //선택한 노래 경로받아서 저장

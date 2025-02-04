@@ -46,10 +46,11 @@ public class PlayManager : MonoBehaviour
     void SetMusic()
     {
         //선택한 노래 리소스 세팅
-        string musicName = GameManager.Instance.curBMS.wavInfo.wav;
-        string path = $"{GameManager.Instance.resourcePath}/{musicName}";
-        musicSound.clip = Resources.Load<AudioClip>(path);
-        Debug.Log(path);
+        //string musicName = GameManager.Instance.curBMS.wavInfo.wav;
+        //string path = $"{GameManager.Instance.resourcePath}/{musicName}";
+        //musicSound.clip = Resources.Load<AudioClip>(path);
+        //Debug.Log(path);
+        musicSound.clip = GameManager_PSH.Instance.GetComponent<MusicData>().Audio;
     }
 
     void SetSound()
@@ -62,23 +63,32 @@ public class PlayManager : MonoBehaviour
     
     void SetBackground()
     {
-        string musicName = GameManager.Instance.curBMS.wavInfo.wav;
-        string path = GameManager.Instance.resourcePath + $"/Back_{musicName}";
-        Debug.Log(path);
-        playBackgroundVideo = Resources.Load<VideoClip>(path);
-        if (playBackgroundVideo != null) {
+        //string musicName = GameManager.Instance.curBMS.wavInfo.wav;
+        //string path = GameManager.Instance.resourcePath + $"/Back_{musicName}";
+        //Debug.Log(path);
+        //playBackgroundVideo = Resources.Load<VideoClip>(path);
+        //if (playBackgroundVideo != null) {
+        //    videoPlayer.clip = playBackgroundVideo;
+        //}
+        //else if (playBackgroundVideo == null) {
+        //    Sprite backgroundSprite = Resources.Load<Sprite>(path);
+        //    if (backgroundSprite != null)
+        //    {
+        //        playBackgroundImage.sprite = backgroundSprite;
+        //    }
+        //    else
+        //    {
+        //        Debug.LogError($"'{path}' 경로에서 VideoClip 또는 Sprite 파일을 찾을 수 없습니다.");
+        //    }
+        //}
+
+        if (GameManager_PSH.Instance.GetComponent<MusicData>().MuVi != null) {
+            playBackgroundVideo = GameManager_PSH.Instance.GetComponent<MusicData>().MuVi;
             videoPlayer.clip = playBackgroundVideo;
-        }
-        else if (playBackgroundVideo == null) {
-            Sprite backgroundSprite = Resources.Load<Sprite>(path);
-        if (backgroundSprite != null)
-        {
-            playBackgroundImage.sprite = backgroundSprite;
         }
         else
         {
-            Debug.LogError($"'{path}' 경로에서 VideoClip 또는 Sprite 파일을 찾을 수 없습니다.");
-        }
+            playBackgroundImage.sprite = GameManager_PSH.Instance.GetComponent<MusicData>().Album;
         }
     }
 }
