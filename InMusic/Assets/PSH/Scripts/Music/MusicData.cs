@@ -4,6 +4,8 @@ using UnityEngine.Video;
 public class MusicData : MonoBehaviour
 {
     /*MusicDataBox Prefab의 Inspactor창에서 기본값 할당*/
+    [Header("파일 관련 정보")]
+    [SerializeField] string mPath;
     [Header("음악 관련 정보")]
     [SerializeField] BMSData mBMS;
     [SerializeField] private string length;
@@ -12,14 +14,16 @@ public class MusicData : MonoBehaviour
     [SerializeField] private VideoClip musicVideo;
     [SerializeField] private bool hasBMS = false;
     [Header("기록 관련 정보")]
-    [SerializeField] private string score;
-    [SerializeField] private string accuracy;
-    [SerializeField] private string combo;
-    [SerializeField] private string rank;
+    [SerializeField] private string score = "0";
+    [SerializeField] private string accuracy = "0";
+    [SerializeField] private string combo = "0";
+    [SerializeField] private string rank = "-";
 
 
+    public string DirPath { get { return mPath; } set { mPath = value; } }
     public BMSData BMS { get { return mBMS; } set { mBMS = value; } }
     public string Title { get { return mBMS.header.title; } set { mBMS.header.title = value; } }
+    //Artist 메서드는 문제가 있어서 사용 안함
     public string Artist { get { return mBMS.header.artist; } set { mBMS.header.artist = value; } }
     public string Length { get { return length; } set { length = value; } }
     public Sprite Album { get { return albumArt; } set { albumArt = value; } }

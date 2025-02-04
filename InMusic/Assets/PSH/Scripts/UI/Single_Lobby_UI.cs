@@ -10,13 +10,13 @@ public class Single_Lobby_UI : UI_Base
     [SerializeField] private GameObject popupUI;
     [SerializeField] private GameObject[] musicItems = new GameObject[17];
     [SerializeField] private GameObject curMusicItem;
-    [Tooltip("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: ï¿½Ù¹ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Æ¼ï¿½ï¿½Æ®, ï¿½ï¿½ï¿½ï¿½")]
+    [Tooltip("¼±ÅÃÇÑ À½¾ÇÀÇ Á¤º¸: ¾Ù¹ü, Á¦¸ñ, ¾ÆÆ¼½ºÆ®, ±æÀÌ")]
     [SerializeField] private GameObject[] curMusicData = new GameObject[4];
-    [Tooltip("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½È®ï¿½ï¿½, ï¿½Þºï¿½, ï¿½ï¿½Å©")]
+    [Tooltip("¼±ÅÃÇÑ À½¾ÇÀÇ ±â·Ï: Á¡¼ö, Á¤È®µµ, ÄÞº¸, ·©Å©")]
     [SerializeField] private Text[] logData = new Text[4];
-    [Tooltip("ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
+    [Tooltip("½ºÅ©·Ñ °ü·Ã º¯¼ö")]
     [SerializeField] private RectTransform contentPos;
-    [SerializeField] List<MusicData> musicList = new List<MusicData>();
+    [SerializeField] List<MusicData> musicDataList = new List<MusicData>();
     private float itemGap = 40.0f;
     private int numOfitems;
     [SerializeField] private int startIndex = 0;
@@ -26,15 +26,15 @@ public class Single_Lobby_UI : UI_Base
 
     void Start()
     {
-        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Loadï¿½Ï±ï¿½
-        musicList = GameManager_PSH.Resource.GetMusicList();
+        //À½¾Ç ¸ñ·Ï LoadÇÏ±â
+        musicDataList = GameManager_PSH.Resource.GetMusicList();
 
-        if (musicList == null) {
-            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Load ï¿½ï¿½ï¿½ï¿½");
+        if (musicDataList == null) {
+            Debug.Log("À½¾Ç ¸ñ·Ï Load ½ÇÆÐ");
             return;
         }
 
-        numOfitems = musicList.Count;
+        numOfitems = musicDataList.Count;
         ContentDown();
 
         GameManager_PSH.Input.SetUIKeyEvent(SingleLobbyKeyEvent);
@@ -42,15 +42,15 @@ public class Single_Lobby_UI : UI_Base
 
     void Update()
     {
-        //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù·ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+        //¸ñ·ÏÀ» ÈÙ·Î Á¶ÀÛ Ã³¸®
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scroll > 0) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+        if (scroll > 0) //ÈÙÀ» À§·Î µ¹·ÈÀ» ¶§
         {
             ScrollUp();
         }
 
-        else if (scroll < 0)  //ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+        else if (scroll < 0)  //ÈÙÀ» ¾Æ·¡·Î µ¹·ÈÀ» ¶§
         {
             ScrollDown();
         }
@@ -81,31 +81,42 @@ public class Single_Lobby_UI : UI_Base
                 ScrollDown();
                 break;
             case "Exit":
-                //Å° ï¿½Ô·ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+                //Å° ÀÔ·Â ÀÌº¥Æ® Á¦°Å
                 GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-                //SceneManager.LoadScene("ï¿½Îºï¿½ ï¿½ï¿½");
+                //SceneManager.LoadScene("·Îºñ ¾À");
                 break;
             case "Enter":
                 if (curMusicItem.GetComponent<Music_Item>().HasBMS) {
-                    //Å° ï¿½Ô·ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+                    //Å° ÀÔ·Â ÀÌº¥Æ® Á¦°Å
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-                    GameManager_PSH.Instance.GetComponent<MusicData>().BMS = curMusicItem.GetComponent<Music_Item>().Data.BMS;
-                    GameManager_PSH.Instance.GetComponent<MusicData>().Album = curMusicItem.GetComponent<Music_Item>().Album.sprite;
-                    GameManager_PSH.Instance.GetComponent<MusicData>().Audio = curMusicItem.GetComponent<Music_Item>().Audio;
-                    GameManager_PSH.Instance.GetComponent<MusicData>().MuVi = curMusicItem.GetComponent<Music_Item>().MuVi;
+                    //´ÙÀ½ ¾À¿¡ ³Ñ°ÜÁÙ MusicData °ª ¼³Á¤
+                    //GameManager_PSH.LogData.SendData(curMusicItem.GetComponent<Music_Item>());
+                    Music_Item tmp = curMusicItem.GetComponent<Music_Item>();
+                    //ÃÖÀûÈ­ ÇÊ¿ä
+                    {
+                        GameManager_PSH.Instance.GetComponent<MusicData>().DirPath = tmp.DirPath;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().BMS = tmp.Data.BMS;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().Album = tmp.Album.sprite;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().Audio = tmp.Audio;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().MuVi = tmp.MuVi;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().Score = tmp.Score;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().Accuracy = tmp.Accuracy;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().Combo = tmp.Combo;
+                        GameManager_PSH.Instance.GetComponent<MusicData>().Rank = tmp.Rank.text;
+                    }
                     SceneManager.LoadScene(1);
                 }
                 else
                 {
                     //popupUI = GameManager_PSH.Resource.Instantiate("Notice_UI");
-                    Debug.Log("BMS ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½");
+                    Debug.Log("BMS ÆÄÀÏÀÌ ¾ø´Â °î");
                 }
                 break;
             case "KeyGuide":
                 Guide();
                 break;
             default:
-                Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å³ï¿½ ï¿½ß¸ï¿½ ï¿½Ô·ï¿½");
+                Debug.Log("¾ÆÁ÷ ±â´ÉÀÌ ¾ø°Å³ª Àß¸ø ÀÔ·Â");
                 break;
         }
     }
@@ -141,31 +152,29 @@ public class Single_Lobby_UI : UI_Base
     {
         //Debug.Log("Change Item");
         Music_Item newData = curMusicItem.GetComponent<Music_Item>();
-        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+        //À½¾Ç Á¤º¸ ¾÷µ¥ÀÌÆ®
         curMusicData[0].GetComponent<Image>().sprite = newData.Album.sprite;
         curMusicData[1].GetComponent<Text>().text = newData.Title.text;
         curMusicData[2].GetComponent<Text>().text = newData.Artist.text;
         curMusicData[3].GetComponent<Text>().text = newData.Length;
-        //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+        //±â·Ï Á¤º¸ ¾÷µ¥ÀÌÆ®
         logData[0].text = newData.Score;
         logData[1].text = newData.Accuracy;
         logData[2].text = newData.Combo;
         logData[3].text = newData.Rank.text;
-
-        SelectMusic();
     }
 
     void ContentDown()
     {
-        //Content ï¿½Ìµï¿½
+        //Content ÀÌµ¿
         contentPos.localPosition = new Vector2(0, 200.0f);
-        //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        //¸ñ·Ï °»½Å
         startIndex -= 5;
         if (startIndex < 0) {
             startIndex = numOfitems + startIndex;
         }
         for (int i = 0; i < musicItems.Length; i++) {
-            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicList[startIndex++]);
+            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicDataList[startIndex++]);
             if (startIndex >= numOfitems) {
                 startIndex = 0;
             }
@@ -173,16 +182,16 @@ public class Single_Lobby_UI : UI_Base
     }
 
     void ContentUp() {
-        //Content ï¿½Ìµï¿½
+        //Content ÀÌµ¿
         contentPos.localPosition = new Vector2(0, 200.0f);
-        //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        //¸ñ·Ï °»½Å
         startIndex -= 12; // 12 = 17 - 5
         if (startIndex < 0) {
             startIndex = numOfitems + startIndex;
         }
         for (int i = 0; i < musicItems.Length; i++)
         {
-            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicList[startIndex++]);
+            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicDataList[startIndex++]);
             if (startIndex >= numOfitems) {
                 startIndex = 0;
             }
@@ -202,6 +211,7 @@ public class Single_Lobby_UI : UI_Base
     }
 
     void UpdateItems(Music_Item oldItem, MusicData newItem) {
+        oldItem.DirPath = newItem.DirPath;
         //Debug.Log(newItem.BMS.header.title);
         if (newItem.HasBMS) {
             oldItem.Title.text = newItem.BMS.header.title;
@@ -220,18 +230,18 @@ public class Single_Lobby_UI : UI_Base
         oldItem.Data = newItem;
     }
 
-    //ï¿½Îµå·´ï¿½ï¿½ ï¿½Ìµï¿½: ï¿½ï¿½Å©ï¿½ï¿½/ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½
+    //ºÎµå·´°Ô ÀÌµ¿: ½ºÅ©·Ñ/¸¶¿ì½º Á¶ÀÛ
     IEnumerator SmoothScrollMove() {
         isScrolling = true;
 
-        //Content ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+        //Content À§Ä¡ ¼öÁ¤
         if (contentPos.localPosition.y < 40.0f)
         {
             ContentDown();
             dest = contentPos.localPosition;
             dest -= new Vector2(0, itemGap);
         }
-        //ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        //½ºÅ©·ÑÀ» ³»¸®¸é
         else if (contentPos.localPosition.y >= 400.0f)
         {
             ContentUp();
@@ -239,7 +249,7 @@ public class Single_Lobby_UI : UI_Base
             dest += new Vector2(0, itemGap);
         }
 
-        //ï¿½Ìµï¿½
+        //ÀÌµ¿
         float elapsedTime = 0f;
         while (elapsedTime < duration)
         {
@@ -247,16 +257,34 @@ public class Single_Lobby_UI : UI_Base
             contentPos.localPosition = Vector2.MoveTowards(contentPos.localPosition, dest, itemGap * (Time.deltaTime / duration));
             yield return null;
         }
-        //ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+        //À§Ä¡ º¸Á¤
         contentPos.localPosition = dest;
 
         isScrolling = false;
     }
 
-    void SelectMusic() //by KGB. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ë·¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½.(Gamemanager_PSHï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+
+    public void LogSaveTestButton()
     {
-        string musicName;
-        musicName = curMusicData[1].GetComponent<Text>().text;
-        GameManager_PSH.Instance.SetSelectedMusic(musicName);
+        //MusicData ¼³Á¤(GameManager°¡ °®°í ÀÖ´Â °ª)
+        Music_Item tmp = curMusicItem.GetComponent<Music_Item>();
+        GameManager_PSH.Instance.GetComponent<MusicData>().DirPath = tmp.DirPath;
+        GameManager_PSH.Instance.GetComponent<MusicData>().BMS = tmp.Data.BMS;
+        GameManager_PSH.Instance.GetComponent<MusicData>().Album = tmp.Album.sprite;
+        GameManager_PSH.Instance.GetComponent<MusicData>().Audio = tmp.Audio;
+        GameManager_PSH.Instance.GetComponent<MusicData>().MuVi = tmp.MuVi;
+        GameManager_PSH.Instance.GetComponent<MusicData>().Score = tmp.Score;
+        GameManager_PSH.Instance.GetComponent<MusicData>().Accuracy = tmp.Accuracy;
+        GameManager_PSH.Instance.GetComponent<MusicData>().Combo = tmp.Combo;
+        GameManager_PSH.Instance.GetComponent<MusicData>().Rank = tmp.Rank.text;
+
+        //°ÔÀÓ Á¾·á ÈÄ ÀÔ·Â¹Þ´Â °ª
+        MusicLog test = new MusicLog();
+        test.Combo = "100";
+        test.Accuracy = "10%";
+        test.Score = "1000";
+        test.Rank = "A";
+        //ÀúÀå
+        GameManager_PSH.LogData.SaveData(test);
     }
 }

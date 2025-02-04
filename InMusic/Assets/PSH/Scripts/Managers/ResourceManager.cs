@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.IO;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Video;
 using System.Linq;
@@ -53,7 +51,7 @@ public class ResourceManager
     }
 
     public List<MusicData> GetMusicList() {
-        musicDataRoot = new GameObject("musicDataRoot");
+        musicDataRoot = new GameObject("MusicDataRoot");
 
         List<MusicData> mList = new List<MusicData>();
         //경로 설정
@@ -62,6 +60,7 @@ public class ResourceManager
         int min = 17; //최소값
         int numOfMusic = 0;  //디렉토리 개수 == 음악 폴더 개수
         int result;
+        //수정 필요
         string[] mTitles = new string[17]; //제목(디렉토리 이름)
 
         if (Directory.Exists(fullPath)) 
@@ -77,20 +76,17 @@ public class ResourceManager
         }
 
         result = min > numOfMusic ? min : numOfMusic;
+
         for (int i = 0; i < result; i++)
         {
             GameObject item = Instantiate("MusicDataBox", musicDataRoot.transform);
             MusicData tmpMusic = item.GetComponent<MusicData>();
-
-            /*//BMS내용 임시
-            {
-                tmpMusic.Title = $"{i + 1} 제목";
-                tmpMusic.Artist = $"{i + 1} 작곡가";
-                tmpMusic.Rank = "-";
-            }*/
+            //MusicData tmpMusic = new MusicData();
 
             //최값보다 음악의 수가 적으면 파일 Load 안함
             if (i < numOfMusic) {
+                //경로 가져오기
+                tmpMusic.DirPath = mTitles[i].Replace("\\","/");
                 //파일들 이름 가져오기
                 string[] files = Directory.GetFiles(mTitles[i])
                                           //LINQ문 (Language-Integrated Query)
@@ -133,14 +129,13 @@ public class ResourceManager
                 else //사진이 없으면 기본 사진 사용
                     tmpMusic.Album = Load<Sprite>("Default_IMG");
 
-
                 //4. 기록 파일 열기 (선택)
                 if (fileMap.ContainsKey("log")) {
-                    //TODO
                     MusicLog tmpLog = LoadLog(fileMap["log"]);
                     tmpMusic.Score = tmpLog.Score;
                     tmpMusic.Accuracy = tmpLog.Accuracy;
-                    tmpMusic.Rank = tmpMusic.Rank;
+                    tmpMusic.Combo = tmpLog.Combo;
+                    tmpMusic.Rank = tmpLog.Rank;
                 }
                 
                 //5. 뮤비 파일 열기 (선택)
@@ -149,10 +144,17 @@ public class ResourceManager
 
                 UnityEngine.Debug.Log($"{i + 1}번째 폴더 확인 완료\n");
             }
+            //디렉토리가 없는 더미 Item이 읽을 MusicData
+            else
+            {
+                tmpMusic.Album = Load<Sprite>("Default_IMG");
+            }
+
             mList.Add(tmpMusic);
         }
         return mList;
     }
+
     //파일경로와 확장자 분류
     Dictionary<string, string> FileMapping(string[] fileList) { 
         Dictionary<string, string> fileMap = new Dictionary<string, string>();
