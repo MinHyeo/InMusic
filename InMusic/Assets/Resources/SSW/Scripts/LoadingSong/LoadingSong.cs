@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LoadingSong : SongList.Singleton<LoadingSong>
+public class LoadingSong : MonoBehaviour
 {
     [SerializeField] private CanvasGroup _canvasGroup;
     [SerializeField] private Image _loadingBar;
@@ -25,12 +25,12 @@ public class LoadingSong : SongList.Singleton<LoadingSong>
     private float _defaultLoadingTextX;
     private Song songTitle;
 
-    protected override void Awake() {
-        base.Awake();
-    }
+    // protected override void Awake() {
+    //     base.Awake();
+    // }
 
     /// <summary>
-    // 외부에서 호출하여 씬을 로드하는 함수
+    /// 외부에서 호출하여 씬을 로드하는 함수
     /// </summary>
     public void LoadPlay(string sceneName, string SongTitle, string Artist, Sprite songSprite) {
         gameObject.SetActive(true);
