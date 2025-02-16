@@ -71,6 +71,7 @@ namespace SongList{
                     // 1. 효과음 재생
                     SoundManager.Instance.PlaySFX(SFXType.PlayStart);
                     // 2. 씬 로드
+                    loadingSongObj = LoadingSong.Instance;
                     loadingSongObj.LoadPlay(playSceneName, songInfo.Title, _detailArtistText.text, _detailImage.sprite);
                 });
 

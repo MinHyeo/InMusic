@@ -17,17 +17,44 @@ public class LoadingSong : MonoBehaviour
     [SerializeField] private Image _songImage;
     [SerializeField] private Text _songTitle;
     [SerializeField] private Text _songArtist;
-    
 
-
+    private static LoadingSong _instance;
     private string loadSceneName;
     private Coroutine dotCoroutine;
-    private float _defaultLoadingTextX;
+    private float _defaultLoadingText;
     private Song songTitle;
+    
+    public static LoadingSong Instance {
+        get {
+            if (_instance == null) {
+                LoadingSong instance = FindFirstObjectByType<LoadingSong>();
+                if(instance == null) {
+                    Debug.LogError("LoadingSong이 씬에 배치되어 있지 않음");
+                } else {
+                    _instance = instance;
+                }
+            }
+            return _instance;
+        }
+    }
 
-    // protected override void Awake() {
-    //     base.Awake();
-    // }
+    private void Awake() {
+        if (_instance == null) {
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+        } else if (_instance != this) {
+            Destroy(gameObject);
+            return;
+        }
+    }
+
+    private void Start() {
+        // 시작할 때 투명/클릭불가 처리
+        _canvasGroup.alpha = 0f;
+        _canvasGroup.interactable = false;
+        _canvasGroup.blocksRaycasts = false;
+    }
+
 
     /// <summary>
     /// 외부에서 호출하여 씬을 로드하는 함수
@@ -47,7 +74,7 @@ public class LoadingSong : MonoBehaviour
         _songImage.sprite = songSprite;
         _songTitle.text = SongTitle;
         _songArtist.text = Artist;
-        _defaultLoadingTextX = _loadingText.rectTransform.anchoredPosition.x;
+        _defaultLoadingText = _loadingText.rectTransform.anchoredPosition.x;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
         loadSceneName = sceneName;
@@ -110,6 +137,13 @@ public class LoadingSong : MonoBehaviour
 
     private IEnumerator Fade(bool isFadeIn)
     {
+        if (isFadeIn)
+        {
+            // 보이게 할 때는 우선 인터랙션/레이캐스트 허용
+            _canvasGroup.interactable = true;
+            _canvasGroup.blocksRaycasts = true;
+        }
+        
         float timer = 0f;
         while (timer <= 1f)
         {
@@ -120,7 +154,8 @@ public class LoadingSong : MonoBehaviour
 
         if (!isFadeIn)
         {
-            gameObject.SetActive(false);
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
         }
     }
 
