@@ -101,7 +101,6 @@ namespace Play
 
         public void StartGame(Song songName)
         {
-            Debug.Log("Game Start");
             this.songName = songName;
             SoundManager.Instance.SongInit(songName.ToString());
             videoPlayScript.GetVideoClip(songName);
