@@ -80,6 +80,10 @@ public class GameManager : MonoBehaviour
 
     public void ReturnMusicSelectSceen(ScoreData saveData)
     {
+        //발동 조건 : 결과창에서 next 버튼을 클릭시 작동
 
+        //Unity에 저장
+
+        //저장 끝나면 씬 이동
     }
 }
