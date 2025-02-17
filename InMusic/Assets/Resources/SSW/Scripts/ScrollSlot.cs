@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
-
+using Play;
 
 namespace SongList {
     public class ScrollSlot : MonoBehaviour {
@@ -24,6 +24,7 @@ namespace SongList {
         private SongInfo _currentData;
         private int _currentIndex;
         private Coroutine _highlightCoroutine;
+        private string _uniqueKey;
         #endregion
 
         #region Slot Data Setting
@@ -77,7 +78,47 @@ namespace SongList {
                     _songImage.sprite = null;
                 }
             }
+
+            SavePlayData savePlayData = FindFirstObjectByType<SavePlayData>();
+            if (savePlayData != null)
+            {
+                // 곡을 고유하게 식별할 키를 만듦 (title + artist 결합)
+                _uniqueKey = $"{_currentData.Title}_{_currentData.Artist}";
+                ScoreData bestPlayData = savePlayData.GetSongScoreByKey(_uniqueKey);
+
+                if (bestPlayData != null)
+                {
+                    if (_songHighestRank != null)
+                    {
+                        string rank = CalculateRank(bestPlayData.score, bestPlayData.accuracy);
+                        _songHighestRank.text = rank;
+                    }
+                }
+                else
+                {
+                    // 해당 키에 대한 기록이 아직 없을 경우
+                    if (_songHighestRank != null)
+                        _songHighestRank.text = "-";
+                }
+            }
+            else
+            {
+                // SavePlayData를 못 찾았을 경우
+                if (_songHighestRank != null)
+                    _songHighestRank.text = "?";
+            }
         }
+        /// <summary>
+        /// (예시) 점수와 정확도를 기반으로 랭크를 산출하는 간단한 메서드
+        /// </summary>
+        private string CalculateRank(int score, float accuracy)
+        {
+            if (score > 1000000 && accuracy > 95f) return "S";
+            else if (score > 500000) return "A";
+            else if (score > 300000) return "B";
+            else return "C";
+        }
+
         #endregion
 
         #region Highlight

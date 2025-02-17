@@ -10,7 +10,7 @@ using System.Collections.Generic;
 [Serializable]
 public class SongScorePair
 {
-    public string songName;
+    public string songKey;
     public ScoreData scoreData;
 }
 
@@ -25,19 +25,45 @@ public class ScoreDataCollection
 
 public class SavePlayData : MonoBehaviour
 {
+    private static SavePlayData _instance;
+    public static SavePlayData Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                // 씬 어딘가에 SavePlayData 오브젝트가 있어야 함
+                _instance = FindFirstObjectByType<SavePlayData>();
+            }
+            return _instance;
+        }
+    }
     private const string SCORE_FILE_NAME = "scores.json";
     private ScoreDataCollection allScores = null;
-
     private void Awake()
     {
-        LoadScores();
+        // 싱글톤 초기화
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+            LoadScores(); // 필요하면 여기서 한 번 로드
+        }
+        else
+        {
+            // 이미 존재하는 경우 새 오브젝트 제거
+            if (this != _instance)
+                Destroy(gameObject);
+        }
     }
+    
 
     /// <summary>
     /// 실제 파일 경로를 반환
     /// </summary>
     private string GetSaveFilePath()
     {
+        // C:\Users\<User>\AppData\LocalLow\<CompanyName>\<ProjectName>\scores.json
         return Path.Combine(Application.persistentDataPath, SCORE_FILE_NAME);
     }
 
@@ -97,9 +123,8 @@ public class SavePlayData : MonoBehaviour
         if (allScores == null)
             LoadScores();
 
-        // 곡 이름 기준으로 검색
         SongScorePair existing = allScores.allSongScores
-            .Find(pair => pair.songName == newScore.songName);
+            .Find(pair => pair.songKey == newScore.songKey);
 
         if (existing != null)
         {
@@ -111,13 +136,11 @@ public class SavePlayData : MonoBehaviour
         else
         {
             // 해당 곡이 최초 저장이므로 바로 추가
-            allScores.allSongScores.Add(
-                new SongScorePair
-                {
-                    songName = newScore.songName,
-                    scoreData = newScore
-                }
-            );
+            SongScorePair newPair = new SongScorePair {
+                songKey = newScore.songKey,
+                scoreData = newScore
+            };
+            allScores.allSongScores.Add(newPair);
         }
 
         // 전체를 다시 파일로 저장(= 기존 곡들도 유지)
@@ -125,17 +148,14 @@ public class SavePlayData : MonoBehaviour
     }
 
     /// <summary>
-    /// 특정 곡 이름으로 저장된 ScoreData 가져오기
+    /// 특정 곡 이름 및 아티스트로 저장된 ScoreData 가져오기
     /// </summary>
-    public ScoreData GetSongScore(string songName)
+    public ScoreData GetSongScoreByKey(string key)
     {
-        if (allScores == null)
-            LoadScores();
-
+        LoadScores();
         SongScorePair pair = allScores.allSongScores
-            .Find(p => p.songName == songName);
-
-        return pair != null ? pair.scoreData : null;
+            .Find(p => p.songKey == key);
+        return pair?.scoreData;
     }
 
     /// <summary>

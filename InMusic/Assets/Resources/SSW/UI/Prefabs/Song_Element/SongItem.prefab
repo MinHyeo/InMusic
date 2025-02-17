@@ -322,7 +322,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: S
+  m_Text: X
 --- !u!1 &6905251678252019351
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,9 +389,7 @@ MonoBehaviour:
   _songImage: {fileID: 8786185124888146760}
   _songTitle: {fileID: 5225491547763959843}
   _songArtist: {fileID: 3666407886053568196}
-  _songHighestScore: {fileID: 0}
-  _songHighestAccuracy: {fileID: 0}
-  _songHighestCombo: {fileID: 0}
+  _songHighestRank: {fileID: 7888847092495038853}
   _backgroundImage: {fileID: 690273127942960967}
   _highlightImage: {fileID: 5582901362194308616}
   _isHighlighted: 0

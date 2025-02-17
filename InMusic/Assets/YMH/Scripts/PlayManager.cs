@@ -13,6 +13,7 @@ namespace Play
     [Serializable]
     public class ScoreData
     {
+        public string songKey;
         //노래 정보
         public string songName;
         public string artist;
@@ -328,6 +329,7 @@ namespace Play
 
             scoreData.songName = songName.ToString();
             scoreData.artist = artist;
+            scoreData.songKey = songName.ToString() + "_" + artist;
             scoreData.score = (int)score;
             scoreData.accuracy = accuracy;
             scoreData.great = inputCount[0];

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Play;
 
 namespace SongList{
     public class HighlightSong : MonoBehaviour
@@ -15,10 +16,12 @@ namespace SongList{
         //[SerializeField] private Text _detailPlayTimeText; // 좌측에 표시할 플레이 시간 Text
         [SerializeField] private Image _detailImage; // 좌측에 표시할 이미지
         [SerializeField] private LoadingSong loadingSongObj;
-        // [Header("Score UI")]
-        // [SerializeField] private Text _songHighScoreText; // 좌측 하단에 표시할 최고 점수 Text
-        // [SerializeField] private Text _songMaxComboText; // 좌측 하단에 표시할 최대 콤보 Text
-        // [SerializeField] private Text _songAccuracy; // 좌측 하단에 표시할 정확도 Text
+
+        [Header("Score UI")]
+        [SerializeField] private Text _songHighestScoreText; // 좌측 하단에 표시할 최고 점수 Text
+        [SerializeField] private Text _songMaxComboText; // 좌측 하단에 표시할 최대 콤보 Text
+        [SerializeField] private Text _songHighestAccuracyText; // 좌측 하단에 표시할 정확도 Text
+        [SerializeField] private Text _songHighestRankText; // 좌측 하단에 표시할 최고 등급 Text
 
 
         [Header("Button")]
@@ -61,6 +64,40 @@ namespace SongList{
                 _detailImage.sprite = songSprite;
             }
 
+            // 플레이 기록 불러오기
+            // 고유 키 생성 (예: "Heya_ArtistA")
+            string uniqueKey = $"{songInfo.Title}_{songInfo.Artist}";
+
+            SavePlayData spd = SavePlayData.Instance;
+            if (spd != null) {
+                ScoreData record = spd.GetSongScoreByKey(uniqueKey);
+                if (record != null) {
+                    // 최고 점수, 최대 콤보, 정확도, 랭크를 업데이트
+                    if (_songHighestScoreText != null)
+                        _songHighestScoreText.text = $"{record.score}";
+                    if (_songMaxComboText != null)
+                        _songMaxComboText.text = $"{record.maxCombo}";
+                    if (_songHighestAccuracyText != null)
+                        _songHighestAccuracyText.text = $"{record.accuracy:F2}%";
+                    if (_songHighestRankText != null)
+                        _songHighestRankText.text = $"{CalculateRank(record.score, record.accuracy)}";
+                }
+                else {
+                    // 기록이 없는 경우 기본값 표시
+                    if (_songHighestScoreText != null)
+                        _songHighestScoreText.text = "-";
+                    if (_songMaxComboText != null)
+                        _songMaxComboText.text = "-";
+                    if (_songHighestAccuracyText != null)
+                        _songHighestAccuracyText.text = "-";
+                    if (_songHighestRankText != null)
+                        _songHighestRankText.text = "-";
+                }
+            }
+            else {
+                Debug.LogWarning("[HighlightSong] SavePlayData 객체를 찾지 못했습니다.");
+            }
+
             // TODO: 버튼 클릭 부분 리팩토링 필요 (버튼 관련 코드는 다른 클래스로 분리하여야 함)
             // 버튼 리스너 세팅
             if (startButton != null) {
@@ -78,6 +115,18 @@ namespace SongList{
             }
         }
 
+        /// <summary>
+        /// 점수와 정확도를 기준으로 랭크 계산
+        /// 테스트를 위해 선언
+        /// </summary>
+        private string CalculateRank(int score, float accuracy)
+        {
+            if (score > 1000000 && accuracy > 95f) return "S";
+            else if (score > 500000) return "A";
+            else if (score > 300000) return "B";
+            else return "C";
+        }
+
 
 
         /// <summary>
@@ -91,6 +140,10 @@ namespace SongList{
                 // 버튼 리스너 제거
                 startButton.onClick.RemoveAllListeners();
             }
+            if (_songHighestScoreText != null) _songHighestScoreText.text = "";
+            if (_songMaxComboText != null)  _songMaxComboText.text  = "";
+            if (_songHighestAccuracyText != null)  _songHighestAccuracyText.text  = "";
+            if (_songHighestRankText != null)      _songHighestRankText.text      = "";
         }
         #endregion
     }
