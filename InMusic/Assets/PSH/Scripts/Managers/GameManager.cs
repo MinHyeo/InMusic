@@ -1,6 +1,7 @@
 using Play;
 using System;
 using System.Collections;
+using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -75,5 +76,10 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Try Scene Load");
         SceneManager.LoadScene("test_SSW");
+    }
+
+    public void ReturnMusicSelectSceen(ScoreData saveData)
+    {
+
     }
 }

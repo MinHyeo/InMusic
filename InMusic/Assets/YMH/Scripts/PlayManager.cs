@@ -314,7 +314,7 @@ namespace Play
             ResultManager.Instance.ReceiveResult(scoreData);
         }
 
-        private ScoreData SaveScore()
+        public ScoreData SaveScore()
         {
             ScoreData scoreData = new ScoreData();
 

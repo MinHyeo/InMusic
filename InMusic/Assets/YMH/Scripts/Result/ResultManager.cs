@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Threading.Tasks;
+using UnityEditor.Overlays;
 using UnityEngine;
 
 
@@ -44,7 +45,11 @@ namespace Play.Result
             resultText.SetResultText(scoreData.score, new int[] { scoreData.great, scoreData.good, scoreData.bad, scoreData.miss }, scoreData.accuracy, scoreData.maxCombo);
             //결과에 따른 랭크 판정
             resultText.SetRank(scoreData.accuracy, scoreData.isFullCombo);
-            //결과 저장
+        }
+
+        public void OnClickNextButton()
+        {
+            GameManager.Instance.ReturnMusicSelectSceen(scoreData);
         }
     }
 }
