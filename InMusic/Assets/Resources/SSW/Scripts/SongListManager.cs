@@ -16,7 +16,7 @@ namespace SongList
 
         [Header("Slot Settings")]
         [SerializeField] private GameObject _songItemPrefab;
-        [SerializeField] private int _bufferItems = 5;
+        [SerializeField] private int _bufferItems = 10;
 
         [Header("Background Sprites")]
         [SerializeField] private Sprite _selectedSprite;
@@ -35,7 +35,7 @@ namespace SongList
         private int _poolSize;
         private float _itemHeight;
         private int _visibleCount;
-        private int _firstVisibleIndexCached = -5;
+        private int _firstVisibleIndexCached = -10;
 
         private List<GameObject> _songList = new List<GameObject>();
         private List<SongInfo> _songs;

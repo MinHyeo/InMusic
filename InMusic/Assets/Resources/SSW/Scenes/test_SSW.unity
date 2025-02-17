@@ -249,7 +249,7 @@ MonoBehaviour:
   _scrollRect: {fileID: 386415305}
   _contentRect: {fileID: 733476975}
   _songItemPrefab: {fileID: 6905251678252019351, guid: 3c7875108b5f26a4cbb4302d82eed171, type: 3}
-  _bufferItems: 5
+  _bufferItems: 10
   _selectedSprite: {fileID: 5930141362655772493, guid: ef3ab89986ec9ba4b9d594d4d1485517, type: 3}
   _defaultSprite: {fileID: 346123834412281656, guid: 18d76dcc5ab9c09438eccceaaaedbf0b, type: 3}
   _scrollDebounceTime: 0.05
