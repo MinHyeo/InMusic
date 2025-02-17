@@ -43,8 +43,11 @@ namespace Play.Result
             resultText.SetSongInfoText(scoreData.songName, scoreData.artist);
             //결과 출력
             resultText.SetResultText(scoreData.score, new int[] { scoreData.great, scoreData.good, scoreData.bad, scoreData.miss }, scoreData.accuracy, scoreData.maxCombo);
+
             //결과에 따른 랭크 판정
-            resultText.SetRank(scoreData.accuracy, scoreData.isFullCombo);
+            string rank = resultText.SetRank(scoreData.accuracy, scoreData.isFullCombo);
+            //ScoreData에 랭크 저장
+            scoreData.rank = rank;
         }
 
         public void OnClickNextButton()

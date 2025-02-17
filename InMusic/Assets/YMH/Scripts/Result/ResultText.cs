@@ -76,7 +76,7 @@ namespace Play.Result
             maxComboText.text = maxCombo.ToString();
         }
 
-        public void SetRank(float accuracy, bool isFullCombo)
+        public string SetRank(float accuracy, bool isFullCombo)
         {
             string rank = "";
             int rankColor = 0;
@@ -108,6 +108,8 @@ namespace Play.Result
 
             rankText.text = rank;
             rankText.colorGradient = new VertexGradient(Color.white, Color.white, colors[rankColor], colors[rankColor]);
+
+            return rank;
         }
     }
 }

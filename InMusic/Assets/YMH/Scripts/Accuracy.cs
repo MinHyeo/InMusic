@@ -38,7 +38,6 @@ namespace Play
 
         public void ShowAccracy(AccuracyType type)
         {
-            Debug.Log(type.ToString());
             //텍스트 글자 변경
             accuarcy.text = type.ToString().ToLower();
             //텍스트 색 변경

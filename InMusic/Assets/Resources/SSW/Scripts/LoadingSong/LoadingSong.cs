@@ -23,6 +23,7 @@ public class LoadingSong : MonoBehaviour
     private Coroutine dotCoroutine;
     private float _defaultLoadingText;
     private Song songTitle;
+    private string artsit;
     
     public static LoadingSong Instance {
         get {
@@ -62,6 +63,7 @@ public class LoadingSong : MonoBehaviour
     public void LoadPlay(string sceneName, string SongTitle, string Artist, Sprite songSprite) {
         gameObject.SetActive(true);
         Enum.TryParse(SongTitle, out songTitle);
+        artsit = Artist;
 
         if (dotCoroutine != null) {
             StopCoroutine(dotCoroutine);
@@ -119,7 +121,7 @@ public class LoadingSong : MonoBehaviour
         }
 
         // PlayManager가 초기화되면 메서드 호출
-        PlayManager.Instance.StartGame(songTitle);
+        PlayManager.Instance.StartGame(songTitle, artsit);
     }
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)

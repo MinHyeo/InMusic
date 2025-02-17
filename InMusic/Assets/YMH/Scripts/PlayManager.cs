@@ -17,6 +17,7 @@ namespace Play
         //점수
         public int score;
         public float accuracy;
+        public string rank;
         //판정별 입력 횟수
         public int great;
         public int good;
@@ -59,6 +60,7 @@ namespace Play
 
         //노래 정보
         private Song songName;
+        private string artist;
         public Song SongTitle { get { return songName; } private set { } }
         private const float preStartDelay = 2.0f;
         private const float noteSpeed = 5.0f;
@@ -90,7 +92,7 @@ namespace Play
 
         public void OnClickButton()
         {
-            StartGame(Song.Heya);
+            StartGame(Song.Heya, "artist");
         }
 
         private void OnApplicationQuit()
@@ -99,9 +101,13 @@ namespace Play
             SoundManager.Instance.End();
         }
 
-        public void StartGame(Song songName)
+        public void StartGame(Song songName, string artist)
         {
+            //노래 정보 저장
             this.songName = songName;
+            this.artist = artist;
+
+            //노래 초기화
             SoundManager.Instance.SongInit(songName.ToString());
             videoPlayScript.GetVideoClip(songName);
             metronome.CalculateSync();
@@ -292,7 +298,7 @@ namespace Play
 
 
             //재시작
-            StartGame(songName);
+            StartGame(songName, artist);
         }
 
         //노래 종료
@@ -319,7 +325,7 @@ namespace Play
             ScoreData scoreData = new ScoreData();
 
             scoreData.songName = songName.ToString();
-            scoreData.artist = "artist";
+            scoreData.artist = artist;
             scoreData.score = (int)score;
             scoreData.accuracy = accuracy;
             scoreData.great = inputCount[0];
