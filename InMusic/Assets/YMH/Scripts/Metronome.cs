@@ -4,12 +4,11 @@ using UnityEngine;
 
 namespace Play 
 {
-    public class Metronome : MonoBehaviour
+    public class Metronome : SingleTon<Metronome>
     {
-        public static Metronome Instance;
-
         [SerializeField]
         private AudioSource hitSource;
+        [Space(10)]
         [SerializeField]
         private GameObject linePrefab;
         [SerializeField]
@@ -37,11 +36,6 @@ namespace Play
         private float travelTime;
         public readonly float preStartDelay = 2.0f;
 
-        private void Awake()
-        {
-            Instance = this;
-        }
-
         private void Update()
         {
             if (!isStart)
@@ -60,6 +54,9 @@ namespace Play
         }
         public void CalculateSync()
         {
+            //오브젝트 풀로 오브젝트 미리 생성
+            ObjectPoolManager.Instance.CreatePool(linePrefab);
+
             // 한 박자의 샘플 간격 계산
             frequency = SoundManager.Instance.frequency;
             samplesPerBeat = (stdBpm / songBpm) * frequency;
@@ -90,9 +87,10 @@ namespace Play
                 yield return new WaitForSeconds(initialSpawnTime);
 
                 // 마디 선 생성
-                GameObject newLine = Instantiate(linePrefab, lineSpawnPoint.position, Quaternion.identity);
+                //GameObject newLine = Instantiate(linePrefab, lineSpawnPoint.position, Quaternion.identity);
+                GameObject newLine = ObjectPoolManager.Instance.GetFromPool("Line");
+                newLine.transform.position = lineSpawnPoint.position;
                 newLine.GetComponent<Line>().Initialize(lineSpeed, judgementLine.position.y);
-                Debug.Log("마디 선 생성");
             }
         }
         private IEnumerator PlayTicks()
@@ -120,8 +118,15 @@ namespace Play
             yield return new WaitForSeconds(spawnTime - Time.time);
 
             // 마디 선 생성
-            GameObject newLine = Instantiate(linePrefab, lineSpawnPoint.position, Quaternion.identity);
+            //GameObject newLine = Instantiate(linePrefab, lineSpawnPoint.position, Quaternion.identity);
+            GameObject newLine = ObjectPoolManager.Instance.GetFromPool("Line");
+            newLine.transform.position = lineSpawnPoint.position;
             newLine.GetComponent<Line>().Initialize(lineSpeed, judgementLine.position.y);
+        }
+
+        public void RemoveLine(GameObject line)
+        {
+            ObjectPoolManager.Instance.ReleaseToPool("Line", line);
         }
     }
 }

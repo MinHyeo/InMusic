@@ -22,7 +22,7 @@ namespace Play
             // 화면 아래로 사라지면 삭제
             if (transform.position.y < -10.0f)
             {
-                Destroy(gameObject);
+                Metronome.Instance.RemoveLine(this.gameObject);
             }
         }
     }
