@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using TMPro;
+using System;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using Play.Result;
@@ -9,6 +10,7 @@ using UnityEngine.InputSystem;
 namespace Play
 {
     #region play result data class
+    [Serializable]
     public class ScoreData
     {
         //노래 정보

@@ -501,7 +501,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2107196331912146449, guid: 4cee0f9e9e61e1f4db48dcd7edbaf060, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2651884139398342361, guid: 4cee0f9e9e61e1f4db48dcd7edbaf060, type: 3}
       propertyPath: m_Pivot.x
@@ -1060,7 +1060,7 @@ GameObject:
   - component: {fileID: 687809177}
   - component: {fileID: 687809176}
   m_Layer: 5
-  m_Name: SongAccuracy
+  m_Name: SongHighestAccuracy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1082,8 +1082,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -64, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: -47, y: 0}
+  m_SizeDelta: {x: 194, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &687809176
 MonoBehaviour:
@@ -1118,7 +1118,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: SongHighestAccuracy
 --- !u!222 &687809177
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1761,8 +1761,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.17017852, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -47.545, y: -47.1}
-  m_SizeDelta: {x: 127.08984, y: 30}
+  m_AnchoredPosition: {x: -30.545, y: -47.1}
+  m_SizeDelta: {x: 161.09, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1397846005
 MonoBehaviour:
@@ -1797,7 +1797,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: SongHighestCombo
 --- !u!222 &1397846006
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2050,8 +2050,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -64, y: 42.8}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: -47, y: 42.8}
+  m_SizeDelta: {x: 194, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1537023557
 MonoBehaviour:
@@ -2086,7 +2086,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: SongHighestScore
 --- !u!222 &1537023558
 CanvasRenderer:
   m_ObjectHideFlags: 0

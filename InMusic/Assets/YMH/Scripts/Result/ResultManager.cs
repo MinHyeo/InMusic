@@ -24,7 +24,7 @@ namespace Play.Result
             resultCanvas.SetActive(false);
         }
 
-        // ÇÃ·¹ÀÌ °á°ú ¹Þ¾Æ¿À±â
+        // ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½
         public void ReceiveResult(ScoreData scoreData)
         {
             this.scoreData = scoreData;
@@ -33,26 +33,26 @@ namespace Play.Result
 
         private IEnumerator ShowResult()
         {
-            //µô·¹ÀÌ
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             yield return delayTime;
 
-            //Canvas È°¼ºÈ­
+            //Canvas È°ï¿½ï¿½È­
             resultCanvas.SetActive(true);
 
-            //³ë·¡ Á¤º¸ Ãâ·Â
+            //ï¿½ë·¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             resultText.SetSongInfoText(scoreData.songName, scoreData.artist);
-            //°á°ú Ãâ·Â
+            //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             resultText.SetResultText(scoreData.score, new int[] { scoreData.great, scoreData.good, scoreData.bad, scoreData.miss }, scoreData.accuracy, scoreData.maxCombo);
 
-            //°á°ú¿¡ µû¸¥ ·©Å© ÆÇÁ¤
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½
             string rank = resultText.SetRank(scoreData.accuracy, scoreData.isFullCombo);
-            //ScoreData¿¡ ·©Å© ÀúÀå
+            //ScoreDataï¿½ï¿½ ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½
             scoreData.rank = rank;
         }
 
         public void OnClickNextButton()
         {
-            GameManager.Instance.ReturnMusicSelectSceen(scoreData);
+            GameManager.Instance.ReturnMusicSelectScene(scoreData);
         }
     }
 }

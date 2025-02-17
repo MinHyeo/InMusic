@@ -12,6 +12,7 @@ namespace SongList {
         [SerializeField] private Image _songImage;       // 곡 이미지
         [SerializeField] private Text _songTitle;        // 곡 제목
         [SerializeField] private Text _songArtist;       // 곡 아티스트
+        [SerializeField] private Text _songHighestRank;  // 곡 최고 등급
         [SerializeField] private Image _backgroundImage;   // 항상 기본 스프라이트가 표시되는 배경 이미지
         [SerializeField] private Image _highlightImage;  // 하이라이트 표시용 UI (테두리나 배경 등)
         [SerializeField] private bool _isHighlighted;    // 현재 하이라이트 상태인지 여부

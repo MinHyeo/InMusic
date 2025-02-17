@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
         }
 
         // PlayManager가 초기화되면 메서드 호출
-        PlayManager.Instance.StartGame(songTitle);
+        //PlayManager.Instance.StartGame(songTitle);
     }
 
     public void SelectSong(Song songTitle)
@@ -78,12 +78,27 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("test_SSW");
     }
 
-    public void ReturnMusicSelectSceen(ScoreData saveData)
+    public void ReturnMusicSelectScene(ScoreData saveData)
     {
         //발동 조건 : 결과창에서 next 버튼을 클릭시 작동
 
         //Unity에 저장
 
         //저장 끝나면 씬 이동
+        // 1) JSON 저장
+        SavePlayData savePlayData = FindFirstObjectByType<SavePlayData>();
+        if (savePlayData != null)
+        {
+            // scoreData 저장 (이미 "Heya" 등 곡 이름이 들어있다고 가정)
+            savePlayData.SaveSongScore(saveData);
+            Debug.Log($"[GameManager] 저장 완료: {saveData.songName}, 점수: {saveData.score}");
+        }
+        else
+        {
+            Debug.LogWarning("[GameManager] SavePlayData 객체를 찾지 못했습니다. 점수를 저장할 수 없습니다.");
+        }
+
+        // 2) 저장 완료 후, 곡 선택 씬 등 원하는 씬으로 이동
+        SceneManager.LoadScene("test_SSW");
     }
 }
