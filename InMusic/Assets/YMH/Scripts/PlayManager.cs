@@ -158,7 +158,6 @@ namespace Play
             // 해당 라인에 있는 노트 중 판정할 노트 검색
             Note closestNote = FindClosestNoteToPressTime((int)keyEvent, pressTime);
 
-            Debug.Log(keyObjects[0]);
             //키 입력 임팩트
             keyObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(true);
 
@@ -187,7 +186,6 @@ namespace Play
 
         private void OnKeyRelase(Define.NoteControl keyEvent)
         {
-            Debug.Log(keyObjects[0]);
             keyObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(false);
         }
 
@@ -298,7 +296,8 @@ namespace Play
             SoundManager.Instance.End();
             //노트 초기화
             NoteManager.Instance.Restart();
-
+            //박자선  초기화
+            metronome.Restart();
 
             //재시작
             StartGame(songName, artist);

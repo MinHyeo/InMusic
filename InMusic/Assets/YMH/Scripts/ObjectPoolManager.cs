@@ -18,7 +18,6 @@ public class ObjectPoolManager : SingleTon<ObjectPoolManager>
     public void CreatePool(GameObject prefab)
     {
         string key = prefab.name;
-        Debug.Log(key);
 
         if (pools.ContainsKey(key))
         {
