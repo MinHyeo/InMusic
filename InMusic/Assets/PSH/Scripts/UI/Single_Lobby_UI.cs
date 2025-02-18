@@ -24,6 +24,7 @@ public class Single_Lobby_UI : UI_Base
     float duration = 0.3f;
     bool isScrolling = false;
 
+    [SerializeField] private LoadingScreen loadingScereen;
     void Start()
     {
         //���� ��� Load�ϱ�
@@ -93,7 +94,10 @@ public class Single_Lobby_UI : UI_Base
                     GameManager_PSH.Instance.GetComponent<MusicData>().Album = curMusicItem.GetComponent<Music_Item>().Album.sprite;
                     GameManager_PSH.Instance.GetComponent<MusicData>().Audio = curMusicItem.GetComponent<Music_Item>().Audio;
                     GameManager_PSH.Instance.GetComponent<MusicData>().MuVi = curMusicItem.GetComponent<Music_Item>().MuVi;
-                    SceneManager.LoadScene(1);
+                    //GameManager_PSH.Instance.GetComponent<MusicData>().MuVi = curMusicItem.GetComponent<Music_Item>().Data.BMS.header.title
+                    //SceneManager.LoadScene(1);
+                    //loadingScereen.LoadScene("KGB_SinglePlay", curMusicItem.GetComponent<Music_Item>().Data.BMS);
+                    loadingScereen.LoadScene("KGB_SinglePlay", curMusicItem.GetComponent<Music_Item>().Data);
                 }
                 else
                 {
