@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -141,7 +142,7 @@ namespace Play
             isStart = false;
 
             //화면에 있는 마디 선 삭제
-            foreach (GameObject line in linesObject)
+            foreach (GameObject line in linesObject.ToList())
             {
                 RemoveLine(line);
             }
