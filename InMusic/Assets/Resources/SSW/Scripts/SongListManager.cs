@@ -25,9 +25,6 @@ namespace SongList
         [Header("Scrolling Settings")]
         [SerializeField] private float _scrollDebounceTime = 0.05f; // 스크롤 멈춤 판정 시간
 
-        // // === 추가: 일정 범위 이상 넘어가면 텔레포트
-        // [SerializeField] private float _teleportThreshold = 2000f; 
-
         private bool _isScrolling = false;
         private float _lastScrollTime = 0f;
 
@@ -36,6 +33,11 @@ namespace SongList
         private float _itemHeight;
         private int _visibleCount;
         private int _firstVisibleIndexCached = -10;
+
+        private float upKeyTimer = 0f;
+        private float downKeyTimer = 0f;
+        private const float initialDelay = 0.3f; // 키를 누른 후 최초 반복까지의 지연 시간
+        private const float repeatRate = 0.1f;   // 반복 스크롤 간격
 
         private List<GameObject> _songList = new List<GameObject>();
         private List<SongInfo> _songs;
@@ -84,15 +86,6 @@ namespace SongList
 
             Canvas.ForceUpdateCanvases();
 
-            //TODO: 아래 주석 풀고, 맨 밑에 있는 연산 식 확인
-            // 현재 선택된 슬롯 위의 내용들이 사라지면서 그 다음항목부터 보이는 것으로 추정됨
-            // 초기 스냅 + 재배치
-            // SnapToNearestSlot();
-            // OnScroll();
-
-            // // 중앙 슬롯 즉시 하이라이트
-            // HighlightCenterSlotByPosition(isImmediate: true);
-
             if (rememberedIndex >= 0) {
                 ForceCenterAtIndex(rememberedIndex);
             } else {
@@ -104,6 +97,16 @@ namespace SongList
                 // 중앙 슬롯 즉시 하이라이트
                 HighlightCenterSlotByPosition(isImmediate: true);
             }
+        }
+
+        private void OnEnable() {
+            GameManager.SingleMenuInput.keyAction += OnKeyPress;
+            Debug.Log("SongList Input Enabled");
+        }
+
+        private void OnDisable() {
+            GameManager.SingleMenuInput.keyAction -= OnKeyPress;
+            Debug.Log("SongList Input Disabled");
         }
         
         private void Update() {
@@ -122,48 +125,7 @@ namespace SongList
         private void OnScrolled(Vector2 pos) {
             _isScrolling = true;
             _lastScrollTime = Time.time;
-
-            // === 추가: 일정 임계값 벗어나면 텔레포트
-            //TeleportIfNeeded();
         }
-
-        // === 추가 함수: contentRect를 ±2000 범위를 벗어날 때 중앙으로 되돌리기
-        // TODO: 수정 필요
-        // private void TeleportIfNeeded()
-        // {
-        //     float contentY = _contentRect.anchoredPosition.y;
-        //     _teleportThreshold = _itemHeight * _poolSize * 2;
-        //     if (contentY > _teleportThreshold)
-        //     {
-        //         // 1) ContentRect를 _teleportThreshold만큼 아래로 이동
-        //         _contentRect.anchoredPosition -= new Vector2(0, _teleportThreshold);
-
-        //         // 2) 슬롯들은 그만큼 위로 이동 (결과적으로 화면 위치 변화 X)
-        //         foreach (var slotObj in _songList)
-        //         {
-        //             var rt = slotObj.GetComponent<RectTransform>();
-        //             rt.anchoredPosition += new Vector2(0, _teleportThreshold);
-        //         }
-
-        //         // 3) firstVisibleIndexCached도 그만큼 "칸 수"만큼 변경
-        //         int shiftCount = Mathf.RoundToInt(_teleportThreshold / _itemHeight);
-        //         _firstVisibleIndexCached += shiftCount;
-        //     }
-        //     else if (contentY < -_teleportThreshold)
-        //     {
-        //         _contentRect.anchoredPosition += new Vector2(0, _teleportThreshold);
-
-        //         foreach (var slotObj in _songList)
-        //         {
-        //             var rt = slotObj.GetComponent<RectTransform>();
-        //             rt.anchoredPosition -= new Vector2(0, _teleportThreshold);
-        //         }
-
-        //         int shiftCount = Mathf.RoundToInt(_teleportThreshold / _itemHeight);
-        //         _firstVisibleIndexCached -= shiftCount;
-        //         if (_firstVisibleIndexCached < 0) _firstVisibleIndexCached = 0;
-        //     }
-        // }
 
         private void SnapToNearestSlot() {
             float topOffset = _bufferItems * _itemHeight; 
@@ -235,6 +197,63 @@ namespace SongList
             float y = -(dataIndex * _itemHeight) + topOffset;
             Debug.Log($"[SongListManager] Calculate Slot Position: {dataIndex} -> {y}");
             return new Vector2(0, y);
+        }
+        #endregion
+
+        #region Keyboard Input
+        private void OnKeyPress() {
+            // 위쪽 화살표 처리
+            if (Input.GetKey(KeyCode.UpArrow)) {  
+                // 누른 순간 처리
+                if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                    ScrollUp();
+                    HighlightCenterSlotByPosition();
+                    upKeyTimer = 0f;
+                }
+                upKeyTimer += Time.deltaTime;
+                if (upKeyTimer >= initialDelay) {
+                    ScrollUp();
+                    HighlightCenterSlotByPosition();
+                    upKeyTimer -= repeatRate;
+                }
+            }
+            // 아래쪽 화살표 처리
+            else if (Input.GetKey(KeyCode.DownArrow)) {
+                if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                    ScrollDown();
+                    HighlightCenterSlotByPosition();
+                    downKeyTimer = 0f;
+                }
+                downKeyTimer += Time.deltaTime;
+                if (downKeyTimer >= initialDelay) {
+                    ScrollDown();
+                    HighlightCenterSlotByPosition();
+                    downKeyTimer -= repeatRate;
+                }
+            }
+            // 아무 키도 안 누르고 있을 때
+            else {
+                // 두 타이머 모두 리셋
+                upKeyTimer = 0f;
+                downKeyTimer = 0f;
+            }
+        }
+
+        // 키보드 입력에 따른 스크롤 이동 메서드
+        private void ScrollUp() {
+            Vector2 pos = _contentRect.anchoredPosition;
+            // 스크롤 한 칸 위로 이동
+            pos.y -= _itemHeight;
+            _contentRect.anchoredPosition = pos;
+            OnScroll();
+        }
+
+        private void ScrollDown() {
+            Vector2 pos = _contentRect.anchoredPosition;
+            // 스크롤 한 칸 아래로 이동
+            pos.y += _itemHeight;
+            _contentRect.anchoredPosition = pos;
+            OnScroll();
         }
         #endregion
 

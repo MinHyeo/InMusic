@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    [Tooltip("Observer ¿ªÇÒÀ» ÇÏ´Â ÇÔ¼ö¿¡ ÀÌ º¯¼ö ÇÒ´ç")]
+    [Tooltip("Observer ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½")]
     public Action<Define.UIControl> uIKeyPress;
     public Action<Define.NoteControl> noteKeyPress;
     public Action<Define.NoteControl> noteKeyRelease;
@@ -28,11 +28,11 @@ public class InputManager : MonoBehaviour
         //StartCoroutine(UIControl());
     }
 
-    //Å° ÀÔ·Â ½Ã ÇØ´ç Å°ÀÇ ÀÔ·ÂÀ» ±â´Ù¸®´Â ÇÔ¼ö È£Ãâ
+    //Å° ï¿½Ô·ï¿½ ï¿½ï¿½ ï¿½Ø´ï¿½ Å°ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ È£ï¿½ï¿½
     #region GetKeyPress
 
     /// <summary>
-    /// Å° ÀÔ·Â °¨Áö ¸Þ¼­µå
+    /// Å° ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
     /// </summary>
     IEnumerator UIControl()
     {
@@ -44,7 +44,7 @@ public class InputManager : MonoBehaviour
                 SetNewKey(targetNoteKey, newKey);
                 uIKeyPress.Invoke(Define.UIControl.Any);
             }
-            //º¯°æ Ãë¼Ò
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             else if (newKey == KeyCode.Escape)
             {
                 uIKeyPress.Invoke(Define.UIControl.Esc);
@@ -102,7 +102,7 @@ public class InputManager : MonoBehaviour
                 SetNewKey(targetNoteKey, newKey);
                 uIKeyPress.Invoke(Define.UIControl.Any);
             }
-            //º¯°æ Ãë¼Ò
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             else if (newKey == KeyCode.Escape) {
                 uIKeyPress.Invoke(Define.UIControl.Esc);
             }
@@ -150,7 +150,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    //°Ç¹Ý Á¶ÀÛ
+    //ï¿½Ç¹ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void NoteUpdate() {
         if (noteKeyPress != null)
         {
@@ -177,13 +177,13 @@ public class InputManager : MonoBehaviour
     #endregion
 
     public KeyCode FindKeyPress() {
-        //´©¸¥ Å° Ã£±â
+        //ï¿½ï¿½ï¿½ï¿½ Å° Ã£ï¿½ï¿½
         foreach (KeyCode keyCode in Enum.GetValues(typeof(KeyCode)))
         {
             if (Input.GetKeyDown(keyCode))
             {
                 Debug.Log($"Find New Key: {keyCode}");
-                return keyCode; //´©¸¥ Å°¸¦ ¹ÝÈ¯
+                return keyCode; //ï¿½ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½È¯
             }
         }
         return KeyCode.None;
@@ -206,7 +206,7 @@ public class InputManager : MonoBehaviour
 
     #region KeyEventSet
     /// <summary>
-    /// UI Á¶ÀÛ½Ã »ç¿ëÇÒ Å°º¸µå ÀÔ·Â ¸Þ¼Òµå, Define.UIControlÀ» Àü´Þ
+    /// UI ï¿½ï¿½ï¿½Û½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½Þ¼Òµï¿½, Define.UIControlï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="keyEventFunc"></param>
     public void SetUIKeyEvent(Action<Define.UIControl> keyEventFunc) {
@@ -216,7 +216,7 @@ public class InputManager : MonoBehaviour
         uIKeyPress += keyEventFunc;
     }
     /// <summary>
-    /// ¿¬°áÇÑ Å°º¸µå ÀÔ·Â ÇÔ¼ö¸¦ Á¦°ÅÇÏ´Â ¸Þ¼­µå
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="keyEventFunc"></param>
     public void RemoveUIKeyEvent(Action<Define.UIControl> keyEventFunc) {
@@ -224,7 +224,7 @@ public class InputManager : MonoBehaviour
     }
 
     /// <summary>
-    /// °ÔÀÓ ÇÃ·¹ÀÌ½Ã »ç¿ëÇÒ Å°º¸µå ÀÔ·Â ¸Þ¼­µå, Define.NoteControl¸¦ Àü´ÞÇÔ
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½, Define.NoteControlï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="keyEventFunc"></param>
     public void SetNoteKeyPressEvent(Action<Define.NoteControl> keyEventFunc)
@@ -244,7 +244,7 @@ public class InputManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¿¬°áÇÑ Å°º¸µå ÀÔ·Â ÇÔ¼ö¸¦ Á¦°ÅÇÏ´Â ¸Þ¼­µå
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="keyEventFunc"></param>
     public void RemoveNoteKeyEvent(Action<Define.NoteControl> keyEventFunc)

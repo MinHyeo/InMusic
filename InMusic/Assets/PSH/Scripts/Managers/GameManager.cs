@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using SSW;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class GameManager : MonoBehaviour
 
     ResourceManager M_Resource = new ResourceManager();
     public static ResourceManager Resource { get { return Instance.M_Resource; } }
+
+    SingleMenuInputManager _singleMenuInput = new SingleMenuInputManager();
+    public static SingleMenuInputManager SingleMenuInput { get { return Instance._singleMenuInput; } }
     #endregion
 
     private Song songTitle;
@@ -41,6 +45,7 @@ public class GameManager : MonoBehaviour
     {
         M_Input.UIUpdate();
         M_Input.NoteUpdate();
+        _singleMenuInput.OnUpdate();
     }
 
     public void StartGame(string SongTitle)
