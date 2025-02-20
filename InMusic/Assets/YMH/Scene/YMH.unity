@@ -7746,8 +7746,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "ive(\uC544\uC774\uBE0C)"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2a95e0721f34f1740a52d9ece1e6b0b8, type: 2}
-  m_sharedMaterial: {fileID: -6964114132261064183, guid: 2a95e0721f34f1740a52d9ece1e6b0b8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: abbf957b31591a94da2279de933239e0, type: 2}
+  m_sharedMaterial: {fileID: 6095279901799887265, guid: abbf957b31591a94da2279de933239e0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9621,8 +9621,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uD574\uC57C(heya)"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2a95e0721f34f1740a52d9ece1e6b0b8, type: 2}
-  m_sharedMaterial: {fileID: -6964114132261064183, guid: 2a95e0721f34f1740a52d9ece1e6b0b8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: abbf957b31591a94da2279de933239e0, type: 2}
+  m_sharedMaterial: {fileID: 6095279901799887265, guid: abbf957b31591a94da2279de933239e0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

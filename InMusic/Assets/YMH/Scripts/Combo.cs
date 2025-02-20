@@ -27,7 +27,7 @@ namespace Play
 
         //시간 변수
         private float currentTime = 0.0f;
-        private const float showTime = 1f;
+        private const float showTime = 2f;
 
         private bool isShow = false;
 
@@ -55,6 +55,7 @@ namespace Play
                 if(currentTime >= showTime)
                 {
                     isShow = !isShow;
+                    anim.enabled = true;
                     anim.SetTrigger("Hide");
                 }
             }
@@ -82,11 +83,13 @@ namespace Play
         private void ShowCombo()
         {
             //콤보 텍스트 변경 및 활성화
-            comboText.text = string.Format("{0}", combo);
+            comboText.text = string.Format($"{combo}");
             if (!gameObject.activeSelf)
             {
+                anim.enabled = false;
+
                 gameObject.SetActive(true);
-                comboText.color = Color.white;
+                comboText.alpha = 1;
             }
                 
 

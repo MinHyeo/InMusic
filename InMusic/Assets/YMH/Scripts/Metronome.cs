@@ -1,5 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 namespace Play 
@@ -35,6 +38,9 @@ namespace Play
         private float measureInterval;
         private float travelTime;
         public readonly float preStartDelay = 2.0f;
+
+        //소환되어 있는 박자선 저장할 리스트
+        private List<GameObject> linesObject = new List<GameObject>();
 
         private void Update()
         {
@@ -91,6 +97,7 @@ namespace Play
                 GameObject newLine = ObjectPoolManager.Instance.GetFromPool("Line");
                 newLine.transform.position = lineSpawnPoint.position;
                 newLine.GetComponent<Line>().Initialize(lineSpeed, judgementLine.position.y);
+                linesObject.Add(newLine);
             }
         }
         private IEnumerator PlayTicks()
@@ -126,7 +133,19 @@ namespace Play
 
         public void RemoveLine(GameObject line)
         {
+            linesObject.Remove(line);
             ObjectPoolManager.Instance.ReleaseToPool("Line", line);
+        }
+
+        public void Restart()
+        {
+            isStart = false;
+
+            //화면에 있는 마디 선 삭제
+            foreach (GameObject line in linesObject.ToList())
+            {
+                RemoveLine(line);
+            }
         }
     }
 }
