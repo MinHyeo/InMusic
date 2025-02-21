@@ -46,14 +46,16 @@ public class Single_Lobby_UI : UI_Base
         //∏Ò∑œ¿ª »Ÿ∑Œ ¡∂¿€ √≥∏Æ
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scroll > 0) //»Ÿ¿ª ¿ß∑Œ µπ∑»¿ª ∂ß
-        {
-            ScrollUp();
-        }
+        if (!isScrolling) {
+            if (scroll > 0) //»Ÿ¿ª ¿ß∑Œ µπ∑»¿ª ∂ß
+            {
+                ScrollUp();
+            }
 
-        else if (scroll < 0)  //»Ÿ¿ª æ∆∑°∑Œ µπ∑»¿ª ∂ß
-        {
-            ScrollDown();
+            else if (scroll < 0)  //»Ÿ¿ª æ∆∑°∑Œ µπ∑»¿ª ∂ß
+            {
+                ScrollDown();
+            }
         }
     }
 
