@@ -186,7 +186,32 @@ namespace Play
 
         private void OnKeyRelase(Define.NoteControl keyEvent)
         {
-            keyObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(false);
+            int index = (int)keyEvent - (int)Define.NoteControl.Key1;
+
+            // 리스트 크기 확인
+            if (keyObjects == null || keyObjects.Length <= index)
+            {
+                Debug.LogError($"keyObjects 배열이 초기화되지 않았거나 인덱스 {index}가 범위를 벗어났습니다.");
+                return;
+            }
+
+            // 개별 요소 null 체크
+            if (keyObjects[index] == null)
+            {
+                Debug.Log(keyObjects[0]);
+                Debug.LogError($"keyObjects[{index}]가 null입니다.");
+                return;
+            }
+
+            // 오브젝트가 삭제되지 않았는지 확인 후 SetActive(false)
+            if (keyObjects[index] != null && keyObjects[index].gameObject != null)
+            {
+                keyObjects[index].SetActive(false);
+            }
+            else
+            {
+                Debug.LogError($"keyObjects[{index}]가 삭제되었거나 비활성화된 상태입니다.");
+            }
         }
 
         private void OnUIKkeyPress(Define.UIControl keyEvent)

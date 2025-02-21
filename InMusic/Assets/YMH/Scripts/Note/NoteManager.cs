@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -160,9 +161,9 @@ namespace Play
             {
                 StopCoroutine(coroutine);
             }
-            foreach (Note note in NoteList)
+            foreach (Note note in NoteList.ToList())
             {
-                ObjectPoolManager.Instance.ReleaseToPool(note.gameObject.name, note.gameObject);
+                RemoveNoteFromActiveList(note);
             }
         }
 

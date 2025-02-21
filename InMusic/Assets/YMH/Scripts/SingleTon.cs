@@ -20,6 +20,7 @@ public class SingleTon<T> : MonoBehaviour where T : MonoBehaviour
                 {
                     GameObject obj = new GameObject();
                     obj.name = typeof(T).Name + "_AutoCreated";
+                    obj.AddComponent<T>();
                 }
             }
             return _instance;
