@@ -24,7 +24,6 @@ public class Single_Lobby_UI : UI_Base
     float duration = 0.3f;
     bool isScrolling = false;
 
-    [SerializeField] LoadingScreen loadingScreen;
     void Start()
     {
         //음악 목록 Load하기
@@ -38,8 +37,8 @@ public class Single_Lobby_UI : UI_Base
         numOfitems = musicDataList.Count;
         ContentDown();
 
+        //변경 예정
         GameManager_PSH.Input.SetUIKeyEvent(SingleLobbyKeyEvent);
-
     }
 
     void Update()
@@ -47,14 +46,16 @@ public class Single_Lobby_UI : UI_Base
         //목록을 휠로 조작 처리
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scroll > 0) //휠을 위로 돌렸을 때
-        {
-            ScrollUp();
-        }
+        if (!isScrolling) {
+            if (scroll > 0) //휠을 위로 돌렸을 때
+            {
+                ScrollUp();
+            }
 
-        else if (scroll < 0)  //휠을 아래로 돌렸을 때
-        {
-            ScrollDown();
+            else if (scroll < 0)  //휠을 아래로 돌렸을 때
+            {
+                ScrollDown();
+            }
         }
     }
 
@@ -91,25 +92,11 @@ public class Single_Lobby_UI : UI_Base
                 if (curMusicItem.GetComponent<Music_Item>().HasBMS) {
                     //키 입력 이벤트 제거
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-                    //다음 씬에 넘겨줄 MusicData 값 설정
-                    //GameManager_PSH.LogData.SendData(curMusicItem.GetComponent<Music_Item>());
-                    Music_Item tmp = curMusicItem.GetComponent<Music_Item>();
-                    //최적화 필요
-                    {
-                        GameManager_PSH.Instance.GetComponent<MusicData>().DirPath = tmp.DirPath;
-                        GameManager_PSH.Instance.GetComponent<MusicData>().BMS = tmp.Data.BMS;
-                        GameManager_PSH.Instance.GetComponent<MusicData>().Album = tmp.Album.sprite;
-                        GameManager_PSH.Instance.GetComponent<MusicData>().Audio = tmp.Audio;
-                        GameManager_PSH.Instance.GetComponent<MusicData>().MuVi = tmp.MuVi;
-                        GameManager_PSH.Instance.GetComponent<MusicData>().Score = tmp.Score;
-                        GameManager_PSH.Instance.GetComponent<MusicData>().Accuracy = tmp.Accuracy;
-                        GameManager_PSH.Instance.GetComponent<MusicData>().Combo = tmp.Combo;
-                        GameManager_PSH.Instance.GetComponent<MusicData>().Rank = tmp.Rank.text;
-                    }
-                    //SceneManager.LoadScene(1);
 
-                    loadingScreen.LoadScene("KGB_SinglePlay", GameManager_PSH.Instance.GetComponent<MusicData>());
-                    //loadingScreen.LoadScene("KGB_SinglePlay");
+                    //다음 씬에 넘겨줄 MusicData 값 설정
+                    GameManager_PSH.Data.SetData(curMusicItem.GetComponent<Music_Item>());
+
+                    SceneManager.LoadScene(1);
                 }
                 else
                 {
@@ -128,7 +115,7 @@ public class Single_Lobby_UI : UI_Base
 
     void SingleLobbyKeyEvent(Define.UIControl keyEvent)
     {
-        if (popupUI != null || SettingUI != null || guideUI != null) return;
+        if (popupUI != null || SettingUI != null || guideUI != null || isScrolling) return;
 
         switch (keyEvent)
         {
@@ -153,6 +140,7 @@ public class Single_Lobby_UI : UI_Base
         }
     }
 
+    //Update Detail Info
     void UpdateInfo()
     {
         //Debug.Log("Change Item");
@@ -167,6 +155,33 @@ public class Single_Lobby_UI : UI_Base
         logData[1].text = newData.Accuracy;
         logData[2].text = newData.Combo;
         logData[3].text = newData.Rank.text;
+    }
+
+    void UpdateItems(Music_Item oldItem, MusicData newItem)
+    {
+        oldItem.DirPath = newItem.DirPath;
+        //Debug.Log(newItem.BMS.header.title);
+        if (newItem.HasBMS)
+        {
+            oldItem.Title.text = newItem.BMS.header.title;
+            oldItem.Artist.text = newItem.BMS.header.artist;
+        }
+        else
+        {
+            oldItem.Title.text = "EmptyItem";
+            oldItem.Artist.text = "Empty";
+        }
+        oldItem.Length = newItem.Length;
+        oldItem.Album.sprite = newItem.Album;
+        oldItem.Audio = newItem.Audio;
+        oldItem.MuVi = newItem.MuVi;
+        oldItem.HasBMS = newItem.HasBMS;
+        oldItem.Score = newItem.Score;
+        oldItem.Accuracy = newItem.Accuracy + "%";
+        oldItem.Combo = newItem.Combo;
+        oldItem.Rank.text = newItem.Rank;
+
+        oldItem.Data = newItem;
     }
 
     void ContentDown()
@@ -215,27 +230,7 @@ public class Single_Lobby_UI : UI_Base
         StartCoroutine(SmoothScrollMove());
     }
 
-    void UpdateItems(Music_Item oldItem, MusicData newItem) {
-        oldItem.DirPath = newItem.DirPath;
-        //Debug.Log(newItem.BMS.header.title);
-        if (newItem.HasBMS) {
-            oldItem.Title.text = newItem.BMS.header.title;
-            oldItem.Artist.text = newItem.BMS.header.artist;
-        }
-        oldItem.Length = newItem.Length;
-        oldItem.Album.sprite = newItem.Album;
-        oldItem.Audio = newItem.Audio;
-        oldItem.MuVi = newItem.MuVi;
-        oldItem.HasBMS = newItem.HasBMS;
-        oldItem.Score = newItem.Score;
-        oldItem.Accuracy = newItem.Accuracy + "%";
-        oldItem.Combo = newItem.Combo;
-        oldItem.Rank.text = newItem.Rank;
-
-        oldItem.Data = newItem;
-    }
-
-    //부드럽게 이동: 스크롤/마우스 조작
+    //부드럽게 이동: 마우스(스크롤)/키보드 조작
     IEnumerator SmoothScrollMove() {
         isScrolling = true;
 
@@ -290,6 +285,6 @@ public class Single_Lobby_UI : UI_Base
         test.Score = "1000";
         test.Rank = "A";
         //저장
-        GameManager_PSH.LogData.SaveData(test);
+        GameManager_PSH.Data.SaveData(test);
     }
 }

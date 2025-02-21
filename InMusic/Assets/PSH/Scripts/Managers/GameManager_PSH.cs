@@ -20,7 +20,7 @@ public class GameManager_PSH : MonoBehaviour
     public static BMSManager BMS { get { return Instance.M_BMS; } }
 
     DataManager M_Data = new DataManager();
-    public static DataManager LogData { get { return Instance.M_Data; } }
+    public static DataManager Data { get { return Instance.M_Data; } }
     #endregion
 
     static void Init()
@@ -38,6 +38,7 @@ public class GameManager_PSH : MonoBehaviour
             GM_Instance = gmObject.GetComponent<GameManager_PSH>();
 
             GM_Instance.M_Input.Init();
+            GM_Instance.M_Data.Init();
         }
     }
 

@@ -96,8 +96,7 @@ public class ResourceManager
                 Dictionary<string, string> fileMap = FileMapping(files);
 
                 /*for (int j = 0; j < files.Length; j++) {
-                    UnityEngine.Debug.Log($"{j}번째 파일 이름: {files[j]}");
-                }*/
+                    UnityEngine.Debug.Log($"{j}번째 파일 이름: {files[j]}");*/
 
                 //1. BMS 파일 열기 (필수)
                 if (fileMap.ContainsKey("bms")) {
@@ -106,6 +105,7 @@ public class ResourceManager
                     //UnityEngine.Debug.Log("BMS 파일 찾음");
                     tmpMusic.HasBMS = true;
                 }
+
                 //else
                 //{
                 //    tmpMusic.BMS = new BMSData();
