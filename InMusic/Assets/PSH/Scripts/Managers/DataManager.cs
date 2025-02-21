@@ -26,7 +26,7 @@ public class DataManager
         //경로 설정
         string filePath = mData.DirPath + "/" + mData.Title + "Log.json";
         //Json형태로 변환
-        string JsonData = JsonUtility.ToJson(newLog);
+        string JsonData = JsonUtility.ToJson(newLog, true);
         //저장(기록이 없으면 생성, 있으면 덮어씀)
         File.WriteAllText(filePath, JsonData);
         Debug.Log("Json 저장 완료");

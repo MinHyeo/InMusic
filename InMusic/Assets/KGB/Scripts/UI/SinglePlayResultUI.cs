@@ -116,7 +116,7 @@ public class SinglePlayResultUI : MonoBehaviour
         newLog.Score = score.text;
         newLog.Rank = rate.text;
         newLog.Combo = combo.text;
-        GameManager_PSH.LogData.SaveData(newLog);
+        GameManager_PSH.Data.SaveData(newLog);
         SceneManager.LoadScene(0);
     }
 }

@@ -4321,7 +4321,6 @@ MonoBehaviour:
   contentPos: {fileID: 341532225}
   musicDataList: []
   startIndex: 0
-  loadingScreen: {fileID: 1958766580}
 --- !u!61 &1890810792
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4746,17 +4745,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3964619929280816202, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
   m_PrefabInstance: {fileID: 453637592}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1958766580 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7269105194850222422, guid: fb80dbded41937c4280e2820f4189fab, type: 3}
-  m_PrefabInstance: {fileID: 6302230022391035012}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26c7b4ff118da6a4889b5ea955840982, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1975008115
 GameObject:
   m_ObjectHideFlags: 0
@@ -5041,6 +5029,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Loading_UI
       objectReference: {fileID: 0}
+    - target: {fileID: 1190342812635274342, guid: fb80dbded41937c4280e2820f4189fab, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6604334996190842644, guid: fb80dbded41937c4280e2820f4189fab, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -5123,11 +5115,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6878620549135622196, guid: fb80dbded41937c4280e2820f4189fab, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6878620549135622196, guid: fb80dbded41937c4280e2820f4189fab, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

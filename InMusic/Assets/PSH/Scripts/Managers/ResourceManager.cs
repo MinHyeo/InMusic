@@ -42,14 +42,6 @@ public class ResourceManager
         return gameObject;
     }
 
-    MusicLog LoadLog(string path)
-    {
-        //Json파일 읽기
-        TextAsset jsonText = Load<TextAsset>(path);
-        //내용을 객체로 만들어서 전달
-        return JsonUtility.FromJson<MusicLog>(jsonText.text);
-    }
-
     public List<MusicData> GetMusicList() {
         musicDataRoot = new GameObject("MusicDataRoot");
 
@@ -101,8 +93,7 @@ public class ResourceManager
                 //1. BMS 파일 열기 (필수)
                 if (fileMap.ContainsKey("bms")) {
                     tmpMusic.BMS = GameManager_PSH.BMS.ParseBMS(fileMap["bms"]);
-                    UnityEngine.Debug.Log(tmpMusic.Title);
-                    //UnityEngine.Debug.Log("BMS 파일 찾음");
+                    //UnityEngine.Debug.Log(tmpMusic.Title);
                     tmpMusic.HasBMS = true;
                 }
 
@@ -170,7 +161,7 @@ public class ResourceManager
             //UnityEngine.Debug.Log(filePath);
 
             //BMS
-            if (fileExt == ".txt") 
+            if (fileExt == ".txt")
                 fileMap["bms"] = filePath;
             //음원 파일
             else if (fileExt == ".wav" || fileExt == ".mp3" || fileExt == ".ogg")
@@ -180,11 +171,19 @@ public class ResourceManager
                 fileMap["album"] = filePath;
             //기록 파일
             else if (fileExt == ".json")
-                fileMap["log"] = filePath;
+                fileMap["log"] = filePath + ".json";
             //뮤비 파일
             else if (fileExt == ".mp4" || fileExt == ".avi" || fileExt == ".mov")
                 fileMap["video"] = filePath;
         }
         return fileMap;
+    }
+
+    MusicLog LoadLog(string path)
+    {
+        Debug.Log(path);
+        string jsonText = File.ReadAllText(Path.Combine(appPath + "\\Resources\\", path));
+        //내용을 객체로 만들어서 전달
+        return JsonUtility.FromJson<MusicLog>(jsonText);
     }
 }
