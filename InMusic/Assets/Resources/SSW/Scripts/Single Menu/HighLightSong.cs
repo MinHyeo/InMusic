@@ -8,7 +8,7 @@ namespace SongList{
     {
         #region Variables
         [Header("References")]
-        [SerializeField] private SongListManager _songListManager; // SongListManager 참조
+        [SerializeField] private SongListController _songListController; // SongListController
 
         [Header("Detail UI")]
         [SerializeField] private Text _detailTitleText; // 좌측에 표시할 제목 Text
@@ -30,15 +30,15 @@ namespace SongList{
 
         #region Unity Methods
         private void OnEnable() {
-            if (_songListManager != null) {
-                _songListManager.OnHighlightedSongChanged += HandleHighlightedSongChanged;
+            if (_songListController != null) {
+                _songListController.OnHighlightedSongChanged += HandleHighlightedSongChanged;
                 Debug.Log("[HighlightSong] Event subscribed.");
             }
         }
 
         private void OnDisable() {
-            if (_songListManager != null) {
-                _songListManager.OnHighlightedSongChanged -= HandleHighlightedSongChanged;
+            if (_songListController != null) {
+                _songListController.OnHighlightedSongChanged -= HandleHighlightedSongChanged;
                 Debug.Log("[HighlightSong] Event unsubscribed.");
             }
         }
@@ -126,7 +126,6 @@ namespace SongList{
             else if (score > 300000) return "B";
             else return "C";
         }
-
 
 
         /// <summary>

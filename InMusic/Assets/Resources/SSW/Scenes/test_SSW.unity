@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 45358249}
   - component: {fileID: 45358250}
   m_Layer: 5
-  m_Name: SongListManager
+  m_Name: SongListController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1567,7 +1567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a4ab1db3e7ddd543aea2a791b0b9486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _songListManager: {fileID: 45358250}
+  _songListController: {fileID: 45358250}
   _detailTitleText: {fileID: 1174743300}
   _detailArtistText: {fileID: 1716697188}
   _detailImage: {fileID: 1868857856}

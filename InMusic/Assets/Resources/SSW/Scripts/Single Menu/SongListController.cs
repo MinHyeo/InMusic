@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SongList
 {
-    public class SongListManager : MonoBehaviour
+    public class SongListController : MonoBehaviour
     {
         #region Variables
         [Header("ScrollRect Settings")]
