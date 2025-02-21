@@ -24,6 +24,7 @@ public class Single_Lobby_UI : UI_Base
     float duration = 0.3f;
     bool isScrolling = false;
 
+    [SerializeField] LoadingScreen loadingScreen;
     void Start()
     {
         //음악 목록 Load하기
@@ -38,6 +39,7 @@ public class Single_Lobby_UI : UI_Base
         ContentDown();
 
         GameManager_PSH.Input.SetUIKeyEvent(SingleLobbyKeyEvent);
+
     }
 
     void Update()
@@ -104,7 +106,10 @@ public class Single_Lobby_UI : UI_Base
                         GameManager_PSH.Instance.GetComponent<MusicData>().Combo = tmp.Combo;
                         GameManager_PSH.Instance.GetComponent<MusicData>().Rank = tmp.Rank.text;
                     }
-                    SceneManager.LoadScene(1);
+                    //SceneManager.LoadScene(1);
+
+                    loadingScreen.LoadScene("KGB_SinglePlay", GameManager_PSH.Instance.GetComponent<MusicData>());
+                    //loadingScreen.LoadScene("KGB_SinglePlay");
                 }
                 else
                 {

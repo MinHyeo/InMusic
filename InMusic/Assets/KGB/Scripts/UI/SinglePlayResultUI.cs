@@ -111,6 +111,12 @@ public class SinglePlayResultUI : MonoBehaviour
     public void NextButton()
     {
         //게임 결과 표시후 종료 버튼
+        MusicLog newLog = new MusicLog();
+        newLog.Accuracy = accuracy.text;
+        newLog.Score = score.text;
+        newLog.Rank = rate.text;
+        newLog.Combo = combo.text;
+        GameManager_PSH.LogData.SaveData(newLog);
         SceneManager.LoadScene(0);
     }
 }

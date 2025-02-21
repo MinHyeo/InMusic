@@ -7,25 +7,31 @@ public class LoadingScreen : MonoBehaviour
 {
     public GameObject loadingPanel; // 로딩 UI 패널
     public Slider progressBar; // 로딩 바 (슬라이더)
+    [SerializeField] GameObject inMusic;
+    [SerializeField] GameObject musicInfoPanel;
+    [SerializeField] GameObject loadingBarUI;
     private BMSData musicBMS;
     private LodingUI loadingUI;
     private MusicData musicData;
 
-    public void LoadScene(string sceneName)
+    private void Start()
+    {
+        loadingUI = GetComponent<LodingUI>();
+    }
+    public void LoadScene(string sceneName) //기본 로딩화면
     {
         loadingPanel.SetActive(true); // 로딩 UI 활성화
+        inMusic.SetActive(true);
+        musicInfoPanel.SetActive(false);
+        SetLoadingBarPos(0);
         StartCoroutine(LoadSceneAsync(sceneName));
     }
+    public void LoadScene(string sceneName, MusicData data) //플레이씬 으로 가는 로딩화면 
+    {
+        loadingPanel.SetActive(true); // 로딩 UI 활성화
+        inMusic.SetActive(false);
+        SetLoadingBarPos(-430);
 
-    public void LoadScene(string sceneName, BMSData data)
-    {
-        loadingPanel.SetActive(true); // 로딩 UI 활성화
-        SetLodingScreen(data);
-        StartCoroutine(LoadSceneAsync(sceneName));
-    }
-    public void LoadScene(string sceneName, MusicData data)
-    {
-        loadingPanel.SetActive(true); // 로딩 UI 활성화
         SetLodingScreen(data);
         StartCoroutine(LoadSceneAsync(sceneName));
     }
@@ -71,17 +77,17 @@ public class LoadingScreen : MonoBehaviour
         }
     }
 
-    private void SetLodingScreen(BMSData data)
-    {
-        loadingUI = GetComponent<LodingUI>();
-        loadingUI.artistText.text = data.header.artist;
-        loadingUI.titleText.text = data.header.title;
-    }
     private void SetLodingScreen(MusicData data)
     {
-        loadingUI = GetComponent<LodingUI>();
         loadingUI.artistText.text = data.BMS.header.artist;
         loadingUI.titleText.text = data.BMS.header.title;
         loadingUI.musicImage.sprite = data.Album;
+    }
+    
+    private void SetLoadingBarPos(float newY)
+    {
+        Vector3 newPosition = loadingBarUI.transform.localPosition;
+        newPosition.y = newY;
+        loadingBarUI.transform.localPosition = newPosition;
     }
 }
