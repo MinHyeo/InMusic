@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using Play;
+using SSW;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class LoadingSong : MonoBehaviour
 {
@@ -17,6 +19,11 @@ public class LoadingSong : MonoBehaviour
     [SerializeField] private Image _songImage;
     [SerializeField] private Text _songTitle;
     [SerializeField] private Text _songArtist;
+
+    [Header("Background Settings")]
+    [SerializeField] private VideoPlayer _bgVideo;
+    [SerializeField] private AudioSource _bgAudio;
+
 
     private static LoadingSong _instance;
     private string loadSceneName;
@@ -77,6 +84,8 @@ public class LoadingSong : MonoBehaviour
         _songTitle.text = SongTitle;
         _songArtist.text = Artist;
         _defaultLoadingText = _loadingText.rectTransform.anchoredPosition.x;
+        GlobalInpoutControl.IsInputEnabled = false;
+        BackgroundController.Instance.StopHighlight();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
         loadSceneName = sceneName;
@@ -106,6 +115,7 @@ public class LoadingSong : MonoBehaviour
 
                 if(_loadingBar.fillAmount >= 1f) {
                     operation.allowSceneActivation = true;
+                    GlobalInpoutControl.IsInputEnabled = true;
                     yield break;
                 }
             }
@@ -152,6 +162,8 @@ public class LoadingSong : MonoBehaviour
             yield return null;
             timer += Time.unscaledDeltaTime; // unscaledDeltaTime: The timeScale-independent interval in seconds from the last frame to the current one
             _canvasGroup.alpha = isFadeIn ? Mathf.Lerp(0, 1, timer) : Mathf.Lerp(1, 0, timer);
+            _bgAudio.volume = Mathf.Lerp(_bgAudio.volume, 0f, timer);
+            _bgVideo.Pause();
         }
 
         if (!isFadeIn)
