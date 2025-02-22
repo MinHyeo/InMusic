@@ -1,4 +1,5 @@
 using UnityEngine;
+using FMODUnity;
 using FMOD;
 using UnityEngine.Rendering.Universal;
 
@@ -26,8 +27,17 @@ namespace Play
 
         private void Init()
         {
-            FMOD.Factory.System_Create(out fmodSystem);
-            fmodSystem.init(512, FMOD.INITFLAGS.NORMAL, System.IntPtr.Zero);
+            if (FMODUnity.RuntimeManager.IsInitialized)
+            {
+                FMOD.Factory.System_Create(out fmodSystem);
+                fmodSystem.init(512, FMOD.INITFLAGS.NORMAL, System.IntPtr.Zero);
+            }
+            else
+            {
+                UnityEngine.Debug.Log("초기화 실패");
+                FMODUnity.RuntimeManager.CoreSystem.init(512, FMOD.INITFLAGS.NORMAL, System.IntPtr.Zero);
+                Init();
+            }
         }
 
         public void Play()

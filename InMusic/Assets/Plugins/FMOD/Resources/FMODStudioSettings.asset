@@ -462,7 +462,7 @@ MonoBehaviour:
   BankLoadType: 1
   AutomaticSampleLoading: 0
   EncryptionKey: 
-  ImportType: 0
+  ImportType: 1
   TargetAssetPath: FMODBanks
   TargetBankFolder: SFX
   EventLinkage: 0
@@ -486,9 +486,9 @@ MonoBehaviour:
   StopEventsOutsideMaxDistance: 0
   BoltUnitOptionsBuildPending: 0
   EnableErrorCallback: 0
-  SharedLibraryUpdateStage: 2
+  SharedLibraryUpdateStage: 3
   SharedLibraryTimeSinceStart: 653.3963747
-  CurrentVersion: 131622
+  CurrentVersion: 131623
   HideSetupWizard: 1
   LastEventReferenceScanVersion: 131620
   Platforms:
