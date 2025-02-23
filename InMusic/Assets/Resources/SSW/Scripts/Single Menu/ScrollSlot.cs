@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
+using UnityEngine.Video;
 using Play;
 
 namespace SongList {
@@ -20,7 +21,6 @@ namespace SongList {
         [Header("Sprites")]
         [SerializeField] private Sprite _defaultSprite;   // 비선택 상태
         [SerializeField] private Sprite _highlightSprite; // 선택(하이라이트) 상태
-
         private SongInfo _currentData;
         private int _currentIndex;
         private Coroutine _highlightCoroutine;
@@ -49,7 +49,6 @@ namespace SongList {
         public void SetData(SongInfo data, int index) {
             _currentData = data;
             _currentIndex = index;
-
             UpdateUI();
         }
 
@@ -65,7 +64,6 @@ namespace SongList {
 
             // 곡 이미지를 Resources 폴더에서 "Song/{Title}/{Title}" 경로로 로드
             if (_songImage != null && !string.IsNullOrEmpty(_currentData.Title)) {
-                // 예: Song/ShapeOfYou/ShapeOfYou
                 string resourcePath = $"Song/{_currentData.Title}/{_currentData.Title}";
                 Sprite loadedSprite = Resources.Load<Sprite>(resourcePath);
 
@@ -122,10 +120,6 @@ namespace SongList {
         #endregion
 
         #region Highlight
-
-        /// <summary>
-        /// 슬롯이 현재 하이라이트(선택) 상태인지 여부에 따른 UI 처리
-        /// </summary>
         /// <summary>
         /// 하이라이트 On/Off 설정 (게이지 애니메이션)
         /// </summary>
@@ -141,10 +135,15 @@ namespace SongList {
             }
 
             if (isImmediate) {
-                // 애니메이션 없이 즉시 fillAmount = (highlight ? 1 : 0)
+                // 처음 선택 시 애니메이션 없이 즉시 fillAmount = (highlight ? 1 : 0)
                 _highlightImage.fillAmount = highlight ? 1f : 0f;
+                if (highlight) {
+                    OnHighlightGaugeComplete();
+                } else {
+                    OnHighlightGaugeReset();
+                }
             } else {
-                float target = highlight ? 1f : 0f;
+                float target = highlight ? 1f : 0f; // 선택 시 1, 해제 시 0으로 타겟 설정
                 _highlightCoroutine = StartCoroutine(AnimateHighlightFill(target, 0.2f));
             }
         }
@@ -157,14 +156,39 @@ namespace SongList {
             float elapsed = 0f;
 
             while (elapsed < duration) {
+                // if (!_isHighlighted) yield break; // 중간에 꺼지면 중단
                 elapsed += Time.deltaTime;
                 float t = Mathf.Clamp01(elapsed / duration);
                 _highlightImage.fillAmount = Mathf.Lerp(startFill, toFill, t);
                 yield return null;
             }
             _highlightImage.fillAmount = toFill;
-
             _highlightCoroutine = null;
+
+            if (Mathf.Approximately(toFill, 1f)) {
+                OnHighlightGaugeComplete();
+            } else if (toFill == 0f) {
+                // TODO: 테스트 하면서 조건문 확인
+                OnHighlightGaugeReset();
+            }
+        }
+
+        /// <summary>
+        /// 0.2초 게이지 완료 시점 => BackgroundController로 "이 곡 하이라이트 시작" 이벤트
+        /// </summary>
+        private void OnHighlightGaugeComplete()
+        {
+            if (_currentData != null)
+            {
+                // 곡 이름 (or ID)만 넘겨도 됨
+                BackgroundController.Instance.StartHighlightProcess(_currentData.Title);
+            }
+        }
+
+        private void OnHighlightGaugeReset() {
+            // 게이지가 0f가 되었을 때(하이라이트 OFF)
+            // BackgroundController에게 하이라이트 중단 요청
+            //BackgroundController.Instance.StopHighlight();
         }
 
         public SongInfo GetHighlightedSong() {
