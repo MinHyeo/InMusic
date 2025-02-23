@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 public class Key_Setting_UI : MonoBehaviour
 {
     [Header("Setting List")]
-    [Tooltip("Start¿¡¼­ ÀÚµ¿À¸·Î ÇÒ´ç µÊ")]
+    [Tooltip("Startï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½ ï¿½ï¿½")]
     [SerializeField] private GameObject[] menuList;
     [SerializeField] private Text[] menuValues;
     [SerializeField] private GameObject message;
@@ -16,6 +16,7 @@ public class Key_Setting_UI : MonoBehaviour
     [SerializeField] int curMenuIndex = 0;
     [SerializeField] Define.NoteControl curNote = Define.NoteControl.Key1;
     [SerializeField] bool isSetMode = false;
+    public bool _isSetting = false;
 
     void Start()
     {
@@ -76,7 +77,7 @@ public class Key_Setting_UI : MonoBehaviour
                 Destroy(gameObject);
                 break;
             default:
-                Debug.Log("¾ÆÁ÷ ±â´ÉÀÌ ¾ø°Å³ª Àß¸ø ÀÔ·Â");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å³ï¿½ ï¿½ß¸ï¿½ ï¿½Ô·ï¿½");
                 break;
         }
     }
@@ -96,7 +97,7 @@ public class Key_Setting_UI : MonoBehaviour
                 if (curMenuIndex == 2) ButtonEvent("Key3");
                 if (curMenuIndex == 3) ButtonEvent("Key4");
                 break;
-            //Å° º¯°æ ½Ã ÀÔ·Â °ª
+            //Å° ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½ï¿½
             case Define.UIControl.Any:
                 if (isSetMode) EndKeySet();
                 break;

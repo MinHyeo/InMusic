@@ -64,8 +64,7 @@ public class Main_Lobby_UI : UI_Base
             //�ַ�
             case "Solo":
                 //Todo
-                SceneManager.LoadScene("test_SSW");
-                Debug.Log("Solo function is not implemented");
+                SceneLoading.Instance.LoadScene("test_SSW");
                 break;
             //��Ƽ
             case "Multi":

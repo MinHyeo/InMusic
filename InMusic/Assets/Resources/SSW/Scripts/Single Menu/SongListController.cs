@@ -43,6 +43,7 @@ namespace SongList
         private List<SongInfo> _songs;
         private GameObject _selectedSlot;
         public event Action<SongInfo> OnHighlightedSongChanged;
+        private SingleMenuController _singleMenuController;
         #endregion
 
         #region Unity Methods
@@ -97,6 +98,7 @@ namespace SongList
                 // 중앙 슬롯 즉시 하이라이트
                 HighlightCenterSlotByPosition(isImmediate: true);
             }
+            _singleMenuController = FindFirstObjectByType<SingleMenuController>();
         }
 
         private void OnEnable() {

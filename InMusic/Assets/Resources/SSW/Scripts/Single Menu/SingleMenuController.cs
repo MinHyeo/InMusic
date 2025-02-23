@@ -3,11 +3,13 @@ using UnityEngine.SceneManagement;
 using System;
 using SongList;
 using UI_BASE_PSH;
-using Unity.XR.Oculus.Input;
 
 
 public class SingleMenuController : MonoBehaviour
 {
+    [SerializeField] public GameObject curSetUI = null;
+    [SerializeField] public GameObject guideUI = null;
+    Key_Setting_UI _key_Setting_UI;
     private void OnEnable() {
         GameManager.SingleMenuInput.keyAction += OnKeyPress;
         Debug.Log("SingleMenu Input Enabled");
@@ -15,7 +17,7 @@ public class SingleMenuController : MonoBehaviour
 
     private void OnDisable() {
         GameManager.SingleMenuInput.keyAction -= OnKeyPress;
-        Debug.Log("SingleMenu Input Enabled");
+        Debug.Log("SingleMenu Input Disabled");
     }
     private void OnKeyPress()
     {
@@ -30,6 +32,13 @@ public class SingleMenuController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.O))
         {
             OnClickOption();
+        }
+        if(Input.GetKeyDown(KeyCode.F1))
+        {
+            if(guideUI == null)
+            {
+                
+            }
         }
     }
     // 전체 기능 구현 완료 후 Manager를 추가하여 수정 예정
@@ -48,9 +57,11 @@ public class SingleMenuController : MonoBehaviour
 
     public void OnClickOption()
     {
-        //TODO: Option UI 표현
-        
+        //TODO: Option UI 입출력 이벤트 처리
+        if(curSetUI == null)
+        {
 
+        }
         Debug.Log("Option Button Clicked.");
     }
 }
