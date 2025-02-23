@@ -2,10 +2,8 @@
 using UnityEngine;
 using TMPro;
 using System;
-using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
 using Play.Result;
-using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace Play
 {
@@ -93,6 +91,16 @@ namespace Play
         }
         private States state = States.Ready;
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            if(SceneManager.GetActiveScene().name != "YMH")
+            {
+                Destroy(gameObject);
+            }
+        }
+
         public void OnClickButton()
         {
             StartGame(Song.Heya, "artist");
@@ -112,6 +120,7 @@ namespace Play
 
             //노래 초기화
             SoundManager.Instance.SongInit(songName.ToString());
+            Debug.Log(videoPlayScript);
             videoPlayScript.GetVideoClip(songName);
             metronome.CalculateSync();
 

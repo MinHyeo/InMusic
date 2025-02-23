@@ -48,35 +48,6 @@ public class GameManager : MonoBehaviour
         _singleMenuInput.OnUpdate();
     }
 
-    public void StartGame(string SongTitle)
-    {
-        Enum.TryParse(SongTitle, out songTitle);
-        SceneManager.sceneLoaded += OnPlaySceneLoaded;  //������ ����
-
-        SceneManager.LoadScene("YMH");
-    }
-
-    private void OnPlaySceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == "YMH")
-        {
-            StartCoroutine(WaitForPlayManagerAndStartGame());
-            SceneManager.sceneLoaded -= OnPlaySceneLoaded; // �̺�Ʈ ���� ����
-        }
-    }
-
-    public IEnumerator WaitForPlayManagerAndStartGame()
-    {
-        // PlayManager가 존재할 때까지 대기
-        while (PlayManager.Instance == null)
-        {
-            yield return null;  // 다음 프레임까지 대기
-        }
-
-        // PlayManager가 초기화되면 메서드 호출
-        //PlayManager.Instance.StartGame(songTitle);
-    }
-
     public void SelectSong(Song songTitle)
     {
         Debug.Log("Try Scene Load");
