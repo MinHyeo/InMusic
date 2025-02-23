@@ -24,6 +24,7 @@ public class Single_Lobby_UI : UI_Base
     float duration = 0.3f;
     bool isScrolling = false;
 
+
     void Start()
     {
         //음악 목록 Load하기
@@ -86,7 +87,7 @@ public class Single_Lobby_UI : UI_Base
             case "Exit":
                 //키 입력 이벤트 제거
                 GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-                //SceneManager.LoadScene("로비 씬");
+                SceneManager.LoadScene(2);
                 break;
             case "Enter":
                 if (curMusicItem.GetComponent<Music_Item>().HasBMS) {
@@ -96,7 +97,9 @@ public class Single_Lobby_UI : UI_Base
                     //다음 씬에 넘겨줄 MusicData 값 설정
                     GameManager_PSH.Data.SetData(curMusicItem.GetComponent<Music_Item>());
 
-                    SceneManager.LoadScene(1);
+                    //SceneManager.LoadScene(1);
+                    LoadingScreen.Instance.LoadScene("KGB_SinglePlay", GameManager_PSH.Data.GetData());
+                    //LoadingScreen.Instance.LoadScene("KGB_SinglePlay");
                 }
                 else
                 {

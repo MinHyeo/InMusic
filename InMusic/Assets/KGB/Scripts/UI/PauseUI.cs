@@ -74,7 +74,7 @@ public class PauseUI : MonoBehaviour
     public void Exit()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(0); //메인화면으로 가야함 임시로 선택화면
+        SceneManager.LoadScene(2); //메인화면으로 가야함 임시로 선택화면
     }
  
 

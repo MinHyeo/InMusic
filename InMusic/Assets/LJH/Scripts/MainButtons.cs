@@ -37,6 +37,7 @@ public class MainButtons : MonoBehaviour
     {
         mainCanvas.SetActive(false);
         soloCanvas.SetActive(true);
+        LoadingScreen.Instance.LoadScene("Single_Lobby_PSH");
     }
 
     // Open MultiPLay Canvas

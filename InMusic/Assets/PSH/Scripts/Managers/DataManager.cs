@@ -39,4 +39,8 @@ public class DataManager
         mData.Audio = item.Audio;
         mData.MuVi = item.MuVi;
     }
+
+    public MusicData GetData() { 
+        return mData;
+    }
 }
