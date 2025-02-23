@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using SongList;
+using UI_BASE_PSH;
+using Unity.XR.Oculus.Input;
 
 
 public class SingleMenuController : MonoBehaviour
@@ -16,7 +19,7 @@ public class SingleMenuController : MonoBehaviour
     }
     private void OnKeyPress()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Return))
         {
             OnClickStart();
         }
@@ -32,7 +35,8 @@ public class SingleMenuController : MonoBehaviour
     // 전체 기능 구현 완료 후 Manager를 추가하여 수정 예정
     public void OnClickStart()
     {
-        //SceneManager.LoadScene("Next_Scene");
+        HighlightSong highlightSong = FindFirstObjectByType<HighlightSong>();
+        highlightSong.StartButtonAction();
         Debug.Log("Start Button Action");
     }
 
@@ -45,6 +49,8 @@ public class SingleMenuController : MonoBehaviour
     public void OnClickOption()
     {
         //TODO: Option UI 표현
+        
+
         Debug.Log("Option Button Clicked.");
     }
 }

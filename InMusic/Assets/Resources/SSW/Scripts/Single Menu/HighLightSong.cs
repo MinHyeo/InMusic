@@ -98,21 +98,28 @@ namespace SongList{
                 Debug.LogWarning("[HighlightSong] SavePlayData 객체를 찾지 못했습니다.");
             }
 
-            // TODO: 버튼 클릭 부분 리팩토링 필요 (버튼 관련 코드는 다른 클래스로 분리하여야 함)
-            // 버튼 리스너 세팅
-            if (startButton != null) {
-                startButton.onClick.RemoveAllListeners();
-                string playSceneName = "YMH";
-                startButton.onClick.AddListener(() =>
-                {
-                    // 1. 효과음 재생
-                    SoundManager.Instance.PlaySFX(SFXType.PlayStart);
-                    // 2. 씬 로드
-                    loadingSongObj = LoadingSong.Instance;
-                    loadingSongObj.LoadPlay(playSceneName, songInfo.Title, _detailArtistText.text, _detailImage.sprite);
-                });
+            // // TODO: 버튼 클릭 부분 리팩토링 필요 (버튼 관련 코드는 다른 클래스로 분리하여야 함)
+            // // 버튼 리스너 세팅
+            // if (startButton != null) {
+            //     startButton.onClick.RemoveAllListeners();
+            //     string playSceneName = "YMH";
+            //     startButton.onClick.AddListener(() =>
+            //     {
+            //         // 1. 효과음 재생
+            //         SoundManager.Instance.PlaySFX(SFXType.PlayStart);
+            //         // 2. 씬 로드
+            //         loadingSongObj = LoadingSong.Instance;
+            //         loadingSongObj.LoadPlay(playSceneName, songInfo.Title, _detailArtistText.text, _detailImage.sprite);
+            //     });
 
-            }
+            // }
+        }
+
+        public void StartButtonAction()
+        {
+            SoundManager.Instance.PlaySFX(SFXType.PlayStart);
+            loadingSongObj = LoadingSong.Instance;
+            loadingSongObj.LoadPlay("YMH", _detailTitleText.text, _detailArtistText.text, _detailImage.sprite);
         }
 
         /// <summary>
