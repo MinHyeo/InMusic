@@ -153,6 +153,9 @@ public class Sound_Setting_UI : MonoBehaviour
             menuSliders[i].value = Mathf.Round(menuSliders[i].value);
             menuValues[i].text = $"{menuSliders[i].value}%";
             curVolumes[i] = menuSliders[i].value;
+
+            //SoundManager에 변경된 사운드 조절
+            Play.SoundManager.Instance.SetVolume(i, curVolumes[i]);
         }
     }
     IEnumerator KeyUICheck()

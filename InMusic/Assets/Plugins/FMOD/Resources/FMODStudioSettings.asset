@@ -459,12 +459,12 @@ MonoBehaviour:
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
   AutomaticEventLoading: 0
-  BankLoadType: 1
-  AutomaticSampleLoading: 0
+  BankLoadType: 0
+  AutomaticSampleLoading: 1
   EncryptionKey: 
-  ImportType: 1
+  ImportType: 0
   TargetAssetPath: FMODBanks
-  TargetBankFolder: SFX
+  TargetBankFolder: FMODBanks
   EventLinkage: 0
   LoggingLevel: 4
   SpeakerModeSettings: []
@@ -475,8 +475,11 @@ MonoBehaviour:
   VirtualChannelSettings: []
   RealChannelSettings: []
   Plugins: []
-  MasterBanks: []
-  Banks: []
+  MasterBanks:
+  - Master
+  Banks:
+  - BGM
+  - SFX
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0

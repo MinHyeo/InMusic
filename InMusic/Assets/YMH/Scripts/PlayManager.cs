@@ -119,7 +119,7 @@ namespace Play
             this.artist = artist;
 
             //노래 초기화
-            SoundManager.Instance.SongInit(songName.ToString());
+            //SoundManager.Instance.SongInit(songName.ToString());
             Debug.Log(videoPlayScript);
             videoPlayScript.GetVideoClip(songName);
             metronome.CalculateSync();
@@ -157,7 +157,8 @@ namespace Play
 
         private void PlaySong()
         {
-            SoundManager.Instance.Play();
+            string songPart = "event:/BGM/" + songName.ToString();
+            SoundManager.Instance.PlayBGM(songPart);
             videoPlayScript.Play();
         }
 
