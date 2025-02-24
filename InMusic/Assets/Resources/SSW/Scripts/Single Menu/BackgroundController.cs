@@ -94,24 +94,25 @@ public class BackgroundController : MonoBehaviour
         float fadeOutTime = 0.5f;
 
         // 이전 하이라이트 음악 볼륨 감소
-        //if (_bgAudio.volume >= 1f) {
-        //    while (elapsed < fadeOutTime) {
-        //        elapsed += Time.deltaTime;
-        //        float t = Mathf.Clamp01(elapsed / fadeOutTime);
-        //        if (_bgAudio != null)
-        //            _bgAudio.volume = Mathf.Lerp(1f, 0f, t);
-        //        yield return null;
-        //    }
-        //}
+        if (_bgAudio.volume >= 1f)
+        {
+            while (elapsed < fadeOutTime)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / fadeOutTime);
+                if (_bgAudio != null)
+                    _bgAudio.volume = Mathf.Lerp(1f, 0f, t);
+                yield return null;
+            }
+        }
 
         if (_bgAudio != null)
         {
-            //_bgAudio.volume = 0.5f;
-            //AudioClip clip = Resources.Load<AudioClip>($"Song/{songName}/{songName}");
-            //_bgAudio.clip = clip; 
-            //_bgAudio.Play();
-            //_bgAudio.time = 60f;
-            Play.SoundManager.Instance.PlayBGMHighLight(songName);
+            _bgAudio.volume = 0.5f;
+            AudioClip clip = Resources.Load<AudioClip>($"Song/{songName}/{songName}");
+            _bgAudio.clip = clip;
+            _bgAudio.Play();
+            _bgAudio.time = 60f;
         }
 
         if (_bgCanvasGroup != null) _bgCanvasGroup.alpha = 0f;
