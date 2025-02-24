@@ -2,19 +2,39 @@ using UnityEngine;
 using FMODUnity;
 using FMOD;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
+using FMOD.Studio;
 
-namespace Play 
+namespace Play
 {
+    public enum SoundType 
+    {
+        Master = 0,
+        SFX,
+        BGM,
+    }
+
     public class SoundManager : SingleTon<SoundManager>
     {
+        // FMOD Variable 
         [Header("music")]
         FMOD.System fmodSystem;
         FMOD.ChannelGroup musicChannelGroup;
         FMOD.Sound musicSound;
         FMOD.Channel musicChannel;
 
+        private EventInstance bgmInstance;
+        private FMOD.ChannelGroup masterChannelGroup;
+
+        // Fmod Bus
+        [Header("Fmod Bus")]
+        private FMOD.Studio.Bus masterBus;
+        private FMOD.Studio.Bus bgmBus;
+        private FMOD.Studio.Bus sfxBus;
+
         [Header("MusicInfo")]
         public float frequency;
+        private int startTimeSeconds = 60;
         public uint positionInSamples;
 
         private bool isPlaying = false;
@@ -27,27 +47,66 @@ namespace Play
 
         private void Init()
         {
-            if (FMODUnity.RuntimeManager.IsInitialized)
+            //fmodSystem = RuntimeManager.CoreSystem;
+            //fmodSystem.createChannelGroup("Music", out musicChannelGroup);
+
+            RuntimeManager.LoadBank("Master");
+            RuntimeManager.LoadBank("BGM");
+            RuntimeManager.LoadBank("SFX");
+
+            // FMOD에서 Bus 가져오기
+            masterBus = RuntimeManager.GetBus("bus:/");
+            bgmBus = RuntimeManager.GetBus("bus:/BGM");
+            sfxBus = RuntimeManager.GetBus("bus:/SFX");
+
+            DontDestroyOnLoad(this.gameObject);
+        }
+
+        public void SetVolume(int soundType, float volume) 
+        {
+            switch (soundType)
             {
-                FMOD.Factory.System_Create(out fmodSystem);
-                fmodSystem.init(512, FMOD.INITFLAGS.NORMAL, System.IntPtr.Zero);
-            }
-            else
-            {
-                UnityEngine.Debug.Log("초기화 실패");
-                FMODUnity.RuntimeManager.CoreSystem.init(512, FMOD.INITFLAGS.NORMAL, System.IntPtr.Zero);
-                Init();
+                case (int)SoundType.Master:
+                    masterBus.setVolume(volume);
+                    break;
+                case (int)SoundType.SFX:
+                    sfxBus.setVolume(volume);
+                    break;
+                case (int)SoundType.BGM:
+                    bgmBus.setVolume(volume);
+                    break;
             }
         }
 
-        public void Play()
+        private void LoadSong(string songName)
         {
-            //노래 재생
-            UnityEngine.Debug.Log("노래 재생");
-            fmodSystem.playSound(musicSound, musicChannelGroup, false, out musicChannel);
-            musicChannel.setVolume(0.5f);
+            //노래 불러오기
+            if (bgmInstance.isValid())
+            {
+                bgmInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                bgmInstance.release();
+            }
+            string bgmEventPart = "event:/BGM/" + songName;
+            bgmInstance = RuntimeManager.CreateInstance(bgmEventPart);
+        }
+
+        public void PlayBGM(string bgmEventPart)
+        {
+            bgmInstance.start();
 
             isPlaying = true;
+        }
+
+        public void PlayBGMHighLight(string songName)
+        {
+            LoadSong(songName);
+
+            bgmInstance.setParameterByName("BGM_Loop", 1.0f);
+
+            //int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000); // 44.1kHz 기준
+            //bgmInstance.setTimelinePosition(startTimeMilliseconds);
+
+            bgmInstance.start();
         }
 
         public void Pause(bool isPause)
@@ -61,17 +120,21 @@ namespace Play
             Init();
 
             //노래 불러오기
-            string path = "Assets/Resources/Song/" + songName + "/" + songName + ".ogg";
-            UnityEngine.Debug.Log(path);
-            FMOD.RESULT result = fmodSystem.createSound(path, FMOD.MODE.DEFAULT, out musicSound);
-            if (result != FMOD.RESULT.OK)
-            {
-                UnityEngine.Debug.LogError("노래 불러오기 실패" + result);
-                return;
-            }
+            LoadSong(songName);
 
             //현재 샘플 계산
-            musicSound.getDefaults(out frequency, out _);
+            frequency = GetCurrentFrequency();
+        }
+
+        private float GetCurrentFrequency()
+        {
+            if (masterChannelGroup.hasHandle())
+            {
+                FMOD.DSP dsp;
+                masterChannelGroup.getDSP(0, out dsp);  // DSP 0번 가져오기
+                dsp.getParameterFloat(0, out frequency);  // DSP에서 주파수 가져오기
+            }
+            return frequency;
         }
 
         private void Update()
