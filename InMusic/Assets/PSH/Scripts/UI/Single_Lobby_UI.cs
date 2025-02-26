@@ -8,35 +8,35 @@ using UnityEngine.SceneManagement;
 public class Single_Lobby_UI : UI_Base
 {
     [SerializeField] private GameObject popupUI;
-    [SerializeField] private GameObject[] musicItems = new GameObject[17];
+    [Header("현재 선택한 음악 항목")]
     [SerializeField] private GameObject curMusicItem;
-    [Tooltip("선택한 음악의 정보: 앨범, 제목, 아티스트, 길이")]
+    [Header("선택한 음악의 정보")]
+    [Tooltip("앨범, 제목, 아티스트, 길이")]
     [SerializeField] private GameObject[] curMusicData = new GameObject[4];
-    [Tooltip("선택한 음악의 기록: 점수, 정확도, 콤보, 랭크")]
+    [Header("선택한 음악의 플레이 기록")]
+    [Tooltip("점수, 정확도, 콤보, 랭크")]
     [SerializeField] private Text[] logData = new Text[4];
-    [Tooltip("스크롤 관련 변수")]
-    [SerializeField] private RectTransform contentPos;
-    [SerializeField] List<MusicData> musicDataList = new List<MusicData>();
-    private float itemGap = 40.0f;
-    private int numOfitems;
-    [SerializeField] private int startIndex = 0;
-    Vector2 dest;
-    float duration = 0.3f;
-    bool isScrolling = false;
+    [Header("아이템 리스트 관련")]
+    [Tooltip("리스트 오브젝트, 스크립트")]
+    [SerializeField] private GameObject musicList;
+    [Tooltip("")]
+    [SerializeField] MusicList mList;
+
+
+    private void Awake()
+    {
+        if (musicList == null) {
+            musicList = transform.Find("MusicList").gameObject;
+        }
+        mList = musicList.GetComponent<MusicList>();    
+    }
 
     void Start()
     {
-        //음악 목록 Load하기
-        musicDataList = GameManager_PSH.Resource.GetMusicList();
 
-        if (musicDataList == null) {
-            Debug.Log("음악 목록 Load 실패");
-            return;
-        }
-
-        numOfitems = musicDataList.Count;
-        ContentDown();
-
+        //음악 목록 Load해서 넘겨주기
+        mList.SetData(GameManager_PSH.Resource.GetMusicList());
+        
         //변경 예정
         GameManager_PSH.Input.SetUIKeyEvent(SingleLobbyKeyEvent);
     }
@@ -46,20 +46,20 @@ public class Single_Lobby_UI : UI_Base
         //목록을 휠로 조작 처리
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (!isScrolling) {
+        if (!mList.IsScrolling) {
             if (scroll > 0) //휠을 위로 돌렸을 때
             {
-                ScrollUp();
+                mList.ScrollDown();
             }
 
             else if (scroll < 0)  //휠을 아래로 돌렸을 때
             {
-                ScrollDown();
+                mList.ScrollUp();
             }
         }
     }
 
-    #region ItemDetect
+    #region Detect
     void OnTriggerEnter2D(Collider2D listItem)
     {
         curMusicItem = listItem.gameObject;
@@ -71,17 +71,16 @@ public class Single_Lobby_UI : UI_Base
     {
         listItem.gameObject.GetComponent<Music_Item>().ItemUnselect();
     }
-
     #endregion
 
     public void ButtonEvent(string type) {
         switch (type)
         {
             case "Up":
-                ScrollUp();
+                mList.ScrollUp();
                 break;
             case "Down":
-                ScrollDown();
+                mList.ScrollDown();
                 break;
             case "Exit":
                 //키 입력 이벤트 제거
@@ -115,7 +114,7 @@ public class Single_Lobby_UI : UI_Base
 
     void SingleLobbyKeyEvent(Define.UIControl keyEvent)
     {
-        if (popupUI != null || SettingUI != null || guideUI != null || isScrolling) return;
+        if (popupUI != null || SettingUI != null || guideUI != null || mList.IsScrolling) return;
 
         switch (keyEvent)
         {
@@ -157,113 +156,8 @@ public class Single_Lobby_UI : UI_Base
         logData[3].text = newData.Rank.text;
     }
 
-    void UpdateItems(Music_Item oldItem, MusicData newItem)
-    {
-        oldItem.DirPath = newItem.DirPath;
-        //Debug.Log(newItem.BMS.header.title);
-        if (newItem.HasBMS)
-        {
-            oldItem.Title.text = newItem.BMS.header.title;
-            oldItem.Artist.text = newItem.BMS.header.artist;
-        }
-        else
-        {
-            oldItem.Title.text = "EmptyItem";
-            oldItem.Artist.text = "Empty";
-        }
-        oldItem.Length = newItem.Length;
-        oldItem.Album.sprite = newItem.Album;
-        oldItem.Audio = newItem.Audio;
-        oldItem.MuVi = newItem.MuVi;
-        oldItem.HasBMS = newItem.HasBMS;
-        oldItem.Score = newItem.Score;
-        oldItem.Accuracy = newItem.Accuracy + "%";
-        oldItem.Combo = newItem.Combo;
-        oldItem.Rank.text = newItem.Rank;
-
-        oldItem.Data = newItem;
-    }
-
-    void ContentDown()
-    {
-        //Content 이동
-        contentPos.localPosition = new Vector2(0, 200.0f);
-        //목록 갱신
-        startIndex -= 5;
-        if (startIndex < 0) {
-            startIndex = numOfitems + startIndex;
-        }
-        for (int i = 0; i < musicItems.Length; i++) {
-            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicDataList[startIndex++]);
-            if (startIndex >= numOfitems) {
-                startIndex = 0;
-            }
-        }
-    }
-
-    void ContentUp() {
-        //Content 이동
-        contentPos.localPosition = new Vector2(0, 200.0f);
-        //목록 갱신
-        startIndex -= 12; // 12 = 17 - 5
-        if (startIndex < 0) {
-            startIndex = numOfitems + startIndex;
-        }
-        for (int i = 0; i < musicItems.Length; i++)
-        {
-            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicDataList[startIndex++]);
-            if (startIndex >= numOfitems) {
-                startIndex = 0;
-            }
-        }
-    }
-
-    void ScrollDown() {
-        dest = contentPos.localPosition;
-        dest += new Vector2(0, itemGap);
-        StartCoroutine(SmoothScrollMove());
-    }
-
-    void ScrollUp(){
-        dest = contentPos.localPosition;
-        dest -= new Vector2(0, itemGap);
-        StartCoroutine(SmoothScrollMove());
-    }
-
-    //부드럽게 이동: 마우스(스크롤)/키보드 조작
-    IEnumerator SmoothScrollMove() {
-        isScrolling = true;
-
-        //Content 위치 수정
-        if (contentPos.localPosition.y < 40.0f)
-        {
-            ContentDown();
-            dest = contentPos.localPosition;
-            dest -= new Vector2(0, itemGap);
-        }
-        //스크롤을 내리면
-        else if (contentPos.localPosition.y >= 400.0f)
-        {
-            ContentUp();
-            dest = contentPos.localPosition;
-            dest += new Vector2(0, itemGap);
-        }
-
-        //이동
-        float elapsedTime = 0f;
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            contentPos.localPosition = Vector2.MoveTowards(contentPos.localPosition, dest, itemGap * (Time.deltaTime / duration));
-            yield return null;
-        }
-        //위치 보정
-        contentPos.localPosition = dest;
-
-        isScrolling = false;
-    }
-
-
+    //TestCode
+    /*
     public void LogSaveTestButton()
     {
         //MusicData 설정(GameManager가 갖고 있는 값)
@@ -286,5 +180,5 @@ public class Single_Lobby_UI : UI_Base
         test.Rank = "A";
         //저장
         GameManager_PSH.Data.SaveData(test);
-    }
+    }*/
 }

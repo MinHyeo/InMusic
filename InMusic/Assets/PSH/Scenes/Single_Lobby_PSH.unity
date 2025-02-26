@@ -220,6 +220,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Music (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -554,6 +558,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Music (+4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -705,6 +713,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Music (+5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -855,6 +867,10 @@ PrefabInstance:
     - target: {fileID: 3964619929280816202, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Name
       value: Music (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
@@ -1176,6 +1192,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Music (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1290,6 +1310,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Music (-5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1403,6 +1427,10 @@ PrefabInstance:
     - target: {fileID: 3964619929280816202, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Name
       value: Music (-3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
@@ -2109,6 +2137,9 @@ GameObject:
   - component: {fileID: 686798011}
   - component: {fileID: 686798010}
   - component: {fileID: 686798009}
+  - component: {fileID: 686798013}
+  - component: {fileID: 686798014}
+  - component: {fileID: 686798012}
   m_Layer: 5
   m_Name: MusicList
   m_TagString: Untagged
@@ -2204,6 +2235,113 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 686798007}
   m_CullTransparentMesh: 1
+--- !u!114 &686798012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686798007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 351ff4da533588c4a86bbd83ddef48b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicItems:
+  - {fileID: 1802879875}
+  - {fileID: 1739262099}
+  - {fileID: 1934996149}
+  - {fileID: 17822854}
+  - {fileID: 1754514817}
+  - {fileID: 796183148}
+  - {fileID: 1674635095}
+  - {fileID: 1276391326}
+  - {fileID: 880231996}
+  - {fileID: 944324373}
+  - {fileID: 654158089}
+  - {fileID: 494936787}
+  - {fileID: 1704578280}
+  - {fileID: 17536437}
+  - {fileID: 1467854103}
+  - {fileID: 953211196}
+  - {fileID: 820336222}
+  curItem: {fileID: 0}
+  startIndex: 0
+  musicDataList: []
+  contentPos: {fileID: 341532225}
+--- !u!61 &686798013
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686798007}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 32
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 3, y: -1.5}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 373, y: 11.5}
+  m_EdgeRadius: 0
+--- !u!50 &686798014
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686798007}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &746905410
 GameObject:
   m_ObjectHideFlags: 0
@@ -2416,6 +2554,10 @@ PrefabInstance:
     - target: {fileID: 3964619929280816202, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Name
       value: Music (-1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
@@ -2763,6 +2905,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Music (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2876,6 +3022,10 @@ PrefabInstance:
     - target: {fileID: 3964619929280816202, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Name
       value: Music (+1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
@@ -3069,6 +3219,10 @@ PrefabInstance:
     - target: {fileID: 3964619929280816202, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Name
       value: Music (+2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
@@ -3401,6 +3555,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Music (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3652,6 +3810,10 @@ PrefabInstance:
     - target: {fileID: 3964619929280816202, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Name
       value: Music (-4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
@@ -4289,24 +4451,6 @@ MonoBehaviour:
   SettingUI: {fileID: 0}
   guideUI: {fileID: 0}
   popupUI: {fileID: 0}
-  musicItems:
-  - {fileID: 1802879875}
-  - {fileID: 1739262099}
-  - {fileID: 1934996149}
-  - {fileID: 17822854}
-  - {fileID: 1754514817}
-  - {fileID: 796183148}
-  - {fileID: 1674635095}
-  - {fileID: 1276391326}
-  - {fileID: 880231996}
-  - {fileID: 944324373}
-  - {fileID: 654158089}
-  - {fileID: 494936787}
-  - {fileID: 1704578280}
-  - {fileID: 17536437}
-  - {fileID: 1467854103}
-  - {fileID: 953211196}
-  - {fileID: 820336222}
   curMusicItem: {fileID: 0}
   curMusicData:
   - {fileID: 793296701}
@@ -4318,9 +4462,8 @@ MonoBehaviour:
   - {fileID: 557147252}
   - {fileID: 1283319709}
   - {fileID: 1257152489}
-  contentPos: {fileID: 341532225}
-  musicDataList: []
-  startIndex: 0
+  musicList: {fileID: 0}
+  mList: {fileID: 0}
 --- !u!61 &1890810792
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4487,6 +4630,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Music (+3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4600,6 +4747,10 @@ PrefabInstance:
     - target: {fileID: 3964619929280816202, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Name
       value: Music (-2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
@@ -4835,6 +4986,10 @@ PrefabInstance:
     - target: {fileID: 3964619929280816202, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Name
       value: Music (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
@@ -5140,6 +5295,10 @@ PrefabInstance:
     - target: {fileID: 3964619929280816202, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Name
       value: Music
+      objectReference: {fileID: 0}
+    - target: {fileID: 4119890202325672502, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5064981203881762074, guid: 62898d17a87a84c42af74f09bf327168, type: 3}
       propertyPath: m_Pivot.x
