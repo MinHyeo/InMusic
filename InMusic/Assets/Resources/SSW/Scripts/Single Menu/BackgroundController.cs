@@ -31,6 +31,7 @@ public class BackgroundController : MonoBehaviour
     [SerializeField] private AudioSource _bgAudio;
     [SerializeField] private VideoPlayer _bgVideo;
     [SerializeField] private CanvasGroup _bgCanvasGroup; // 페이드 인/아웃용
+    [SerializeField] private string _previousSongName;
 
     private Coroutine _highlightCoroutine;
     private Coroutine _fadeCoroutine;
@@ -67,6 +68,8 @@ public class BackgroundController : MonoBehaviour
     /// </summary>
     public void StartHighlightProcess(string songName)
     {
+        if(_previousSongName == songName) return;
+        _previousSongName = songName;
         // 기존 코루틴 중지
         if (_highlightCoroutine != null)
         {

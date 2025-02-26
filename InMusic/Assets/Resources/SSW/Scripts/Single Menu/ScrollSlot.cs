@@ -137,38 +137,33 @@ namespace SongList {
             if (isImmediate) {
                 // 처음 선택 시 애니메이션 없이 즉시 fillAmount = (highlight ? 1 : 0)
                 _highlightImage.fillAmount = highlight ? 1f : 0f;
-                if (highlight) {
+                if (Mathf.Approximately(_highlightImage.fillAmount, 1f)) {
                     OnHighlightGaugeComplete();
-                } else {
-                    OnHighlightGaugeReset();
                 }
             } else {
                 float target = highlight ? 1f : 0f; // 선택 시 1, 해제 시 0으로 타겟 설정
-                _highlightCoroutine = StartCoroutine(AnimateHighlightFill(target, 0.2f));
+                _highlightCoroutine = StartCoroutine(AnimateHighlightFill(target, 0.35f));
             }
         }
 
         /// <summary>
         /// 현재 fillAmount부터 toFill까지 Lerp 애니메이션
         /// </summary>
-        private IEnumerator AnimateHighlightFill(float toFill, float duration) {
+        private IEnumerator AnimateHighlightFill(float target, float duration) {
             float startFill = _highlightImage.fillAmount;
             float elapsed = 0f;
 
             while (elapsed < duration) {
                 elapsed += Time.deltaTime;
                 float t = Mathf.Clamp01(elapsed / duration);
-                _highlightImage.fillAmount = Mathf.Lerp(startFill, toFill, t);
+                _highlightImage.fillAmount = Mathf.Lerp(startFill, target, t);
                 yield return null;
             }
-            _highlightImage.fillAmount = toFill;
+            _highlightImage.fillAmount = target;
             _highlightCoroutine = null;
 
             if (Mathf.Approximately(_highlightImage.fillAmount, 1f)) {
                 OnHighlightGaugeComplete();
-            } else if (_highlightImage.fillAmount == 0f) {
-                // TODO: 테스트 하면서 조건문 확인
-                OnHighlightGaugeReset();
             }
         }
 
@@ -182,12 +177,6 @@ namespace SongList {
                 // 곡 이름 (or ID)만 넘겨도 됨
                 BackgroundController.Instance.StartHighlightProcess(_currentData.Title);
             }
-        }
-
-        private void OnHighlightGaugeReset() {
-            // 게이지가 0f가 되었을 때(하이라이트 OFF)
-            // BackgroundController에게 하이라이트 중단 요청
-            //BackgroundController.Instance.StopHighlight();
         }
 
         public SongInfo GetHighlightedSong() {
