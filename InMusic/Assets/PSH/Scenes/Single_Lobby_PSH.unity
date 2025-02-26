@@ -828,6 +828,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 245580215}
+  - component: {fileID: 245580216}
   m_Layer: 5
   m_Name: MusicInfo
   m_TagString: Untagged
@@ -856,6 +857,28 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &245580216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245580214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ddccb24fa4421443b749f8b204fa3ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curMusicData:
+  - {fileID: 793296701}
+  - {fileID: 504681488}
+  - {fileID: 746905410}
+  - {fileID: 1910152539}
+  logData:
+  - {fileID: 1627315568}
+  - {fileID: 557147252}
+  - {fileID: 1283319709}
+  - {fileID: 1257152489}
 --- !u!1001 &289934183
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4452,6 +4475,7 @@ MonoBehaviour:
   guideUI: {fileID: 0}
   popupUI: {fileID: 0}
   curMusicItem: {fileID: 0}
+  mInfo: {fileID: 0}
   curMusicData:
   - {fileID: 793296701}
   - {fileID: 504681488}

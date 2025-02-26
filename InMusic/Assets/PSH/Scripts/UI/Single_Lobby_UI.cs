@@ -10,25 +10,27 @@ public class Single_Lobby_UI : UI_Base
     [SerializeField] private GameObject popupUI;
     [Header("현재 선택한 음악 항목")]
     [SerializeField] private GameObject curMusicItem;
+
     [Header("선택한 음악의 정보")]
-    [Tooltip("앨범, 제목, 아티스트, 길이")]
-    [SerializeField] private GameObject[] curMusicData = new GameObject[4];
-    [Header("선택한 음악의 플레이 기록")]
-    [Tooltip("점수, 정확도, 콤보, 랭크")]
-    [SerializeField] private Text[] logData = new Text[4];
+    [SerializeField] private GameObject musicInfo;
+    [SerializeField] MusicInfo mInfo;
+
     [Header("아이템 리스트 관련")]
-    [Tooltip("리스트 오브젝트, 스크립트")]
     [SerializeField] private GameObject musicList;
-    [Tooltip("")]
     [SerializeField] MusicList mList;
 
 
     private void Awake()
     {
-        if (musicList == null) {
+        if (musicInfo == null || mInfo == null)
+            musicInfo = transform.Find("MusicInfo").gameObject;
+        mInfo = musicInfo.GetComponent<MusicInfo>();
+
+
+        if (musicList == null || mList == null)
             musicList = transform.Find("MusicList").gameObject;
-        }
-        mList = musicList.GetComponent<MusicList>();    
+        mList = musicList.GetComponent<MusicList>();
+
     }
 
     void Start()
@@ -64,7 +66,7 @@ public class Single_Lobby_UI : UI_Base
     {
         curMusicItem = listItem.gameObject;
         curMusicItem.GetComponent<Music_Item>().ItemSelect();
-        UpdateInfo();
+        mInfo.UpdateInfo(curMusicItem.GetComponent<Music_Item>());
     }
 
     private void OnTriggerExit2D(Collider2D listItem)
@@ -137,23 +139,6 @@ public class Single_Lobby_UI : UI_Base
                 ButtonEvent("Gear");
                 break;
         }
-    }
-
-    //Update Detail Info
-    void UpdateInfo()
-    {
-        //Debug.Log("Change Item");
-        Music_Item newData = curMusicItem.GetComponent<Music_Item>();
-        //음악 정보 업데이트
-        curMusicData[0].GetComponent<Image>().sprite = newData.Album.sprite;
-        curMusicData[1].GetComponent<Text>().text = newData.Title.text;
-        curMusicData[2].GetComponent<Text>().text = newData.Artist.text;
-        curMusicData[3].GetComponent<Text>().text = newData.Length;
-        //기록 정보 업데이트
-        logData[0].text = newData.Score;
-        logData[1].text = newData.Accuracy;
-        logData[2].text = newData.Combo;
-        logData[3].text = newData.Rank.text;
     }
 
     //TestCode
