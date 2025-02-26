@@ -59,6 +59,8 @@ public class BackgroundController : MonoBehaviour
     }
     #endregion
 
+    #region Background Control
+
     /// <summary>
     /// 슬롯(ScrollSlot)에서 "0.2초 게이지 완료" 이벤트를 수신.
     /// 이 시점부터 대기 + 1초 페이드인 (뮤직/비디오) 진행.
@@ -188,4 +190,17 @@ public class BackgroundController : MonoBehaviour
             _highlightCoroutine = null;
         }
     }
+    #endregion
+
+    #region ReSources
+    public AudioSource GetAudioSource()
+    {
+        return _bgAudio;
+    }
+
+    public VideoPlayer GetVideoPlayer()
+    {
+        return _bgVideo;
+    }
+    #endregion
 }

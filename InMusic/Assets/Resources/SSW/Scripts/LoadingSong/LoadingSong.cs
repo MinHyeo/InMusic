@@ -21,6 +21,7 @@ public class LoadingSong : MonoBehaviour
     [SerializeField] private Text _songArtist;
 
     [Header("Background Settings")]
+    [SerializeField] private BackgroundController _bgController;
     [SerializeField] private VideoPlayer _bgVideo;
     [SerializeField] private AudioSource _bgAudio;
     private string loadSceneName;
@@ -48,6 +49,8 @@ public class LoadingSong : MonoBehaviour
         if (_instance == null) {
         _instance = this;
         DontDestroyOnLoad(gameObject);
+        _bgController = BackgroundController.Instance;
+
         } else if (_instance != this) {
             Destroy(gameObject);
             return;
@@ -83,6 +86,9 @@ public class LoadingSong : MonoBehaviour
         _songArtist.text = Artist;
         _defaultLoadingText = _loadingText.rectTransform.anchoredPosition.x;
         GlobalInpoutControl.IsInputEnabled = false;
+        _bgController = BackgroundController.Instance;
+        _bgAudio = _bgController.GetAudioSource();
+        _bgVideo = _bgController.GetVideoPlayer();
         BackgroundController.Instance.StopHighlight();
 
         SceneManager.sceneLoaded += OnSceneLoaded;

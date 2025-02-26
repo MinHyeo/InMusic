@@ -156,7 +156,6 @@ namespace SongList {
             float elapsed = 0f;
 
             while (elapsed < duration) {
-                // if (!_isHighlighted) yield break; // 중간에 꺼지면 중단
                 elapsed += Time.deltaTime;
                 float t = Mathf.Clamp01(elapsed / duration);
                 _highlightImage.fillAmount = Mathf.Lerp(startFill, toFill, t);
@@ -165,9 +164,9 @@ namespace SongList {
             _highlightImage.fillAmount = toFill;
             _highlightCoroutine = null;
 
-            if (Mathf.Approximately(toFill, 1f)) {
+            if (Mathf.Approximately(_highlightImage.fillAmount, 1f)) {
                 OnHighlightGaugeComplete();
-            } else if (toFill == 0f) {
+            } else if (_highlightImage.fillAmount == 0f) {
                 // TODO: 테스트 하면서 조건문 확인
                 OnHighlightGaugeReset();
             }
