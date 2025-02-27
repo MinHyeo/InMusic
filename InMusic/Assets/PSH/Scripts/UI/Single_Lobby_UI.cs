@@ -65,13 +65,13 @@ public class Single_Lobby_UI : UI_Base
     void OnTriggerEnter2D(Collider2D listItem)
     {
         curMusicItem = listItem.gameObject;
-        curMusicItem.GetComponent<Music_Item>().ItemSelect();
-        mInfo.UpdateInfo(curMusicItem.GetComponent<Music_Item>());
+        curMusicItem.GetComponent<MusicItem>().ItemSelect();
+        mInfo.UpdateInfo(curMusicItem.GetComponent<MusicItem>());
     }
 
     private void OnTriggerExit2D(Collider2D listItem)
     {
-        listItem.gameObject.GetComponent<Music_Item>().ItemUnselect();
+        listItem.gameObject.GetComponent<MusicItem>().ItemUnselect();
     }
     #endregion
 
@@ -90,12 +90,12 @@ public class Single_Lobby_UI : UI_Base
                 //SceneManager.LoadScene("로비 씬");
                 break;
             case "Enter":
-                if (curMusicItem.GetComponent<Music_Item>().HasBMS) {
+                if (curMusicItem.GetComponent<MusicItem>().HasBMS) {
                     //키 입력 이벤트 제거
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
 
                     //다음 씬에 넘겨줄 MusicData 값 설정
-                    GameManager_PSH.Data.SetData(curMusicItem.GetComponent<Music_Item>());
+                    GameManager_PSH.Data.SetData(curMusicItem.GetComponent<MusicItem>());
 
                     SceneManager.LoadScene(1);
                 }

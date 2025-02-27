@@ -45,6 +45,7 @@ public class MusicList : MonoBehaviour
     public void UpdateItems(MusicItem oldItem, MusicData newItem)
     {
         oldItem.DirPath = newItem.DirPath;
+        oldItem.IsDummy = false;
         //Debug.Log(newItem.BMS.header.title);
         if (newItem.HasBMS)
         {
@@ -55,6 +56,7 @@ public class MusicList : MonoBehaviour
         {
             oldItem.Title.text = "EmptyItem";
             oldItem.Artist.text = "Empty";
+            oldItem.IsDummy = true;
         }
         oldItem.Length = newItem.Length;
         oldItem.Album.sprite = newItem.Album;

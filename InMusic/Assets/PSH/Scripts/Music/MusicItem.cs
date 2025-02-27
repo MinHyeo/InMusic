@@ -29,8 +29,8 @@ public class MusicItem : MonoBehaviour
     [SerializeField] private Color wMint = new Color(104.0f, 240.0f, 235.0f, 0.08f);
     [SerializeField] private Color sMint = new Color(57, 255, 255, 1.0f);
     [SerializeField] private Color purple = new Color(155.0f, 48.0f, 255.0f, 1.0f);
-    [SerializeField] public MusicData mData;
-
+    [SerializeField] private MusicData mData;
+    [SerializeField] private bool isDummy = true;
 
     #region Get/Set
     public string DirPath { get { return mPath; } set { mPath = value; } }
@@ -48,6 +48,7 @@ public class MusicItem : MonoBehaviour
     public string Combo { get { return combo; } set { combo = value; } }
     public Text Rank { get { return rank; } set { rank = value; } }
     public MusicData Data { get { return mData; }set { mData = value; } }
+    public bool IsDummy { get { return isDummy; } set { isDummy = value; } }
     #endregion
 
     /*
