@@ -13,6 +13,7 @@ public class MusicData : MonoBehaviour
     [SerializeField] private AudioClip audioClip;
     [SerializeField] private VideoClip musicVideo;
     [SerializeField] private bool hasBMS = false;
+    [SerializeField] private bool hasMV = false;
     [Header("기록 관련 정보")]
     [SerializeField] private string score = "0";
     [SerializeField] private string accuracy = "0";
@@ -30,6 +31,7 @@ public class MusicData : MonoBehaviour
     public AudioClip Audio { get { return audioClip; } set { audioClip = value; } }
     public VideoClip MuVi { get { return musicVideo; } set { musicVideo = value; } }
     public bool HasBMS { get { return hasBMS; } set { hasBMS = value; } }
+    public bool HasMV { get { return hasMV; } set { hasMV = value; } }
 
     public string Score { get { return score; } set { score = value; } }
     public string Accuracy { get { return accuracy; } set { accuracy = value; } }

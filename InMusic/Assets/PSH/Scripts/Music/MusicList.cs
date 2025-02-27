@@ -42,7 +42,7 @@ public class MusicList : MonoBehaviour
         ContentDown();
     }
 
-    public void UpdateItems(Music_Item oldItem, MusicData newItem)
+    public void UpdateItems(MusicItem oldItem, MusicData newItem)
     {
         oldItem.DirPath = newItem.DirPath;
         //Debug.Log(newItem.BMS.header.title);
@@ -60,6 +60,7 @@ public class MusicList : MonoBehaviour
         oldItem.Album.sprite = newItem.Album;
         oldItem.Audio = newItem.Audio;
         oldItem.MuVi = newItem.MuVi;
+        oldItem.HasMV = newItem.HasMV;
         oldItem.HasBMS = newItem.HasBMS;
         oldItem.Score = newItem.Score;
         oldItem.Accuracy = newItem.Accuracy + "%";
@@ -102,7 +103,7 @@ public class MusicList : MonoBehaviour
         }
         for (int i = 0; i < musicItems.Length; i++)
         {
-            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicDataList[startIndex++]);
+            UpdateItems(musicItems[i].GetComponent<MusicItem>(), musicDataList[startIndex++]);
             if (startIndex >= numOfitems)
             {
                 startIndex = 0;
@@ -122,7 +123,7 @@ public class MusicList : MonoBehaviour
         }
         for (int i = 0; i < musicItems.Length; i++)
         {
-            UpdateItems(musicItems[i].GetComponent<Music_Item>(), musicDataList[startIndex++]);
+            UpdateItems(musicItems[i].GetComponent<MusicItem>(), musicDataList[startIndex++]);
             if (startIndex >= numOfitems)
             {
                 startIndex = 0;

@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class DataManager
 {
-    MusicData mData;
+    MusicData executeData;
 
     public void Init() {
-        mData = GameManager_PSH.Instance.GetComponent<MusicData>();
-        if (mData == null)
+        executeData = GameManager_PSH.Instance.GetComponent<MusicData>();
+        if (executeData == null)
         {
             Debug.LogError("GameManager에 MusicData가 없습니다.");
         }
@@ -19,12 +19,12 @@ public class DataManager
     public void SaveData(MusicLog newLog)
     {
         //신기록 확인(최종 점수만 비교)
-        if (int.Parse(mData.Score) >= int.Parse(newLog.Score)){
+        if (int.Parse(executeData.Score) >= int.Parse(newLog.Score)){
             Debug.Log("기록 더 안 좋음");
             return;
         }
         //경로 설정
-        string filePath = mData.DirPath + "/" + mData.Title + "Log.json";
+        string filePath = executeData.DirPath + "/" + executeData.Title + "Log.json";
         //Json형태로 변환
         string JsonData = JsonUtility.ToJson(newLog, true);
         //저장(기록이 없으면 생성, 있으면 덮어씀)
@@ -32,11 +32,11 @@ public class DataManager
         Debug.Log("Json 저장 완료");
     }
 
-    public void SetData(Music_Item item) {
-        mData.DirPath = item.DirPath;
-        mData.BMS = item.Data.BMS;
-        mData.Album = item.Album.sprite;
-        mData.Audio = item.Audio;
-        mData.MuVi = item.MuVi;
+    public void SetData(MusicItem executeItem) {
+        executeData.DirPath = executeItem.DirPath;
+        executeData.BMS = executeItem.Data.BMS;
+        executeData.Album = executeItem.Album.sprite;
+        executeData.Audio = executeItem.Audio;
+        executeData.MuVi = executeItem.MuVi;
     }
 }

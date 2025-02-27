@@ -10,7 +10,7 @@ public class MusicInfo : MonoBehaviour
     [Tooltip("점수, 정확도, 콤보, 랭크")]
     [SerializeField] private Text[] logData = new Text[4];
 
-    public void UpdateInfo(Music_Item newItem)
+    public void UpdateInfo(MusicItem newItem)
     {
         //음악 정보 업데이트
         curMusicData[0].GetComponent<Image>().sprite = newItem.Album.sprite;

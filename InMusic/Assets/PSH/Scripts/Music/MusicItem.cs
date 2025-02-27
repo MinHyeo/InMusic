@@ -3,7 +3,10 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 
 //MusicItem Prefab에 사용할 스크립트
-public class Music_Item : MonoBehaviour
+/// <summary>
+/// 로비에서 음악 정보 확인용 GameObject 스크립트
+/// </summary>
+public class MusicItem : MonoBehaviour
 {
     [Header("음악 관련 정보")]
     private string mPath;
@@ -14,6 +17,7 @@ public class Music_Item : MonoBehaviour
     [SerializeField] private AudioClip audioClip;
     [SerializeField] private VideoClip musicVideo;
     [SerializeField] private bool hasBMS = false;
+    [SerializeField] private bool hasMV = false;
     [Header("기록 관련 정보")]
     [SerializeField] private string score;
     [SerializeField] private string accuracy;
@@ -37,6 +41,8 @@ public class Music_Item : MonoBehaviour
     public AudioClip Audio { get { return audioClip;  }set { audioClip = value; } }
     public VideoClip MuVi { get { return musicVideo; } set { musicVideo = value; } }
     public bool HasBMS { get { return hasBMS; } set { hasBMS = value; } }
+    public bool HasMV { get { return hasMV; } set { hasMV = value; } }
+
     public string Score { get { return score; } set { score = value; } }
     public string Accuracy { get { return accuracy; } set { accuracy = value; } }
     public string Combo { get { return combo; } set { combo = value; } }

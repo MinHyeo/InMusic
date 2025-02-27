@@ -130,8 +130,10 @@ public class ResourceManager
                 }
                 
                 //5. 뮤비 파일 열기 (선택)
-                if (fileMap.ContainsKey("video"))
+                if (fileMap.ContainsKey("video")){
                     tmpMusic.MuVi = Load<VideoClip>(fileMap["video"]);
+                    tmpMusic.HasMV = true;
+                }
 
                 UnityEngine.Debug.Log($"{i + 1}번째 폴더 확인 완료\n");
             }
