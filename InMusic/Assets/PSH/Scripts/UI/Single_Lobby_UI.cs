@@ -8,14 +8,15 @@ using UnityEngine.SceneManagement;
 public class Single_Lobby_UI : UI_Base
 {
     [SerializeField] private GameObject popupUI;
-    [Header("현재 선택한 음악 항목")]
+
+    [Header("현재 선택한 음악 항목 확인")]
     [SerializeField] private GameObject curMusicItem;
 
-    [Header("선택한 음악의 정보")]
+    [Header("선택한 음악의 정보 확인")]
     [SerializeField] private GameObject musicInfo;
     [SerializeField] MusicInfo mInfo;
 
-    [Header("아이템 리스트 관련")]
+    [Header("아이템 리스트 관련 확인")]
     [SerializeField] private GameObject musicList;
     [SerializeField] MusicList mList;
 

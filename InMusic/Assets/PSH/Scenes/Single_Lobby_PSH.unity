@@ -475,7 +475,7 @@ GameObject:
   - component: {fileID: 85998034}
   - component: {fileID: 85998033}
   m_Layer: 5
-  m_Name: MusicAlbum
+  m_Name: Album
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -945,9 +945,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ddccb24fa4421443b749f8b204fa3ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background: {fileID: 277811128}
-  muAlbum: {fileID: 85998031}
-  muPlayer: {fileID: 1236650418}
+  background: {fileID: 277811133}
+  muviAlbum: {fileID: 85998031}
+  muviPlayer: {fileID: 1236650418}
   curMusicData:
   - {fileID: 793296701}
   - {fileID: 504681488}
@@ -969,8 +969,9 @@ GameObject:
   - component: {fileID: 277811129}
   - component: {fileID: 277811131}
   - component: {fileID: 277811132}
+  - component: {fileID: 277811133}
   m_Layer: 5
-  m_Name: BackGround
+  m_Name: MusicThumbnail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1035,6 +1036,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &277811133
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277811128}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &289934183
 PrefabInstance:
   m_ObjectHideFlags: 0
