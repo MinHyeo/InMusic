@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using System;
 using SongList;
 using UI_BASE_PSH;
+using SSW;
 
 
 public class SingleMenuController : MonoBehaviour
@@ -31,14 +32,13 @@ public class SingleMenuController : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.O))
         {
+            GlobalInputControl.CurrentInputMode = InputMode.UI;
             OnClickOption();
         }
         if(Input.GetKeyDown(KeyCode.F1))
         {
-            if(guideUI == null)
-            {
-                
-            }
+            GlobalInputControl.CurrentInputMode = InputMode.UI;
+            OnClickGuide();
         }
     }
     // 전체 기능 구현 완료 후 Manager를 추가하여 수정 예정
@@ -60,8 +60,17 @@ public class SingleMenuController : MonoBehaviour
         //TODO: Option UI 입출력 이벤트 처리
         if(curSetUI == null)
         {
-
+            curSetUI = GameManager.Resource.Instantiate("SoundSetting_UI");
         }
         Debug.Log("Option Button Clicked.");
+    }
+
+    public void OnClickGuide()
+    {
+        if(guideUI == null)
+        {
+            guideUI = GameManager.Resource.Instantiate("KeyGuide_UI");
+        }
+        Debug.Log("Key Setting Button Clicked.");
     }
 }

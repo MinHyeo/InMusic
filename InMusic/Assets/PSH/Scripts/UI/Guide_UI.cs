@@ -1,4 +1,5 @@
 using UnityEngine;
+using SSW;
 
 public class Guide_UI : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class Guide_UI : MonoBehaviour
     public void GuideButton(string buttonname){
         if (buttonname == "Exit") {
             GameManager.Input.RemoveUIKeyEvent(GuideKeyEvent);
+            GlobalInputControl.CurrentInputMode = InputMode.GamePlay;
             Destroy(gameObject);
         }
     }

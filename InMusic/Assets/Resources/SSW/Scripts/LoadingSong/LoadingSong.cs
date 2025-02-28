@@ -85,7 +85,7 @@ public class LoadingSong : MonoBehaviour
         _songTitle.text = SongTitle;
         _songArtist.text = Artist;
         _defaultLoadingText = _loadingText.rectTransform.anchoredPosition.x;
-        GlobalInpoutControl.IsInputEnabled = false;
+        GlobalInputControl.IsInputEnabled = false;
         _bgController = BackgroundController.Instance;
         _bgAudio = _bgController.GetAudioSource();
         _bgVideo = _bgController.GetVideoPlayer();
@@ -119,7 +119,7 @@ public class LoadingSong : MonoBehaviour
 
                 if(_loadingBar.fillAmount >= 1f) {
                     operation.allowSceneActivation = true;
-                    GlobalInpoutControl.IsInputEnabled = true;
+                    GlobalInputControl.IsInputEnabled = true;
                     yield break;
                 }
             }

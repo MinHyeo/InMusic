@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
 
     SingleMenuInputManager _singleMenuInput = new SingleMenuInputManager();
     public static SingleMenuInputManager SingleMenuInput { get { return Instance._singleMenuInput; } }
+
+    UIInputManager _uiInput = new UIInputManager();
+    public static UIInputManager UIInput { get { return Instance._uiInput; } }
     #endregion
 
     private Song songTitle;
@@ -46,6 +49,7 @@ public class GameManager : MonoBehaviour
         M_Input.UIUpdate();
         M_Input.NoteUpdate();
         _singleMenuInput.OnUpdate();
+        _uiInput.OnUpdate();
     }
 
     public void SelectSong(Song songTitle)

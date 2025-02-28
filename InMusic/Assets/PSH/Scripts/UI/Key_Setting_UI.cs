@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using SSW;
 
 
 public class Key_Setting_UI : MonoBehaviour
@@ -74,6 +75,7 @@ public class Key_Setting_UI : MonoBehaviour
                 break;
             case "Exit":
                 GameManager.Input.RemoveUIKeyEvent(KeySetKeyEvent);
+                GlobalInputControl.CurrentInputMode = InputMode.GamePlay;
                 Destroy(gameObject);
                 break;
             default:

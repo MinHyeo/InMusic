@@ -3,16 +3,13 @@ using UnityEngine;
 
 namespace SSW
 {
-    public static class GlobalInpoutControl {
-        public static bool IsInputEnabled = true;
-    }
     public class SingleMenuInputManager
     {
         public Action keyAction = null;
-
         public void OnUpdate()
         {
-            if(GlobalInpoutControl.IsInputEnabled == false) return;
+            if(GlobalInputControl.IsInputEnabled == false) return;
+            if(GlobalInputControl.CurrentInputMode != InputMode.GamePlay) return;
             if(Input.anyKey == false) return;
 
             if(keyAction != null)

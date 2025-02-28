@@ -70,7 +70,7 @@ public class SceneLoading : MonoBehaviour
         _loadingText.text = "Loading";
         _defaultLoadingText = _loadingText.rectTransform.anchoredPosition.x;
 
-        GlobalInpoutControl.IsInputEnabled = false;
+        GlobalInputControl.IsInputEnabled = false;
         _loadSceneName = sceneName;
         StartCoroutine(LoadSceneProcess());
     }
@@ -97,7 +97,7 @@ public class SceneLoading : MonoBehaviour
 
                 if(_loadingBar.fillAmount >= 1f) {
                     operation.allowSceneActivation = true;
-                    GlobalInpoutControl.IsInputEnabled = true;
+                    GlobalInputControl.IsInputEnabled = true;
                     gameObject.SetActive(false);
                     yield break;
                 }
