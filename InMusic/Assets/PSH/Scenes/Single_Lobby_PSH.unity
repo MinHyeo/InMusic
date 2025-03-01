@@ -473,6 +473,7 @@ GameObject:
   m_Component:
   - component: {fileID: 85998032}
   - component: {fileID: 85998034}
+  - component: {fileID: 85998035}
   - component: {fileID: 85998033}
   m_Layer: 5
   m_Name: Album
@@ -538,6 +539,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 85998031}
   m_CullTransparentMesh: 1
+--- !u!225 &85998035
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85998031}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!224 &104873663 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5052710254163339769, guid: fb80dbded41937c4280e2820f4189fab, type: 3}
@@ -945,9 +958,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ddccb24fa4421443b749f8b204fa3ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background: {fileID: 277811133}
+  fadeController: {fileID: 277811134}
   muviAlbum: {fileID: 85998031}
-  muviPlayer: {fileID: 1236650418}
+  muviController: {fileID: 1236650419}
   curMusicData:
   - {fileID: 793296701}
   - {fileID: 504681488}
@@ -970,8 +983,9 @@ GameObject:
   - component: {fileID: 277811131}
   - component: {fileID: 277811132}
   - component: {fileID: 277811133}
+  - component: {fileID: 277811134}
   m_Layer: 5
-  m_Name: MusicThumbnail
+  m_Name: MusicBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1048,6 +1062,22 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &277811134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277811128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2982ccbfa55a134dbd5cba3f618399e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas:
+  - {fileID: 277811133}
+  - {fileID: 1236650420}
+  - {fileID: 85998035}
 --- !u!1001 &289934183
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3332,7 +3362,9 @@ GameObject:
   - component: {fileID: 1236650414}
   - component: {fileID: 1236650416}
   - component: {fileID: 1236650417}
+  - component: {fileID: 1236650420}
   - component: {fileID: 1236650418}
+  - component: {fileID: 1236650419}
   m_Layer: 5
   m_Name: MusicVideo
   m_TagString: Untagged
@@ -3426,10 +3458,37 @@ VideoPlayer:
   m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
-  m_Looping: 0
+  m_Looping: 1
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
+--- !u!114 &1236650419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236650413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fac48385a61eab34284d51dcd2c6857d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  muviPlayer: {fileID: 1236650418}
+  loopStartTime: 50
+  loopEndTime: 110
+--- !u!225 &1236650420
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236650413}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1257152487
 GameObject:
   m_ObjectHideFlags: 0
