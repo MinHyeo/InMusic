@@ -1,16 +1,18 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class MusicVideoController : MonoBehaviour
+/// <summary>
+/// 뮤비랑 앨범 보여주는거 제어하는 객체
+/// </summary>
+public class MusicFadeController : MonoBehaviour
 {
     [Header("Fade 효과를 제어할 CanvasGruop")]
     [Tooltip("배경, 뮤직비디오, 앨범")]
     [SerializeField] CanvasGroup[] canvas;
     [Header("뮤직비디오 재생 제어 변수")]
 
-    private float fadeDuration = 0.29f;
+    private float fadeDuration = 0.28f;
     private float showAlpha = 1.0f;
     private float hideAlpha = 0.0f;
     private bool pasthasMuvi = false;

@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 캔버스 제어 및 뮤비/음악 재생을 제어하는 객체
+/// </summary>
 public class MusicInfo : MonoBehaviour
 {
     [Header("뮤직비디오 제어")]
     [Tooltip("배경")]
-    [SerializeField] private MusicVideoController muviController;
+    [SerializeField] private MusicFadeController muviFade;
     [Tooltip("앨범 제어)")]
-    [SerializeField] private GameObject muviAlbum;
+    [SerializeField] private MusicSamplePlayer muviAlbum;
     [Tooltip("뮤비 제어")]
     [SerializeField] private MusicVideoPlayer muviPlayer;
 
@@ -53,7 +56,8 @@ public class MusicInfo : MonoBehaviour
     {
         //더미면 배경화면 보여주기
         if (newItem.IsDummy) {
-            muviController.ControlFade(1);
+            //muviAlbum.StopMusic();
+            muviFade.ControlFade(1);
             muviPlayer.PlayMusicVideo();
             return;
         }
@@ -61,15 +65,16 @@ public class MusicInfo : MonoBehaviour
         //뮤비가 있으면 뮤비 보여주기
         if (newItem.HasMV)
         {
-            muviController.ControlFade(2, newItem.HasMV);
+            muviFade.ControlFade(2, newItem.HasMV);
             muviPlayer.PlayMusicVideo(newItem.MuVi);
         }
         //뮤비가 없으면 앨범사진 띄우기
         else
         {
-            muviController.ControlFade(2);
+            muviFade.ControlFade(2);
             muviPlayer.PlayMusicVideo();
-            muviAlbum.GetComponent<Image>().sprite = newItem.Album.sprite;
+            muviAlbum.SetAlbum(newItem.Album);
+            //muviAlbum.PlayMusic(newItem.Audio);
         }
     }
 }

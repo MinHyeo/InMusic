@@ -1,8 +1,10 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Video;
 
+/// <summary>
+/// 뮤비를 실행하는 객체
+/// </summary>
 public class MusicVideoPlayer : MonoBehaviour
 {
     [Header("뮤비 재생 관련 변수")]
