@@ -5,11 +5,11 @@ public class MusicInfo : MonoBehaviour
 {
     [Header("뮤직비디오 제어")]
     [Tooltip("배경")]
-    [SerializeField] private FadeController fadeController;
+    [SerializeField] private MusicVideoController fadeController;
     [Tooltip("앨범 제어)")]
     [SerializeField] private GameObject muviAlbum;
     [Tooltip("뮤비 제어")]
-    [SerializeField] private MusicVideoController muviController;
+    [SerializeField] private MusicVideoPlayer muviController;
 
     [Header("선택한 음악의 정보")]
     [Tooltip("앨범, 제목, 아티스트, 길이")]
@@ -63,7 +63,7 @@ public class MusicInfo : MonoBehaviour
         if (newItem.HasMV)
         {
             muviController.gameObject.SetActive(true);
-            fadeController.ControlFade(2);
+            fadeController.ControlFade(2, newItem.HasMV);
 
             muviController.PlayMusicVideo(newItem.MuVi);
             muviAlbum.gameObject.SetActive(false);

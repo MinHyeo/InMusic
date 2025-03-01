@@ -1,8 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UI_BASE_PSH;
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class Single_Lobby_UI : UI_Base
