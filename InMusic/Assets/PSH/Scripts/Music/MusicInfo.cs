@@ -57,8 +57,8 @@ public class MusicInfo : MonoBehaviour
         //더미면 배경화면 보여주기
         if (newItem.IsDummy) {
             muviAlbum.StopMusic();
+            muviPlayer.StopMusicVideo();
             muviFade.ControlFade(1);
-            muviPlayer.PlayMusicVideo();
             return;
         }
 
@@ -66,15 +66,15 @@ public class MusicInfo : MonoBehaviour
         if (newItem.HasMV)
         {
             muviAlbum.StopMusic();
-            muviFade.ControlFade(2, true);
             muviPlayer.PlayMusicVideo(newItem.MuVi);
+            muviFade.ControlFade(2, true);
         }
         //뮤비가 없으면 앨범사진 띄우고 음악 틀어주기
         else
         {
-            muviPlayer.PlayMusicVideo();
-            muviFade.ControlFade(2);
+            muviPlayer.StopMusicVideo();
             muviAlbum.PlayMusic(newItem.Album, newItem.Audio);
+            muviFade.ControlFade(2);
         }
     }
 }

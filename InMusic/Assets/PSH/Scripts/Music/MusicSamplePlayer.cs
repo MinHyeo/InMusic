@@ -23,7 +23,6 @@ public class MusicSamplePlayer : MonoBehaviour
 
         muPlayer.clip = audio;
         muPlayer.time = loopStartTime;
-        muPlayer.Play();
         loopCoroutine = StartCoroutine(LoopSound());
     }
 
@@ -40,6 +39,7 @@ public class MusicSamplePlayer : MonoBehaviour
     //특정 구간 반복 재생
     IEnumerator LoopSound()
     {
+        muPlayer.Play();
         while (true)
         {
             if (muPlayer.time >= loopEndTime)

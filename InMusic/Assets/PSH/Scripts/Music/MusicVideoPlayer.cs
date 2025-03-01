@@ -19,16 +19,7 @@ public class MusicVideoPlayer : MonoBehaviour
     /// <summary>
     /// 음악 재생, 뮤비가 없으면 종료됨
     /// </summary>
-    public void PlayMusicVideo(VideoClip Muvi = null) {
-        if (Muvi == null)
-        {
-            if (muviPlayer.isPlaying) {
-                muviPlayer.Stop();
-                StopCoroutine(LoopVideo());
-                loopCoroutine = null;
-            }
-            return;
-        }
+    public void PlayMusicVideo(VideoClip Muvi) {
         //VideoClip 설정
         muviPlayer.clip = Muvi;
         //시작 시간 설정
@@ -36,14 +27,24 @@ public class MusicVideoPlayer : MonoBehaviour
         //재생
         if (loopCoroutine == null)
         {
-            muviPlayer.Play();
             loopCoroutine = StartCoroutine(LoopVideo());
+        }
+    }
+
+    public void StopMusicVideo()
+    {
+        if (muviPlayer.isPlaying)
+        {
+            muviPlayer.Stop();
+            StopCoroutine(LoopVideo());
+            loopCoroutine = null;
         }
     }
 
     //특정 구간 반복 재생
     IEnumerator LoopVideo()
     {
+        muviPlayer.Play();
         while (true)
         {
             if (muviPlayer.time >= loopEndTime)
