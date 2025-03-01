@@ -16,7 +16,7 @@ public class GameManager_PSH : MonoBehaviour
 
     public static ResourceManager Resource { get { return Instance.M_Resource; } }
 
-    BMSManager M_BMS = new BMSManager();
+    BMSManager M_BMS = new BMSManager(); //여기 문제 있음
     public static BMSManager BMS { get { return Instance.M_BMS; } }
 
     DataManager M_Data = new DataManager();

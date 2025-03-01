@@ -12,7 +12,7 @@ public class MusicFadeController : MonoBehaviour
     [SerializeField] CanvasGroup[] canvas;
     [Header("뮤직비디오 재생 제어 변수")]
 
-    private float fadeDuration = 0.28f;
+    private float fadeDuration = 0.26f;
     private float showAlpha = 1.0f;
     private float hideAlpha = 0.0f;
     private bool pasthasMuvi = false;

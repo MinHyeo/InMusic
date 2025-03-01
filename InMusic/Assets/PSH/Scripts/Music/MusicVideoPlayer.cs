@@ -10,7 +10,7 @@ public class MusicVideoPlayer : MonoBehaviour
     [Header("뮤비 재생 관련 변수")]
     [Tooltip("VideoPlayer")]
     [SerializeField] private VideoPlayer muviPlayer;
-    [SerializeField] private Coroutine loopCoroutine = null;
+    private Coroutine loopCoroutine = null;
     [Tooltip("하이라이트 시작 시간(초)")]
     public float loopStartTime = 50.0f; 
     [Tooltip("하이라이트 종료 시간(초)")]

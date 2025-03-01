@@ -11,23 +11,16 @@ public class MusicSamplePlayer : MonoBehaviour
     [SerializeField]private Image backgroundAlbum;
     [Header("음악 재생 관련 변수")]
     [SerializeField] private AudioSource muPlayer;
-    [SerializeField] private Coroutine loopCoroutine = null;
+    private Coroutine loopCoroutine = null;
     [Tooltip("하이라이트 시작 시간(초)")]
     public float loopStartTime = 50.0f;
     [Tooltip("하이라이트 종료 시간(초)")]
     public float loopEndTime = 110.0f;
 
-
-    public void SetAlbum(Image newAlbum)
+    public void PlayMusic(Image newAlbum, AudioClip audio)
     {
         backgroundAlbum.sprite = newAlbum.sprite;
-    }
 
-    public void PlayMusic(AudioClip audio)
-    {
-        if (muPlayer.isPlaying){
-
-        }
         muPlayer.clip = audio;
         muPlayer.time = loopStartTime;
         muPlayer.Play();
