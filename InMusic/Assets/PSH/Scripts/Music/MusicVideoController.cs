@@ -8,11 +8,11 @@ public class MusicVideoController : MonoBehaviour
     [Header("Fade 효과를 제어할 CanvasGruop")]
     [Tooltip("배경, 뮤직비디오, 앨범")]
     [SerializeField] CanvasGroup[] canvas;
-    [Tooltip("리스트 움직이는 시간보다 작게 설정해서 fade 버그 발생 방지")]
-    private float fadeDuration = 0.3f;
+    [Header("뮤직비디오 재생 제어 변수")]
+
+    private float fadeDuration = 0.29f;
     private float showAlpha = 1.0f;
-    private float hideAlpha = 0.1f;
-    private float clearAlpha = 0.0f;
+    private float hideAlpha = 0.0f;
     private bool pasthasMuvi = false;
 
 
@@ -25,17 +25,33 @@ public class MusicVideoController : MonoBehaviour
         switch (situation)
         {
             case 1:
-                //일반 -> 더미
+                //일반 -> 더미 or 더미 -> 더미
                 if (canvas[0].alpha != 0.0f)
                 {
-                    StartCoroutine(Fade(canvas[0],showAlpha, clearAlpha, fadeDuration));
+                    StartCoroutine(Fade(canvas[0],showAlpha, hideAlpha, fadeDuration));
                 }
                 break;
             case 2:
                 //더미 -> 일반
                 if (canvas[0].alpha == 0.0f)
                 {
-                    StartCoroutine(Fade(canvas[0], clearAlpha, showAlpha, fadeDuration));
+                    //더미 -> 뮤비
+                    if (curhasMuvi)
+                    {
+                        if (canvas[1].alpha != 1.0f)
+                            canvas[1].alpha = 1.0f;
+                        if (canvas[2].alpha != 0.0f)
+                            canvas[2].alpha = 0.0f;
+                    }
+                    //더미 -> 앨범
+                    else
+                    {
+                        if (canvas[1].alpha != 0.0f)
+                            canvas[1].alpha = 0.0f;
+                        if (canvas[2].alpha != 1.0f)
+                            canvas[2].alpha = 1.0f;
+                    }
+                    StartCoroutine(Fade(canvas[0], hideAlpha, showAlpha, fadeDuration));
                     return;
                 }
                 //일반 -> 일반 (동기화)

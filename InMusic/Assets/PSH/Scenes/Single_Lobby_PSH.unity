@@ -958,9 +958,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ddccb24fa4421443b749f8b204fa3ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeController: {fileID: 277811134}
+  muviController: {fileID: 277811134}
   muviAlbum: {fileID: 85998031}
-  muviController: {fileID: 1236650419}
+  muviPlayer: {fileID: 1236650419}
   curMusicData:
   - {fileID: 793296701}
   - {fileID: 504681488}
@@ -985,7 +985,7 @@ GameObject:
   - component: {fileID: 277811133}
   - component: {fileID: 277811134}
   m_Layer: 5
-  m_Name: FadeController
+  m_Name: MusicVideoController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

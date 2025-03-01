@@ -5,11 +5,11 @@ public class MusicInfo : MonoBehaviour
 {
     [Header("뮤직비디오 제어")]
     [Tooltip("배경")]
-    [SerializeField] private MusicVideoController fadeController;
+    [SerializeField] private MusicVideoController muviController;
     [Tooltip("앨범 제어)")]
     [SerializeField] private GameObject muviAlbum;
     [Tooltip("뮤비 제어")]
-    [SerializeField] private MusicVideoPlayer muviController;
+    [SerializeField] private MusicVideoPlayer muviPlayer;
 
     [Header("선택한 음악의 정보")]
     [Tooltip("앨범, 제목, 아티스트, 길이")]
@@ -53,29 +53,23 @@ public class MusicInfo : MonoBehaviour
     {
         //더미면 배경화면 보여주기
         if (newItem.IsDummy) {
-            fadeController.ControlFade(1);
-            muviController.gameObject.SetActive(false);
-            muviAlbum.gameObject.SetActive(false);
+            muviController.ControlFade(1);
+            muviPlayer.PlayMusicVideo();
             return;
         }
 
         //뮤비가 있으면 뮤비 보여주기
         if (newItem.HasMV)
         {
-            muviController.gameObject.SetActive(true);
-            fadeController.ControlFade(2, newItem.HasMV);
-
-            muviController.PlayMusicVideo(newItem.MuVi);
-            muviAlbum.gameObject.SetActive(false);
+            muviController.ControlFade(2, newItem.HasMV);
+            muviPlayer.PlayMusicVideo(newItem.MuVi);
         }
         //뮤비가 없으면 앨범사진 띄우기
         else
         {
-            fadeController.ControlFade(2);
-            muviController.PlayMusicVideo();
-            muviController.gameObject.SetActive(false);
+            muviController.ControlFade(2);
+            muviPlayer.PlayMusicVideo();
             muviAlbum.GetComponent<Image>().sprite = newItem.Album.sprite;
-            muviAlbum.gameObject.SetActive(true);
         }
     }
 }
