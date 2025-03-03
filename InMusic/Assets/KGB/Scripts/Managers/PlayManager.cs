@@ -38,6 +38,7 @@ public class PlayManager : MonoBehaviour
 
     public void SetResources()
     {
+        ResetResources();
         SetMusic();
         SetSound();
         SetBackground();
@@ -90,5 +91,13 @@ public class PlayManager : MonoBehaviour
         {
             playBackgroundImage.sprite = GameManager_PSH.Instance.GetComponent<MusicData>().Album;
         }
+    }
+
+    public void ResetResources()
+    {
+        playBackgroundVideo = null;
+        playBackgroundImage.sprite = null;
+        videoPlayer.clip= null;
+        videoPlayer.targetTexture.Release();
     }
 }

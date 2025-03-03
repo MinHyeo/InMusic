@@ -161,7 +161,7 @@ public class ResourceManager
             //UnityEngine.Debug.Log(filePath);
 
             //BMS
-            if (fileExt == ".txt")
+            if (fileExt == ".bms")
                 fileMap["bms"] = filePath;
             //음원 파일
             else if (fileExt == ".wav" || fileExt == ".mp3" || fileExt == ".ogg")

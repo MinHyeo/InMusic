@@ -7669,8 +7669,6 @@ MonoBehaviour:
   - {fileID: 214029399}
   - {fileID: 1947778292}
   - {fileID: 7198904395195406912}
-  scoreText: {fileID: 570256393}
-  accuracyText: {fileID: 421159319}
   BackImage: {fileID: 1681319687}
   countText: {fileID: 597457724}
 --- !u!1 &1681319685

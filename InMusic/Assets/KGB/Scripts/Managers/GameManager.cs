@@ -246,6 +246,7 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Time.timeScale = 1f; // 씬 로드 후 타임스케일 초기화
+
     }
 
     private void OnDestroy()

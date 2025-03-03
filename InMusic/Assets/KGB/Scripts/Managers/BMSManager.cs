@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
@@ -47,14 +48,22 @@ public class BMSManager : MonoBehaviour
     public BMSData ParseBMS(string fileName)
     {
         BMSData bmsData = new BMSData();
-
-        TextAsset bmsFile = Resources.Load<TextAsset>(fileName);
-        if (bmsFile == null)
+        string fileContent = null;
+        string filePath = Path.Combine(Application.dataPath, "Resources", fileName + ".bms");
+        if (File.Exists(filePath))
         {
+            // 파일 내용을 읽어서 string에 저장
+            fileContent = File.ReadAllText(filePath);
+            Debug.Log("BMS파일 찾음");
+        }
+        else
+        {
+            Debug.Log("BMS파일없음: "+ filePath);
             Debug.LogError($"BMS 못 찾음: {fileName}");
             return null;
         }
-        string[] lines = bmsFile.text.Split(new[] { '\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+
+        string[] lines = fileContent.Split(new[] { '\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
 
         foreach (string line in lines)
         {
@@ -66,11 +75,6 @@ public class BMSManager : MonoBehaviour
                 ParseLine(line, bmsData);
             }
         }
-
-
-
-
-
         return bmsData;
     }
 
