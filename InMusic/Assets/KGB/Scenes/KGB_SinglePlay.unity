@@ -3003,7 +3003,7 @@ Transform:
   m_GameObject: {fileID: 530347669}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 10, z: -2.536129}
+  m_LocalPosition: {x: 0, y: 11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4479,8 +4479,7 @@ MonoBehaviour:
   judgeLinePos: {fileID: 2118528203}
   songStartNote: {fileID: 30923386169360993, guid: 490e3408a9eb36a4094ba16d3d009d01, type: 3}
   lineCount: 5
-  baseScrollSpeed: 6
-  bpm: 0
+  baseScrollSpeed: 1
   beatsPerMeasure: 4
   noteOffset: 0.15
   secondsPerBeat: 0
