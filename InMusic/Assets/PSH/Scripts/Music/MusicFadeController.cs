@@ -17,7 +17,6 @@ public class MusicFadeController : MonoBehaviour
     private float hideAlpha = 0.0f;
     private bool pasthasMuvi = false;
 
-
     /// <summary>
     /// 상황에 맞게 Fade in/out 조절/동기화하는 매서드 
     /// </summary>
@@ -98,7 +97,6 @@ public class MusicFadeController : MonoBehaviour
            }
         pasthasMuvi = curhasMuvi;
     }
-
 
     /// <summary>
     /// 코루틴을 비동기로 작동하니 주의할 것

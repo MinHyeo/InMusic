@@ -33,12 +33,8 @@ public class Single_Lobby_UI : UI_Base
 
     void Start()
     {
-
         //음악 목록 Load해서 넘겨주기
         mList.SetData(GameManager_PSH.Resource.GetMusicList());
-        
-        //변경 예정
-        GameManager_PSH.Input.SetUIKeyEvent(SingleLobbyKeyEvent);
     }
 
     void Update()
@@ -56,6 +52,23 @@ public class Single_Lobby_UI : UI_Base
             {
                 mList.ScrollUp();
             }
+        }
+
+        //방식 변경 예정
+        //UpArrow
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.UpArrow))
+        {
+            SingleLobbyKeyEvent(Define.UIControl.Up);
+        }
+        //DownArrow
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyCode.DownArrow))
+        {
+            SingleLobbyKeyEvent(Define.UIControl.Down);
+        }
+        //Enter
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            SingleLobbyKeyEvent(Define.UIControl.Enter);
         }
     }
 

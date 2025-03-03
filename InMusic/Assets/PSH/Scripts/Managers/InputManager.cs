@@ -57,12 +57,12 @@ public class InputManager
             uIKeyPress.Invoke(Define.UIControl.Right);
         }
         //UpArrow
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.UpArrow))
         {
             uIKeyPress.Invoke(Define.UIControl.Up);
         }
         //DownArrow
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyCode.DownArrow))
         {
             uIKeyPress.Invoke(Define.UIControl.Down);
         }
