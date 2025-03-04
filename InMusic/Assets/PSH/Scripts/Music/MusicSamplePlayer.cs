@@ -17,13 +17,18 @@ public class MusicSamplePlayer : MonoBehaviour
     [Tooltip("하이라이트 종료 시간(초)")]
     public float loopEndTime = 110.0f;
 
+    private void Awake()
+    {
+        muPlayer = gameObject.GetComponent<AudioSource>();
+    }
+
     public void PlayMusic(Image newAlbum, AudioClip audio)
     {
-        backgroundAlbum.sprite = newAlbum.sprite;
-
         muPlayer.clip = audio;
         muPlayer.time = loopStartTime;
         loopCoroutine = StartCoroutine(LoopSound());
+
+        backgroundAlbum.sprite = newAlbum.sprite;
     }
 
     public void StopMusic()
@@ -31,7 +36,7 @@ public class MusicSamplePlayer : MonoBehaviour
         if (muPlayer.isPlaying)
         {
             muPlayer.Stop();
-            StopCoroutine(LoopSound());
+            StopCoroutine(loopCoroutine);
             loopCoroutine = null;
         }
     }
@@ -45,6 +50,7 @@ public class MusicSamplePlayer : MonoBehaviour
             if (muPlayer.time >= loopEndTime)
             {
                 muPlayer.Stop();
+                yield return null;
                 muPlayer.time = loopStartTime;
                 muPlayer.Play();
             }

@@ -16,6 +16,12 @@ public class MusicVideoPlayer : MonoBehaviour
     [Tooltip("하이라이트 종료 시간(초)")]
     public float loopEndTime = 110.0f;
 
+    private void Awake()
+    {
+        muviPlayer = gameObject.GetComponent<VideoPlayer>();
+        muviPlayer.Prepare();
+    }
+
     /// <summary>
     /// 음악 재생, 뮤비가 없으면 종료됨
     /// </summary>
@@ -26,9 +32,7 @@ public class MusicVideoPlayer : MonoBehaviour
         muviPlayer.time = loopStartTime;
         //재생
         if (loopCoroutine == null)
-        {
             loopCoroutine = StartCoroutine(LoopVideo());
-        }
     }
 
     public void StopMusicVideo()
@@ -36,7 +40,7 @@ public class MusicVideoPlayer : MonoBehaviour
         if (muviPlayer.isPlaying)
         {
             muviPlayer.Stop();
-            StopCoroutine(LoopVideo());
+            StopCoroutine(loopCoroutine);
             loopCoroutine = null;
         }
     }
