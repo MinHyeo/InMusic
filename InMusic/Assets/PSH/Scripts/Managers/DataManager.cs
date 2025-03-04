@@ -41,6 +41,6 @@ public class DataManager
     }
 
     public MusicData GetData() { 
-        return mData;
+        return executeData;
     }
 }
