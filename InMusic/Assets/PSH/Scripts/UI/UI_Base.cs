@@ -4,6 +4,7 @@ namespace UI_BASE_PSH
 {
     public abstract class UI_Base : MonoBehaviour
     {
+        [Header("ÆË¾÷ UI °ü·Ã")]
         [SerializeField] public GameObject SettingUI = null;
         [SerializeField] public GameObject guideUI = null;
 
