@@ -80,6 +80,13 @@ namespace Play
                     bgmBus.setVolume(volume);
                     break;
             }
+
+            //º¼·ý º¯°æ È®ÀÎ Å×½ºÆ® ÄÚµå
+            //float masterVolume, sfxVolume, bgmVolume;
+            //masterBus.getVolume(out masterVolume);
+            //sfxBus.getVolume(out sfxVolume);
+            //bgmBus.getVolume(out bgmVolume);
+            //Debug.Log($"master º¼·ý : {masterVolume}, SFX º¼·ý : {sfxVolume}, BGM º¼·ý : {bgmVolume}");
         }
 
         private void LoadSong(string songName)

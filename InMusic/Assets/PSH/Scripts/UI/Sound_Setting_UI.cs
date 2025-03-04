@@ -43,12 +43,18 @@ public class Sound_Setting_UI : MonoBehaviour
         curMenu = menuList[curMenuIndex];
         ChangeMenu();
 
+        //슬라이더 이벤트 설정
+        foreach(Slider slider in menuSliders)
+        {
+            slider.onValueChanged.AddListener(delegate { UpdateSliderValues(); });
+        }
+
         GameManager.Input.SetUIKeyEvent(SoundSetKeyEvent);
     }
 
     void Update()
     {
-        UpdateSliderValues();
+        //UpdateSliderValues();
     }
 
     public void ControlMenu(string arrow)
