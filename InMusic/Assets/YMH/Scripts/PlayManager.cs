@@ -34,6 +34,8 @@ namespace Play
     public class PlayManager : SingleTon<PlayManager>
     {
         [Header("관련 Scripts")]
+        //점수 관련
+        private ScoreManager scoreManager;
         //정확도 관련
         [SerializeField]
         private Accuracy accuracyScript;
@@ -72,15 +74,6 @@ namespace Play
         private const float badThreshold = 0.0832f;
         private const float missThreshold = 0.0416f;
 
-        //점수 관련
-        private float score = 0;            //점수
-        private float accuracy = 0;         //정확도
-        private float totalPercent = 0;     //정확도 총합
-        private int noteCount = 0;          //노트 입력 횟수
-
-        //입력 횟수
-        private int[] inputCount = new int[4] { 0, 0, 0, 0 };
-
         //게임 상태
         enum States
         {
@@ -99,6 +92,11 @@ namespace Play
             {
                 Destroy(gameObject);
             }
+        }
+
+        private void Start()
+        {
+            scoreManager = new ScoreManager(scoreText, accuracyText, accuracyScript, comboScript);
         }
 
         public void OnClickButton()
@@ -120,17 +118,11 @@ namespace Play
 
             //노래 초기화
             //SoundManager.Instance.SongInit(songName.ToString());
-            Debug.Log(videoPlayScript);
             videoPlayScript.GetVideoClip(songName);
             metronome.CalculateSync();
 
-            //점수 관련 초기화
-            score = 0;
-            comboScript.Init();
-
-            //텍스트 초기화
-            scoreText.text = "0";
-            accuracyText.text = "0.00%";
+            //점수 초기화
+            scoreManager.Init();
 
             StartCoroutine(StartMusicWithIntroDelay());
 
@@ -269,24 +261,8 @@ namespace Play
         {
             float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
 
-            //점수 계산
-            score += noteScore * (percent / 100);
-            int scoreInt = (int)score;
-            noteCount++;
-            totalPercent += percent;
-            accuracy = totalPercent / (float)noteCount;
-
-            //정확도 표시
-            accuracyScript.ShowAccracy(accuracyResult);
-            //콤보
-            comboScript.ChangeInCombo(accuracyResult);
-
-            //입력 횟수 증가
-            inputCount[(int)accuracyResult] += 1;
-
-            //점수 표시
-            scoreText.text = scoreInt.ToString();
-            accuracyText.text = accuracy.ToString("F2") + "%";
+            //점수 계산 및 표시
+            scoreManager.AddScore(noteScore, percent, accuracyResult);
         }
 
         //일시정지
@@ -364,12 +340,12 @@ namespace Play
             scoreData.songName = songName.ToString();
             scoreData.artist = artist;
             scoreData.songKey = songName.ToString() + "_" + artist;
-            scoreData.score = (int)score;
-            scoreData.accuracy = accuracy;
-            scoreData.great = inputCount[0];
-            scoreData.good = inputCount[1];
-            scoreData.bad = inputCount[2];
-            scoreData.miss = inputCount[3];
+            scoreData.score = (int)scoreManager.Score;
+            scoreData.accuracy = scoreManager.Accuracy;
+            scoreData.great = scoreManager.InputCount[0];
+            scoreData.good = scoreManager.InputCount[1];
+            scoreData.bad = scoreManager.InputCount[2];
+            scoreData.miss = scoreManager.InputCount[3];
             scoreData.maxCombo = comboScript.MaxCombo;
             scoreData.isFullCombo = comboScript.IsFullCombo;
 

@@ -1,8 +1,5 @@
 using UnityEngine;
 using FMODUnity;
-using FMOD;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.Rendering;
 using FMOD.Studio;
 
 namespace Play
@@ -101,10 +98,10 @@ namespace Play
         {
             LoadSong(songName);
 
-            bgmInstance.setParameterByName("BGM_Loop", 1.0f);
+            //bgmInstance.setParameterByName("BGM_Loop", 1.0f);
 
-            //int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000); // 44.1kHz 기준
-            //bgmInstance.setTimelinePosition(startTimeMilliseconds);
+            int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000); // 44.1kHz 기준
+            bgmInstance.setTimelinePosition(startTimeMilliseconds);
 
             bgmInstance.start();
         }

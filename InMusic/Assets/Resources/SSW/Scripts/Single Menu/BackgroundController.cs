@@ -113,11 +113,12 @@ public class BackgroundController : MonoBehaviour
 
         if (_bgAudio != null)
         {
-            _bgAudio.volume = 0.5f;
-            AudioClip clip = Resources.Load<AudioClip>($"Song/{songName}/{songName}");
-            _bgAudio.clip = clip;
-            _bgAudio.Play();
-            _bgAudio.time = 60f;
+            //_bgAudio.volume = 0.5f;
+            //AudioClip clip = Resources.Load<AudioClip>($"Song/{songName}/{songName}");
+            //_bgAudio.clip = clip;
+            //_bgAudio.Play();
+            //_bgAudio.time = 60f;
+            Play.SoundManager.Instance.PlayBGMHighLight(songName);
         }
 
         if (_bgCanvasGroup != null) _bgCanvasGroup.alpha = 0f;

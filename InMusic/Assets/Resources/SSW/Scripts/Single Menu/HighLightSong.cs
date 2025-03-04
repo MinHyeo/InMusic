@@ -117,7 +117,8 @@ namespace SongList{
 
         public void StartButtonAction()
         {
-            SoundManager.Instance.PlaySFX(SFXType.PlayStart);
+            //SoundManager.Instance.PlaySFX(SFXType.PlayStart);
+            //Play.SoundManager.Instance.PlayBGMHighLight()
             loadingSongObj = LoadingSong.Instance;
             loadingSongObj.LoadPlay("YMH", _detailTitleText.text, _detailArtistText.text, _detailImage.sprite);
         }
