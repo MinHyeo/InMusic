@@ -67,31 +67,6 @@ public class BmsLoader : SingleTon<BmsLoader>
         SelectSong(Song.Heya);
     }
 
-    // public SongInfo SelectSong(Song song)
-    // {
-    //     tempStr = "";
-    //     StrText = "";
-    //     songName = "";
-    //     path = "Assets/Resources/Song/";
-    //     seps = new char[] { ' ', ':' };
-
-    //     songName = song.ToString();
-    //     path += songName + "/";
-    //     fileName = new FileInfo(path + song.ToString() + ".bms");
-
-    //     if (fileName != null)
-    //     {
-    //         reader = fileName.OpenText();
-    //     }
-    //     else
-    //     {
-    //         Debug.Log("������ �����ϴ�.");
-    //     }
-
-    //     songInfo = ParseBMS();
-
-    //     return songInfo;
-    // }
     public SongInfo SelectSong(Song song)
     {
         tempStr = "";

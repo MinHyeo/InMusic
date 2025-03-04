@@ -11,8 +11,15 @@ namespace Play
         BGM,
     }
 
+    public enum PlayStyle
+    {
+        Normal,
+        Highlight,
+    }
+
     public class SoundManager : SingleTon<SoundManager>
     {
+        // 현재 사용 X
         // FMOD Variable 
         [Header("music")]
         FMOD.System fmodSystem;
@@ -87,50 +94,84 @@ namespace Play
             bgmInstance = RuntimeManager.CreateInstance(bgmEventPart);
         }
 
-        public void PlayBGM(string bgmEventPart)
+        public void PlayBGM(string songName, PlayStyle style)
         {
-            bgmInstance.start();
-
-            isPlaying = true;
-        }
-
-        public void PlayBGMHighLight(string songName)
-        {
+            // 노래 불러오기
             LoadSong(songName);
 
-            //bgmInstance.setParameterByName("BGM_Loop", 1.0f);
+            // 노래 하이라이트 설정
+            if(style == PlayStyle.Highlight)
+            {
+                int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000);
+                bgmInstance.setTimelinePosition(startTimeMilliseconds);
+            }
 
-            int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000); // 44.1kHz 기준
-            bgmInstance.setTimelinePosition(startTimeMilliseconds);
-
+            //노래 시작
             bgmInstance.start();
+            // 채널 그룹 가져오기
+            bgmInstance.getChannelGroup(out masterChannelGroup);
         }
+
+        //public void PlayBGM(string bgmEventPart, PlayStyle style)
+        //{
+        //    bgmInstance.start();
+
+        //    isPlaying = true;
+        //}
+
+        //public void PlayBGMHighLight(string songName)
+        //{
+        //    LoadSong(songName);
+
+        //    //bgmInstance.setParameterByName("BGM_Loop", 1.0f);
+
+        //    int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000); // 44.1kHz 기준
+        //    bgmInstance.setTimelinePosition(startTimeMilliseconds);
+
+        //    bgmInstance.start();
+        //}
 
         public void Pause(bool isPause)
         {
             musicChannel.setPaused(isPause);
         }
 
-        public void SongInit(string songName)
+        //public void SongInit(string songName)
+        //{
+        //    //FMOD 초기화
+        //    //Init();
+
+        //    //노래 불러오기
+        //    LoadSong(songName);
+
+        //    //현재 샘플 계산
+        //    frequency = GetCurrentFrequency();
+        //}
+
+        public float GetCurrentFrequency()
         {
-            //FMOD 초기화
-            Init();
-
-            //노래 불러오기
-            LoadSong(songName);
-
-            //현재 샘플 계산
-            frequency = GetCurrentFrequency();
-        }
-
-        private float GetCurrentFrequency()
-        {
+            Debug.Log("dddddddd");
             if (masterChannelGroup.hasHandle())
             {
+                Debug.Log("dddd");
                 FMOD.DSP dsp;
                 masterChannelGroup.getDSP(0, out dsp);  // DSP 0번 가져오기
-                dsp.getParameterFloat(0, out frequency);  // DSP에서 주파수 가져오기
+
+                // DSP가 연결되었는지 확인
+                FMOD.DSP_PARAMETER_DESC paramDesc;
+                dsp.getParameterInfo(0, out paramDesc);
+
+                if(paramDesc.type == FMOD.DSP_PARAMETER_TYPE.FLOAT)
+                {
+                    dsp.getParameterFloat(0, out frequency);  // DSP에서 주파수 가져오기
+                    Debug.Log($"SoundManager에서 샘플 구함 : {frequency}");
+                }
+                else
+                {
+                    Debug.LogError("DSP Parameter 0 type is not FLOAT");
+                }     
             }
+
             return frequency;
         }
 

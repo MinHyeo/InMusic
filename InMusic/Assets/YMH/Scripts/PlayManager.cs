@@ -116,6 +116,10 @@ namespace Play
             this.songName = songName;
             this.artist = artist;
 
+            //노래 샘플 계산
+            PlaySong();
+            SoundManager.Instance.GetCurrentFrequency();
+
             //노래 초기화
             //SoundManager.Instance.SongInit(songName.ToString());
             videoPlayScript.GetVideoClip(songName);
@@ -143,14 +147,13 @@ namespace Play
             state = States.Playing;
 
             //노래 재생 및 마디선 생성
-            PlaySong();
             metronome.StartMetronome();
         }
 
         private void PlaySong()
         {
-            string songPart = "event:/BGM/" + songName.ToString();
-            SoundManager.Instance.PlayBGM(songPart);
+            //string songPart = "event:/BGM/" + songName.ToString();
+            SoundManager.Instance.PlayBGM(songName.ToString(), PlayStyle.Normal);
             videoPlayScript.Play();
         }
 
