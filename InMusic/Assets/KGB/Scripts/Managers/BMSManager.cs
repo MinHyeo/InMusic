@@ -3,47 +3,8 @@ using System.IO;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
-public class BMSManager : MonoBehaviour
+public class BMSManager
 {
-
-    public static BMSManager Instance { get; private set; }
-
-    void Awake()
-    {
-        // ΩÃ±€≈Ê ¿ŒΩ∫≈œΩ∫ º≥¡§
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    void Start()
-    {
-        
-        //BMSData parsedData = ParseBMS("test");
-        //if (parsedData != null)
-        //{
-        //    Debug.Log("BMS Parsing complete.");
-        //    Debug.Log("Title: " + parsedData.header.title);
-        //    Debug.Log("Artist: " + parsedData.header.artist);
-        //    Debug.Log("Number of notes: " + parsedData.notes.Count);
-        //    foreach (BMSNoteData note in parsedData.notes)
-        //    {
-        //        Debug.Log($"Measure: {note.measure}, Channel: {note.channel}, Notes: {note.noteString}");
-        //    }
-        //}
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public BMSData ParseBMS(string fileName)
     {
