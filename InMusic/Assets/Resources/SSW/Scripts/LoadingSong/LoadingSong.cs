@@ -167,7 +167,7 @@ public class LoadingSong : MonoBehaviour
             timer += Time.unscaledDeltaTime; // unscaledDeltaTime: The timeScale-independent interval in seconds from the last frame to the current one
             _canvasGroup.alpha = isFadeIn ? Mathf.Lerp(0, 1, timer) : Mathf.Lerp(1, 0, timer);
             //_bgAudio.volume = Mathf.Lerp(_bgAudio.volume, 0f, timer);
-            _bgVideo.Pause();
+            //_bgVideo.Pause();
         }
 
         if (!isFadeIn)
