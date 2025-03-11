@@ -101,7 +101,7 @@ namespace Play
 
         public void OnClickButton()
         {
-            StartGame(Song.Heya, "artist");
+            //StartGame(Song.Heya, "artist");
         }
 
         private void OnApplicationQuit()
@@ -110,52 +110,108 @@ namespace Play
             SoundManager.Instance.End();
         }
 
-        public void StartGame(Song songName, string artist)
+
+        #region Play Init
+        public void Init(Song songName, string artist)
         {
             //노래 정보 저장
             this.songName = songName;
             this.artist = artist;
 
-            //노래 샘플 계산
-            PlaySong();
-            SoundManager.Instance.GetCurrentFrequency();
-
-            //노래 초기화
-            //SoundManager.Instance.SongInit(songName.ToString());
+            //비디오 불러오기
             videoPlayScript.GetVideoClip(songName);
-            metronome.CalculateSync();
+            SoundManager.Instance.SongInit(songName, PlayStyle.Normal);
+        }
+        #endregion
 
+        #region Play Game
+        public void StartGame()
+        {
+            //샘플 구하기
+            SoundManager.Instance.GetCurrentFrequency();
+            //박자선 계산
+            metronome.CalculateSync();
+            
             //점수 초기화
             scoreManager.Init();
 
-            StartCoroutine(StartMusicWithIntroDelay());
-
-            //키 설정
+            //키보드 설정
             GameManager.Input.SetNoteKeyPressEvent(OnKeyPress);
             GameManager.Input.SetNoteKeyReleaseEvent(OnKeyRelase);
             GameManager.Input.SetUIKeyEvent(OnUIKkeyPress);
+
+            //게임 시작 딜레이 측정 및 시작
+            StartCoroutine(StartMusicWithIntroDelay());
         }
 
-        private IEnumerator StartMusicWithIntroDelay()
+        private IEnumerator StartGameWithIntroDelay()
         {
+            yield return null;
+
             metronome.StartInitialMetronome();
             NoteManager.Instance.InitializeNotes(BmsLoader.Instance.SelectSong(songName));
-            // 2초 인트로 시간 대기
+
+            //딜레이
             yield return new WaitForSeconds(preStartDelay);
 
-            //상태 변환
+            //게임 상태 수정
             state = States.Playing;
 
-            //노래 재생 및 마디선 생성
-            metronome.StartMetronome();
-        }
-
-        private void PlaySong()
-        {
-            //string songPart = "event:/BGM/" + songName.ToString();
-            SoundManager.Instance.PlayBGM(songName.ToString(), PlayStyle.Normal);
+            //노래 재생
+            SoundManager.Instance.Play();
+            //비디오 재생
             videoPlayScript.Play();
-        }
+
+        } 
+
+
+        //public void StartGame(Song songName, string artist)
+        //{
+        //    //노래 정보 저장
+        //    this.songName = songName;
+        //    this.artist = artist;
+
+        //    //노래 샘플 계산
+        //    videoPlayScript.GetVideoClip(songName);
+        //    PlaySong();
+        //    SoundManager.Instance.GetCurrentFrequency();
+
+        //    //노래 초기화
+        //    //SoundManager.Instance.SongInit(songName.ToString()); 
+        //    metronome.CalculateSync();
+
+        //    //점수 초기화
+        //    scoreManager.Init();
+
+        //    StartCoroutine(StartMusicWithIntroDelay());
+
+        //    //키 설정
+        //    GameManager.Input.SetNoteKeyPressEvent(OnKeyPress);
+        //    GameManager.Input.SetNoteKeyReleaseEvent(OnKeyRelase);
+        //    GameManager.Input.SetUIKeyEvent(OnUIKkeyPress);
+        //}
+
+        //private IEnumerator StartMusicWithIntroDelay()
+        //{
+        //    metronome.StartInitialMetronome();
+        //    NoteManager.Instance.InitializeNotes(BmsLoader.Instance.SelectSong(songName));
+        //    // 2초 인트로 시간 대기
+        //    yield return new WaitForSeconds(preStartDelay);
+
+        //    //상태 변환
+        //    state = States.Playing;
+
+        //    //노래 재생 및 마디선 생성
+        //    metronome.StartMetronome();
+        //}
+
+        //private void PlaySong()
+        //{
+        //    //string songPart = "event:/BGM/" + songName.ToString();
+        //    SoundManager.Instance.PlayBGM(songName.ToString(), PlayStyle.Normal);
+        //    videoPlayScript.Play();
+        //}
+        #endregion
 
         private void OnKeyPress(Define.NoteControl keyEvent)
         {

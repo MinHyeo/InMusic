@@ -1,9 +1,11 @@
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
+using System.Collections;
 
 namespace Play
 {
+    #region Enum Define
     public enum SoundType 
     {
         Master = 0,
@@ -16,6 +18,7 @@ namespace Play
         Normal,
         Highlight,
     }
+    #endregion
 
     public class SoundManager : SingleTon<SoundManager>
     {
@@ -81,43 +84,115 @@ namespace Play
                     break;
             }
 
-            //볼륨 변경 확인 테스트 코드
+            #region 볼륨 변경 확인 테스트 코드
             //float masterVolume, sfxVolume, bgmVolume;
             //masterBus.getVolume(out masterVolume);
             //sfxBus.getVolume(out sfxVolume);
             //bgmBus.getVolume(out bgmVolume);
             //Debug.Log($"master 볼륨 : {masterVolume}, SFX 볼륨 : {sfxVolume}, BGM 볼륨 : {bgmVolume}");
+            #endregion
         }
 
-        private void LoadSong(string songName)
+        #region Play Music
+        /// <summary>
+        /// SoundManager 노래 초기설정
+        /// </summary>
+        /// <param name="songName"></param>
+        public void SongInit(Song songName, PlayStyle style)
         {
+            //노래 제목 문자열 변환
+            string songTitle = songName.ToString();
+
             //노래 불러오기
+            //FMOD 상태 체크 및 초기화
             if (bgmInstance.isValid())
             {
                 bgmInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 bgmInstance.release();
             }
-            string bgmEventPart = "event:/BGM/" + songName;
+
+            //노래 이벤트 불러오기
+            string bgmEventPart = "event:/BGM/" + songTitle;
             bgmInstance = RuntimeManager.CreateInstance(bgmEventPart);
-        }
 
-        public void PlayBGM(string songName, PlayStyle style)
-        {
-            // 노래 불러오기
-            LoadSong(songName);
-
-            // 노래 하이라이트 설정
+            //노래 하이라이트 설정
             if(style == PlayStyle.Highlight)
             {
                 int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000);
                 bgmInstance.setTimelinePosition(startTimeMilliseconds);
             }
 
-            //노래 시작
+            //채널 그룹 가져오기
+            StartCoroutine(GetChannelGroup());
+        }
+
+        private IEnumerator GetChannelGroup()
+        {
+            //노래 시작하고 바로 일시정지
+            isPlaying = true;
             bgmInstance.start();
-            // 채널 그룹 가져오기
+            Pause(!isPlaying);
+
+            //프레임 대기
+            yield return null;
+
+            //채널그룹 가져오기
             bgmInstance.getChannelGroup(out masterChannelGroup);
         }
+
+        public void Play()
+        {
+            
+        }
+
+        //private void LoadSong(string songName)
+        //{
+        //    //노래 불러오기
+        //    if (bgmInstance.isValid())
+        //    {
+        //        bgmInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        //        bgmInstance.release();
+        //    }
+        //    string bgmEventPart = "event:/BGM/" + songName;
+        //    bgmInstance = RuntimeManager.CreateInstance(bgmEventPart);
+        //}
+
+        //public void PlayBGM(string songName, PlayStyle style)
+        //{
+        //    StartCoroutine(Play(songName, style));
+        //}
+
+        //private IEnumerator Play(string songName, PlayStyle style)
+        //{
+        //    // 노래 불러오기
+        //    LoadSong(songName);
+
+        //    // 노래 하이라이트 설정
+        //    if (style == PlayStyle.Highlight)
+        //    {
+        //        int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000);
+        //        bgmInstance.setTimelinePosition(startTimeMilliseconds);
+        //    }
+
+        //    //노래 시작
+        //    bgmInstance.start();
+
+        //    FMOD.Studio.PLAYBACK_STATE state;
+        //    do
+        //    {
+        //        yield return null;
+        //        bgmInstance.getPlaybackState(out state);
+        //    } while (state != FMOD.Studio.PLAYBACK_STATE.PLAYING);
+
+        //    // 채널 그룹 가져오기
+        //    bgmInstance.getChannelGroup(out masterChannelGroup);
+
+        //    //yield return new WaitForSeconds(0.1f);
+
+        //    //// 채널 그룹 가져오기
+        //    //bgmInstance.getChannelGroup(out masterChannelGroup);
+        //    //Debug.Log(masterChannelGroup);
+        //}
 
         //public void PlayBGM(string bgmEventPart, PlayStyle style)
         //{
@@ -137,30 +212,27 @@ namespace Play
 
         //    bgmInstance.start();
         //}
+        #endregion
 
+        #region Pause Music
         public void Pause(bool isPause)
         {
-            musicChannel.setPaused(isPause);
+            if(isPlaying != isPause)
+            {
+                isPlaying = isPause;
+                musicChannel.setPaused(isPause);
+            }
+            else
+            {
+                Debug.LogError("노래 플레이 상태 겹침");
+            }
         }
-
-        //public void SongInit(string songName)
-        //{
-        //    //FMOD 초기화
-        //    //Init();
-
-        //    //노래 불러오기
-        //    LoadSong(songName);
-
-        //    //현재 샘플 계산
-        //    frequency = GetCurrentFrequency();
-        //}
+        #endregion
 
         public float GetCurrentFrequency()
         {
-            Debug.Log("dddddddd");
             if (masterChannelGroup.hasHandle())
             {
-                Debug.Log("dddd");
                 FMOD.DSP dsp;
                 masterChannelGroup.getDSP(0, out dsp);  // DSP 0번 가져오기
 
@@ -177,6 +249,10 @@ namespace Play
                 {
                     Debug.LogError("DSP Parameter 0 type is not FLOAT");
                 }     
+            }
+            else
+            {
+                Debug.LogError("Master Channel Group has no handle");
             }
 
             return frequency;
