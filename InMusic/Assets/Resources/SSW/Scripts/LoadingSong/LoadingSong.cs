@@ -3,6 +3,7 @@ using System.Collections;
 using Play;
 using SSW;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -106,7 +107,6 @@ public class LoadingSong : MonoBehaviour
 
         AsyncOperation operation = SceneManager.LoadSceneAsync(loadSceneName);
         operation.allowSceneActivation = false; // 씬 로딩 끝나도 자동 전환 x
-        StartCoroutine(WaitForPlayManagerAndStartGame());
 
         float timer = 0f;
         while(!operation.isDone) {
@@ -121,7 +121,17 @@ public class LoadingSong : MonoBehaviour
 
                 if(_loadingBar.fillAmount >= 1f) {
                     operation.allowSceneActivation = true;
+
+                    //씬 활성화될 때까지 대기
+                    yield return new WaitUntil(() => PlayManager.Instance != null);
+                    Debug.Log("PlayManager 인스턴스 확인");
+
+                    yield return StartCoroutine(WaitForPlayManagerAndStartGame());
+
                     GlobalInputControl.IsInputEnabled = true;
+
+                    //게임 시작
+                    PlayManager.Instance.StartGame();
                     yield break;
                 }
             }
@@ -130,17 +140,25 @@ public class LoadingSong : MonoBehaviour
 
     public IEnumerator WaitForPlayManagerAndStartGame()
     {
+        Debug.Log("PlayManager 불러오기 시작");
         // PlayManager가 존재할 때까지 대기
         while (PlayManager.Instance == null)
         {
             yield return null;  // 다음 프레임까지 대기
+            Debug.Log("PlayManager가 안 불러와짐");
         }
+        Debug.Log("PlayManager 불러오기 완");
 
         PlayManager.Instance.Init(songTitle, artist);
         yield return new WaitUntil(() => PlayManager.Instance.IsDataLoaded());
+        Debug.Log("준비 완");
+
+        isDataReady = true;
         // PlayManager가 초기화되면 메서드 호출
         //PlayManager.Instance.StartGame(songTitle, artist);
     }
+    //>
+
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
@@ -151,6 +169,7 @@ public class LoadingSong : MonoBehaviour
             if (dotCoroutine != null) {
                 StopCoroutine(dotCoroutine);
                 dotCoroutine = null;
+                isDataReady = false;
             }
         }
     }

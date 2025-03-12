@@ -75,7 +75,7 @@ namespace Play
         private const float missThreshold = 0.0416f;
 
         //데이터 불러온 상태
-        public bool IsDataLoaded { get; private set; } = false;
+        public bool isDataLoaded { get; private set; } = false;
 
         //게임 상태
         enum States
@@ -120,12 +120,20 @@ namespace Play
             //노래 정보 저장
             this.songName = songName;
             this.artist = artist;
+            Debug.Log("노래 정보 저장 완료");
 
             //비디오 불러오기
             videoPlayScript.GetVideoClip(songName);
+            //노래 불러오기
             SoundManager.Instance.SongInit(songName, PlayStyle.Normal);
+            Debug.Log("비디오 + 노래 불러오기 완료");
 
-            IsDataReady = true;
+            isDataLoaded = true;
+        }
+
+        public bool IsDataLoaded()
+        {
+            return isDataLoaded;
         }
         #endregion
 
