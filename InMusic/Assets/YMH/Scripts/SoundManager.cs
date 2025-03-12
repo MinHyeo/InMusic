@@ -22,13 +22,14 @@ namespace Play
 
     public class SoundManager : SingleTon<SoundManager>
     {
-        // 현재 사용 X
+        #region 사용X
         // FMOD Variable 
         [Header("music")]
         FMOD.System fmodSystem;
         FMOD.ChannelGroup musicChannelGroup;
         FMOD.Sound musicSound;
         FMOD.Channel musicChannel;
+        #endregion
 
         private EventInstance bgmInstance;
         private FMOD.ChannelGroup masterChannelGroup;
@@ -137,12 +138,21 @@ namespace Play
             yield return null;
 
             //채널그룹 가져오기
+            FMOD.Studio.PLAYBACK_STATE state;
+            do
+            {
+                yield return null;
+                bgmInstance.getPlaybackState(out state);
+            } while (state != FMOD.Studio.PLAYBACK_STATE.PLAYING);
             bgmInstance.getChannelGroup(out masterChannelGroup);
+
+            //샘플 구하기
+            GetCurrentFrequency();
         }
 
         public void Play()
         {
-            
+            bgmInstance.start();
         }
 
         //private void LoadSong(string songName)
@@ -229,7 +239,7 @@ namespace Play
         }
         #endregion
 
-        public float GetCurrentFrequency()
+        public void GetCurrentFrequency()
         {
             if (masterChannelGroup.hasHandle())
             {
@@ -254,8 +264,6 @@ namespace Play
             {
                 Debug.LogError("Master Channel Group has no handle");
             }
-
-            return frequency;
         }
 
         private void Update()

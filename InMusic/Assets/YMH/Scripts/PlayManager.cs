@@ -74,6 +74,9 @@ namespace Play
         private const float badThreshold = 0.0832f;
         private const float missThreshold = 0.0416f;
 
+        //데이터 불러온 상태
+        public bool IsDataLoaded { get; private set; } = false;
+
         //게임 상태
         enum States
         {
@@ -121,6 +124,8 @@ namespace Play
             //비디오 불러오기
             videoPlayScript.GetVideoClip(songName);
             SoundManager.Instance.SongInit(songName, PlayStyle.Normal);
+
+            IsDataReady = true;
         }
         #endregion
 
@@ -141,7 +146,7 @@ namespace Play
             GameManager.Input.SetUIKeyEvent(OnUIKkeyPress);
 
             //게임 시작 딜레이 측정 및 시작
-            StartCoroutine(StartMusicWithIntroDelay());
+            StartCoroutine(StartGameWithIntroDelay());
         }
 
         private IEnumerator StartGameWithIntroDelay()
@@ -370,7 +375,7 @@ namespace Play
             metronome.Restart();
 
             //재시작
-            StartGame(songName, artist);
+            //StartGame(songName, artist);
         }
 
         //노래 종료

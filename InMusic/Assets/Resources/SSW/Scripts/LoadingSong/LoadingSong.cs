@@ -30,6 +30,8 @@ public class LoadingSong : MonoBehaviour
     private Song songTitle;
     private string artist;
     private static LoadingSong _instance;
+
+    private bool isDataReady = false;
     
     public static LoadingSong Instance {
         get {
@@ -134,8 +136,10 @@ public class LoadingSong : MonoBehaviour
             yield return null;  // 다음 프레임까지 대기
         }
 
+        PlayManager.Instance.Init(songTitle, artist);
+        yield return new WaitUntil(() => PlayManager.Instance.IsDataLoaded());
         // PlayManager가 초기화되면 메서드 호출
-        PlayManager.Instance.StartGame(songTitle, artist);
+        //PlayManager.Instance.StartGame(songTitle, artist);
     }
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
