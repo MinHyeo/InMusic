@@ -66,8 +66,6 @@ public class GameManager : MonoBehaviour
         playManager = GetComponent<PlayManager>();
         playManager.SetResources(); // 노래 리소스 세팅
         NoteManager.Instance.SetNote(curBMS); //노트생성
-        Debug.Log("씬스타트");
-
     }
 
     public void Update()
@@ -94,8 +92,17 @@ public class GameManager : MonoBehaviour
 
    public void InitializeGame()
     {
+
         pauseUI.SetActive(false);
         gameoverUI.SetActive(false);
+        if (playManager.musicSound.clip.loadState == AudioDataLoadState.Unloaded)
+        {
+            playManager.musicSound.clip.LoadAudioData(); // 오디오 데이터를 미리 로드
+        }
+        if (playManager.videoPlayer.clip != null)
+        {
+            playManager.videoPlayer.Prepare();
+        }
         // 초기화 (노트 데이터 가져오기)
         totalNotes = NoteManager.Instance.totalNotes; // NoteManager에서 총 노트 수 가져오기
         maxScorePerNote = 1000000f / totalNotes; // 노트 하나당 최대 점수 계산
@@ -109,15 +116,8 @@ public class GameManager : MonoBehaviour
         missCount = 0;  //miss 횟수
         maxCombo = 0;   //최대 콤보수
         combo = 0; //현재 콤포
-
-        if (playManager.musicSound.clip.loadState == AudioDataLoadState.Unloaded)
-        {
-            playManager.musicSound.clip.LoadAudioData(); // 오디오 데이터를 미리 로드
-        }
-        if(playManager.videoPlayer.clip != null)
-        {
-            playManager.videoPlayer.Prepare();
-        }
+        LoadingScreen.Instance.SceneReady();
+        
 
         StartGame();
         Debug.Log("Game Initialized");

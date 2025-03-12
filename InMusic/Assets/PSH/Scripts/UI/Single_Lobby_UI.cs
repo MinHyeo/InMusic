@@ -36,6 +36,7 @@ public class Single_Lobby_UI : UI_Base
     {
         //음악 목록 Load해서 넘겨주기
         mList.SetData(GameManager_PSH.Resource.GetMusicList());
+        LoadingScreen.Instance.SceneReady();
     }
 
     void Update()

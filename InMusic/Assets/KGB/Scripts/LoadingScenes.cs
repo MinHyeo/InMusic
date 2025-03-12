@@ -83,7 +83,7 @@ public class LoadingScreen : MonoBehaviour
     {
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         operation.allowSceneActivation = false;
-
+        float elapsed = 0f;
         float displayedProgress = 0f;
         progressBar.value = displayedProgress;
         loadingUI.loadingRate.text = $"{Mathf.RoundToInt(displayedProgress * 100)}%";
@@ -107,6 +107,10 @@ public class LoadingScreen : MonoBehaviour
         // 이후 진행도 업데이트
         while (!operation.isDone)
         {
+            Debug.Log(operation.progress.ToString());
+            if (operation.progress>=1){
+                break;
+            }
             float targetProgress = Mathf.Clamp01(operation.progress / 0.9f); // 로딩 진행도 (0~1)
 
             if (targetProgress < 0.9f)
@@ -118,7 +122,7 @@ public class LoadingScreen : MonoBehaviour
             else
             {
                 // 로딩 완료 상태: 90%에서 100%까지 서서히 증가 (1초 동안)
-                float elapsed = 0f;
+
                 while (elapsed < 1f)
                 {
                     elapsed += Time.deltaTime;
@@ -142,7 +146,24 @@ public class LoadingScreen : MonoBehaviour
     // 씬이 변경되면 자동으로 호출되는 함수
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        StartCoroutine(FadeOut()); // 새로운 씬에서 페이드아웃 실행
+        //StartCoroutine(FadeOut()); // 새로운 씬에서 페이드아웃 실행
+        Debug.Log("씬 로드됨");
+        if (scene.name == "Single_Lobby_PSH")
+        {
+            Debug.Log("싱글 로비 씬");
+            return;
+        }
+        else if(scene.name == "KGB_SinglePlay")
+        {
+            Debug.Log("플레이 씬");
+            return;
+        }
+        else
+        {
+            Debug.Log("바로 씬 준비 끝");
+            StartCoroutine(FadeOut());
+        }
+        
     }
 
     private void SetLodingScreen(MusicData data)
@@ -196,5 +217,11 @@ public class LoadingScreen : MonoBehaviour
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    public void SceneReady()
+    {
+        Debug.Log("씬 준비 완료");
+        StartCoroutine(FadeOut());
     }
 }
