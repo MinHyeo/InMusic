@@ -6,10 +6,11 @@ using UnityEngine;
 public class Managers
 {
 
-        private static UIManager _uiManager;
-        private static InputManager _inputManager;
+    private static UIManager _uiManager;
+    private static InputManager _inputManager;
+    public static SoundManager Sound => SoundManager.Instance;
 
-        public static UIManager UI
+    public static UIManager UI
         {
             get
             {
@@ -28,7 +29,9 @@ public class Managers
                 return _inputManager;
             }
         }
-    
+
+
+
     //  GetOrAddComponent: 중복 방지 및 최적화
     public static T GetOrAddComponent<T>(GameObject go) where T : Component
     {

@@ -8,8 +8,6 @@ public class InputManager
 
     public void Update()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return;
-
         if (Input.anyKeyDown)
         {
             Debug.Log("е╟ ют╥б");

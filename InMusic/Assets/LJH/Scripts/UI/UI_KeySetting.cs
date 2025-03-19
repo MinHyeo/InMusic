@@ -67,7 +67,7 @@ public class UI_KeySetting : UI_Base
 
     private void Start()
     {
-        Init(); // Init 반드시 호출
+        Init(); 
         Managers.Input.OnKeyPressed += HandleKeyPress;
         _instance = this;
 
@@ -77,9 +77,7 @@ public class UI_KeySetting : UI_Base
 
     private void OnDestroy()
     {
-        Managers.Input.OnKeyPressed -= HandleKeyPress;
-        UIManager.ToggleComponentInput<UI_Setting>(this.gameObject, true);
-        _instance = null;
+        ClosePopupUI();
     }
 
     /// <summary>
@@ -93,13 +91,10 @@ public class UI_KeySetting : UI_Base
         if (_isChangingKey)
         {
             // 중복 키 확인
-            for (int i = 0; i < 4; i++)
+            if (Array.Exists(_assignedKeys, assignedKey => assignedKey == key))
             {
-                if (_assignedKeys[i] == key)
-                {
-                    Debug.LogWarning($"이미 Note{i + 1}에 할당된 키입니다: {key}");
-                    return; // 중복 키 방지
-                }
+                Debug.LogWarning($"이미 사용 중인 키입니다: {key}");
+                return; // 중복 키 방지
             }
 
             // 키 재할당
@@ -161,10 +156,7 @@ public class UI_KeySetting : UI_Base
         // 텍스트 색상 (기본: 검정, 변경 모드: 빨간색)
         for (int i = 0; i < 4; i++)
         {
-            if (_isChangingKey && i == _currentSelection)
-                GetText(i).color = Color.red; // 변경 모드일 때 빨간색
-            else
-                GetText(i).color = Color.black; // 나머지는 검정색
+            GetText(i).color = (_isChangingKey && i == _currentSelection) ? Color.red : Color.black;
         }
 
         // 공지(Notice) 활성화 여부
@@ -182,9 +174,12 @@ public class UI_KeySetting : UI_Base
     /// </summary>
     public override void ClosePopupUI()
     {
-        Managers.Input.OnKeyPressed -= HandleKeyPress;
-        UIManager.ToggleComponentInput<UI_Setting>(this.gameObject, true);
-        _instance = null;
-        Destroy(gameObject);
+        if (_instance == this)
+        {
+            Managers.Input.OnKeyPressed -= HandleKeyPress;
+            UIManager.ToggleComponentInput<UI_Setting>(this.gameObject, true);
+            _instance = null;
+            Destroy(gameObject);
+        }
     }
 }
