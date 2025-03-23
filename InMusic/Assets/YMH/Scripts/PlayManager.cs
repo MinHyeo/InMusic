@@ -115,7 +115,7 @@ namespace Play
 
 
         #region Play Init
-        public void Init(Song songName, string artist)
+        public async void Init(Song songName, string artist)
         {
             //노래 정보 저장
             this.songName = songName;
@@ -125,7 +125,7 @@ namespace Play
             //비디오 불러오기
             videoPlayScript.GetVideoClip(songName);
             //노래 불러오기
-            SoundManager.Instance.SongInit(songName, PlayStyle.Normal);
+            await SoundManager.Instance.SongInit(songName, PlayStyle.Normal);
             Debug.Log("비디오 + 노래 불러오기 완료");
 
             isDataLoaded = true;
@@ -141,7 +141,7 @@ namespace Play
         public void StartGame()
         {
             //샘플 구하기
-            SoundManager.Instance.GetCurrentFrequency();
+            //SoundManager.Instance.GetCurrentFrequency();
             //박자선 계산
             metronome.CalculateSync();
             

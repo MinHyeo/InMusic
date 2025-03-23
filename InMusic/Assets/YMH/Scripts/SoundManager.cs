@@ -2,6 +2,9 @@ using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
 using System.Collections;
+using System;
+using FMOD;
+using System.Threading.Tasks;
 
 namespace Play
 {
@@ -31,7 +34,7 @@ namespace Play
         FMOD.Channel musicChannel;
         #endregion
 
-        private EventInstance bgmInstance;
+        private FMOD.Studio.EventInstance bgmInstance;
         private FMOD.ChannelGroup masterChannelGroup;
 
         // Fmod Bus
@@ -41,7 +44,7 @@ namespace Play
         private FMOD.Studio.Bus sfxBus;
 
         [Header("MusicInfo")]
-        public float frequency;
+        public int frequency;
         private int startTimeSeconds = 60;
         public uint positionInSamples;
 
@@ -53,6 +56,7 @@ namespace Play
             Init();
         }
 
+        #region Sound Init
         private void Init()
         {
             //fmodSystem = RuntimeManager.CoreSystem;
@@ -69,7 +73,9 @@ namespace Play
 
             DontDestroyOnLoad(this.gameObject);
         }
+        #endregion
 
+        #region Set Sound Volume
         public void SetVolume(int soundType, float volume) 
         {
             switch (soundType)
@@ -93,13 +99,14 @@ namespace Play
             //Debug.Log($"master 볼륨 : {masterVolume}, SFX 볼륨 : {sfxVolume}, BGM 볼륨 : {bgmVolume}");
             #endregion
         }
+        #endregion
 
         #region Play Music
         /// <summary>
         /// SoundManager 노래 초기설정
         /// </summary>
         /// <param name="songName"></param>
-        public void SongInit(Song songName, PlayStyle style)
+        public async Task SongInit(Song songName, PlayStyle style)
         {
             //노래 제목 문자열 변환
             string songTitle = songName.ToString();
@@ -124,7 +131,21 @@ namespace Play
             }
 
             //채널 그룹 가져오기
-            StartCoroutine(GetChannelGroup());
+            //StartCoroutine(GetChannelGroup());
+            await RunCoroutineAsTask(GetChannelGroup());
+        }
+
+        private Task RunCoroutineAsTask(IEnumerator coroutine)
+        {
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            StartCoroutine(CoroutineWrapper(coroutine, tcs));
+            return tcs.Task;
+        }
+
+        private IEnumerator CoroutineWrapper(IEnumerator coroutine, TaskCompletionSource<bool> tcs)
+        {
+            yield return coroutine;
+            tcs.SetResult(true);
         }
 
         private IEnumerator GetChannelGroup()
@@ -234,37 +255,67 @@ namespace Play
             }
             else
             {
-                Debug.LogError("노래 플레이 상태 겹침");
+                UnityEngine.Debug.LogError("노래 플레이 상태 겹침");
             }
         }
         #endregion
 
+        #region Get Frequency
         public void GetCurrentFrequency()
         {
-            if (masterChannelGroup.hasHandle())
+            if (!masterChannelGroup.hasHandle())
             {
-                FMOD.DSP dsp;
-                masterChannelGroup.getDSP(0, out dsp);  // DSP 0번 가져오기
-
-                // DSP가 연결되었는지 확인
-                FMOD.DSP_PARAMETER_DESC paramDesc;
-                dsp.getParameterInfo(0, out paramDesc);
-
-                if(paramDesc.type == FMOD.DSP_PARAMETER_TYPE.FLOAT)
-                {
-                    dsp.getParameterFloat(0, out frequency);  // DSP에서 주파수 가져오기
-                    Debug.Log($"SoundManager에서 샘플 구함 : {frequency}");
-                }
-                else
-                {
-                    Debug.LogError("DSP Parameter 0 type is not FLOAT");
-                }     
+                UnityEngine.Debug.LogError("Master Channel Group has no handle");
+                return;
             }
-            else
+
+            FMOD.System system;
+            FMOD.RESULT result = masterChannelGroup.getSystemObject(out system);
+            if (result != FMOD.RESULT.OK)
             {
-                Debug.LogError("Master Channel Group has no handle");
+                UnityEngine.Debug.LogError($"FMOD 시스템 가져오기 실패: {result}");
+                return;
+            }
+
+            // 현재 샘플링 주파수 (예: 44100 Hz)
+            FMOD.SPEAKERMODE speakerMode;
+            int numRawSpeakers;
+            result = system.getSoftwareFormat(out frequency, out speakerMode, out numRawSpeakers);
+            UnityEngine.Debug.Log($"frequency : {frequency}");
+            if (result != FMOD.RESULT.OK)
+            {
+                UnityEngine.Debug.LogError($"FMOD 샘플링 주파수 가져오기 실패: {result}");
+                return;
             }
         }
+
+        //public void GetCurrentFrequency()
+        //{
+        //    if (masterChannelGroup.hasHandle())
+        //    {
+        //        FMOD.DSP dsp;
+        //        masterChannelGroup.getDSP(0, out dsp);  // DSP 0번 가져오기
+
+        //        // DSP가 연결되었는지 확인
+        //        FMOD.DSP_PARAMETER_DESC paramDesc;
+        //        dsp.getParameterInfo(0, out paramDesc);
+
+        //        if(paramDesc.type == FMOD.DSP_PARAMETER_TYPE.FLOAT)
+        //        {
+        //            dsp.getParameterFloat(0, out frequency);  // DSP에서 주파수 가져오기
+        //            Debug.Log($"SoundManager에서 샘플 구함 : {frequency}");
+        //        }
+        //        else
+        //        {
+        //            Debug.LogError("DSP Parameter 0 type is not FLOAT");
+        //        }     
+        //    }
+        //    else
+        //    {
+        //        Debug.LogError("Master Channel Group has no handle");
+        //    }
+        //}
+        #endregion
 
         private void Update()
         {
