@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UI_KeySetting : UI_Base
 {
@@ -32,13 +34,19 @@ public class UI_KeySetting : UI_Base
         Back4
     }
 
-    private int _currentSelection = 0; // 현재 선택 인덱스 (0~3)
+    public enum DefKey // 사용 불가능한 키
+    {
+        Return = KeyCode.Return,
+        F10 = KeyCode.F10,
+        F1 = KeyCode.F1,
+        Escape = KeyCode.Escape
+    }
+
+    private int _currentSelection = 0;
     private float _inputDelay = 0.15f;
     private float _lastInputTime = 0f;
-
-    private bool _isChangingKey = false; // 키 변경 상태
-
-    private KeyCode[] _assignedKeys = new KeyCode[4]; // 현재 설정된 키
+    private bool _isChangingKey = false;
+    private readonly KeyCode[] _assignedKeys = { KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.F };
 
     public override void Init()
     {
@@ -46,43 +54,36 @@ public class UI_KeySetting : UI_Base
         Bind<Button>(typeof(Buttons));
         Bind<Image>(typeof(Images));
 
-        // 버튼 클릭 시 키 변경 모드 진입
         for (int i = 0; i < 4; i++)
         {
             int index = i;
             GetButton(index).onClick.AddListener(() => EnterChangeMode(index));
         }
 
-        // 뒤로가기 버튼
         GetButton((int)Buttons.BackButton).onClick.AddListener(ClosePopupUI);
+        UpdateVisuals();
+    }
 
-        // 예시 기본 키 할당
-        _assignedKeys[0] = KeyCode.A;
-        _assignedKeys[1] = KeyCode.S;
-        _assignedKeys[2] = KeyCode.D;
-        _assignedKeys[3] = KeyCode.F;
-
-        UpdateVisuals(); // 초기 상태 반영
+    private void Awake()
+    {
+        if (_instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        _instance = this;
     }
 
     private void Start()
     {
-        Init(); 
+        Init();
         Managers.Input.OnKeyPressed += HandleKeyPress;
-        _instance = this;
+        UIManager.ToggleComponentInput<UI_Setting>(gameObject, false);
 
-        // Setting UI와 충돌 방지
-        UIManager.ToggleComponentInput<UI_Setting>(this.gameObject, false);
+        // 선택된 UI 오브젝트 포커스 해제 (엔터키 의도치 않은 작동 방지)
+        EventSystem.current?.SetSelectedGameObject(null);
     }
 
-    private void OnDestroy()
-    {
-        ClosePopupUI();
-    }
-
-    /// <summary>
-    /// 키보드 입력 처리
-    /// </summary>
     private void HandleKeyPress(KeyCode key)
     {
         if (Time.time - _lastInputTime < _inputDelay) return;
@@ -90,96 +91,73 @@ public class UI_KeySetting : UI_Base
 
         if (_isChangingKey)
         {
-            // 중복 키 확인
-            if (Array.Exists(_assignedKeys, assignedKey => assignedKey == key))
+            if (Enum.GetValues(typeof(DefKey)).Cast<DefKey>().Any(dk => (KeyCode)dk == key))
+            {
+                Debug.LogWarning($"기본 키는 사용할 수 없습니다: {key}");
+                return;
+            }
+            if (_assignedKeys.Contains(key))
             {
                 Debug.LogWarning($"이미 사용 중인 키입니다: {key}");
-                return; // 중복 키 방지
+                return;
             }
 
-            // 키 재할당
             _assignedKeys[_currentSelection] = key;
             Debug.Log($"Note{_currentSelection + 1} 키가 {key}로 변경됨");
-            ExitChangeMode(); // 변경 모드 종료
+            ExitChangeMode();
+            return;
         }
-        else
+
+        switch (key)
         {
-            // 기본 모드에서 이동 및 변경 모드 진입
-            if (key == KeyCode.UpArrow) MoveSelection(-1);
-            else if (key == KeyCode.DownArrow) MoveSelection(1);
-            else if (key == KeyCode.Return) EnterChangeMode(_currentSelection); // Enter로 변경 모드 진입
-            else if (key == KeyCode.Escape) ClosePopupUI();
+            case KeyCode.UpArrow: MoveSelection(-1); break;
+            case KeyCode.DownArrow: MoveSelection(1); break;
+            case KeyCode.Return: EnterChangeMode(_currentSelection); break;
+            case KeyCode.Escape: ClosePopupUI(); break;
         }
     }
 
-    /// <summary>
-    /// 선택 이동
-    /// </summary>
     private void MoveSelection(int direction)
     {
-        _currentSelection += direction;
-        _currentSelection = Mathf.Clamp(_currentSelection, 0, 3);
+        _currentSelection = Mathf.Clamp(_currentSelection + direction, 0, 3);
         UpdateVisuals();
     }
 
-    /// <summary>
-    /// 키 변경 모드 진입
-    /// </summary>
     private void EnterChangeMode(int index)
     {
         _currentSelection = index;
         _isChangingKey = true;
         UpdateVisuals();
+        EventSystem.current?.SetSelectedGameObject(null);
         Debug.Log($"Note{_currentSelection + 1} 키 변경 대기 중...");
     }
 
-    /// <summary>
-    /// 키 변경 모드 종료
-    /// </summary>
     private void ExitChangeMode()
     {
         _isChangingKey = false;
         UpdateVisuals();
     }
 
-    /// <summary>
-    /// 화면 시각 효과 갱신
-    /// </summary>
     private void UpdateVisuals()
     {
-        // 선택 표시 (Back 이미지)
         for (int i = 0; i < 4; i++)
         {
-            GetImage(i).gameObject.SetActive(i == _currentSelection && !_isChangingKey); // 기본 모드일 때만
-        }
-
-        // 텍스트 색상 (기본: 검정, 변경 모드: 빨간색)
-        for (int i = 0; i < 4; i++)
-        {
+            GetImage(i).gameObject.SetActive(i == _currentSelection && !_isChangingKey);
             GetText(i).color = (_isChangingKey && i == _currentSelection) ? Color.red : Color.black;
-        }
-
-        // 공지(Notice) 활성화 여부
-        GetText((int)Texts.Notice).gameObject.SetActive(_isChangingKey);
-
-        // 현재 할당된 키를 텍스트로 표시
-        for (int i = 0; i < 4; i++)
-        {
             GetText(i).text = _assignedKeys[i].ToString();
         }
+
+        GetText((int)Texts.Notice).gameObject.SetActive(_isChangingKey);
     }
 
-    /// <summary>
-    /// 닫기
-    /// </summary>
     public override void ClosePopupUI()
     {
-        if (_instance == this)
-        {
-            Managers.Input.OnKeyPressed -= HandleKeyPress;
-            UIManager.ToggleComponentInput<UI_Setting>(this.gameObject, true);
-            _instance = null;
-            Destroy(gameObject);
-        }
+        if (_instance != this) return;
+
+        Managers.Input.OnKeyPressed -= HandleKeyPress;
+        UIManager.ToggleComponentInput<UI_Setting>(gameObject, true);
+
+        _instance = null;
+        Destroy(gameObject);
     }
 }
