@@ -172,6 +172,8 @@ namespace Play
 
             //노래 재생
             SoundManager.Instance.Play();
+            //노래 끝나는지 체크
+            StartCoroutine(SoundManager.Instance.WaitForMusicEnd(() => End()));
             //비디오 재생
             videoPlayScript.Play();
 
