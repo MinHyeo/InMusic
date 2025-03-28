@@ -174,6 +174,7 @@ namespace Play
         public void Play()
         {
             bgmInstance.start();
+            isPlaying = true;
         }
         #endregion
 
@@ -236,12 +237,11 @@ namespace Play
             do
             {
                 bgmInstance.getPlaybackState(out state);
-                UnityEngine.Debug.Log($"현재 노래 상태 : {state}");
                 yield return null; // 매 프레임마다 확인
             } while (state != FMOD.Studio.PLAYBACK_STATE.STOPPED);
 
             UnityEngine.Debug.Log("노래가 끝났습니다!");
-            onComplete?.Invoke(); // 콜백 실행 (예: 결과창 띄우기)
+            onComplete?.Invoke(); // 콜백 실행
         }
         //private void Update()
         //{
