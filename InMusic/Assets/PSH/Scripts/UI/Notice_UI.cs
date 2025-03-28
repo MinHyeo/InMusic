@@ -14,12 +14,12 @@ public class Notice_UI : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void MessageKeyEvent(Define.UIControl keyEvent)
+    public void MessageKeyEvent(Define_PSH.UIControl keyEvent)
     {
         switch (keyEvent)
         {
-            case Define.UIControl.Esc:
-            case Define.UIControl.Enter:
+            case Define_PSH.UIControl.Esc:
+            case Define_PSH.UIControl.Enter:
                 MessageButton("Exit");
                 break;
         }

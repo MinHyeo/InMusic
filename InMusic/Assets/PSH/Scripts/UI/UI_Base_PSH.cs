@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace UI_BASE_PSH
 {
-    public abstract class UI_Base : MonoBehaviour
+    public abstract class UI_Base_PSH : MonoBehaviour
     {
         [Header("ÆË¾÷ UI °ü·Ã")]
         [SerializeField] public GameObject SettingUI = null;

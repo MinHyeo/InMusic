@@ -14,7 +14,7 @@ public class Key_Setting_UI : MonoBehaviour
     [Header("Currentyl selected menue")]
     [SerializeField] private GameObject curMenu;
     [SerializeField] int curMenuIndex = 0;
-    [SerializeField] Define.NoteControl curNote = Define.NoteControl.Key1;
+    [SerializeField] Define_PSH.NoteControl curNote = Define_PSH.NoteControl.Key1;
     [SerializeField] bool isSetMode = false;
 
     void Start()
@@ -56,19 +56,19 @@ public class Key_Setting_UI : MonoBehaviour
         switch (type)
         {
             case "Key1":
-                curNote = Define.NoteControl.Key1;
+                curNote = Define_PSH.NoteControl.Key1;
                 StartKeySet();
                 break;
             case "Key2":
-                curNote = Define.NoteControl.Key2;
+                curNote = Define_PSH.NoteControl.Key2;
                 StartKeySet();
                 break;
             case "Key3":
-                curNote = Define.NoteControl.Key3;
+                curNote = Define_PSH.NoteControl.Key3;
                 StartKeySet();
                 break;
             case "Key4":
-                curNote = Define.NoteControl.Key4;
+                curNote = Define_PSH.NoteControl.Key4;
                 StartKeySet();
                 break;
             case "Exit":
@@ -81,27 +81,27 @@ public class Key_Setting_UI : MonoBehaviour
         }
     }
 
-    void KetSetKeyEvent(Define.UIControl keyEvent) {
+    void KetSetKeyEvent(Define_PSH.UIControl keyEvent) {
         switch (keyEvent)
         {
-            case Define.UIControl.Up:
+            case Define_PSH.UIControl.Up:
                 ControlMenu("Up");
                 break;
-            case Define.UIControl.Down:
+            case Define_PSH.UIControl.Down:
                 ControlMenu("Down");
                 break;
-            case Define.UIControl.Enter:
+            case Define_PSH.UIControl.Enter:
                 if (curMenuIndex == 0) ButtonEvent("Key1");
                 if (curMenuIndex == 1) ButtonEvent("Key2");
                 if (curMenuIndex == 2) ButtonEvent("Key3");
                 if (curMenuIndex == 3) ButtonEvent("Key4");
                 break;
-            case Define.UIControl.Any:
+            case Define_PSH.UIControl.Any:
                 if (isSetMode) {
                     EndKeySet();
                 } 
                 break;
-            case Define.UIControl.Esc:
+            case Define_PSH.UIControl.Esc:
                 ButtonEvent("Exit");
                 break;
         }

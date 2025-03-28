@@ -14,7 +14,7 @@ public class Guide_UI : MonoBehaviour
         }
     }
 
-    public void GuideKeyEvent(Define.UIControl keyEvent) {
-        if (keyEvent == Define.UIControl.Esc) GuideButton("Exit");
+    public void GuideKeyEvent(Define_PSH.UIControl keyEvent) {
+        if (keyEvent == Define_PSH.UIControl.Esc) GuideButton("Exit");
     }
 }

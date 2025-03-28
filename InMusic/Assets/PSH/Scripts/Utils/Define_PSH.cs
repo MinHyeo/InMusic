@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Define
+public class Define_PSH
 {
     public enum UIControl
     {

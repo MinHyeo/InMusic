@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UI_BASE_PSH;
-public class Main_Lobby_UI : UI_Base
+public class Main_Lobby_UI : UI_Base_PSH
 {
     [Header("UI Mode")]
     [SerializeField]private bool isSolo = true;
@@ -80,35 +80,35 @@ public class Main_Lobby_UI : UI_Base
     }
 
     //ButtonEvent·Î ´Ù ³Ñ±è
-    public void MainLobbyKeyEvent(Define.UIControl keyEvent) {
+    public void MainLobbyKeyEvent(Define_PSH.UIControl keyEvent) {
         if (popupUI != null || SettingUI != null || guideUI != null) return;
         switch (keyEvent)
         {
-            case Define.UIControl.Right:
+            case Define_PSH.UIControl.Right:
                 if (!isChange)
                 {
                     ButtonEvent("Right");
                     isChange = true;
                 }
                 break;
-            case Define .UIControl.Left:
+            case Define_PSH.UIControl.Left:
                 if (!isChange) 
                 {
                     ButtonEvent("Left");
                     isChange = true;
                 }
                 break;
-            case Define.UIControl.Enter:
+            case Define_PSH.UIControl.Enter:
                 string Mode = isSolo ? "Solo" : "Multi";
                 ButtonEvent(Mode);
                 break;
-            case Define.UIControl.Esc:
+            case Define_PSH.UIControl.Esc:
                 ButtonEvent("Exit");
                 break;
-            case Define.UIControl.Guide:
+            case Define_PSH.UIControl.Guide:
                 ButtonEvent("KeyGuide");
                 break;
-            case Define.UIControl.Setting:
+            case Define_PSH.UIControl.Setting:
                 ButtonEvent("Gear");
                 break;
         }

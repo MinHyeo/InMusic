@@ -4,26 +4,26 @@ using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InputManager
+public class InputManager_PSH
 {
     [Tooltip("Observer 역할을 하는 함수에 이 변수 할당")]
-    public Action<Define.UIControl> uIKeyPress;
-    public Action<Define.NoteControl> noteKeyPress;
+    public Action<Define_PSH.UIControl> uIKeyPress;
+    public Action<Define_PSH.NoteControl> noteKeyPress;
 
     [Header("Note Key Map")]
     [SerializeField]
-    private Dictionary<Define.NoteControl, KeyCode> keyMapping= new Dictionary<Define.NoteControl, KeyCode>();
+    private Dictionary<Define_PSH.NoteControl, KeyCode> keyMapping= new Dictionary<Define_PSH.NoteControl, KeyCode>();
     [Header("InputManager Mode")]
     [SerializeField] 
     private bool isSetMode = false;
-    private Define.NoteControl targetNoteKey;
+    private Define_PSH.NoteControl targetNoteKey;
 
     public void Init() {
         //Default Key
-        keyMapping.Add(Define.NoteControl.Key1, KeyCode.D);
-        keyMapping.Add(Define.NoteControl.Key2, KeyCode.F);
-        keyMapping.Add(Define.NoteControl.Key3, KeyCode.J);
-        keyMapping.Add(Define.NoteControl.Key4, KeyCode.K);
+        keyMapping.Add(Define_PSH.NoteControl.Key1, KeyCode.D);
+        keyMapping.Add(Define_PSH.NoteControl.Key2, KeyCode.F);
+        keyMapping.Add(Define_PSH.NoteControl.Key3, KeyCode.J);
+        keyMapping.Add(Define_PSH.NoteControl.Key4, KeyCode.K);
     }
 
     //키 입력 시 해당 키의 입력을 기다리는 함수 호출
@@ -42,49 +42,49 @@ public class InputManager
             KeyCode newKey = FindKeyPress();
             if (newKey != KeyCode.None && newKey != KeyCode.Escape && newKey != KeyCode.KeypadEnter) {
                 SetNewKey(targetNoteKey, newKey);
-                uIKeyPress.Invoke(Define.UIControl.Any);
+                uIKeyPress.Invoke(Define_PSH.UIControl.Any);
             }
             return;
         }
         //LeftArrow
         if (Input.GetKeyDown(KeyCode.LeftArrow)) 
         {
-            uIKeyPress.Invoke(Define.UIControl.Left);
+            uIKeyPress.Invoke(Define_PSH.UIControl.Left);
         }
         //RightArrow
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            uIKeyPress.Invoke(Define.UIControl.Right);
+            uIKeyPress.Invoke(Define_PSH.UIControl.Right);
         }
         //UpArrow
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.UpArrow))
         {
-            uIKeyPress.Invoke(Define.UIControl.Up);
+            uIKeyPress.Invoke(Define_PSH.UIControl.Up);
         }
         //DownArrow
         if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyCode.DownArrow))
         {
-            uIKeyPress.Invoke(Define.UIControl.Down);
+            uIKeyPress.Invoke(Define_PSH.UIControl.Down);
         }
         //Enter
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            uIKeyPress.Invoke(Define.UIControl.Enter);
+            uIKeyPress.Invoke(Define_PSH.UIControl.Enter);
         }
         //ESC
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            uIKeyPress.Invoke(Define.UIControl.Esc);
+            uIKeyPress.Invoke(Define_PSH.UIControl.Esc);
         }
         //F1: KeyGuide
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            uIKeyPress.Invoke(Define.UIControl.Guide);
+            uIKeyPress.Invoke(Define_PSH.UIControl.Guide);
         }
         //F10: Setting
         if (Input.GetKeyDown(KeyCode.F10))
         {
-            uIKeyPress.Invoke(Define.UIControl.Setting);
+            uIKeyPress.Invoke(Define_PSH.UIControl.Setting);
         }
     }
 
@@ -116,17 +116,17 @@ public class InputManager
         return KeyCode.None;
     }
 
-    public string GetKey(Define.NoteControl noteKey) {
+    public string GetKey(Define_PSH.NoteControl noteKey) {
         return keyMapping[noteKey].ToString();
     
     }
 
-    public void ChangeKey(Define.NoteControl noteKey) { 
+    public void ChangeKey(Define_PSH.NoteControl noteKey) { 
         isSetMode = true;
         targetNoteKey = noteKey;
     }
 
-    public void SetNewKey(Define.NoteControl noteKey, KeyCode newKey) {
+    public void SetNewKey(Define_PSH.NoteControl noteKey, KeyCode newKey) {
         keyMapping[noteKey] = newKey;
         isSetMode = false;
     }
@@ -136,7 +136,7 @@ public class InputManager
     /// UI 조작시 사용할 키보드 입력 메소드, Define.UIControl을 전달
     /// </summary>
     /// <param name="keyEventFunc"></param>
-    public void SetUIKeyEvent(Action<Define.UIControl> keyEventFunc) {
+    public void SetUIKeyEvent(Action<Define_PSH.UIControl> keyEventFunc) {
         //Initialize
         RemoveUIKeyEvent(keyEventFunc);
         //SetKeyEvent
@@ -146,7 +146,7 @@ public class InputManager
     /// 연결한 키보드 입력 함수를 제거하는 메서드
     /// </summary>
     /// <param name="keyEventFunc"></param>
-    public void RemoveUIKeyEvent(Action<Define.UIControl> keyEventFunc) {
+    public void RemoveUIKeyEvent(Action<Define_PSH.UIControl> keyEventFunc) {
         uIKeyPress -= keyEventFunc;
     }
 
@@ -154,7 +154,7 @@ public class InputManager
     /// 게임 플레이시 사용할 키보드 입력 메서드, Define.NoteControl를 전달함
     /// </summary>
     /// <param name="keyEventFunc"></param>
-    public void SetNoteKeyEvent(Action<Define.NoteControl> keyEventFunc)
+    public void SetNoteKeyEvent(Action<Define_PSH.NoteControl> keyEventFunc)
     {
         //Initialize
         RemoveNoteKeyEvent(keyEventFunc);
@@ -165,7 +165,7 @@ public class InputManager
     /// 연결한 키보드 입력 함수를 제거하는 메서드
     /// </summary>
     /// <param name="keyEventFunc"></param>
-    public void RemoveNoteKeyEvent(Action<Define.NoteControl> keyEventFunc)
+    public void RemoveNoteKeyEvent(Action<Define_PSH.NoteControl> keyEventFunc)
     {
         noteKeyPress -= keyEventFunc;
     }

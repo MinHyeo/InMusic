@@ -1,7 +1,7 @@
 using UnityEngine;
 using UI_BASE_PSH;
 
-public class Multi_Lobby_UI : UI_Base
+public class Multi_Lobby_UI : UI_Base_PSH
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
