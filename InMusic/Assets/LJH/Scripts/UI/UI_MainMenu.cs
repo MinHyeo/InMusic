@@ -145,6 +145,12 @@ public class UI_MainMenu : UI_Base
     {
         Debug.Log(isMultiplayer ? "Starting Multiplayer Mode" : "Starting Solo Mode");
         // 씬 전환 등 게임 시작 로직
+        if (isMultiplayer) { 
+        }
+        else
+        {
+            LoadingScreen.Instance.LoadScene("Single_Lobby_PSH");
+        }
     }
 
     private void OpenSettings()
