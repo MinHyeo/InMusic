@@ -583,7 +583,7 @@ PlayerSettings:
     PS5: UNITY_POST_PROCESSING_STACK_V2
     QNX: UNITY_POST_PROCESSING_STACK_V2
     ReservedCFE: UNITY_POST_PROCESSING_STACK_V2
-    Standalone: UNITY_POST_PROCESSING_STACK_V2;FUSION_LOGLEVEL_INFO;FUSION_WEAVER;FUSION2
+    Standalone: UNITY_POST_PROCESSING_STACK_V2;FUSION_LOGLEVEL_INFO;FUSION_WEAVER;FUSION2;STEAMWORKS_NET
     VisionOS: UNITY_POST_PROCESSING_STACK_V2
     WebGL: UNITY_POST_PROCESSING_STACK_V2
     XboxOne: UNITY_POST_PROCESSING_STACK_V2
@@ -700,11 +700,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: a0185cf9-083d-4da8-ae02-3c8ffac6f47e
+  cloudProjectId: 3d440d59-964f-45e3-8f7b-ba386fc3765c
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: InMusic
-  organizationId: minhyeong1
+  organizationId: swatper
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
