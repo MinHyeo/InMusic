@@ -104,26 +104,26 @@ public class Sound_Setting_UI : MonoBehaviour
         }
     }
 
-    public void SoundSetKeyEvent(Define.UIControl keyEvent)
+    public void SoundSetKeyEvent(Define_PSH.UIControl keyEvent)
     {
         //키 설정 UI가 활성화되어 있는 동안 키 입력 막음
         if (keySet != null) return;
 
         switch (keyEvent)
         {
-            case Define.UIControl.Right:
+            case Define_PSH.UIControl.Right:
                 ControlMenu("Right");
                 break;
-            case Define.UIControl.Left:
+            case Define_PSH.UIControl.Left:
                 ControlMenu("Left");
                 break;
-            case Define.UIControl.Up:
+            case Define_PSH.UIControl.Up:
                 ControlMenu("Up");
                 break;
-            case Define.UIControl.Down:
+            case Define_PSH.UIControl.Down:
                 ControlMenu("Down");
                 break;
-            case Define.UIControl.Enter:
+            case Define_PSH.UIControl.Enter:
                 if (curMenuIndex == 3) {
                     ButtonEvent("BeatSet");
                 }
@@ -131,7 +131,7 @@ public class Sound_Setting_UI : MonoBehaviour
                     ButtonEvent("KeySet");
                 }
                 break;
-            case Define.UIControl.Esc:
+            case Define_PSH.UIControl.Esc:
                 ButtonEvent("Exit");
                 break;
         }

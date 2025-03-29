@@ -2,7 +2,7 @@ using UnityEngine;
 using UI_BASE_PSH;
 using UnityEngine.SceneManagement;
 
-public class Single_Lobby_UI : UI_Base
+public class Single_Lobby_UI : UI_Base_PSH
 {
     [SerializeField] private GameObject popupUI;
 
@@ -60,17 +60,17 @@ public class Single_Lobby_UI : UI_Base
         //UpArrow
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.UpArrow))
         {
-            SingleLobbyKeyEvent(Define.UIControl.Up);
+            SingleLobbyKeyEvent(Define_PSH.UIControl.Up);
         }
         //DownArrow
         if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyCode.DownArrow))
         {
-            SingleLobbyKeyEvent(Define.UIControl.Down);
+            SingleLobbyKeyEvent(Define_PSH.UIControl.Down);
         }
         //Enter
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            SingleLobbyKeyEvent(Define.UIControl.Enter);
+            SingleLobbyKeyEvent(Define_PSH.UIControl.Enter);
         }
     }
 
@@ -129,28 +129,28 @@ public class Single_Lobby_UI : UI_Base
         }
     }
 
-    void SingleLobbyKeyEvent(Define.UIControl keyEvent)
+    void SingleLobbyKeyEvent(Define_PSH.UIControl keyEvent)
     {
         if (popupUI != null || SettingUI != null || guideUI != null || mList.IsScrolling) return;
 
         switch (keyEvent)
         {
-            case Define.UIControl.Up:
+            case Define_PSH.UIControl.Up:
                 ButtonEvent("Up");
                 break;
-            case Define.UIControl.Down:
+            case Define_PSH.UIControl.Down:
                 ButtonEvent("Down");
                 break;
-            case Define.UIControl.Enter:
+            case Define_PSH.UIControl.Enter:
                 ButtonEvent("Enter");
                 break;
-            case Define.UIControl.Esc:
+            case Define_PSH.UIControl.Esc:
                 ButtonEvent("Exit");
                 break;
-            case Define.UIControl.Guide:
+            case Define_PSH.UIControl.Guide:
                 Gear();
                 break;
-            case Define.UIControl.Setting:
+            case Define_PSH.UIControl.Setting:
                 ButtonEvent("Gear");
                 break;
         }

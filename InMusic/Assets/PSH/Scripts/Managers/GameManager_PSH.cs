@@ -9,8 +9,8 @@ public class GameManager_PSH : MonoBehaviour
     public static GameManager_PSH GM_Instance;
     public static GameManager_PSH Instance { get { Init(); return GM_Instance; } }
 
-    InputManager M_Input = new InputManager();
-    public static InputManager Input { get { return Instance.M_Input; } }
+    InputManager_PSH M_Input = new InputManager_PSH();
+    public static InputManager_PSH Input { get { return Instance.M_Input; } }
 
     ResourceManager M_Resource = new ResourceManager();
 
