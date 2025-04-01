@@ -6,18 +6,19 @@ public class WebManager : MonoBehaviour
 {
     string loginURL = "http://localhost/InmusicScripts/login.php";
     string signiupURL = "http://localhost/InmusicScripts/signup.php";
-    string musicLogURP = "http://localhost/InmusicScripts/getlog.php";
+    string musicLogURL = "http://localhost/InmusicScripts/getlog.php";
 
     #region 로그인
     public void UserLogin(string userID, string userName){
         StartCoroutine(LoginToServer(userID, userName));
     }
 
-    IEnumerator LoginToServer(string userID, string userName)
+    IEnumerator LoginToServer(string userID, string userName, string logID = "all")
     {
         WWWForm form = new WWWForm();
         form.AddField("userID", userID);
         form.AddField("userName", userName);
+        form.AddField("logID",logID);
         using (UnityWebRequest www = UnityWebRequest.Post(loginURL, form))
         {
             yield return www.SendWebRequest();
@@ -32,6 +33,9 @@ public class WebManager : MonoBehaviour
             }
             else
             {
+                Debug.Log(www.downloadHandler.text);
+                /*
+
                 if (www.downloadHandler.text == $"Login successful, welcome {userName}" ||
                     www.downloadHandler.text == $"User created successfully, welcome  {userName}")
                 {
@@ -41,7 +45,7 @@ public class WebManager : MonoBehaviour
                 {
                     Debug.Log(www.downloadHandler.text);
                     Debug.Log("로그인 실패ㅠㅠ");
-                }
+                }*/
             }
         }
     }

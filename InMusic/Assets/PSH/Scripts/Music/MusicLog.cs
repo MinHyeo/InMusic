@@ -10,24 +10,24 @@ public class MusicLog
 {
     [Header("기록 관련 정보")]
     [SerializeField] private string logID;
-    [SerializeField] private string score;
-    [SerializeField] private string accuracy;
-    [SerializeField] private string combo;
-    [SerializeField] private string rank;
+    [SerializeField] private string musicScore;
+    [SerializeField] private string musicAccuracy;
+    [SerializeField] private string musicCombo;
+    [SerializeField] private string musicRank;
 
     public string LogID { get { return logID; } set { logID = value; } }
-    public string Score { get { return score; } set { score = value; } }
-    public string Accuracy { get { return accuracy; } set { accuracy = value; } }
-    public string Combo { get { return combo; } set {combo = value; } }
-    public string Rank { get { return rank; } set { rank = value; } }
+    public string Score { get { return musicScore; } set { musicScore = value; } }
+    public string Accuracy { get { return musicAccuracy; } set { musicAccuracy = value; } }
+    public string Combo { get { return musicCombo; } set { musicCombo = value; } }
+    public string Rank { get { return musicRank; } set { musicRank = value; } }
 
     //기본 생성자
     public MusicLog() {
         logID = "";
-        score = "0";
-        accuracy = "0";
-        combo = "0";
-        rank = "-";
+        musicScore = "0";
+        musicAccuracy = "0";
+        musicCombo = "0";
+        musicRank = "-";
     }
 }
 
