@@ -22,7 +22,7 @@ public class UI_MainMenu : UI_Base
     }
 
     private SelectionState _currentState = SelectionState.Solo;
-    private bool _isMoving = false; // 애니메이션 재생 중 입력 방지용 플래그
+    private bool _isMoving = false;
 
     private Animator _soloGroupAnimator;
     private Animator _multiGroupAnimator;
@@ -34,22 +34,24 @@ public class UI_MainMenu : UI_Base
     {
         Init();
         SetupRoot();
-        Managers.Input.OnKeyPressed -= HandleKeyPress;
-        Managers.Input.OnKeyPressed += HandleKeyPress;
 
-        // 여기서 그룹 애니메이터를 가져온다 (빈 오브젝트 그룹)
-        _soloGroupAnimator = Managers.FindChild<Animator>(this.gameObject, "SoloPlayButton", true);
-        _multiGroupAnimator = Managers.FindChild<Animator>(this.gameObject, "MultiPlayButton", true);
+        // 키 입력 등록
+        Managers.Instance.Input.OnKeyPressed -= HandleKeyPress;
+        Managers.Instance.Input.OnKeyPressed += HandleKeyPress;
+
+        // Animator 가져오기
+        _soloGroupAnimator = Managers.Instance.FindChild<Animator>(gameObject, "SoloPlayButton", true);
+        _multiGroupAnimator = Managers.Instance.FindChild<Animator>(gameObject, "MultiPlayButton", true);
 
         _leftButton = GetButton((int)Buttons.LeftButton);
         _rightButton = GetButton((int)Buttons.RightButton);
 
-        UpdateButtonInteractable(); // 초기 버튼 상태 업데이트
+        UpdateButtonInteractable();
     }
 
     private void Update()
     {
-        Managers.Input.Update();
+        Managers.Instance.Input.Update();
     }
 
     public override void Init()
@@ -71,46 +73,41 @@ public class UI_MainMenu : UI_Base
         if (root == null)
         {
             root = new GameObject("@Root");
-            root.transform.SetParent(this.transform.parent);
+            root.transform.SetParent(transform.parent);
             root.transform.localPosition = Vector3.zero;
         }
     }
 
     public void HandleKeyPress(KeyCode key)
     {
-        if (_isMoving) return; // 애니메이션 중엔 입력 무시
+        if (_isMoving) return;
 
         Debug.Log($"Key Pressed: {key}");
 
-        if (key == KeyCode.F1) OpenKeyGuide();
-        else if (key == KeyCode.F10) OpenSettings();
-        else if (key == KeyCode.LeftArrow) ChangeSelection(false);
-        else if (key == KeyCode.RightArrow) ChangeSelection(true);
-        else if (key == KeyCode.Return) StartGame(_currentState == SelectionState.Multi);
+        switch (key)
+        {
+            case KeyCode.F1: OpenKeyGuide(); break;
+            case KeyCode.F10: OpenSettings(); break;
+            case KeyCode.LeftArrow: ChangeSelection(false); break;
+            case KeyCode.RightArrow: ChangeSelection(true); break;
+            case KeyCode.Return: StartGame(_currentState == SelectionState.Multi); break;
+        }
     }
 
     private void ChangeSelection(bool moveRight)
     {
-        if (_isMoving) return; // 애니메이션 중엔 무시
+        if (_isMoving) return;
 
         if (moveRight && _currentState == SelectionState.Solo)
-        {
             StartCoroutine(SwitchTo(SelectionState.Multi, true));
-        }
         else if (!moveRight && _currentState == SelectionState.Multi)
-        {
             StartCoroutine(SwitchTo(SelectionState.Solo, false));
-        }
     }
 
-    /// <summary>
-    /// 애니메이션을 통한 전환 처리
-    /// </summary>
     private IEnumerator SwitchTo(SelectionState newState, bool rightMove)
     {
         _isMoving = true;
 
-        // 그룹 애니메이션 트리거 발동
         if (rightMove)
         {
             _soloGroupAnimator.SetTrigger("RightMove");
@@ -122,19 +119,13 @@ public class UI_MainMenu : UI_Base
             _multiGroupAnimator.SetTrigger("LeftMove");
         }
 
-        // 애니메이션 길이만큼 대기 (필요 시 조절)
         yield return new WaitForSeconds(0.5f);
 
         _currentState = newState;
-
-        UpdateButtonInteractable(); // 이동 가능 여부 갱신
-
+        UpdateButtonInteractable();
         _isMoving = false;
     }
 
-    /// <summary>
-    /// 왼쪽, 오른쪽 버튼 활성화 상태 갱신
-    /// </summary>
     private void UpdateButtonInteractable()
     {
         _leftButton.interactable = _currentState != SelectionState.Solo;
@@ -144,8 +135,10 @@ public class UI_MainMenu : UI_Base
     private void StartGame(bool isMultiplayer)
     {
         Debug.Log(isMultiplayer ? "Starting Multiplayer Mode" : "Starting Solo Mode");
-        // 씬 전환 등 게임 시작 로직
-        if (isMultiplayer) { 
+
+        if (isMultiplayer)
+        {
+            // Multiplayer scene load logic here
         }
         else
         {
@@ -162,20 +155,21 @@ public class UI_MainMenu : UI_Base
             Debug.LogError("SettingPanel prefab not found!");
             return;
         }
-        Managers.UI.ShowPopup(settingPanel);
+
+        Managers.Instance.UI.ShowPopup(settingPanel);
     }
 
     private void OpenKeyGuide()
     {
         Debug.Log("Opening Key Guide");
-
         GameObject keyGuidePanel = Resources.Load<GameObject>("Prefabs/UI/KeyGuidePanel");
         if (keyGuidePanel == null)
         {
             Debug.LogError("KeyGuidePanel prefab not found!");
             return;
         }
-        Managers.UI.ShowPopup(keyGuidePanel);
+
+        Managers.Instance.UI.ShowPopup(keyGuidePanel);
     }
 
     private void ExitGame()
@@ -183,4 +177,13 @@ public class UI_MainMenu : UI_Base
         Debug.Log("Exiting Game");
         Application.Quit();
     }
+
+    private void OnDestroy()
+    {
+        if (Managers.Instance != null)
+            Managers.Instance.Input.OnKeyPressed -= HandleKeyPress;
+    }
+
+
+
 }

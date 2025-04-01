@@ -18,7 +18,7 @@ public abstract class UI_Base : MonoBehaviour
 
         for (int i = 0; i < names.Length; i++)
         {
-            objects[i] = Managers.FindChild<T>(gameObject, names[i], true);
+            objects[i] = Managers.Instance.FindChild<T>(gameObject, names[i], true);
             if (objects[i] == null)
                 Debug.LogError($"Failed to bind ({names[i]})");
         }
@@ -40,6 +40,5 @@ public abstract class UI_Base : MonoBehaviour
     // 팝업 UI 기능 추가 (UI_Popup 기능 포함)
     public virtual void ClosePopupUI()
     {
-        gameObject.SetActive(false);
     }
 }

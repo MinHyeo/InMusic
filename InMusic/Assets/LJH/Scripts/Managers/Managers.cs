@@ -1,50 +1,96 @@
-using System;
-using System.Collections.Generic;
-using System.Resources;
 using UnityEngine;
 
-public class Managers
+public class Managers : MonoBehaviour
 {
+    private static Managers _instance;
 
-    private static UIManager _uiManager;
-    private static InputManager _inputManager;
-    public static SoundManager Sound => SoundManager.Instance;
-
-    public static UIManager UI
-        {
-            get
-            {
-                if (_uiManager == null)
-                    _uiManager = new UIManager();
-                return _uiManager;
-            }
-        }
-
-        public static InputManager Input
-        {
-            get
-            {
-                if (_inputManager == null)
-                    _inputManager = new InputManager();
-                return _inputManager;
-            }
-        }
-
-
-
-    //  GetOrAddComponent: 중복 방지 및 최적화
-    public static T GetOrAddComponent<T>(GameObject go) where T : Component
+    public static Managers Instance
     {
-        T component = go.GetComponent<T>();
-        return component ? component : go.AddComponent<T>();
+        get
+        {
+            if (_instance == null)
+            {
+                if (applicationIsQuitting)
+                {
+                    Debug.LogWarning("[Managers] Application is quitting. Returning null instance.");
+                    return null;
+                }
+
+                GameObject go = GameObject.Find("Managers");
+                if (go == null)
+                {
+                    // 씬 종료 중에는 생성하지 않도록 방어
+                    if (!UnityEngine.SceneManagement.SceneManager.GetActiveScene().isLoaded)
+                    {
+                        Debug.LogWarning("[Managers] Scene is unloading. Not creating new Managers.");
+                        return null;
+                    }
+
+                    go = new GameObject("Managers");
+                    DontDestroyOnLoad(go);
+                }
+
+                _instance = go.GetComponent<Managers>();
+                if (_instance == null)
+                    _instance = go.AddComponent<Managers>();
+            }
+
+            return _instance;
+        }
     }
 
-    //  FindChild: UI 요소 탐색 기능 최적화
-    public static T FindChild<T>(GameObject go, string name = null, bool recursive = false) where T : UnityEngine.Object
-    {
-        if (go == null)
-            return null;
+    private static bool applicationIsQuitting = false;
 
+    private void OnApplicationQuit()
+    {
+        applicationIsQuitting = true;
+    }
+
+
+    public UIManager UI { get; private set; }
+    public InputManager Input { get; private set; }
+    public SoundManager Sound { get; private set; }
+
+    private bool _initialized = false;
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        if (!_initialized)
+        {
+            InitializeManagers();
+            _initialized = true;
+        }
+    }
+
+    private void InitializeManagers()
+    {
+        Input = new InputManager();
+        Sound = new SoundManager();
+
+        //  UIManager를 GameObject로 만들고 컴포넌트로 붙임
+        GameObject uiObj = new GameObject("UIManager");
+        uiObj.transform.SetParent(this.transform);
+        UI = uiObj.AddComponent<UIManager>();
+    }
+
+    // 유틸리티 메서드들
+    public T GetOrAddComponent<T>(GameObject go) where T : Component
+    {
+        T comp = go.GetComponent<T>();
+        return comp != null ? comp : go.AddComponent<T>();
+    }
+
+    public T FindChild<T>(GameObject go, string name = null, bool recursive = false) where T : Object
+    {
         if (!recursive)
         {
             for (int i = 0; i < go.transform.childCount; i++)
@@ -52,20 +98,23 @@ public class Managers
                 Transform child = go.transform.GetChild(i);
                 if (string.IsNullOrEmpty(name) || child.name == name)
                 {
-                    T component = child.GetComponent<T>();
-                    if (component != null)
-                        return component;
+                    T comp = child.GetComponent<T>();
+                    if (comp != null)
+                        return comp;
                 }
             }
         }
         else
         {
-            foreach (T component in go.GetComponentsInChildren<T>())
+            foreach (T comp in go.GetComponentsInChildren<T>(true))
             {
-                if (string.IsNullOrEmpty(name) || component.name == name)
-                    return component;
+                if (string.IsNullOrEmpty(name) || comp.name == name)
+                    return comp;
             }
         }
+
         return null;
     }
+
+
 }

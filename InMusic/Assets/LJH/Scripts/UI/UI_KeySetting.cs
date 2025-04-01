@@ -6,8 +6,6 @@ using UnityEngine.EventSystems;
 
 public class UI_KeySetting : UI_Base
 {
-    private static UI_KeySetting _instance;
-
     private enum Texts
     {
         Note1,
@@ -64,23 +62,14 @@ public class UI_KeySetting : UI_Base
         UpdateVisuals();
     }
 
-    private void Awake()
-    {
-        if (_instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        _instance = this;
-    }
-
     private void Start()
     {
         Init();
-        Managers.Input.OnKeyPressed += HandleKeyPress;
-        UIManager.ToggleComponentInput<UI_Setting>(gameObject, false);
+        Managers.Instance.Input.OnKeyPressed -= HandleKeyPress;
+        Managers.Instance.Input.OnKeyPressed += HandleKeyPress;
+        Managers.Instance.UI.ToggleComponentInput<UI_Setting>(gameObject, false);
 
-        // 선택된 UI 오브젝트 포커스 해제 (엔터키 의도치 않은 작동 방지)
+        // 포커스 해제
         EventSystem.current?.SetSelectedGameObject(null);
     }
 
@@ -96,6 +85,7 @@ public class UI_KeySetting : UI_Base
                 Debug.LogWarning($"기본 키는 사용할 수 없습니다: {key}");
                 return;
             }
+
             if (_assignedKeys.Contains(key))
             {
                 Debug.LogWarning($"이미 사용 중인 키입니다: {key}");
@@ -152,12 +142,9 @@ public class UI_KeySetting : UI_Base
 
     public override void ClosePopupUI()
     {
-        if (_instance != this) return;
+        Managers.Instance.Input.OnKeyPressed -= HandleKeyPress;
+        Managers.Instance.UI.ToggleComponentInput<UI_Setting>(gameObject, true);
 
-        Managers.Input.OnKeyPressed -= HandleKeyPress;
-        UIManager.ToggleComponentInput<UI_Setting>(gameObject, true);
-
-        _instance = null;
-        Destroy(gameObject);
+        Managers.Instance.UI.CloseCurrentPopup();
     }
 }

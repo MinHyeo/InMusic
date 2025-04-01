@@ -1,12 +1,13 @@
+
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UI_Setting : UI_Base
 {
-    private static UI_Setting _instance;
-    private bool isKeyboardAdjusting = false; // 키보드 입력 중인지 확인하는 변수
+    private bool isKeyboardAdjusting = false;
 
     private enum Images
     {
@@ -50,21 +51,11 @@ public class UI_Setting : UI_Base
     private SettingOption _currentSelection;
     private float _scrollStep = 0.01f;
 
-    private void Awake()
-    {
-        if (_instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        _instance = this;
-    }
-
     private void Start()
     {
         Init();
-        Managers.Input.OnKeyPressed += HandleKeyPress;
-        UIManager.ToggleComponentInput<UI_MainMenu>(this.gameObject, false);
+        Managers.Instance.Input.OnKeyPressed += HandleKeyPress;
+        Managers.Instance.UI.ToggleComponentInput<UI_MainMenu>(gameObject, false);
     }
 
     public override void Init()
@@ -74,38 +65,52 @@ public class UI_Setting : UI_Base
         Bind<Image>(typeof(Images));
         Bind<Text>(typeof(Texts));
 
-        GetButton((int)Buttons.BeatOffsetButton).onClick.AddListener(() => { SelectOption(SettingOption.BeatOffset); ConfirmSelection(); });
-        GetButton((int)Buttons.KeySettingButton).onClick.AddListener(() => { SelectOption(SettingOption.KeySetting); ConfirmSelection(); });
-        GetButton((int)Buttons.BackButton).onClick.AddListener(() => { SoundManager.Instance.SaveVolumeSettings(); ClosePopupUI(); });
+        // 버튼 바인딩
+        GetButton((int)Buttons.BeatOffsetButton).onClick.AddListener(() =>
+        {
+            SelectOption(SettingOption.BeatOffset);
+            ConfirmSelection();
+        });
+        GetButton((int)Buttons.KeySettingButton).onClick.AddListener(() =>
+        {
+            SelectOption(SettingOption.KeySetting);
+            ConfirmSelection();
+        });
+        GetButton((int)Buttons.BackButton).onClick.AddListener(() =>
+        {
+            Managers.Instance.Sound.SaveVolumeSettings();
+            ClosePopupUI();
+        });
 
+        // 스크롤바 변경 이벤트
         Get<Scrollbar>((int)Scrollbars.MasterVolumeScrollbar).onValueChanged.AddListener((value) =>
         {
-            if (isKeyboardAdjusting) return; // 키보드 조정 중이면 무시
+            if (isKeyboardAdjusting) return;
             SelectOption(SettingOption.MasterVolume);
-            SoundManager.Instance.SetMasterVolume(value);
+            Managers.Instance.Sound.SetMasterVolume(value);
             UpdateVolumeText();
         });
 
         Get<Scrollbar>((int)Scrollbars.BGMScrollbar).onValueChanged.AddListener((value) =>
         {
-            if (isKeyboardAdjusting) return; // 키보드 조정 중이면 무시
+            if (isKeyboardAdjusting) return;
             SelectOption(SettingOption.BGM);
-            SoundManager.Instance.SetBGMVolume(value);
+            Managers.Instance.Sound.SetBGMVolume(value);
             UpdateVolumeText();
         });
 
         Get<Scrollbar>((int)Scrollbars.SFXScrollbar).onValueChanged.AddListener((value) =>
         {
-            if (isKeyboardAdjusting) return; // 키보드 조정 중이면 무시
+            if (isKeyboardAdjusting) return;
             SelectOption(SettingOption.SFX);
-            SoundManager.Instance.SetSFXVolume(value);
+            Managers.Instance.Sound.SetSFXVolume(value);
             UpdateVolumeText();
         });
 
-        // 스크롤바 초기값 로드
-        Get<Scrollbar>((int)Scrollbars.MasterVolumeScrollbar).value = SoundManager.Instance.MasterVolume;
-        Get<Scrollbar>((int)Scrollbars.BGMScrollbar).value = SoundManager.Instance.BGMVolume;
-        Get<Scrollbar>((int)Scrollbars.SFXScrollbar).value = SoundManager.Instance.SFXVolume;
+        // 초기값 설정
+        Get<Scrollbar>((int)Scrollbars.MasterVolumeScrollbar).value = Managers.Instance.Sound.MasterVolume;
+        Get<Scrollbar>((int)Scrollbars.BGMScrollbar).value = Managers.Instance.Sound.BGMVolume;
+        Get<Scrollbar>((int)Scrollbars.SFXScrollbar).value = Managers.Instance.Sound.SFXVolume;
 
         UpdateVolumeText();
         _currentSelection = SettingOption.MasterVolume;
@@ -117,7 +122,7 @@ public class UI_Setting : UI_Base
         switch (key)
         {
             case KeyCode.Escape:
-                SoundManager.Instance.SaveVolumeSettings();
+                Managers.Instance.Sound.SaveVolumeSettings();
                 ClosePopupUI();
                 break;
             case KeyCode.UpArrow:
@@ -140,8 +145,7 @@ public class UI_Setting : UI_Base
 
     private void MoveSelection(int direction)
     {
-        int newSelection = (int)_currentSelection + direction;
-        newSelection = Mathf.Clamp(newSelection, 0, Enum.GetValues(typeof(SettingOption)).Length - 1);
+        int newSelection = Mathf.Clamp((int)_currentSelection + direction, 0, Enum.GetValues(typeof(SettingOption)).Length - 1);
         _currentSelection = (SettingOption)newSelection;
         UpdateOutlines();
     }
@@ -154,58 +158,58 @@ public class UI_Setting : UI_Base
 
     private void AdjustScrollbar(float value)
     {
-        float fixedStep = 0.01f; // 항상 0.01씩 변경
-        isKeyboardAdjusting = true; // 키보드 조정 활성화
+        float fixedStep = 0.01f;
+        isKeyboardAdjusting = true;
 
         switch (_currentSelection)
         {
             case SettingOption.MasterVolume:
-                float newMasterVolume = Mathf.Clamp01(SoundManager.Instance.MasterVolume + (value > 0 ? fixedStep : -fixedStep));
-                SoundManager.Instance.SetMasterVolume(newMasterVolume);
-                Get<Scrollbar>((int)Scrollbars.MasterVolumeScrollbar).value = newMasterVolume;
+                float mv = Mathf.Clamp01(Managers.Instance.Sound.MasterVolume + (value > 0 ? fixedStep : -fixedStep));
+                Managers.Instance.Sound.SetMasterVolume(mv);
+                Get<Scrollbar>((int)Scrollbars.MasterVolumeScrollbar).value = mv;
                 break;
 
             case SettingOption.BGM:
-                float newBGMVolume = Mathf.Clamp01(SoundManager.Instance.BGMVolume + (value > 0 ? fixedStep : -fixedStep));
-                SoundManager.Instance.SetBGMVolume(newBGMVolume);
-                Get<Scrollbar>((int)Scrollbars.BGMScrollbar).value = newBGMVolume;
+                float bv = Mathf.Clamp01(Managers.Instance.Sound.BGMVolume + (value > 0 ? fixedStep : -fixedStep));
+                Managers.Instance.Sound.SetBGMVolume(bv);
+                Get<Scrollbar>((int)Scrollbars.BGMScrollbar).value = bv;
                 break;
 
             case SettingOption.SFX:
-                float newSFXVolume = Mathf.Clamp01(SoundManager.Instance.SFXVolume + (value > 0 ? fixedStep : -fixedStep));
-                SoundManager.Instance.SetSFXVolume(newSFXVolume);
-                Get<Scrollbar>((int)Scrollbars.SFXScrollbar).value = newSFXVolume;
+                float sv = Mathf.Clamp01(Managers.Instance.Sound.SFXVolume + (value > 0 ? fixedStep : -fixedStep));
+                Managers.Instance.Sound.SetSFXVolume(sv);
+                Get<Scrollbar>((int)Scrollbars.SFXScrollbar).value = sv;
                 break;
         }
 
         UpdateVolumeText();
-
-        // 일정 시간 후 isKeyboardAdjusting을 다시 false로 설정
         StartCoroutine(ResetKeyboardAdjusting());
     }
 
     private IEnumerator ResetKeyboardAdjusting()
     {
         yield return new WaitForSeconds(0.2f);
-        isKeyboardAdjusting = false; // 키보드 입력 해제
+        isKeyboardAdjusting = false;
     }
 
     private void UpdateVolumeText()
     {
-        Get<Text>((int)Texts.MainVText).text = Mathf.RoundToInt(SoundManager.Instance.MasterVolume * 100) + "%";
-        Get<Text>((int)Texts.BGMVText).text = Mathf.RoundToInt(SoundManager.Instance.BGMVolume * 100) + "%";
-        Get<Text>((int)Texts.SFXVText).text = Mathf.RoundToInt(SoundManager.Instance.SFXVolume * 100) + "%";
+        GetText((int)Texts.MainVText).text = $"{Mathf.RoundToInt(Managers.Instance.Sound.MasterVolume * 100)}%";
+        GetText((int)Texts.BGMVText).text = $"{Mathf.RoundToInt(Managers.Instance.Sound.BGMVolume * 100)}%";
+        GetText((int)Texts.SFXVText).text = $"{Mathf.RoundToInt(Managers.Instance.Sound.SFXVolume * 100)}%";
     }
 
     private void ConfirmSelection()
     {
-        if (_currentSelection == SettingOption.BeatOffset) OpenTimingAdjustmentScene();
-        else if (_currentSelection == SettingOption.KeySetting) OpenKeySettingPopup();
+        if (_currentSelection == SettingOption.BeatOffset)
+            OpenTimingAdjustmentScene();
+        else if (_currentSelection == SettingOption.KeySetting)
+            OpenKeySettingPopup();
     }
 
     private void OpenTimingAdjustmentScene()
     {
-        Debug.Log("Opening Timing Adjustment Scene");
+        Debug.Log("Opening Timing Adjustment Scene...");
     }
 
     private void OpenKeySettingPopup()
@@ -216,26 +220,25 @@ public class UI_Setting : UI_Base
             Debug.LogError("KeySettingPanel prefab not found!");
             return;
         }
-        Managers.UI.ShowPopup(keySettingPanel);
+
+        Managers.Instance.UI.ShowPopup(keySettingPanel);
     }
 
     private void UpdateOutlines()
     {
         for (int i = 0; i < Enum.GetValues(typeof(Images)).Length; i++)
-        {
-            Get<Image>(i).gameObject.SetActive(false);
-        }
-        Get<Image>((int)_currentSelection).gameObject.SetActive(true);
+            GetImage(i).gameObject.SetActive(false);
+
+        GetImage((int)_currentSelection).gameObject.SetActive(true);
     }
 
     public override void ClosePopupUI()
     {
-        if (_instance == this)
-        {
-            Managers.Input.OnKeyPressed -= HandleKeyPress;
-            UIManager.ToggleComponentInput<UI_MainMenu>(this.gameObject, true);
-            _instance = null;
-            Destroy(gameObject);
-        }
+        Managers.Instance.Input.OnKeyPressed -= HandleKeyPress;
+        Managers.Instance.UI.ToggleComponentInput<UI_MainMenu>(gameObject, true);
+
+        EventSystem.current?.SetSelectedGameObject(null);
+
+        Managers.Instance.UI.CloseCurrentPopup();
     }
 }

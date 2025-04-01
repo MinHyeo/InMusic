@@ -4,25 +4,13 @@ using UnityEngine.UI;
 
 public class UI_KeyGuide : UI_Base
 {
-    private static UI_KeyGuide _instance;
-
-    private void Awake()
-    {
-        if (_instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        _instance = this;
-    }
-
     private void Start()
     {
         Init();
-        Managers.Input.OnKeyPressed += HandleKeyPress;
+        Managers.Instance.Input.OnKeyPressed += HandleKeyPress;
 
         // UI_MainMenu의 키 입력 해제
-        UIManager.ToggleComponentInput<UI_MainMenu>(this.gameObject, false);
+        Managers.Instance.UI.ToggleComponentInput<UI_MainMenu>(this.gameObject, false);
     }
 
     public override void Init()
@@ -40,12 +28,10 @@ public class UI_KeyGuide : UI_Base
 
     public override void ClosePopupUI()
     {
-        if (_instance == this)
-        {
-            Managers.Input.OnKeyPressed -= HandleKeyPress;
-            UIManager.ToggleComponentInput<UI_MainMenu>(this.gameObject, true);
-            _instance = null;
-            Destroy(gameObject);
-        }
+        Managers.Instance.Input.OnKeyPressed -= HandleKeyPress;
+        Managers.Instance.UI.ToggleComponentInput<UI_MainMenu>(this.gameObject, true);
+
+        Managers.Instance.UI.CloseCurrentPopup();
     }
+
 }
