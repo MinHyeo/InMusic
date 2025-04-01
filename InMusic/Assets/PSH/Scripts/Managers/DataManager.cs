@@ -23,16 +23,28 @@ public class DataManager
             Debug.Log("기록 더 안 좋음");
             return;
         }
-        //경로 설정
+
+        #region Json으로 저장
+        /*//경로 설정
         string filePath = executeData.DirPath + "/" + executeData.Title + "Log.json";
         //Json형태로 변환
         string JsonData = JsonUtility.ToJson(newLog, true);
         //저장(기록이 없으면 생성, 있으면 덮어씀)
         File.WriteAllText(filePath, JsonData);
-        Debug.Log("Json 저장 완료");
+        Debug.Log("Json 저장 완료");*/
+        #endregion
+
+        #region 서버에 저장
+
+        #endregion
     }
 
+    /// <summary>
+    /// musicItem을 주면 musicData로 변환(?)해서 가져감
+    /// </summary>
+    /// <param name="executeItem"></param>
     public void SetData(MusicItem executeItem) {
+        executeData.LogID = executeItem.LogID;
         executeData.DirPath = executeItem.DirPath;
         executeData.BMS = executeItem.Data.BMS;
         executeData.Album = executeItem.Album.sprite;

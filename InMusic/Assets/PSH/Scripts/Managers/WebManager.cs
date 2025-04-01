@@ -6,14 +6,11 @@ public class WebManager : MonoBehaviour
 {
     string loginURL = "http://localhost/InmusicScripts/login.php";
     string signiupURL = "http://localhost/InmusicScripts/signup.php";
+    string musicLogURP = "http://localhost/InmusicScripts/getlog.php";
 
+    #region 로그인
     public void UserLogin(string userID, string userName){
         StartCoroutine(LoginToServer(userID, userName));
-    }
-
-    public void UserSignUp(string newUserID, string newUserName)
-    {
-        StartCoroutine(SignUpToServer(newUserID, newUserName));
     }
 
     IEnumerator LoginToServer(string userID, string userName)
@@ -35,13 +32,10 @@ public class WebManager : MonoBehaviour
             }
             else
             {
-                if (www.downloadHandler.text == $"Login successful, welcome {userName}")
+                if (www.downloadHandler.text == $"Login successful, welcome {userName}" ||
+                    www.downloadHandler.text == $"User created successfully, welcome  {userName}")
                 {
                     Debug.Log("로그인 성공!!");
-                }
-                else if (www.downloadHandler.text == $"No users found")
-                {
-                    Debug.Log("없는 사람임");
                 }
                 else
                 {
@@ -51,6 +45,19 @@ public class WebManager : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region 회원 가입
+    /// <summary>
+    /// 회원 가입 테스트용 메서드
+    /// </summary>
+    /// <param name="newUserID">스팀 ID</param>
+    /// <param name="newUserName">스팀 닉네임</param>
+    public void UserSignUp(string newUserID, string newUserName)
+    {
+        StartCoroutine(SignUpToServer(newUserID, newUserName));
+    }
+
     IEnumerator SignUpToServer(string newID, string newName)
     {
         WWWForm form = new WWWForm();
@@ -82,4 +89,5 @@ public class WebManager : MonoBehaviour
             }
         }
     }
+    #endregion
 }

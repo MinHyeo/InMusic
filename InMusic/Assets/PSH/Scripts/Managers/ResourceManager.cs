@@ -41,6 +41,10 @@ public class ResourceManager
         return gameObject;
     }
 
+    /// <summary>
+    /// 기존의 로그 파일 읽는 방식에서 서버 데이터 읽는 방식으로 수정
+    /// </summary>
+    /// <returns></returns>
     public List<MusicData> GetMusicList() {
         musicDataRoot = new GameObject("MusicDataRoot");
 
@@ -119,7 +123,8 @@ public class ResourceManager
                 else //사진이 없으면 기본 사진 사용
                     tmpMusic.Album = Load<Sprite>("Default_IMG");
 
-                //4. 기록 파일 열기 (선택)
+                #region 로그 읽기
+                //4-1. 기록 파일 열기 (선택)
                 if (fileMap.ContainsKey("log")) {
                     MusicLog tmpLog = LoadLog(fileMap["log"]);
                     tmpMusic.Score = tmpLog.Score;
@@ -127,7 +132,10 @@ public class ResourceManager
                     tmpMusic.Combo = tmpLog.Combo;
                     tmpMusic.Rank = tmpLog.Rank;
                 }
-                
+                //4-2. 기록 파일 가져오기
+                MusicLog servLog;
+                #endregion
+
                 //5. 뮤비 파일 열기 (선택)
                 if (fileMap.ContainsKey("video")){
                     tmpMusic.MuVi = Load<VideoClip>(fileMap["video"]);
@@ -170,9 +178,9 @@ public class ResourceManager
             //엘범 사진
             else if (fileExt == ".png" || fileExt == ".jpg" || fullFilePath == ".jpeg")
                 fileMap["album"] = filePath;
-            //기록 파일
-            else if (fileExt == ".json")
-                fileMap["log"] = filePath + ".json";
+            ////기록 파일
+            //else if (fileExt == ".json")
+            //    fileMap["log"] = filePath + ".json";
             //뮤비 파일
             else if (fileExt == ".mp4" || fileExt == ".avi" || fileExt == ".mov")
                 fileMap["video"] = filePath;
@@ -180,6 +188,7 @@ public class ResourceManager
         return fileMap;
     }
 
+    //기존의 로그 파일(json)읽어서 객체 생성
     MusicLog LoadLog(string path)
     {
         Debug.Log(path);
