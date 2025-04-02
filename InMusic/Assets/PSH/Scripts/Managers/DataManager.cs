@@ -47,6 +47,7 @@ public class DataManager
     /// <param name="executeItem"></param>
     public void SetData(MusicItem executeItem) {
         executeData.LogID = executeItem.LogID;
+        executeData.MusicID = executeItem.MusicID;
         executeData.DirPath = executeItem.DirPath;
         executeData.BMS = executeItem.Data.BMS;
         executeData.Album = executeItem.Album.sprite;

@@ -6,9 +6,9 @@ public class DBManager : MonoBehaviour
 {
     public static DBManager Instance { get; private set; }
 
-    string checkHighScoreURL = "http://localhost/check_highscore.php";
-    string updateHighScoreURL = "http://localhost/update_highscore.php";
-    string insertHighScoreURL = "http://localhost/insert_highscore.php";
+    string checkHighScoreURL = "http://localhost/InmusicScripts/check_highscore.php";
+    string updateHighScoreURL = "http://localhost/InmusicScripts/update_highscore.php";
+    string insertHighScoreURL = "http://localhost/InmusicScripts/insert_highscore.php";
 
     private void Awake()
     {
@@ -23,13 +23,13 @@ public class DBManager : MonoBehaviour
         }
     }
 
-    public void StartCheckHighScore(string userId, int musicId, int newScore, int newCombo, float newAccuracy, string newRate)
+    public void StartCheckHighScore(string userId, string musicId, int newScore, int newCombo, float newAccuracy, string newRate)
     {
         StartCoroutine(CheckHighScore(userId, musicId, newScore, newCombo, newAccuracy, newRate));
         Debug.Log("기록 코루틴");
     }
 
-    IEnumerator CheckHighScore(string userId, int musicId, int newScore, int newCombo, float newAccuracy, string newRate)
+    IEnumerator CheckHighScore(string userId, string musicId, int newScore, int newCombo, float newAccuracy, string newRate)
     {
         Debug.Log("StartCheckHighScore() 호출됨!");
         WWWForm form = new WWWForm();
@@ -65,16 +65,16 @@ public class DBManager : MonoBehaviour
         }
     }
 
-    public void StartUpdateHighScore(string userId, int musicId, int newScore, int newCombo, float newAccuracy, string newRate)
+    public void StartUpdateHighScore(string userId, string musicId, int newScore, int newCombo, float newAccuracy, string newRate)
     {
         StartCoroutine(UpdateHighScore(userId, musicId, newScore, newCombo, newAccuracy, newRate));
     }
 
-    IEnumerator UpdateHighScore(string userId, int musicId, int newScore, int newCombo, float newAccuracy, string newRate)
+    IEnumerator UpdateHighScore(string userId, string musicId, int newScore, int newCombo, float newAccuracy, string newRate)
     {
         WWWForm form = new WWWForm();
         form.AddField("userId", userId);
-        form.AddField("musicId", musicId.ToString());
+        form.AddField("musicId", musicId);
         form.AddField("musicScore", newScore.ToString());
         form.AddField("musicCombo", newCombo.ToString());
         form.AddField("musicAccuracy", newAccuracy.ToString("F2"));
@@ -95,16 +95,16 @@ public class DBManager : MonoBehaviour
 
     public
 
-    void StartInsertHighScore(string userId, int musicId, int newScore, int newCombo, float newAccuracy, string newRate)
+    void StartInsertHighScore(string userId, string musicId, int newScore, int newCombo, float newAccuracy, string newRate)
     {
         StartCoroutine(InsertHighScore(userId, musicId, newScore, newCombo, newAccuracy, newRate));
     }
 
-    IEnumerator InsertHighScore(string userId, int musicId, int newScore, int newCombo, float newAccuracy, string newRate)
+    IEnumerator InsertHighScore(string userId, string musicId, int newScore, int newCombo, float newAccuracy, string newRate)
     {
         WWWForm form = new WWWForm();
         form.AddField("userId", userId);
-        form.AddField("musicId", musicId.ToString());
+        form.AddField("musicId", musicId);
         form.AddField("musicScore", newScore.ToString());
         form.AddField("musicCombo", newCombo.ToString());
         form.AddField("musicAccuracy", newAccuracy.ToString("F2"));
