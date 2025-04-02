@@ -117,6 +117,10 @@ public class SinglePlayResultUI : MonoBehaviour
         newLog.Rank = rate.text;
         newLog.Combo = combo.text;
         GameManager_PSH.Data.SaveData(newLog);
+        Debug.Log("next1");
+        DBManager.Instance.StartCheckHighScore("1", 3, 6623456, 100, 50.0f, "B");
+        Debug.Log("next2");
         SceneManager.LoadScene(0);
+        
     }
 }
