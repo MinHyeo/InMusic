@@ -67,8 +67,9 @@ public class MusicList : MonoBehaviour
         oldItem.Accuracy = newItem.Accuracy + "%";
         oldItem.Combo = newItem.Combo;
         oldItem.Rank.text = newItem.Rank;
-
+        
         oldItem.Data = newItem;
+        oldItem.MusicID = newItem.MusicID;
     }
 
 

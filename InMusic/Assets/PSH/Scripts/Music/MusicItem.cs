@@ -54,7 +54,7 @@ public class MusicItem : MonoBehaviour
     public Text Rank { get { return rank; } set { rank = value; } }
     public MusicData Data { get { return mData; }set { mData = value; } }
     public bool IsDummy { get { return isDummy; } set { isDummy = value; } }
-    public string MusicID {  get { return mData.MusicID; } set { mData.MusicID= value; } }
+    public string MusicID {  get { return musicID; } set { musicID= value; } }
     #endregion
 
     /*
