@@ -41,8 +41,14 @@ public class ResourceManager
         return gameObject;
     }
 
+    /// <summary>
+    /// 기존의 로그 파일 읽는 방식에서 서버 데이터 읽는 방식으로 수정
+    /// </summary>
+    /// <returns></returns>
     public List<MusicData> GetMusicList() {
         musicDataRoot = new GameObject("MusicDataRoot");
+
+        List<MusicLog> logs = GameManager_PSH.Data.getLogDataList();
 
         List<MusicData> mList = new List<MusicData>();
         //경로 설정
@@ -119,15 +125,30 @@ public class ResourceManager
                 else //사진이 없으면 기본 사진 사용
                     tmpMusic.Album = Load<Sprite>("Default_IMG");
 
-                //4. 기록 파일 열기 (선택)
-                if (fileMap.ContainsKey("log")) {
+                #region 로그 읽기
+                //4-1. 기록 파일 열기 (선택)
+                /*if (fileMap.ContainsKey("log")) {
                     MusicLog tmpLog = LoadLog(fileMap["log"]);
                     tmpMusic.Score = tmpLog.Score;
                     tmpMusic.Accuracy = tmpLog.Accuracy;
                     tmpMusic.Combo = tmpLog.Combo;
                     tmpMusic.Rank = tmpLog.Rank;
+                }*/
+                //4-2. 기록 가져오기 (로그랑 음악 맞춰주기)
+                foreach (MusicLog log in logs)
+                {
+                    if (int.Parse(log.MusicID) == i + 1)
+                    {
+                        tmpMusic.LogID = log.LogID;
+                        tmpMusic.MusicID = log.MusicID; //게임 진행엔 없어도 됨
+                        tmpMusic.Score = log.Score;
+                        tmpMusic.Accuracy = log.Accuracy;
+                        tmpMusic.Combo = log.Combo;
+                        tmpMusic.Rank = log.Rank;
+                    }
                 }
-                
+                #endregion
+
                 //5. 뮤비 파일 열기 (선택)
                 if (fileMap.ContainsKey("video")){
                     tmpMusic.MuVi = Load<VideoClip>(fileMap["video"]);
@@ -170,9 +191,9 @@ public class ResourceManager
             //엘범 사진
             else if (fileExt == ".png" || fileExt == ".jpg" || fullFilePath == ".jpeg")
                 fileMap["album"] = filePath;
-            //기록 파일
-            else if (fileExt == ".json")
-                fileMap["log"] = filePath + ".json";
+            ////기록 파일
+            //else if (fileExt == ".json")
+            //    fileMap["log"] = filePath + ".json";
             //뮤비 파일
             else if (fileExt == ".mp4" || fileExt == ".avi" || fileExt == ".mov")
                 fileMap["video"] = filePath;
@@ -180,6 +201,7 @@ public class ResourceManager
         return fileMap;
     }
 
+    //기존의 로그 파일(json)읽어서 객체 생성
     MusicLog LoadLog(string path)
     {
         Debug.Log(path);

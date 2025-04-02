@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.Video;
 
+/// <summary>
+/// 실제 런타임에서 객체들끼리 주고받는 음악 데이터 Model
+/// </summary>
 public class MusicData : MonoBehaviour
 {
     /*MusicDataBox Prefab의 Inspactor창에서 기본값 할당*/
@@ -15,11 +18,7 @@ public class MusicData : MonoBehaviour
     [SerializeField] private bool hasBMS = false;
     [SerializeField] private bool hasMV = false;
     [Header("기록 관련 정보")]
-    [SerializeField] private string score = "0";
-    [SerializeField] private string accuracy = "0";
-    [SerializeField] private string combo = "0";
-    [SerializeField] private string rank = "-";
-
+    private MusicLog musicLog = new MusicLog();
 
     public string DirPath { get { return mPath; } set { mPath = value; } }
     public BMSData BMS { get { return mBMS; } set { mBMS = value; } }
@@ -33,8 +32,11 @@ public class MusicData : MonoBehaviour
     public bool HasBMS { get { return hasBMS; } set { hasBMS = value; } }
     public bool HasMV { get { return hasMV; } set { hasMV = value; } }
 
-    public string Score { get { return score; } set { score = value; } }
-    public string Accuracy { get { return accuracy; } set { accuracy = value; } }
-    public string Combo { get { return combo; } set { combo = value; } }
-    public string Rank { get { return rank; } set { rank = value; } }
+    //기록 관련
+    public string LogID { get {return musicLog.LogID; } set { musicLog.LogID = value; } }
+    public string MusicID { get { return musicLog.MusicID; } set { musicLog.MusicID = value; } }
+    public string Score { get { return musicLog.Score; } set { musicLog.Score = value; } }
+    public string Accuracy { get { return musicLog.Accuracy; } set { musicLog.Accuracy = value; } }
+    public string Combo { get { return musicLog.Combo; } set { musicLog.Combo = value; } }
+    public string Rank { get { return musicLog.Rank; } set { musicLog.Rank = value; } }
 }
