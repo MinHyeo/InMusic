@@ -11,7 +11,7 @@ public class MusicLog
     [Header("기록 관련 정보")]
     [SerializeField] private string logID;
     [SerializeField] private string musicID; //맨 처음 로그랑 음악이랑 확인할 때 사용할 변수
-    [SerializeField] private string musicScore;
+    [SerializeField] private string musicScore; 
     [SerializeField] private string musicAccuracy;
     [SerializeField] private string musicCombo;
     [SerializeField] private string musicRank;

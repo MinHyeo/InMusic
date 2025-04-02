@@ -8,6 +8,7 @@ public class WebManager : MonoBehaviour
     string loginURL = "http://localhost/InmusicScripts/login.php";
     string signiupURL = "http://localhost/InmusicScripts/signup.php";
     string musicLogURL = "http://localhost/InmusicScripts/getlog.php";
+    string LogUpdateURL = "http://localhost/InmusicScripts/updatelog.php";
 
     #region 로그인
     public void UserLogin(string userID, string userName){
@@ -68,7 +69,7 @@ public class WebManager : MonoBehaviour
     }
     #endregion
 
-    #region 회원 가입
+    #region 회원 가입 및 기록 가져오기
     /// <summary>
     /// 회원 가입 테스트용 메서드
     /// </summary>
@@ -111,4 +112,49 @@ public class WebManager : MonoBehaviour
         }
     }
     #endregion
+
+    #region 기록 업데이트 하기
+    public void UpdateLog(MusicLog newLog, string userID = "76561198365750763")
+    {
+        StartCoroutine(UpdateLogServer(newLog, userID));
+    }
+
+    IEnumerator UpdateLogServer(MusicLog newLog, string userID = "76561198365750763")
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("userID", "76561198365750763");
+        form.AddField("musicID", "4");
+        form.AddField("logID", newLog.LogID);
+        form.AddField("score", newLog.Score);
+        form.AddField("accuracy", newLog.Accuracy);
+        form.AddField("combo", newLog.Combo);
+        form.AddField("rank", newLog.Rank);
+        using (UnityWebRequest www = UnityWebRequest.Post(LogUpdateURL, form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log($"연결 실패 ㅠㅠ {www.error}");
+            }
+            else if (www.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.Log($"프로토콜 문제 {www.error}");
+            }
+            else
+            {
+                if (www.downloadHandler.text == $"Log updated successfully")
+                {
+                    Debug.Log("기록 저장 성공");
+                }
+                else
+                {
+                    Debug.Log(www.downloadHandler.text);
+                    Debug.Log("기록 저장 실패 실패");
+                }
+            }
+        }
+    }
+    #endregion
+
 }

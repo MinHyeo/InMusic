@@ -18,7 +18,7 @@ public class DataManager
     /// <summary>
     /// 기존 MusicData의 값과 새로 저장할 MusicLog의 값을 비교해서 저장
     /// </summary>
-    public void SaveData(MusicLog newLog)
+    public void SaveData(MusicLog newLog, string userId = "")
     {
         //신기록 확인(최종 점수만 비교)
         if (int.Parse(executeData.Score) >= int.Parse(newLog.Score)){
@@ -37,7 +37,7 @@ public class DataManager
         #endregion
 
         #region 서버에 저장
-
+        GameManager_PSH.Web.UpdateLog(newLog, userId);
         #endregion
     }
 
