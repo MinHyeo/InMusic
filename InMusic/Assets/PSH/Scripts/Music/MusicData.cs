@@ -32,7 +32,9 @@ public class MusicData : MonoBehaviour
     public bool HasBMS { get { return hasBMS; } set { hasBMS = value; } }
     public bool HasMV { get { return hasMV; } set { hasMV = value; } }
 
+    //기록 관련
     public string LogID { get {return musicLog.LogID; } set { musicLog.LogID = value; } }
+    public string MusicID { get { return musicLog.MusicID; } set { musicLog.MusicID = value; } }
     public string Score { get { return musicLog.Score; } set { musicLog.Score = value; } }
     public string Accuracy { get { return musicLog.Accuracy; } set { musicLog.Accuracy = value; } }
     public string Combo { get { return musicLog.Combo; } set { musicLog.Combo = value; } }

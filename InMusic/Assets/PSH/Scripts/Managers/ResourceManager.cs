@@ -48,6 +48,8 @@ public class ResourceManager
     public List<MusicData> GetMusicList() {
         musicDataRoot = new GameObject("MusicDataRoot");
 
+        List<MusicLog> logs = GameManager_PSH.Data.getLogDataList();
+
         List<MusicData> mList = new List<MusicData>();
         //경로 설정
         string fullPath = appPath + mDataPath.Replace("Assets", "");
@@ -125,15 +127,26 @@ public class ResourceManager
 
                 #region 로그 읽기
                 //4-1. 기록 파일 열기 (선택)
-                if (fileMap.ContainsKey("log")) {
+                /*if (fileMap.ContainsKey("log")) {
                     MusicLog tmpLog = LoadLog(fileMap["log"]);
                     tmpMusic.Score = tmpLog.Score;
                     tmpMusic.Accuracy = tmpLog.Accuracy;
                     tmpMusic.Combo = tmpLog.Combo;
                     tmpMusic.Rank = tmpLog.Rank;
+                }*/
+                //4-2. 기록 가져오기 (로그랑 음악 맞춰주기)
+                foreach (MusicLog log in logs)
+                {
+                    if (int.Parse(log.MusicID) == i + 1)
+                    {
+                        tmpMusic.LogID = log.LogID;
+                        tmpMusic.MusicID = log.MusicID; //게임 진행엔 없어도 됨
+                        tmpMusic.Score = log.Score;
+                        tmpMusic.Accuracy = log.Accuracy;
+                        tmpMusic.Combo = log.Combo;
+                        tmpMusic.Rank = log.Rank;
+                    }
                 }
-                //4-2. 기록 파일 가져오기
-                MusicLog servLog;
                 #endregion
 
                 //5. 뮤비 파일 열기 (선택)

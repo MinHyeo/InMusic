@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -33,9 +34,7 @@ public class WebManager : MonoBehaviour
             }
             else
             {
-                Debug.Log(www.downloadHandler.text);
-                /*
-
+                /*로그인 테스트용 코드
                 if (www.downloadHandler.text == $"Login successful, welcome {userName}" ||
                     www.downloadHandler.text == $"User created successfully, welcome  {userName}")
                 {
@@ -46,6 +45,24 @@ public class WebManager : MonoBehaviour
                     Debug.Log(www.downloadHandler.text);
                     Debug.Log("로그인 실패ㅠㅠ");
                 }*/
+
+                string jsonData = www.downloadHandler.text;
+                Debug.Log(jsonData);
+
+                List<MusicLog> musicLogs = JsonUtility.FromJson<MusicLogList>(jsonData).GetLogs();
+
+                if (musicLogs == null)
+                {
+                    Debug.LogError("JSON 변환 실패!");
+                }
+                else
+                {
+                    foreach (MusicLog log in musicLogs)
+                    {
+                        Debug.Log($"음악 번호:{log.LogID}");
+                    }
+                    GameManager_PSH.Data.SetLogDataList(musicLogs);
+                }
             }
         }
     }

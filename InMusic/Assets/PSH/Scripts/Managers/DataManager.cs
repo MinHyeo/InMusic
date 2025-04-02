@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 public class DataManager
 {
     MusicData executeData;
+    List<MusicLog> logList;
 
     public void Init() {
         executeData = GameManager_PSH.Instance.GetComponent<MusicData>();
@@ -54,5 +56,16 @@ public class DataManager
 
     public MusicData GetData() { 
         return executeData;
+    }
+
+    public void SetLogDataList(List<MusicLog> serverLog)
+    {
+        logList = serverLog;
+
+    }
+
+    public List<MusicLog> getLogDataList()
+    {
+        return logList;
     }
 }
