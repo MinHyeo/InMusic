@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using FMOD.Studio;
+using System.Collections;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
@@ -76,40 +77,14 @@ namespace Play.Result
             maxComboText.text = maxCombo.ToString();
         }
 
-        public string SetRank(float accuracy, bool isFullCombo)
+        public void SetRank(string rank, bool isFullCombo)
         {
-            string rank = "";
             int rankColor = 0;
             if (isFullCombo)
                 rankColor = 1;
 
-            int num = (int)accuracy / 5;
-
-            if(accuracy >= 95)
-            {
-                rank = Rank.S.ToString();
-            }
-            else if (accuracy >= 90)
-            {
-                rank = Rank.A.ToString();
-            }
-            else if (accuracy >= 80)
-            {
-                rank = Rank.B.ToString();
-            }
-            else if (accuracy >= 70)
-            {
-                rank = Rank.C.ToString();
-            }
-            else
-            {
-                rank = Rank.D.ToString();
-            }
-
             rankText.text = rank;
             rankText.colorGradient = new VertexGradient(Color.white, Color.white, colors[rankColor], colors[rankColor]);
-
-            return rank;
         }
     }
 }

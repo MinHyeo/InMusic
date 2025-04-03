@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Play.Result;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace Play
         private float score = 0;
         private float accuracy = 0;
         private float totalAccuracy = 0;
+        private string rank;
         private int noteCount = 0;
 
         //입력 횟수
@@ -23,6 +25,7 @@ namespace Play
         //외부 접근
         public float Score { get { return score; } private set { } }
         public float Accuracy { get { return accuracy; } private set { } }
+        public string Rank { get { return rank; } private set { } }
         public int[] InputCount { get { return inputCount; } private set { } }
 
         public ScoreManager(TextMeshProUGUI scoreText, TextMeshProUGUI accuracyText, Accuracy accuracy, Combo combo)
@@ -64,6 +67,32 @@ namespace Play
 
             //정확도 별 입력 횟수 저장
             inputCount[(int)accuracyResult] += 1;
+        }
+
+        public void SetRank()
+        {
+            int num = (int)accuracy / 5;
+
+            if (accuracy >= 95)
+            {
+                rank = Result.Rank.S.ToString();
+            }
+            else if (accuracy >= 90)
+            {
+                rank = Result.Rank.A.ToString();
+            }
+            else if (accuracy >= 80)
+            {
+                rank = Result.Rank.B.ToString();
+            }
+            else if (accuracy >= 70)
+            {
+                rank = Result.Rank.C.ToString();
+            }
+            else
+            {
+                rank = Result.Rank.D.ToString();
+            }
         }
     }
 }

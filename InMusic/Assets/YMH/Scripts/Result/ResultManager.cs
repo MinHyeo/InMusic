@@ -45,9 +45,7 @@ namespace Play.Result
             resultText.SetResultText(scoreData.score, new int[] { scoreData.great, scoreData.good, scoreData.bad, scoreData.miss }, scoreData.accuracy, scoreData.maxCombo);
 
             //����� ���� ��ũ ����
-            string rank = resultText.SetRank(scoreData.accuracy, scoreData.isFullCombo);
-            //ScoreData�� ��ũ ����
-            scoreData.rank = rank;
+            resultText.SetRank(scoreData.rank, scoreData.isFullCombo);
         }
 
         public void OnClickNextButton()

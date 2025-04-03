@@ -181,9 +181,9 @@ namespace Play
         #region Pause Music
         public void Pause(bool isPause)
         {
-            if(isPlaying != isPause)
+            if(isPlaying == isPause)
             {
-                isPlaying = isPause;
+                isPlaying = !isPause;
                 bgmInstance.setPaused(isPause);
             }
             else
@@ -243,23 +243,6 @@ namespace Play
             UnityEngine.Debug.Log("노래가 끝났습니다!");
             onComplete?.Invoke(); // 콜백 실행
         }
-        //private void Update()
-        //{
-        //    if (!this.isPlaying)
-        //        return;
-
-        //    //현재 샘플링 주파수 계산
-        //    musicChannel.getPosition(out positionInSamples, FMOD.TIMEUNIT.PCM);
-
-        //    //노래가 끝나는지 체크
-        //    bool isPlaying;
-        //    musicChannel.isPlaying(out isPlaying);
-
-        //    if (!isPlaying)
-        //        OnMusicEnd();
-
-        //    fmodSystem.update();
-        //}
         #endregion
 
         private void OnMusicEnd()

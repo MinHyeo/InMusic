@@ -401,10 +401,16 @@ namespace Play
             //판정선 안보에기 표시
             NoteManager.Instance.RemoveJudgementLine();
 
+            //등급 판정
+            scoreManager.SetRank();
             //결과 점수 저장
             ScoreData scoreData = SaveScore();
+
             //결과창 띄우기
             ResultManager.Instance.ReceiveResult(scoreData);
+
+            //결과 DB로 보내기
+            DBManager.Instance.InsertPlayData(scoreData);
         }
 
         public ScoreData SaveScore()
@@ -416,6 +422,7 @@ namespace Play
             scoreData.songKey = songName.ToString() + "_" + artist;
             scoreData.score = (int)scoreManager.Score;
             scoreData.accuracy = scoreManager.Accuracy;
+            scoreData.rank = scoreManager.Rank;
             scoreData.great = scoreManager.InputCount[0];
             scoreData.good = scoreManager.InputCount[1];
             scoreData.bad = scoreManager.InputCount[2];
