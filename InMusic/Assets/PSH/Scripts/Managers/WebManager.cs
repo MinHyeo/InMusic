@@ -7,8 +7,8 @@ public class WebManager : MonoBehaviour
 {
     string loginURL = "http://localhost/InmusicScripts/login.php";
     string signiupURL = "http://localhost/InmusicScripts/signup.php";
-    string musicLogURL = "http://localhost/InmusicScripts/getlog.php";
-    string LogUpdateURL = "http://localhost/InmusicScripts/updatelog.php";
+    //string musicLogURL = "http://localhost/InmusicScripts/getlog.php"; //서버쪽에서 로그인 후 바로 로그 내용 찾아줌
+    //string LogUpdateURL = "http://localhost/InmusicScripts/updatelog.php";
 
     #region 로그인
     public void UserLogin(string userID, string userName){
@@ -114,6 +114,7 @@ public class WebManager : MonoBehaviour
     #endregion
 
     #region 기록 업데이트 하기
+    /*
     public void UpdateLog(MusicLog newLog, string userID = "76561198365750763")
     {
         StartCoroutine(UpdateLogServer(newLog, userID));
@@ -154,7 +155,7 @@ public class WebManager : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
     #endregion
 
 }

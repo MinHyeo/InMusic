@@ -79,8 +79,6 @@ public class ResourceManager
 
             GameObject item = Instantiate("MusicDataBox", musicDataRoot.transform);
             MusicData tmpMusic = item.GetComponent<MusicData>();
-            //MusicData tmpMusic = new MusicData();
-            tmpMusic.MusicID = $"{i + 1}";
             //최값보다 음악의 수가 적으면 파일 Load 안함
             if (i < numOfMusic) {
                 //경로 가져오기
@@ -138,10 +136,12 @@ public class ResourceManager
                 //4-2. 기록 가져오기 (로그랑 음악 맞춰주기)
                 foreach (MusicLog log in logs)
                 {
-                    
-                    if (int.Parse(log.MusicID) == i + 1)
+                    //mussicId = 제목_아티스트
+                    string targetmMusicID = $"{tmpMusic.Title}_{tmpMusic.Artist}";
+                    if (log.MusicID == targetmMusicID)
                     {
                         tmpMusic.LogID = log.LogID;
+                        tmpMusic.MusicID = log.MusicID;
                          //게임 진행엔 없어도 됨
                         tmpMusic.Score = log.Score;
                         tmpMusic.Accuracy = log.Accuracy;
@@ -157,7 +157,7 @@ public class ResourceManager
                     tmpMusic.HasMV = true;
                 }
 
-                UnityEngine.Debug.Log($"{i + 1}번째 폴더 확인 완료\n");
+                //UnityEngine.Debug.Log($"{i + 1}번째 폴더 확인 완료\n");
             }
             //디렉토리가 없는 더미 Item이 읽을 MusicData
             else

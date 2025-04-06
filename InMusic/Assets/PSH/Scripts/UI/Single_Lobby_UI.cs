@@ -34,7 +34,7 @@ public class Single_Lobby_UI : UI_Base_PSH
 
     void Start()
     {
-        //음악 목록 Load해서 넘겨주기
+        //음악 목록 가져와서 아이템 목록에 넘겨주기
         mList.SetData(GameManager_PSH.Resource.GetMusicList());
         LoadingScreen.Instance.SceneReady();
     }
