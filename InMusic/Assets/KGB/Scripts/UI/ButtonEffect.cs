@@ -1,46 +1,74 @@
 using UnityEngine;
 using UnityEngine.UI;
+using static Define;
 
 public class ButtonEffect : MonoBehaviour
 {
-    public Image[] buttonImages; // 버튼 이미지 배열 (D, F, J, K 순서)
+    public Image[] buttonImages; // 버튼 이미지 배열 (Key1 ~ Key4 순서)
     public Sprite[] pressedSprites; // 키를 눌렀을 때의 이미지
     public Sprite[] defaultSprites; // 기본 이미지
-    public GameObject[] lightEffects; // 빛 효과 오브젝트 배열 (D, F, J, K 순서)
+    public GameObject[] lightEffects; // 빛 효과 오브젝트 배열 (Key1 ~ Key4 순서)
 
-    private KeyCode[] keys = { KeyCode.D, KeyCode.F, KeyCode.J, KeyCode.K }; // 키 배열
+    private KeyCode[] keyBindings = new KeyCode[4];
 
-    void Update()
+    void Start()
     {
-        // 각 키에 대해 상태 확인
-        for (int i = 0; i < keys.Length; i++)
+        UpdateKeyBindings();
+        Managers.Instance.Input.OnKeyPressed -= HandleKeyPressed;
+        Managers.Instance.Input.OnKeyPressed += HandleKeyPressed;
+
+    }
+    void OnDestroy()
+    {
+        // 이벤트 해제 (중요!)
+        Managers.Instance.Input.OnKeyPressed -= HandleKeyPressed;
+    }
+    private void HandleKeyPressed(KeyCode key)
+    {
+        Debug.Log($"Key Pressed: {key}");
+        for (int i = 0; i < keyBindings.Length; i++)
         {
-            if (Input.GetKeyDown(keys[i]))
+            if (key == Managers.Instance.Key.GetKey((RhythmKey)i))
             {
-                OnKeyDown(i); // 키를 눌렀을 때의 효과
-            }
-            if (Input.GetKeyUp(keys[i]))
-            {
-                OnKeyUp(i); // 키를 뗐을 때의 효과
+                OnKeyDown(i);
             }
         }
     }
 
+    void Update()
+    {
+        for (int i = 0; i < keyBindings.Length; i++)
+        {
+            if (Managers.Instance.Input.GetKeyUp(keyBindings[i]))
+            {
+                OnKeyUp(i);
+            }
+        }
+    }
+
+    void UpdateKeyBindings()
+    {
+        keyBindings[0] = Managers.Instance.Key.GetKey(RhythmKey.Key1);
+        keyBindings[1] = Managers.Instance.Key.GetKey(RhythmKey.Key2);
+        keyBindings[2] = Managers.Instance.Key.GetKey(RhythmKey.Key3);
+        keyBindings[3] = Managers.Instance.Key.GetKey(RhythmKey.Key4);
+    }
+
     void OnKeyDown(int index)
     {
-        // 버튼 이미지 변경
-        buttonImages[index].sprite = pressedSprites[index];
+        if (buttonImages[index] != null)
+            buttonImages[index].sprite = pressedSprites[index];
 
-        // 빛 효과 활성화
-        lightEffects[index].SetActive(true);
+        if (lightEffects[index] != null)
+            lightEffects[index].SetActive(true);
     }
 
     void OnKeyUp(int index)
     {
-        // 버튼 이미지를 기본 이미지로 복원
-        buttonImages[index].sprite = defaultSprites[index];
+        if (buttonImages[index] != null)
+            buttonImages[index].sprite = defaultSprites[index];
 
-        // 빛 효과 비활성화
-        lightEffects[index].SetActive(false);
+        if (lightEffects[index] != null)
+            lightEffects[index].SetActive(false);
     }
 }

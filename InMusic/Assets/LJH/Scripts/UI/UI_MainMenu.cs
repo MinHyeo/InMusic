@@ -49,10 +49,6 @@ public class UI_MainMenu : UI_Base
         UpdateButtonInteractable();
     }
 
-    private void Update()
-    {
-        Managers.Instance.Input.Update();
-    }
 
     public override void Init()
     {

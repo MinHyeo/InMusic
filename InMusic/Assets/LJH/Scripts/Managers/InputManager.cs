@@ -1,25 +1,36 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class InputManager
 {
     public Action<KeyCode> OnKeyPressed;
 
+    private Dictionary<KeyCode, bool> _keyDownState = new();
+    private Dictionary<KeyCode, bool> _keyHeldState = new();
+    private Dictionary<KeyCode, bool> _keyUpState = new();
+
     public void Update()
     {
-        if (Input.anyKeyDown)
+        _keyDownState.Clear();
+        _keyHeldState.Clear();
+        _keyUpState.Clear();
+
+        foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
         {
-            Debug.Log("키 입력");
-            foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+            if (Input.GetKeyDown(key))
             {
-                if (Input.GetKeyDown(key))
-                {
-                    Debug.Log("맞는 키 입력");
-                    OnKeyPressed?.Invoke(key);
-                    break;
-                }
+                _keyDownState[key] = true;
+                OnKeyPressed?.Invoke(key);
             }
+            if (Input.GetKey(key))
+                _keyHeldState[key] = true;
+            if (Input.GetKeyUp(key))
+                _keyUpState[key] = true;
         }
     }
+
+    public bool GetKeyDown(KeyCode key) => _keyDownState.ContainsKey(key);
+    public bool GetKey(KeyCode key) => _keyHeldState.ContainsKey(key);
+    public bool GetKeyUp(KeyCode key) => _keyUpState.ContainsKey(key);
 }

@@ -50,7 +50,7 @@ public class Managers : MonoBehaviour
     public UIManager UI { get; private set; }
     public InputManager Input { get; private set; }
     public SoundManager Sound { get; private set; }
-
+    public KeyManager Key { get; private set; } //
     private bool _initialized = false;
 
     private void Awake()
@@ -75,6 +75,7 @@ public class Managers : MonoBehaviour
     {
         Input = new InputManager();
         Sound = new SoundManager();
+        Key = new KeyManager();
 
         //  UIManager를 GameObject로 만들고 컴포넌트로 붙임
         GameObject uiObj = new GameObject("UIManager");
@@ -114,6 +115,11 @@ public class Managers : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void Update()
+    {
+        Managers.Instance.Input.Update();
     }
 
 
