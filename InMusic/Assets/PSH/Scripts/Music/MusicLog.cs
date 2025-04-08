@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 음악 로그 파일 Model
+/// DB의 log 테이블과 통신용 음악 로그 Model
 /// </summary>
 [Serializable]
 public class MusicLog

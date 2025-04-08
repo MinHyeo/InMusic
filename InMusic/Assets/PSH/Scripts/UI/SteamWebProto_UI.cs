@@ -24,7 +24,8 @@ public class SteamWebProto_UI : MonoBehaviour
             return;
         }
 
-        LoginToWeb();
+        GameManager_PSH.Resource.CheckMusic();
+        //LoginToWeb();
     }
 
     public void LoginToWeb()

@@ -7,6 +7,7 @@ public class WebManager : MonoBehaviour
 {
     string loginURL = "http://localhost/InmusicScripts/login.php";
     string signiupURL = "http://localhost/InmusicScripts/signup.php";
+    string checkMusicURL = "http://localhost/InmusicScripts/musiccheck.php";
     //string musicLogURL = "http://localhost/InmusicScripts/getlog.php"; //서버쪽에서 로그인 후 바로 로그 내용 찾아줌
     //string LogUpdateURL = "http://localhost/InmusicScripts/updatelog.php";
 
@@ -158,4 +159,45 @@ public class WebManager : MonoBehaviour
     }*/
     #endregion
 
-}
+    #region 음악 목록 업데이트하기
+
+    public void CheckMusic(List<MusicData> data)
+    {
+        MusicDBList musicDBList = new MusicDBList { musics = new List<MusicDB>()};
+
+        //MusicData => MusicDB로 변환
+        foreach (MusicData mData in data)
+        {
+            MusicDB tmp = new MusicDB(mData.MusicID, mData.Title, mData.Artist);
+            musicDBList.musics.Add(tmp);
+        }
+
+        StartCoroutine(CheckMusicToServer(musicDBList));
+    }
+
+    IEnumerator CheckMusicToServer(MusicDBList data)
+    {
+        string jsonData = JsonUtility.ToJson(data);
+        WWWForm form = new WWWForm();
+        form.AddField("musics", jsonData);
+        using (UnityWebRequest www = UnityWebRequest.Post(checkMusicURL, form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log($"연결 실패 ㅠㅠ {www.error}");
+            }
+            else if (www.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.Log($"프로토콜 문제 {www.error}");
+            }
+            else
+            {
+                Debug.Log("서버와 음악 정보를 동기화 합니다...");
+                Debug.Log($"서버 응답: {www.downloadHandler.text}");
+            }
+        }
+    }
+        #endregion
+ }
