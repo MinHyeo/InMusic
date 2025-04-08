@@ -73,7 +73,7 @@ namespace Play
             buttonIndex = 0;
 
             //노래 정지
-            SoundManager.Instance.Pause(isPause);
+            SoundManager.Instance.SetPause(isPause);
 
             //일시정지
             pauseObject.gameObject.SetActive(isPause);

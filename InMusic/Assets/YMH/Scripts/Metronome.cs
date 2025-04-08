@@ -65,7 +65,6 @@ namespace Play
 
             // 한 박자의 샘플 간격 계산
             frequency = SoundManager.Instance.frequency;
-            Debug.Log(frequency);
             samplesPerBeat = (stdBpm / songBpm) * frequency;
             //nextSample = samplesPerBeat;// - (frequency * defaultOffset);
 
@@ -75,7 +74,6 @@ namespace Play
             // 마디 선이 판정선까지 도달하는 데 걸리는 시간 계산
             float distanceToJudgementLine = lineSpawnPoint.position.y - judgementLine.position.y;
             travelTime = distanceToJudgementLine / lineSpeed;
-            Debug.Log(measureInterval);
             NoteManager.Instance.SetTimingInfo(measureInterval, travelTime);
         }
         public void StartMetronome()
