@@ -4,6 +4,7 @@ using System.IO;
 using System;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using SSW.DB;
 
 namespace SongList {
     public class LoadManager : Singleton<LoadManager> {
@@ -52,12 +53,28 @@ namespace SongList {
 
         private IEnumerator LoadAllSongs() {
             Songs = new List<SongInfo>();
+            DBService db = FindFirstObjectByType<DBService>();
+            if (db == null) {
+                Debug.LogError("DBService not found in the scene.");
+                yield break;
+            }
+
 
             foreach(Song song in Enum.GetValues(typeof(Song))) {
                 SongInfo info = BmsLoader.Instance.SelectSong(song);
                 if (info != null) {
                     Songs.Add(info);
                     Debug.Log("Load Song: " + song);
+
+                    // DBService에 곡 정보를 저장하는 부분
+                    if (db != null) {
+                        string musicId = info.Title + "_" + info.Artist;
+                        db.SaveSongToDB(musicId, info.Title, info.Artist);
+                    }
+                    else
+                    {
+                        Debug.LogError("Failed to load Song: " + song);
+                    }
                 } else {
                     Debug.Log("Failed to load song: " + song);
                 }

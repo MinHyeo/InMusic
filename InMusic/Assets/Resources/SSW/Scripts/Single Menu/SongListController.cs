@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Linq;
+using SSW.DB;
 
 namespace SongList
 {
@@ -44,12 +45,14 @@ namespace SongList
         private GameObject _selectedSlot;
         public event Action<SongInfo> OnHighlightedSongChanged;
         private SingleMenuController _singleMenuController;
+
+        private Dictionary<string, MusicLogRecord> _musicLogRecords;
         #endregion
 
         #region Unity Methods
         private void Awake() {
-            _songs = LoadManager.Instance.Songs;
-            _totalSongCount = _songs.Count;
+            // _songs = LoadManager.Instance.Songs;
+            // _totalSongCount = _songs.Count;
 
             _itemHeight = _songItemPrefab.GetComponent<RectTransform>().sizeDelta.y;
             Debug.Log($"[SongListManager] Item Height: {_itemHeight}");
@@ -58,6 +61,63 @@ namespace SongList
 
         private IEnumerator Start() {
             yield return null; // 1프레임 대기
+
+            DBService db = FindFirstObjectByType<DBService>();
+            if (db == null)
+            {
+                Debug.LogError("DBService not found in scene. Cannot load songs from DB.");
+                yield break;
+            }
+
+            List<MusicData> allSongsFromDB = null;
+            bool songsLoaded = false;
+            db.LoadAllSongsFromDB(result => {
+                allSongsFromDB = result;
+                songsLoaded = true;
+            });
+            while (!songsLoaded)
+                yield return null;
+
+            if (allSongsFromDB == null)
+            {
+                Debug.LogWarning("[SongListController] Failed to load songs from DB. Using local fallback.");
+                _songs = LoadManager.Instance.Songs; // fallback
+            }
+            else
+            {
+                _songs = new List<SongInfo>();
+                foreach (var md in allSongsFromDB)
+                {
+                    SongInfo info = new SongInfo
+                    {
+                        Title  = md.musicName,
+                        Artist = md.musicArtist
+                        // 나머지 필드는 필요 시 기본값 설정
+                    };
+                    _songs.Add(info);
+                }
+            }
+            _totalSongCount = _songs.Count;
+            Debug.Log($"[SongListController] Total Songs Count: {_totalSongCount}");
+
+            // 2. DB에서 해당 유저의 모든 플레이 기록(음원 최고 기록) 불러오기
+            string userId = Steamworks.SteamUser.GetSteamID().m_SteamID.ToString();
+            bool logsLoaded = false;
+            db.LoadAllMusicLogs(userId, (dict) => {
+                _musicLogRecords = dict;
+                logsLoaded = true;
+            });
+            while (!logsLoaded)
+                yield return null;
+            if (_musicLogRecords != null)
+            {
+                Debug.Log($"[SongListController] Loaded {_musicLogRecords.Count} music log records.");
+            }
+            else
+            {
+                Debug.LogWarning("[SongListController] No music log records loaded.");
+                _musicLogRecords = new Dictionary<string, MusicLogRecord>();
+            }
 
             float viewportHeight = _scrollRect.viewport.rect.height;
             _visibleCount = Mathf.CeilToInt(viewportHeight / _itemHeight);
@@ -312,6 +372,11 @@ namespace SongList
                 }
             }
         }
+
+        public Dictionary<string, MusicLogRecord> MusicLogRecords {
+            get { return _musicLogRecords; }
+        }
+
         #endregion
 
         #region Slot Data Setting
@@ -324,7 +389,7 @@ namespace SongList
             // ScrollSlot 컴포넌트를 가져와서 데이터 세팅
             ScrollSlot slot = slotObj.GetComponent<ScrollSlot>();
             if (slot != null) {
-                slot.SetData(currentSong, songIndex);
+                slot.SetData(currentSong, songIndex, _musicLogRecords);
             }
         }
 

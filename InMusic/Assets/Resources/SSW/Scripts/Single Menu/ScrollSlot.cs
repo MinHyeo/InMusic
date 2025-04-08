@@ -46,75 +46,46 @@ namespace SongList {
         /// <summary>
         /// 슬롯에 표시할 곡 데이터를 외부에서 전달받아 UI를 갱신
         /// </summary>
-        public void SetData(SongInfo data, int index) {
+        public void SetData(SongInfo data, int index, Dictionary<string, MusicLogRecord> musicLogRecords) {
             _currentData = data;
             _currentIndex = index;
-            UpdateUI();
+            UpdateUI(musicLogRecords);
         }
 
         /// <summary>
         /// 슬롯 UI 업데이트. 제목, 아티스트, 이미지 등 갱신
         /// </summary>
-        private void UpdateUI() {
+        private void UpdateUI(Dictionary<string, MusicLogRecord> musicLogRecords) {
             if (_currentData == null) return;
 
-            // 곡 제목/아티스트 표시
-            if (_songTitle  != null) _songTitle.text  = _currentData.Title;
+            if (_songTitle != null) _songTitle.text = _currentData.Title;
             if (_songArtist != null) _songArtist.text = _currentData.Artist;
 
-            // 곡 이미지를 Resources 폴더에서 "Song/{Title}/{Title}" 경로로 로드
             if (_songImage != null && !string.IsNullOrEmpty(_currentData.Title)) {
                 string resourcePath = $"Song/{_currentData.Title}/{_currentData.Title}";
                 Sprite loadedSprite = Resources.Load<Sprite>(resourcePath);
-
-                if (loadedSprite != null) {
+                if (loadedSprite != null)
                     _songImage.sprite = loadedSprite;
-                }
                 else {
-                    Debug.LogWarning($"[ScrollSlot] Could not find sprite for title '{_currentData.Title}' at '{resourcePath}' in Resources.");
-                    // 필요한 경우 기본 이미지나 null 설정
+                    Debug.LogWarning($"[ScrollSlot] No sprite found for '{_currentData.Title}' at '{resourcePath}'");
                     _songImage.sprite = null;
                 }
             }
 
-            SavePlayData savePlayData = FindFirstObjectByType<SavePlayData>();
-            if (savePlayData != null)
-            {
-                // 곡을 고유하게 식별할 키를 만듦 (title + artist 결합)
-                _uniqueKey = $"{_currentData.Title}_{_currentData.Artist}";
-                ScoreData bestPlayData = savePlayData.GetSongScoreByKey(_uniqueKey);
+            // 고유 키 생성: 예) "Title_Artist"
+            _uniqueKey = $"{_currentData.Title}_{_currentData.Artist}";
 
-                if (bestPlayData != null)
-                {
-                    if (_songHighestRank != null)
-                    {
-                        string rank = CalculateRank(bestPlayData.score, bestPlayData.accuracy);
-                        _songHighestRank.text = rank;
-                    }
-                }
-                else
-                {
-                    // 해당 키에 대한 기록이 아직 없을 경우
-                    if (_songHighestRank != null)
-                        _songHighestRank.text = "-";
-                }
-            }
-            else
+            // DB에서 불러온 음악 로그 Dictionary를 활용하여 최고 기록 표시
+            if (musicLogRecords != null && musicLogRecords.ContainsKey(_uniqueKey))
             {
-                // SavePlayData를 못 찾았을 경우
+                MusicLogRecord record = musicLogRecords[_uniqueKey];
                 if (_songHighestRank != null)
-                    _songHighestRank.text = "?";
+                    _songHighestRank.text = record.musicRank;  // 필요에 따라 record 값을 변환해서 보여줌
             }
-        }
-        /// <summary>
-        /// (예시) 점수와 정확도를 기반으로 랭크를 산출하는 간단한 메서드
-        /// </summary>
-        private string CalculateRank(int score, float accuracy)
-        {
-            if (score > 1000000 && accuracy > 95f) return "S";
-            else if (score > 500000) return "A";
-            else if (score > 300000) return "B";
-            else return "C";
+            else {
+                if (_songHighestRank != null)
+                    _songHighestRank.text = "-";
+            }
         }
 
         #endregion
