@@ -153,7 +153,7 @@ namespace Play
             //노래 시작하고 바로 일시정지
             isPlaying = true;
             bgmInstance.start();
-            Pause(!isPlaying);
+            SetPause(isPlaying);
 
             //프레임 대기
             yield return null;
@@ -173,13 +173,19 @@ namespace Play
 
         public void Play()
         {
-            bgmInstance.start();
+            SetPause(isPlaying);
+            //bgmInstance.start();
+            
             isPlaying = true;
         }
         #endregion
 
         #region Pause Music
-        public void Pause(bool isPause)
+        /// <summary>
+        /// 노래 일시정지
+        /// </summary>
+        /// <param name="isPause">멈추고 싶으면 true</param>
+        public void SetPause(bool isPause)
         {
             if(isPlaying == isPause)
             {

@@ -178,54 +178,6 @@ namespace Play
             videoPlayScript.Play();
 
         } 
-
-
-        //public void StartGame(Song songName, string artist)
-        //{
-        //    //노래 정보 저장
-        //    this.songName = songName;
-        //    this.artist = artist;
-
-        //    //노래 샘플 계산
-        //    videoPlayScript.GetVideoClip(songName);
-        //    PlaySong();
-        //    SoundManager.Instance.GetCurrentFrequency();
-
-        //    //노래 초기화
-        //    //SoundManager.Instance.SongInit(songName.ToString()); 
-        //    metronome.CalculateSync();
-
-        //    //점수 초기화
-        //    scoreManager.Init();
-
-        //    StartCoroutine(StartMusicWithIntroDelay());
-
-        //    //키 설정
-        //    GameManager.Input.SetNoteKeyPressEvent(OnKeyPress);
-        //    GameManager.Input.SetNoteKeyReleaseEvent(OnKeyRelase);
-        //    GameManager.Input.SetUIKeyEvent(OnUIKkeyPress);
-        //}
-
-        //private IEnumerator StartMusicWithIntroDelay()
-        //{
-        //    metronome.StartInitialMetronome();
-        //    NoteManager.Instance.InitializeNotes(BmsLoader.Instance.SelectSong(songName));
-        //    // 2초 인트로 시간 대기
-        //    yield return new WaitForSeconds(preStartDelay);
-
-        //    //상태 변환
-        //    state = States.Playing;
-
-        //    //노래 재생 및 마디선 생성
-        //    metronome.StartMetronome();
-        //}
-
-        //private void PlaySong()
-        //{
-        //    //string songPart = "event:/BGM/" + songName.ToString();
-        //    SoundManager.Instance.PlayBGM(songName.ToString(), PlayStyle.Normal);
-        //    videoPlayScript.Play();
-        //}
         #endregion
 
         private void OnKeyPress(Define.NoteControl keyEvent)
@@ -361,7 +313,7 @@ namespace Play
             //계속하기
             Time.timeScale = 1;
             //노래 실행
-            SoundManager.Instance.Pause(false);
+            SoundManager.Instance.SetPause(false);
             //비디오 실행
             videoPlayScript.Play();
         }
