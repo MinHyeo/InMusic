@@ -161,7 +161,8 @@ namespace Play
         {
             yield return null;
 
-            metronome.StartInitialMetronome();
+            //metronome.StartInitialMetronome();
+            metronome.StartMetronome();
             NoteManager.Instance.InitializeNotes(BmsLoader.Instance.SelectSong(songName));
 
             //딜레이
