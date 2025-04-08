@@ -3,7 +3,9 @@ using UnityEngine;
 public class GameManager_PSH : MonoBehaviour
 {
     string selectedMusic;
+    static GameObject musicDataRoot;
 
+    public GameObject DataRoot { get { return musicDataRoot; } }
 
     #region ManagerObject
     public static GameManager_PSH GM_Instance;
@@ -53,6 +55,9 @@ public class GameManager_PSH : MonoBehaviour
 
             GM_Instance.M_Input.Init();
             GM_Instance.M_Data.Init();
+
+            musicDataRoot = new GameObject("MusicDataRoot");
+            DontDestroyOnLoad(musicDataRoot);
         }
     }
 

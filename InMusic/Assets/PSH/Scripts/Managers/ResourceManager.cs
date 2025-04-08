@@ -9,7 +9,6 @@ public class ResourceManager
     string appPath = Application.dataPath;
     string mDataPath = "Assets/Resources/Music";
     List<MusicData> musicDataList = new List<MusicData>();
-    GameObject musicDataRoot;
 
     public T Load<T>(string path) where T : Object
     {
@@ -48,7 +47,6 @@ public class ResourceManager
     /// </summary>
     public void CheckMusic()
     {
-        musicDataRoot = new GameObject("MusicDataRoot");
 
         //경로 설정
         string fullPath = appPath + mDataPath.Replace("Assets", "");
@@ -77,8 +75,8 @@ public class ResourceManager
         for (int i = 0; i < result; i++)
         {
             //객체 생성
-            GameObject dataobject = Instantiate("MusicDataBox", musicDataRoot.transform);
-            MusicData tmpMusic = dataobject.GetComponent<MusicData>();
+            GameObject dataobject = Instantiate("MusicDataBox", GameManager_PSH.Instance.DataRoot.transform);
+             MusicData tmpMusic = dataobject.GetComponent<MusicData>();
             //MusicData 객체 생성
 
             //최값보다 음악의 수가 적으면 파일 Load 안함
@@ -113,16 +111,12 @@ public class ResourceManager
         GameManager_PSH.Web.CheckMusic(musicDataList);
     }
 
-
-
     /// <summary>
     /// musicData 2차 가공: musicData List의 log 부분 가공 |
     /// 기존의 로그 파일 읽는 방식에서 서버 데이터 읽는 방식으로 수정
     /// </summary>
     /// <returns></returns>
     public List<MusicData> GetMusicList() {
-        musicDataRoot = new GameObject("MusicDataRoot");
-
         List<MusicLog> logs = GameManager_PSH.Data.getLogDataList();
 
         List<MusicData> mList = new List<MusicData>();
@@ -152,7 +146,7 @@ public class ResourceManager
         for (int i = 0; i < result; i++)
         {
 
-            GameObject item = Instantiate("MusicDataBox", musicDataRoot.transform);
+            GameObject item = Instantiate("MusicDataBox", GameManager_PSH.Instance.DataRoot.transform);
             MusicData tmpMusic = item.GetComponent<MusicData>();
             //최값보다 음악의 수가 적으면 파일 Load 안함
             if (i < numOfMusic) {
