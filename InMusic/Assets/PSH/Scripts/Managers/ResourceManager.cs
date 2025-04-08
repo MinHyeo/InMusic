@@ -47,7 +47,7 @@ public class ResourceManager
     /// </summary>
     public void CheckMusic()
     {
-
+        Debug.Log("음악 동기화 및 MusicData  생성");
         //경로 설정
         string fullPath = appPath + mDataPath.Replace("Assets", "");
         //음악 개수
@@ -74,14 +74,16 @@ public class ResourceManager
 
         for (int i = 0; i < result; i++)
         {
-            //객체 생성
+            //객체(MusicDataBox GameObject) 생성
             GameObject dataobject = Instantiate("MusicDataBox", GameManager_PSH.Instance.DataRoot.transform);
              MusicData tmpMusic = dataobject.GetComponent<MusicData>();
-            //MusicData 객체 생성
 
             //최값보다 음악의 수가 적으면 파일 Load 안함
             if (i < numOfMusic)
             {
+                //경로 가져오기
+                tmpMusic.DirPath = musicFolders[i].Replace("\\", "/");
+
                 //폴더 내 파일들 가져오기
                 string[] files = Directory.GetFiles(musicFolders[i])
                                       .Select(file => file.Replace("\\", "/"))
@@ -102,84 +104,9 @@ public class ResourceManager
                 tmpMusic.Title = tmpMusic.BMS.header.title;
                 tmpMusic.Artist = tmpMusic.BMS.header.artist;
 
-                //musicDataList에 추가
-                musicDataList.Add(tmpMusic);
-            }
-        }
-
-        //2. 음악 리소스 목록 동기화
-        GameManager_PSH.Web.CheckMusic(musicDataList);
-    }
-
-    /// <summary>
-    /// musicData 2차 가공: musicData List의 log 부분 가공 |
-    /// 기존의 로그 파일 읽는 방식에서 서버 데이터 읽는 방식으로 수정
-    /// </summary>
-    /// <returns></returns>
-    public List<MusicData> GetMusicList() {
-        List<MusicLog> logs = GameManager_PSH.Data.getLogDataList();
-
-        List<MusicData> mList = new List<MusicData>();
-        //경로 설정
-        string fullPath = appPath + mDataPath.Replace("Assets", "");
-        //음악 개수
-        int min = 17; //최소값
-        int numOfMusic = 0;  //디렉토리 개수 == 음악 폴더 개수
-        int result;
-        //수정 필요
-        string[] mTitles = new string[17]; //제목(디렉토리 이름)
-
-        if (Directory.Exists(fullPath)) 
-        {
-            //파일 갯수가 아닌 디렉토리 갯수를 구함
-            mTitles = Directory.GetDirectories(fullPath);
-            numOfMusic = mTitles.Length;
-        }
-        else
-        {
-            UnityEngine.Debug.Log("음악 디렉토리 없음");
-            return null;
-        }
-
-        result = min > numOfMusic ? min : numOfMusic;
-
-        for (int i = 0; i < result; i++)
-        {
-
-            GameObject item = Instantiate("MusicDataBox", GameManager_PSH.Instance.DataRoot.transform);
-            MusicData tmpMusic = item.GetComponent<MusicData>();
-            //최값보다 음악의 수가 적으면 파일 Load 안함
-            if (i < numOfMusic) {
-                //경로 가져오기
-                tmpMusic.DirPath = mTitles[i].Replace("\\","/");
-                //파일들 이름 가져오기
-                string[] files = Directory.GetFiles(mTitles[i])
-                                          //LINQ문 (Language-Integrated Query)
-                                          .Select(file => file.Replace("\\", "/"))
-                                          .Where(file => !file.EndsWith(".meta")) //.meta파일 제외
-                                          .ToArray();
-                Dictionary<string, string> fileMap = FileMapping(files);
-
-                /*for (int j = 0; j < files.Length; j++) {
-                    UnityEngine.Debug.Log($"{j}번째 파일 이름: {files[j]}");*/
-
-                //1. BMS 파일 열기 (필수)
-                if (fileMap.ContainsKey("bms")) {
-                    tmpMusic.BMS = GameManager_PSH.BMS.ParseBMS(fileMap["bms"]);
-                    //UnityEngine.Debug.Log(tmpMusic.Title);
-                    tmpMusic.HasBMS = true;
-                }
-
-                //else
-                //{
-                //    tmpMusic.BMS = new BMSData();
-                //    tmpMusic.BMS.header.title = $"{i + 1}번째 음악";
-                //    UnityEngine.Debug.Log(tmpMusic.BMS.header.title);
-                //    tmpMusic.BMS.header.artist = $"{i + 1}번째 작곡가";
-                //}
-
                 //2. 음원 파일 열기 (필수)
-                if (fileMap.ContainsKey("audio")) { 
+                if (fileMap.ContainsKey("audio"))
+                {
                     tmpMusic.Audio = Load<AudioClip>(fileMap["audio"]);
                     float audioLength = tmpMusic.Audio.length;
                     int minutes = Mathf.FloorToInt(audioLength / 60);
@@ -193,40 +120,13 @@ public class ResourceManager
                 else //사진이 없으면 기본 사진 사용
                     tmpMusic.Album = Load<Sprite>("Default_IMG");
 
-                #region 로그 읽기
-                //4-1. 기록 파일 열기 (선택)
-                /*if (fileMap.ContainsKey("log")) {
-                    MusicLog tmpLog = LoadLog(fileMap["log"]);
-                    tmpMusic.Score = tmpLog.Score;
-                    tmpMusic.Accuracy = tmpLog.Accuracy;
-                    tmpMusic.Combo = tmpLog.Combo;
-                    tmpMusic.Rank = tmpLog.Rank;
-                }*/
-                //4-2. 기록 가져오기 (로그랑 음악 맞춰주기)
-                foreach (MusicLog log in logs)
-                {
-                    //mussicId = 제목_아티스트
-                    string targetmMusicID = $"{tmpMusic.Title}_{tmpMusic.Artist}";
-                    if (log.MusicID == targetmMusicID)
-                    {
-                        tmpMusic.LogID = log.LogID;
-                        tmpMusic.MusicID = log.MusicID;
-                         //게임 진행엔 없어도 됨
-                        tmpMusic.Score = log.Score;
-                        tmpMusic.Accuracy = log.Accuracy;
-                        tmpMusic.Combo = log.Combo;
-                        tmpMusic.Rank = log.Rank;
-                    }
-                }
-                #endregion
 
-                //5. 뮤비 파일 열기 (선택)
-                if (fileMap.ContainsKey("video")){
+                //4. 뮤비 파일 열기 (선택)
+                if (fileMap.ContainsKey("video"))
+                {
                     tmpMusic.MuVi = Load<VideoClip>(fileMap["video"]);
                     tmpMusic.HasMV = true;
                 }
-
-                //UnityEngine.Debug.Log($"{i + 1}번째 폴더 확인 완료\n");
             }
             //디렉토리가 없는 더미 Item이 읽을 MusicData
             else
@@ -234,9 +134,50 @@ public class ResourceManager
                 tmpMusic.Album = Load<Sprite>("Default_IMG");
             }
 
-            mList.Add(tmpMusic);
+            //5. musicDataList에 추가
+            musicDataList.Add(tmpMusic);
+
         }
-        return mList;
+
+        //6. 음악 리소스 목록 동기화
+        GameManager_PSH.Web.CheckMusic(musicDataList);
+    }
+
+    /// <summary>
+    /// musicData 2차 가공: musicData List의 log 부분 가공 |
+    /// 기존의 로그 파일 읽는 방식에서 서버 데이터 읽는 방식으로 수정
+    /// </summary>
+    /// <returns></returns>
+    public List<MusicData> GetMusicList() {
+        List<MusicLog> logs = GameManager_PSH.Data.getLogDataList();
+
+        for (int i = 0; i < musicDataList.Count - 1; i++)
+        {
+            //4-1. 기록 파일 열기 (선택)
+            /*if (fileMap.ContainsKey("log")) {
+                 MusicLog tmpLog = LoadLog(fileMap["log"]);
+                 tmpMusic.Score = tmpLog.Score;
+                 tmpMusic.Accuracy = tmpLog.Accuracy;
+                 tmpMusic.Combo = tmpLog.Combo;
+                 tmpMusic.Rank = tmpLog.Rank;
+             }*/
+             //4-2. 기록 가져오기 (로그랑 음악 맞춰주기)
+             foreach (MusicLog log in logs)
+             {
+                if (log.MusicID == musicDataList[i].MusicID)
+                {
+                    musicDataList[i].LogID = log.LogID;
+                    musicDataList[i].MusicID = log.MusicID;
+                    //게임 진행엔 없어도 됨
+                    musicDataList[i].Score = log.Score;
+                    musicDataList[i].Accuracy = log.Accuracy;
+                    musicDataList[i].Combo = log.Combo;
+                    musicDataList[i].Rank = log.Rank;
+                }
+             }
+        }
+
+        return musicDataList;
     }
 
     //파일경로와 확장자 분류
