@@ -4,6 +4,7 @@ using TMPro;
 using System;
 using Play.Result;
 using UnityEngine.SceneManagement;
+using SSW.DB;
 
 namespace Play
 {
@@ -363,7 +364,8 @@ namespace Play
             ResultManager.Instance.ReceiveResult(scoreData);
 
             //결과 DB로 보내기
-            DBManager.Instance.InsertPlayData(scoreData);
+            string userId = Steamworks.SteamUser.GetSteamID().m_SteamID.ToString();
+            DBService.Instance.SaveMusicLog(userId, scoreData);
         }
 
         public ScoreData SaveScore()

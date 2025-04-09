@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using SongList;
+using Play;
 
 namespace SSW.DB
 {
@@ -21,6 +22,7 @@ namespace SSW.DB
         [SerializeField] private string _updateMusicListURL = "http://localhost/InMusic/updateMusicList.php";
         [SerializeField] private string _handleGetAllSongsURL = "http://localhost/InMusic/handleGetAllSongs.php";
         [SerializeField] private string _getMusicLogURL = "http://localhost/InMusic/handleGetMusicLog.php";
+        [SerializeField] private string _saveMusicLogURL = "http://localhost/InMusic/handleSaveMusicLog.php";
         #region User Data
         public void SaveOrLoadUser(string steamId, string nickname)
         {
@@ -181,6 +183,39 @@ namespace SSW.DB
         }
         #endregion
 
+        #region Save Music Log
+        public void SaveMusicLog(string userId, ScoreData scoreData)
+        {
+            StartCoroutine(SaveMusicLogCoroutine(userId, scoreData));
+        }
+
+        private IEnumerator SaveMusicLogCoroutine(string userId, ScoreData scoreData)
+        {
+            //폼 생성
+            WWWForm form = new WWWForm();
+            form.AddField("steam_id", userId);
+            form.AddField("music_name", scoreData.songName);
+            form.AddField("music_score", scoreData.score);
+            form.AddField("music_combo", scoreData.maxCombo);
+            form.AddField("music_accuracy", scoreData.accuracy.ToString("F2"));
+            form.AddField("music_rate", scoreData.rank);
+
+            //서버에 데이터 전송
+            using (UnityWebRequest webRequest = UnityWebRequest.Post(_saveMusicLogURL, form))
+            {
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError($"서버 오류: {webRequest.error}");
+                }
+                else
+                {
+                    Debug.Log(webRequest.downloadHandler.text);
+                }
+            }
+        }
+        #endregion
     }
 }
 
