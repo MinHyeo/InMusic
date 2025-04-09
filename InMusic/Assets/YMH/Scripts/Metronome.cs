@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 namespace Play 
@@ -20,11 +18,10 @@ namespace Play
         private float lineSpeed;
         [SerializeField]
         private Transform judgementLine;
-        [SerializeField]
-        private TextMeshProUGUI text;
 
         private float nextSample;
         private float samplesPerBeat;
+        private float beatIntervalMs;
         private float songBpm = 92f;
         private float stdBpm = 60;
 
@@ -48,7 +45,7 @@ namespace Play
                 return;
 
             // 곡 진행시간 * 주파수가 다음 라인보다 크거나 같으면 작동.
-            if (SoundManager.Instance.positionInSamples >= nextSample)
+            if (SoundManager.Instance.GetTimelinePosition() >= nextSample)
             {
                 StartCoroutine(PlayTicks());
             }
@@ -66,7 +63,7 @@ namespace Play
             // 한 박자의 샘플 간격 계산
             frequency = SoundManager.Instance.frequency;
             samplesPerBeat = (stdBpm / songBpm) * frequency;
-            //nextSample = samplesPerBeat;// - (frequency * defaultOffset);
+            beatIntervalMs = (samplesPerBeat / frequency) * 1000.0f;
 
             // 한 마디 간격 (4/4박자 기준)
             measureInterval = samplesPerBeat * 4.0f / frequency;
@@ -87,6 +84,7 @@ namespace Play
         private IEnumerator SpawnInitialMeasureLines()
         {
             float initialSpawnTime = preStartDelay - travelTime;
+
             if (initialSpawnTime > 0)
             {
                 yield return new WaitForSeconds(initialSpawnTime);
@@ -102,8 +100,8 @@ namespace Play
         private IEnumerator PlayTicks()
         {
             //hitSource.Play();
-            nextSample += samplesPerBeat;// - (frequency * defaultOffset);
-            text.text = $"BPM - 92 : {upperBeats} / {underBeats}";
+            Debug.Log($"samplesPerBeat : {samplesPerBeat}");
+            nextSample += beatIntervalMs;// - (frequency * defaultOffset);
             if (upperBeats == 1)
             {
                 float measureStartTime = Time.time + measureInterval;
@@ -124,7 +122,7 @@ namespace Play
             yield return new WaitForSeconds(spawnTime - Time.time);
 
             // 마디 선 생성
-            //GameObject newLine = Instantiate(linePrefab, lineSpawnPoint.position, Quaternion.identity);
+            Debug.Log("노트 생성");
             GameObject newLine = ObjectPoolManager.Instance.GetFromPool("Line");
             newLine.transform.position = lineSpawnPoint.position;
             newLine.GetComponent<Line>().Initialize(lineSpeed, judgementLine.position.y);

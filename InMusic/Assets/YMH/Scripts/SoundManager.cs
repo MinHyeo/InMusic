@@ -46,7 +46,7 @@ namespace Play
         [Header("MusicInfo")]
         public int frequency;
         private int startTimeSeconds = 60;
-        public uint positionInSamples;
+        public int currentPositionMs;
 
         private bool isPlaying = false;
 
@@ -250,6 +250,13 @@ namespace Play
             onComplete?.Invoke(); // 콜백 실행
         }
         #endregion
+
+        public int GetTimelinePosition()
+        {
+            bgmInstance.getTimelinePosition(out currentPositionMs);
+
+            return currentPositionMs;
+        }
 
         private void OnMusicEnd()
         {

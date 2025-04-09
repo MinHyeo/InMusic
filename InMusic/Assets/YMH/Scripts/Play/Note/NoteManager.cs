@@ -123,11 +123,9 @@ namespace Play
 
                         // 노트 생성 타이밍 계산
                         float noteAppearTime = barTime + (measureInterval / divisions) * i;
-                        Debug.Log($"barTime : {barTime},  measureInterval : {measureInterval},  divisions : {divisions}");
 
                         // 실제 소환 시점을 결정하기 위해 이동 시간을 고려
                         float spawnTime = songStartTime + noteAppearTime - travelTime;
-                        Debug.Log($"spawnTime : {spawnTime},  travelTime : {travelTime}");
 
                         // 노트 생성 예약 (코루틴 실행)
                         coroutines.Add(StartCoroutine(SpawnNoteCoroutine(channel, spawnTime)));
