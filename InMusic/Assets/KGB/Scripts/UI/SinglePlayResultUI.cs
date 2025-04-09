@@ -36,14 +36,14 @@ public class SinglePlayResultUI : MonoBehaviour
     {
         playResult = new PlayResultData
         {
-            Score = GameManager.Instance.totalScore,
+            Score = (int)GameManager.Instance.totalScore,
             Great = GameManager.Instance.greatCount,
             Good = GameManager.Instance.goodCount,
             Bad = GameManager.Instance.badCount,
             Miss = GameManager.Instance.missCount,
             Accuracy = GameManager.Instance.accuracy,
             Combo = GameManager.Instance.maxCombo,
-            Rate = (float)GameManager.Instance.totalScore / 1000000f * 100f,
+            Rank = (float)GameManager.Instance.totalScore / 1000000f * 100f,
             FullCombo = (GameManager.Instance.combo == GameManager.Instance.totalNotes)
         };
 
@@ -84,10 +84,10 @@ public class SinglePlayResultUI : MonoBehaviour
         //{
         //    rate.text = "D";
         //}
-        if (playResult.Rate >= 95f) rate.text = "S";
-        else if (playResult.Rate >= 90f) rate.text = "A";
-        else if (playResult.Rate >= 80f) rate.text = "B";
-        else if (playResult.Rate >= 70f) rate.text = "C";
+        if (playResult.Rank >= 95f) rate.text = "S";
+        else if (playResult.Rank >= 90f) rate.text = "A";
+        else if (playResult.Rank >= 80f) rate.text = "B";
+        else if (playResult.Rank >= 70f) rate.text = "C";
         else rate.text = "D";
 
         if (playResult.FullCombo)
@@ -110,13 +110,11 @@ public class SinglePlayResultUI : MonoBehaviour
 
     public void NextButton()
     {
-        //게임 결과 표시후 종료 버튼
-        MusicLog newLog = new MusicLog();
-        newLog.Accuracy = accuracy.text;
-        newLog.Score = score.text;
-        newLog.Rank = rate.text;
-        newLog.Combo = combo.text;
-        GameManager_PSH.Data.SaveData(newLog);
+        string musicID = GameManager_PSH.Instance.GetComponent<MusicData>().MusicID;
+        string userID = "76561198148984177";
+        DBManager.Instance.StartCheckHighScore(userID, musicID, playResult.Score, playResult.Combo, playResult.Accuracy, rate.text);
+
         SceneManager.LoadScene(0);
+        
     }
 }

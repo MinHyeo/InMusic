@@ -21,6 +21,17 @@ public class GameManager_PSH : MonoBehaviour
 
     DataManager M_Data = new DataManager();
     public static DataManager Data { get { return Instance.M_Data; } }
+
+    static WebManager M_Web = null;
+    public static WebManager Web { get {if (M_Web == null) Init(); return M_Web; } 
+                                   private set { M_Web = value; } }
+
+    /* SteamManager는 독립적으로 다뤄야할 듯...
+    static SteamManager M_Steam = null;
+    public static SteamManager Steam { get { if (M_Steam == null) Init(); return Steam; }
+                                      private set { M_Steam = value; }}
+    */
+
     #endregion
 
     static void Init()
@@ -33,9 +44,12 @@ public class GameManager_PSH : MonoBehaviour
                 gmObject = new GameObject { name = "GameManager_PSH" };
                 gmObject.AddComponent<GameManager_PSH>();
                 gmObject.AddComponent<MusicData>();
+                gmObject.AddComponent<WebManager>();
             }
             DontDestroyOnLoad(gmObject);
+
             GM_Instance = gmObject.GetComponent<GameManager_PSH>();
+            Web = gmObject.GetComponent<WebManager>();
 
             GM_Instance.M_Input.Init();
             GM_Instance.M_Data.Init();

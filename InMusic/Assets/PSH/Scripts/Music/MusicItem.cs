@@ -19,10 +19,13 @@ public class MusicItem : MonoBehaviour
     [SerializeField] private bool hasBMS = false;
     [SerializeField] private bool hasMV = false;
     [Header("기록 관련 정보")]
+    [SerializeField] private string logId;
     [SerializeField] private string score;
     [SerializeField] private string accuracy;
     [SerializeField] private string combo;
     [SerializeField] private Text rank;
+    [SerializeField] private string musicID;
+
     [Header("Item 상태 정보")]
     [SerializeField] private Image background;
     [SerializeField] private Image rightCircle;
@@ -31,6 +34,7 @@ public class MusicItem : MonoBehaviour
     [SerializeField] private Color purple = new Color(155.0f, 48.0f, 255.0f, 1.0f);
     [SerializeField] private MusicData mData;
     [SerializeField] private bool isDummy = true;
+
 
     #region Get/Set
     public string DirPath { get { return mPath; } set { mPath = value; } }
@@ -43,12 +47,14 @@ public class MusicItem : MonoBehaviour
     public bool HasBMS { get { return hasBMS; } set { hasBMS = value; } }
     public bool HasMV { get { return hasMV; } set { hasMV = value; } }
 
+    public string LogID { get { return logId; } set { logId = value; } }
     public string Score { get { return score; } set { score = value; } }
     public string Accuracy { get { return accuracy; } set { accuracy = value; } }
     public string Combo { get { return combo; } set { combo = value; } }
     public Text Rank { get { return rank; } set { rank = value; } }
     public MusicData Data { get { return mData; }set { mData = value; } }
     public bool IsDummy { get { return isDummy; } set { isDummy = value; } }
+    public string MusicID {  get { return musicID; } set { musicID= value; } }
     #endregion
 
     /*
