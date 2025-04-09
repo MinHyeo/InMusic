@@ -8,7 +8,12 @@ public class SteamWebProto_UI : MonoBehaviour
     public string userName;
     void Start()
     {
+        //스팀에서 유저 정보 가져오기
         GetSteamUserINFO();
+        //서버와 유니티 음악 리소스랑 동기화
+        GameManager_PSH.Resource.CheckMusic();
+        //로그인
+        LoginToWeb();
     }
 
     void GetSteamUserINFO()
@@ -23,8 +28,6 @@ public class SteamWebProto_UI : MonoBehaviour
             Debug.LogError("Steam is not initialized.");
             return;
         }
-
-        LoginToWeb();
     }
 
     public void LoginToWeb()
@@ -32,8 +35,9 @@ public class SteamWebProto_UI : MonoBehaviour
         GameManager_PSH.Web.UserLogin(userID, userName);
     }
 
+    //회원가입 테스트용 메서드
     public void SignUpToWeb()
     {
-        GameManager_PSH.Web.UserSignUp(userID, userName);
+        //GameManager_PSH.Web.UserSignUp(userID, userName);
     }
 }

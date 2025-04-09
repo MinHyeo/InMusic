@@ -8,7 +8,7 @@ using UnityEngine.Video;
 /// </summary>
 public class MusicItem : MonoBehaviour
 {
-    [Header("음악 관련 정보")]
+    [Header("음악 관련 정보(UI용)")]
     private string mPath;
     [SerializeField] private Text title;
     [SerializeField] private Text artist;
@@ -18,7 +18,7 @@ public class MusicItem : MonoBehaviour
     [SerializeField] private VideoClip musicVideo;
     [SerializeField] private bool hasBMS = false;
     [SerializeField] private bool hasMV = false;
-    [Header("기록 관련 정보")]
+    [Header("기록 관련 정보(UI용)")]
     [SerializeField] private string logId;
     [SerializeField] private string score;
     [SerializeField] private string accuracy;
@@ -26,7 +26,7 @@ public class MusicItem : MonoBehaviour
     [SerializeField] private Text rank;
     [SerializeField] private string musicID;
 
-    [Header("Item 상태 정보")]
+    [Header("Item 상태 정보(UI용)")]
     [SerializeField] private Image background;
     [SerializeField] private Image rightCircle;
     [SerializeField] private Color wMint = new Color(104.0f, 240.0f, 235.0f, 0.08f);

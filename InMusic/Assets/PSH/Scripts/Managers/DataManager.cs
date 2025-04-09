@@ -37,7 +37,7 @@ public class DataManager
         #endregion
 
         #region 서버에 저장
-        GameManager_PSH.Web.UpdateLog(newLog, userId);
+        //GameManager_PSH.Web.UpdateLog(newLog, userId);
         #endregion
     }
 
