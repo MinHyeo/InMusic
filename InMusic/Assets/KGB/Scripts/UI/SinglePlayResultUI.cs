@@ -111,7 +111,7 @@ public class SinglePlayResultUI : MonoBehaviour
     public void NextButton()
     {
         string musicID = GameManager_PSH.Instance.GetComponent<MusicData>().MusicID;
-        string userID = "76561198148984177";
+        string userID = GameManager_PSH.Data.GetPlayerID();
         DBManager.Instance.StartCheckHighScore(userID, musicID, playResult.Score, playResult.Combo, playResult.Accuracy, rate.text);
 
         SceneManager.LoadScene(0);

@@ -50,7 +50,6 @@ public class WebManager : MonoBehaviour
             }
         }
         
-        GetMusicLogs();
     }
     #endregion
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UI_BASE_PSH;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class Single_Lobby_UI : UI_Base_PSH
 {
@@ -20,6 +21,8 @@ public class Single_Lobby_UI : UI_Base_PSH
 
     private void Awake()
     {
+        GameManager_PSH.Web.GetMusicLogs();
+
         if (musicInfo == null || mInfo == null)
             musicInfo = transform.Find("MusicInfo").gameObject;
         mInfo = musicInfo.GetComponent<MusicInfo>();
@@ -28,14 +31,12 @@ public class Single_Lobby_UI : UI_Base_PSH
         if (musicList == null || mList == null)
             musicList = transform.Find("MusicList").gameObject;
         mList = musicList.GetComponent<MusicList>();
-
-        //음악 목록 가져와서 아이템 목록에 넘겨주기
-        mList.SetData(GameManager_PSH.Resource.GetMusicList());
     }
 
 
     void Start()
     {
+        StartCoroutine(SetLogData());
         LoadingScreen.Instance.SceneReady();
     }
 
@@ -181,4 +182,16 @@ public class Single_Lobby_UI : UI_Base_PSH
         //저장
         GameManager_PSH.Data.SaveData(test);
     }*/
+
+    /// <summary>
+    /// 로그 가져와서 DataManager에게 할당하는거랑, 할당한 값을 이용해 musicData 가공하는 과정에서 비동기 문제 발생해서, musicData 가공 요청을 비동기로 실행
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator SetLogData()
+    {
+        if (!GameManager_PSH.Data.isLogReady)
+            yield return null;
+        //음악 목록 가져와서 아이템 목록에 넘겨주기
+        mList.SetData(GameManager_PSH.Resource.GetMusicList());
+    }
 }

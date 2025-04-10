@@ -6,6 +6,7 @@ public class DataManager
     MusicData executeData;
     List<MusicLog> logList;
     Player pData;
+    public bool isLogReady = false;
     public void Init() {
         executeData = GameManager_PSH.Instance.GetComponent<MusicData>();
         pData = GameManager_PSH.Instance.GetComponent<Player>();
@@ -89,6 +90,7 @@ public class DataManager
     public void SetLogDataList(List<MusicLog> serverLog)
     {
         logList = serverLog;
+        isLogReady = true;
     }
 
     public List<MusicLog> getLogDataList()
