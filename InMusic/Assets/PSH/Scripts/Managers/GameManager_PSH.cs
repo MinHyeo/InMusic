@@ -47,13 +47,15 @@ public class GameManager_PSH : MonoBehaviour
                 gmObject.AddComponent<GameManager_PSH>();
                 gmObject.AddComponent<MusicData>();
                 gmObject.AddComponent<WebManager>();
+                gmObject.AddComponent<Player>();
             }
             DontDestroyOnLoad(gmObject);
 
             GM_Instance = gmObject.GetComponent<GameManager_PSH>();
-            Web = gmObject.GetComponent<WebManager>();
 
-            GM_Instance.M_Input.Init();
+            //매니저들 초기화
+            Web = gmObject.GetComponent<WebManager>();
+            //GM_Instance.M_Input.Init();
             GM_Instance.M_Data.Init();
 
             musicDataRoot = new GameObject("MusicDataRoot");
@@ -63,8 +65,10 @@ public class GameManager_PSH : MonoBehaviour
 
     void Update()
     {
+        /*
         M_Input.UIUpdate();
         M_Input.NoteUpdate();
+        */
     }
 
     //by KGB. 선택한 노래정보를 씬 이동후에도 유지(Single_Lobby_UI와 연계)

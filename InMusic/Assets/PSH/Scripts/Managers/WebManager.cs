@@ -8,7 +8,7 @@ public class WebManager : MonoBehaviour
     string loginURL = "http://localhost/InmusicScripts/login.php";
     string signiupURL = "http://localhost/InmusicScripts/signup.php";
     string checkMusicURL = "http://localhost/InmusicScripts/musiccheck.php";
-    //string musicLogURL = "http://localhost/InmusicScripts/getlog.php"; //서버쪽에서 로그인 후 바로 로그 내용 찾아줌
+    string musicLogURL = "http://localhost/InmusicScripts/getlog.php";
     //string LogUpdateURL = "http://localhost/InmusicScripts/updatelog.php";
 
     #region 로그인 및 기록 가져오기
@@ -36,7 +36,7 @@ public class WebManager : MonoBehaviour
             }
             else
             {
-                /*로그인 테스트용 코드
+                
                 if (www.downloadHandler.text == $"Login successful, welcome {userName}" ||
                     www.downloadHandler.text == $"User created successfully, welcome  {userName}")
                 {
@@ -46,27 +46,11 @@ public class WebManager : MonoBehaviour
                 {
                     Debug.Log(www.downloadHandler.text);
                     Debug.Log("로그인 실패ㅠㅠ");
-                }*/
-
-                string jsonData = www.downloadHandler.text;
-                Debug.Log(jsonData);
-
-                List<MusicLog> musicLogs = JsonUtility.FromJson<MusicLogList>(jsonData).GetLogs();
-
-                if (musicLogs == null)
-                {
-                    Debug.LogError("JSON 변환 실패!");
-                }
-                else
-                {
-                    foreach (MusicLog log in musicLogs)
-                    {
-                        Debug.Log($"로그 아이디:{log.LogID}");
-                    }
-                    GameManager_PSH.Data.SetLogDataList(musicLogs);
                 }
             }
         }
+        
+        GetMusicLogs();
     }
     #endregion
 
@@ -114,6 +98,56 @@ public class WebManager : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region 로그 가져오기
+    public void GetMusicLogs()
+    {
+        StartCoroutine(GetLogsFromServer(GameManager_PSH.Data.GetPlayerID()));
+    }
+
+    IEnumerator GetLogsFromServer(string userID)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("userID", userID);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(musicLogURL, form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log($"연결 실패 ㅠㅠ {www.error}");
+            }
+            else if (www.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.Log($"프로토콜 문제 {www.error}");
+            }
+            else
+            {
+                Debug.Log("음악 기록 가져오는 중...");
+                string jsonData = www.downloadHandler.text;
+                Debug.Log(jsonData);
+
+                List<MusicLog> musicLogs = JsonUtility.FromJson<MusicLogList>(jsonData).GetLogs();
+
+                if (musicLogs == null)
+                {
+                    Debug.LogError("JSON 변환 실패!");
+                }
+                else
+                {
+                    foreach (MusicLog log in musicLogs)
+                    {
+                        Debug.Log($"로그 아이디:{log.LogID}");
+                    }
+                    //데이터 메니저한테 로그들 넘겨주기
+                    GameManager_PSH.Data.SetLogDataList(musicLogs);
+                }
+            }
+        }
+    }
+
     #endregion
 
     #region 회원 가입

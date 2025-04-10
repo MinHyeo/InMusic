@@ -29,13 +29,13 @@ public class Single_Lobby_UI : UI_Base_PSH
             musicList = transform.Find("MusicList").gameObject;
         mList = musicList.GetComponent<MusicList>();
 
+        //음악 목록 가져와서 아이템 목록에 넘겨주기
+        mList.SetData(GameManager_PSH.Resource.GetMusicList());
     }
 
 
     void Start()
     {
-        //음악 목록 가져와서 아이템 목록에 넘겨주기
-        mList.SetData(GameManager_PSH.Resource.GetMusicList());
         LoadingScreen.Instance.SceneReady();
     }
 

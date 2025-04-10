@@ -149,6 +149,7 @@ public class ResourceManager
     /// </summary>
     /// <returns></returns>
     public List<MusicData> GetMusicList() {
+        //데이터 메니져가 갖고있는 로그들 가져와서 값 할당하기
         List<MusicLog> logs = GameManager_PSH.Data.getLogDataList();
 
         for (int i = 0; i < musicDataList.Count - 1; i++)

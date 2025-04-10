@@ -1,18 +1,45 @@
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 public class DataManager
 {
     MusicData executeData;
     List<MusicLog> logList;
-
+    Player pData;
     public void Init() {
         executeData = GameManager_PSH.Instance.GetComponent<MusicData>();
+        pData = GameManager_PSH.Instance.GetComponent<Player>();
+
         if (executeData == null)
         {
             Debug.LogError("GameManager에 MusicData가 없습니다.");
         }
+
+        if (pData == null)
+        {
+            Debug.LogError("GameManager에 Player가 없습니다.");
+        }
+    }
+
+    /// <summary>
+    /// 스팀에서 받은 값들 넘겨 주기
+    /// </summary>
+    /// <param name="playerID">스팀ID</param>
+    /// <param name="playerName">스팀 프로필 닉네임</param>
+    public void SetPlayerData(string playerID, string playerName)
+    {
+        pData.PlayerID = playerID;
+        pData.PlayerName = playerName;
+    }
+
+    public string GetPlayerID()
+    {
+        return pData.PlayerID;
+    }
+
+    public string GetPlayerName()
+    {
+        return pData.PlayerName;
     }
 
     /// <summary>
@@ -62,7 +89,6 @@ public class DataManager
     public void SetLogDataList(List<MusicLog> serverLog)
     {
         logList = serverLog;
-
     }
 
     public List<MusicLog> getLogDataList()

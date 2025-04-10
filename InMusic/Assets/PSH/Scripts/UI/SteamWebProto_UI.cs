@@ -28,6 +28,8 @@ public class SteamWebProto_UI : MonoBehaviour
             Debug.LogError("Steam is not initialized.");
             return;
         }
+        
+        GameManager_PSH.Data.SetPlayerData(userID, userName);
     }
 
     public void LoginToWeb()
