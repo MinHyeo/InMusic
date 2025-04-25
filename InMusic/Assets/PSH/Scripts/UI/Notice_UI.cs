@@ -5,7 +5,7 @@ public class Notice_UI : MonoBehaviour
 {
     private void Awake()
     {
-        GameManager_PSH.Input.SetUIKeyEvent(MessageKeyEvent);
+        //GameManager_PSH.Input.SetUIKeyEvent(MessageKeyEvent);
     }
 
     public void MessageButton(string buttonname)
@@ -16,12 +16,12 @@ public class Notice_UI : MonoBehaviour
 
     public void MessageKeyEvent(Define_PSH.UIControl keyEvent)
     {
-        switch (keyEvent)
+        /*switch (keyEvent)
         {
             case Define_PSH.UIControl.Esc:
             case Define_PSH.UIControl.Enter:
                 MessageButton("Exit");
                 break;
-        }
+        }*/
     }
 }

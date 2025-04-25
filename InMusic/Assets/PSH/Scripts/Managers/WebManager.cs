@@ -18,36 +18,43 @@ public class WebManager : MonoBehaviour
 
     IEnumerator LoginToServer(string userID, string userName, string logID = "all")
     {
-        WWWForm form = new WWWForm();
-        form.AddField("userID", userID);
-        form.AddField("userName", userName);
-        form.AddField("logID",logID);
-        using (UnityWebRequest www = UnityWebRequest.Post(loginURL, form))
+        if (userID != "" && userName != "")
         {
-            yield return www.SendWebRequest();
+            WWWForm form = new WWWForm();
+            form.AddField("userID", userID);
+            form.AddField("userName", userName);
+            form.AddField("logID", logID);
+            using (UnityWebRequest www = UnityWebRequest.Post(loginURL, form))
+            {
+                yield return www.SendWebRequest();
 
-            if (www.result == UnityWebRequest.Result.ConnectionError)
-            {
-                Debug.Log($"연결 실패 ㅠㅠ {www.error}");
-            }
-            else if (www.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.Log($"프로토콜 문제 {www.error}");
-            }
-            else
-            {
-                
-                if (www.downloadHandler.text == $"Login successful, welcome {userName}" ||
-                    www.downloadHandler.text == $"User created successfully, welcome  {userName}")
+                if (www.result == UnityWebRequest.Result.ConnectionError)
                 {
-                    Debug.Log("로그인 성공!!");
+                    Debug.Log($"연결 실패 ㅠㅠ {www.error}");
+                }
+                else if (www.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Debug.Log($"프로토콜 문제 {www.error}");
                 }
                 else
                 {
-                    Debug.Log(www.downloadHandler.text);
-                    Debug.Log("로그인 실패ㅠㅠ");
+
+                    if (www.downloadHandler.text == $"Login successful, welcome {userName}" ||
+                        www.downloadHandler.text == $"User created successfully, welcome  {userName}")
+                    {
+                        Debug.Log("로그인 성공!!");
+                    }
+                    else
+                    {
+                        Debug.Log(www.downloadHandler.text);
+                        Debug.Log("로그인 실패ㅠㅠ");
+                    }
                 }
             }
+        }
+        else
+        {
+            Debug.Log("전달 받은 회원 정보 없음");
         }
         
     }

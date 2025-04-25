@@ -168,7 +168,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "BMS \uD30C\uC77C\uC774 \uC874\uC7AC\uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4."
+  m_Text: "\uC2A4\uD300 \uD074\uB77C\uC774\uC5B8\uD2B8\uC640 \uC5F0\uACB0\uC744 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4"
 --- !u!1 &5221200971984533103
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,9 +182,9 @@ GameObject:
   - component: {fileID: 957613705237827964}
   - component: {fileID: 8811085663973600500}
   - component: {fileID: 2245346430915466524}
-  - component: {fileID: 3095682144188986174}
+  - component: {fileID: 3392264767907151412}
   m_Layer: 5
-  m_Name: Notice_UI
+  m_Name: SteamConnector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -295,7 +295,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3095682144188986174
+--- !u!114 &3392264767907151412
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -304,9 +304,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5221200971984533103}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d25cf73ac3a3a04ebf1464bd521f9b8, type: 3}
+  m_Script: {fileID: 11500000, guid: c97e93cdce85d0d43831df1db189183a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  messageBox: {fileID: 0}
+  userID: 
+  userName: 
 --- !u!1 &6174325061208178384
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +323,7 @@ GameObject:
   - component: {fileID: 9053382918172515877}
   - component: {fileID: 1729387214225751635}
   m_Layer: 5
-  m_Name: Exit
+  m_Name: Reconnect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -428,10 +431,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3095682144188986174}
-        m_TargetAssemblyTypeName: Notice_UI, Assembly-CSharp
-        m_MethodName: MessageButton
-        m_Mode: 5
+      - m_Target: {fileID: 3392264767907151412}
+        m_TargetAssemblyTypeName: SteamCommect, Assembly-CSharp
+        m_MethodName: GetSteamUserINFO
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -518,4 +521,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uD655\uC778"
+  m_Text: "\uC7AC\uC5F0\uACB0"
