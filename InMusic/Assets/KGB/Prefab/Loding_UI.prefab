@@ -196,6 +196,8 @@ MonoBehaviour:
   inMusic: {fileID: 6362856341566072886}
   musicInfoPanel: {fileID: 4361794051129160192}
   loadingBarUI: {fileID: 4154176077963159045}
+  backImage: {fileID: 0}
+  backImage2: {fileID: 4261757065877345252, guid: 7baa36361b35dd845a7e8ea2217f7aae, type: 3}
 --- !u!114 &7614058464215877452
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ public class LoadingScreen : MonoBehaviour
     [SerializeField] GameObject musicInfoPanel;
     [SerializeField] GameObject loadingBarUI;
     [SerializeField] Sprite backImage;
+    [SerializeField] Sprite backImage2;
     private BMSData musicBMS;
     private LodingUI loadingUI;
     private MusicData musicData;
@@ -58,6 +59,8 @@ public class LoadingScreen : MonoBehaviour
     {
         if (data != null)
         {
+
+            loadingPanel.GetComponent<Image>().sprite = backImage;
             inMusic.SetActive(false);
             musicInfoPanel.SetActive(true);
             SetLoadingBarPos(-430);
@@ -66,7 +69,7 @@ public class LoadingScreen : MonoBehaviour
         }
         else
         {
-            loadingPanel.GetComponent<Image>().sprite = backImage;
+            loadingPanel.GetComponent<Image>().sprite = backImage2;
             inMusic.SetActive(true);
             musicInfoPanel.SetActive(false);
             SetLoadingBarPos(0);
