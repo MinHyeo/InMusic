@@ -6,18 +6,18 @@ using UnityEngine;
 
 namespace Play 
 {
-    [System.Serializable]
-    public class NoteData
-    {
-        public int bar;
-        public int channel;
-        public List<int> noteData;
+    //[System.Serializable]
+    //public class NoteData
+    //{
+    //    public int bar;
+    //    public int channel;
+    //    public List<int> noteData;
 
-        public override string ToString()
-        {
-            return string.Format("Bar: {0}, Channel: {1}, NoteData: {2}", bar, channel, noteData);
-        }
-    }
+    //    public override string ToString()
+    //    {
+    //        return string.Format("Bar: {0}, Channel: {1}, NoteData: {2}", bar, channel, noteData);
+    //    }
+    //}
 
     public class NoteManager : SingleTon<NoteManager>
     {
@@ -83,25 +83,6 @@ namespace Play
             }
 
             return note;
-        }
-
-        private float GetSpawnTime(NoteData nextNote)
-        {
-            float barTime = nextNote.bar * measureInterval;
-            int divisions = nextNote.noteData.Count;
-
-            for(int i = 0; i < divisions; i++)
-            {
-                int noteValue = nextNote.noteData[i];
-                if(noteValue != 0)
-                {
-                    float noteAppearTime = barTime + (measureInterval / divisions) * i;
-                    float spawnTime = songStartTime + noteAppearTime - travelTime;
-                    return spawnTime;
-                }
-            }
-
-            return 0.0f;
         }
 
         private IEnumerator SpawnNotes()

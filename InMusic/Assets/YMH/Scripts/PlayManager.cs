@@ -67,7 +67,6 @@ namespace Play
         private string artist;
         public Song SongTitle { get { return songName; } private set { } }
         private const float preStartDelay = 2.0f;
-        private const float noteSpeed = 5.0f;
 
         // 판정 기준
         private const float greateThreshold = 0.0533f;
@@ -116,18 +115,16 @@ namespace Play
 
 
         #region Play Init
-        public async void Init(Song songName, string artist)
+        public void Init(Song songName, string artist)
         {
             //노래 정보 저장
             this.songName = songName;
             this.artist = artist;
-            Debug.Log("노래 정보 저장 완료");
 
             //비디오 불러오기
             videoPlayScript.GetVideoClip(songName);
             //노래 불러오기
-            await SoundManager.Instance.SongInit(songName, PlayStyle.Normal);
-            Debug.Log("비디오 + 노래 불러오기 완료");
+            SoundManager.Instance.SongInit(songName, PlayStyle.Normal);
 
             isDataLoaded = true;
         }
@@ -141,11 +138,10 @@ namespace Play
         #region Play Game
         public void StartGame()
         {
-            //샘플 구하기
-            //SoundManager.Instance.GetCurrentFrequency();
             //박자선 계산
-            metronome.CalculateSync();
-            
+            //metronome.CalculateSync();
+            TimelineController.Instance.Initialize(BmsLoader.Instance.SelectSong(songName));
+
             //점수 초기화
             scoreManager.Init();
 
@@ -161,10 +157,9 @@ namespace Play
         private IEnumerator StartGameWithIntroDelay()
         {
             yield return null;
-
-            //metronome.StartInitialMetronome();
-            metronome.StartMetronome();
-            NoteManager.Instance.InitializeNotes(BmsLoader.Instance.SelectSong(songName));
+            
+            //metronome.StartMetronome();
+            //NoteManager.Instance.InitializeNotes(BmsLoader.Instance.SelectSong(songName));
 
             //딜레이
             yield return new WaitForSeconds(preStartDelay);
@@ -339,7 +334,7 @@ namespace Play
             metronome.Restart();
 
             //재시작
-            //StartGame(songName, artist);
+            StartGame();
         }
 
         //노래 종료

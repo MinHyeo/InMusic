@@ -1806,7 +1806,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &295634659
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1921,7 +1921,6 @@ MonoBehaviour:
   lineSpawnPoint: {fileID: 2019970740}
   lineSpeed: 5
   judgementLine: {fileID: 874486164}
-  text: {fileID: 934749514}
   defaultOffset: 0.09
 --- !u!4 &295634661
 Transform:
@@ -6852,6 +6851,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1342672285}
   m_CullTransparentMesh: 1
+--- !u!1 &1343810403
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1343810405}
+  - component: {fileID: 1343810404}
+  m_Layer: 0
+  m_Name: TimelineController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1343810404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343810403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a6e341f42c6a444aa0f1201f88a2dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  linePrefab: {fileID: 4328062452459893043, guid: ff143434f7694ce478b447bcdb540a42, type: 3}
+  note1Prefab: {fileID: 6864457216544786533, guid: 221e0df023c0fed4883efb3b5d9683c0, type: 3}
+  note2Prefab: {fileID: 6864457216544786533, guid: 37817e83f9b570e44ad67bf8927ee3a4, type: 3}
+  lineSpawnPoint: {fileID: 2019970740}
+  noteSpawnPoints:
+  - {fileID: 2064099624}
+  - {fileID: 430142135}
+  - {fileID: 456262725}
+  - {fileID: 1545973875}
+  judgementLine: {fileID: 874486164}
+--- !u!4 &1343810405
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343810403}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.1676384, y: 1.2210798, z: 101.674995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1383133749
 GameObject:
   m_ObjectHideFlags: 0
@@ -8623,7 +8676,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1963125726
 Transform:
   m_ObjectHideFlags: 0
@@ -9667,3 +9720,4 @@ SceneRoots:
   - {fileID: 809740803}
   - {fileID: 1954444353}
   - {fileID: 1907617023}
+  - {fileID: 1343810405}

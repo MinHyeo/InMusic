@@ -25,15 +25,6 @@ namespace Play
 
     public class SoundManager : SingleTon<SoundManager>
     {
-        #region 사용X
-        // FMOD Variable 
-        [Header("music")]
-        FMOD.System fmodSystem;
-        FMOD.ChannelGroup musicChannelGroup;
-        FMOD.Sound musicSound;
-        FMOD.Channel musicChannel;
-        #endregion
-
         private FMOD.Studio.EventInstance bgmInstance;
         private FMOD.ChannelGroup masterChannelGroup;
 
@@ -44,7 +35,6 @@ namespace Play
         private FMOD.Studio.Bus sfxBus;
 
         [Header("MusicInfo")]
-        public int frequency;
         private int startTimeSeconds = 60;
         public int currentPositionMs;
 
@@ -59,9 +49,6 @@ namespace Play
         #region Sound Init
         private void Init()
         {
-            //fmodSystem = RuntimeManager.CoreSystem;
-            //fmodSystem.createChannelGroup("Music", out musicChannelGroup);
-
             RuntimeManager.LoadBank("Master");
             RuntimeManager.LoadBank("BGM");
             RuntimeManager.LoadBank("SFX");
@@ -106,7 +93,7 @@ namespace Play
         /// SoundManager 노래 초기설정
         /// </summary>
         /// <param name="songName"></param>
-        public async Task SongInit(Song songName, PlayStyle style)
+        public void SongInit(Song songName, PlayStyle style)
         {
             //노래 제목 문자열 변환
             string songTitle = songName.ToString();
@@ -129,53 +116,11 @@ namespace Play
                 int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000);
                 bgmInstance.setTimelinePosition(startTimeMilliseconds);
             }
-
-            //채널 그룹 가져오기
-            //StartCoroutine(GetChannelGroup());
-            await RunCoroutineAsTask(GetChannelGroup());
-        }
-
-        private Task RunCoroutineAsTask(IEnumerator coroutine)
-        {
-            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
-            StartCoroutine(CoroutineWrapper(coroutine, tcs));
-            return tcs.Task;
-        }
-
-        private IEnumerator CoroutineWrapper(IEnumerator coroutine, TaskCompletionSource<bool> tcs)
-        {
-            yield return coroutine;
-            tcs.SetResult(true);
-        }
-
-        private IEnumerator GetChannelGroup()
-        {
-            //노래 시작하고 바로 일시정지
-            isPlaying = true;
-            bgmInstance.start();
-            SetPause(isPlaying);
-
-            //프레임 대기
-            yield return null;
-
-            //채널그룹 가져오기
-            FMOD.Studio.PLAYBACK_STATE state;
-            do
-            {
-                yield return null;
-                bgmInstance.getPlaybackState(out state);
-            } while (state != FMOD.Studio.PLAYBACK_STATE.PLAYING);
-            bgmInstance.getChannelGroup(out masterChannelGroup);
-
-            //샘플 구하기
-            GetCurrentFrequency();
         }
 
         public void Play()
         {
-            SetPause(isPlaying);
-            //bgmInstance.start();
-            
+            bgmInstance.start();
             isPlaying = true;
         }
         #endregion
@@ -195,36 +140,6 @@ namespace Play
             else
             {
                 UnityEngine.Debug.LogError("노래 플레이 상태 겹침");
-            }
-        }
-        #endregion
-
-        #region Get Frequency
-        public void GetCurrentFrequency()
-        {
-            if (!masterChannelGroup.hasHandle())
-            {
-                UnityEngine.Debug.LogError("Master Channel Group has no handle");
-                return;
-            }
-
-            FMOD.System system;
-            FMOD.RESULT result = masterChannelGroup.getSystemObject(out system);
-            if (result != FMOD.RESULT.OK)
-            {
-                UnityEngine.Debug.LogError($"FMOD 시스템 가져오기 실패: {result}");
-                return;
-            }
-
-            // 현재 샘플링 주파수 (예: 44100 Hz)
-            FMOD.SPEAKERMODE speakerMode;
-            int numRawSpeakers;
-            result = system.getSoftwareFormat(out frequency, out speakerMode, out numRawSpeakers);
-            UnityEngine.Debug.Log($"frequency : {frequency}");
-            if (result != FMOD.RESULT.OK)
-            {
-                UnityEngine.Debug.LogError($"FMOD 샘플링 주파수 가져오기 실패: {result}");
-                return;
             }
         }
         #endregion
@@ -264,15 +179,9 @@ namespace Play
             PlayManager.Instance.End();
         }
 
-        public void End()
+        public void End() 
         {
-            musicChannel.stop();
-            musicChannelGroup.release();
-
-            musicSound.release();
-
-            fmodSystem.close();
-            fmodSystem.release();
+            //bgmInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
 
             isPlaying = false;
         }

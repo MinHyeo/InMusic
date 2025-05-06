@@ -124,7 +124,6 @@ public class LoadingSong : MonoBehaviour
 
                     //씬 활성화될 때까지 대기
                     yield return new WaitUntil(() => PlayManager.Instance != null);
-                    Debug.Log("PlayManager 인스턴스 확인");
 
                     yield return StartCoroutine(WaitForPlayManagerAndStartGame());
 
