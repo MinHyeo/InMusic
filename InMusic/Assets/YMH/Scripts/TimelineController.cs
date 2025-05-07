@@ -39,6 +39,7 @@ namespace Play
         private float speed = 5f;
         private float startDelayBeats = 2f;
         private float songStartTime = 0f;
+        public float SongStartTime { get { return songStartTime; } private set { } }
         private float nextSample;
         private int underBeats = 4;
         private int upperBeats = 1;
@@ -59,16 +60,21 @@ namespace Play
             ObjectPoolManager.Instance.CreatePool(note1Prefab);
             ObjectPoolManager.Instance.CreatePool(note2Prefab);
 
+            // 곡 정보 받아오기
             noteDataList = songInfo.NoteList;
             noteCount = songInfo.NoteCount;
 
+            // 비트 및 마디 계산
             beatIntervalMs = 60000f / bpm;
             measureInterval = beatIntervalMs * 4f;
+            // 내려오는데 걸리는 시간
             float distanceToJudgementLine = lineSpawnPoint.position.y - judgementLine.position.y;
             travelTime = distanceToJudgementLine / speed;
 
+            // 시작 시간 계산(2마디 후 노래 시작)
             float beatDelayTime = measureInterval * startDelayBeats / 1000f;
             songStartTime = Time.time + beatDelayTime;
+            Debug.Log(songStartTime);
 
             nextSample = SoundManager.Instance.GetTimelinePosition();
 
@@ -91,7 +97,7 @@ namespace Play
 
         private IEnumerator PlayTicks()
         {
-            nextSample += beatIntervalMs;// - (frequency * defaultOffset);
+            nextSample += beatIntervalMs;
 
             if (upperBeats == 1)
             {
@@ -136,7 +142,6 @@ namespace Play
                     float noteAppearTime = barTime + ((measureInterval / divisions) / 1000) * i;
                     float spawnTime = songStartTime + noteAppearTime - travelTime;
 
-                    Debug.Log($"noteAppearTime : {noteAppearTime}, spawnTime : {spawnTime}, songStartTime : {songStartTime}");
                     coroutines.Add(StartCoroutine(SpawnNote(channel, spawnTime)));
                 }
 
@@ -157,12 +162,42 @@ namespace Play
             activeNotes.Add(noteScript);
         }
 
+        public Note GetClosestNote(int channel, float pressTime)
+        {
+            Note closestNote = null;
+            float minTimeDifference = float.MaxValue;
+
+            foreach (Note note in activeNotes)
+            {
+                if (note.Channel == channel)
+                {
+                    float timeDifference = Mathf.Abs(note.targetTime - pressTime);
+                    if (timeDifference < minTimeDifference)
+                    {
+                        minTimeDifference = timeDifference;
+                        closestNote = note;
+                    }
+                }
+            }
+
+            return closestNote;
+        }
+
         public void RemoveNote(Note note)
         {
             if (activeNotes.Contains(note))
             {
                 activeNotes.Remove(note);
                 ObjectPoolManager.Instance.ReleaseToPool(note.gameObject.name, note.gameObject);
+            }
+        }
+
+        public void RemoveLine(GameObject line)
+        {
+            if (linesObject.Contains(line))
+            {
+                linesObject.Remove(line);
+                ObjectPoolManager.Instance.ReleaseToPool("Line", line);
             }
         }
 
@@ -175,6 +210,11 @@ namespace Play
             foreach (var note in activeNotes)
                 ObjectPoolManager.Instance.ReleaseToPool(note.gameObject.name, note.gameObject);
             activeNotes.Clear();
+        }
+
+        public void RemoveJudgementLine()
+        {
+            judgementLine.gameObject.SetActive(false);
         }
     }
 }

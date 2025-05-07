@@ -157,12 +157,13 @@ namespace Play
         private IEnumerator StartGameWithIntroDelay()
         {
             yield return null;
-            
+
             //metronome.StartMetronome();
             //NoteManager.Instance.InitializeNotes(BmsLoader.Instance.SelectSong(songName));
 
             //딜레이
-            yield return new WaitForSeconds(preStartDelay);
+            Debug.Log(TimelineController.Instance.SongStartTime);
+            yield return new WaitForSeconds(TimelineController.Instance.SongStartTime);
 
             //게임 상태 수정
             state = States.Playing;
@@ -261,23 +262,7 @@ namespace Play
 
         private Note FindClosestNoteToPressTime(int channel, float pressTime)
         {
-            Note closestNote = null;
-            float minTimeDifference = float.MaxValue;
-
-            foreach (Note note in NoteManager.Instance.NoteList)
-            {
-                if (note.Channel == channel)
-                {
-                    float timeDifference = Mathf.Abs(note.targetTime - pressTime);
-                    if (timeDifference < minTimeDifference)
-                    {
-                        minTimeDifference = timeDifference;
-                        closestNote = note;
-                    }
-                }
-            }
-
-            return closestNote;
+            return TimelineController.Instance.GetClosestNote(channel, pressTime);
         }
 
         public void HandleNoteHit(Note note, AccuracyType accuracyResult, float percent)
@@ -329,9 +314,10 @@ namespace Play
             //노래 초기화
             SoundManager.Instance.End();
             //노트 초기화
-            NoteManager.Instance.Restart();
+            //NoteManager.Instance.Restart();
             //박자선  초기화
-            metronome.Restart();
+            //metronome.Restart();
+            TimelineController.Instance.ClearAll();
 
             //재시작
             StartGame();
@@ -348,7 +334,8 @@ namespace Play
             //비디오 종료
             videoPlayScript.End();
             //판정선 안보에기 표시
-            NoteManager.Instance.RemoveJudgementLine();
+            //NoteManager.Instance.RemoveJudgementLine();
+            TimelineController.Instance.RemoveJudgementLine();
 
             //등급 판정
             scoreManager.SetRank();
