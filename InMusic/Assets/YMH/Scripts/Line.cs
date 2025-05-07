@@ -23,7 +23,7 @@ namespace Play
             if (transform.position.y < -10.0f)
             {
                 //Metronome.Instance.RemoveLine(this.gameObject);
-                TimelineController.Instance.RemoveLine(this.gameObject)
+                TimelineController.Instance.RemoveLine(this.gameObject);
             }
         }
     }

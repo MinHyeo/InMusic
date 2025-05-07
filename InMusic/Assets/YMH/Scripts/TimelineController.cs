@@ -38,8 +38,9 @@ namespace Play
         private int beatCount = 0;
         private float speed = 5f;
         private float startDelayBeats = 2f;
+        private float beatDelayTime;
+        public float BeatDelayTime { get { return beatDelayTime; } private set { } }
         private float songStartTime = 0f;
-        public float SongStartTime { get { return songStartTime; } private set { } }
         private float nextSample;
         private int underBeats = 4;
         private int upperBeats = 1;
@@ -67,16 +68,20 @@ namespace Play
             // 비트 및 마디 계산
             beatIntervalMs = 60000f / bpm;
             measureInterval = beatIntervalMs * 4f;
+    
+            float beatIntervalSec = beatIntervalMs / 1000f;
+            float measureIntervalSec = measureInterval / 1000f;
+
             // 내려오는데 걸리는 시간
             float distanceToJudgementLine = lineSpawnPoint.position.y - judgementLine.position.y;
             travelTime = distanceToJudgementLine / speed;
 
             // 시작 시간 계산(2마디 후 노래 시작)
-            float beatDelayTime = measureInterval * startDelayBeats / 1000f;
+            beatDelayTime = measureIntervalSec * startDelayBeats;
             songStartTime = Time.time + beatDelayTime;
-            Debug.Log(songStartTime);
 
-            nextSample = SoundManager.Instance.GetTimelinePosition();
+            nextSample = songStartTime + measureIntervalSec;
+            Debug.Log($"nextSample : {nextSample}, time : {Time.time}, TimellinePosition : {SoundManager.Instance.GetTimelinePosition()}");
 
             isStart = true;
 
@@ -89,7 +94,7 @@ namespace Play
                 return;
 
             // 곡 진행시간 * 주파수가 다음 라인보다 크거나 같으면 작동.
-            if (SoundManager.Instance.GetTimelinePosition() >= nextSample)
+            if (Time.time >= nextSample)
             {
                 StartCoroutine(PlayTicks());
             }
@@ -97,13 +102,13 @@ namespace Play
 
         private IEnumerator PlayTicks()
         {
-            nextSample += beatIntervalMs;
+            nextSample += beatIntervalMs / 1000f;
 
             if (upperBeats == 1)
             {
-                float measureStartTime = SoundManager.Instance.GetTimelinePosition() + measureInterval;
+                float measureStartTime = Time.time + measureInterval / 1000;
 
-                float unitySpawnDelay = (measureStartTime - travelTime) / 1000f - Time.time;
+                float unitySpawnDelay = measureStartTime - travelTime - Time.time;
 
                 StartCoroutine(SpawnMeasureLine(unitySpawnDelay));
             }

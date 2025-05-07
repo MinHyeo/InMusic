@@ -162,8 +162,8 @@ namespace Play
             //NoteManager.Instance.InitializeNotes(BmsLoader.Instance.SelectSong(songName));
 
             //딜레이
-            Debug.Log(TimelineController.Instance.SongStartTime);
-            yield return new WaitForSeconds(TimelineController.Instance.SongStartTime);
+            Debug.Log(TimelineController.Instance.BeatDelayTime);
+            yield return new WaitForSeconds(TimelineController.Instance.BeatDelayTime);
 
             //게임 상태 수정
             state = States.Playing;
