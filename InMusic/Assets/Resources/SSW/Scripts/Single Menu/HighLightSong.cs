@@ -157,7 +157,7 @@ namespace SongList{
             //SoundManager.Instance.PlaySFX(SFXType.PlayStart);
             //Play.SoundManager.Instance.PlayBGMHighLight()
             loadingSongObj = LoadingSong.Instance;
-            loadingSongObj.LoadPlay("YMH", _detailTitleText.text, _detailArtistText.text, _detailImage.sprite);
+            loadingSongObj.LoadPlay("SinglePlay", _detailTitleText.text, _detailArtistText.text, _detailImage.sprite);
         }
 
         // /// <summary>

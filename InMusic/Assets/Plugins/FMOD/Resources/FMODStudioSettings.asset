@@ -477,11 +477,7 @@ MonoBehaviour:
   Plugins: []
   MasterBanks: []
   Banks: []
-  BanksToLoad:
-  - BGM
-  - Master
-  - Master.strings
-  - SFX
+  BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
   AndroidUseOBB: 0
