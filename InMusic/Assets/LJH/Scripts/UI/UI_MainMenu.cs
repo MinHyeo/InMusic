@@ -131,6 +131,7 @@ public class UI_MainMenu : UI_Base
     private void StartGame(bool isMultiplayer)
     {
         Debug.Log(isMultiplayer ? "Starting Multiplayer Mode" : "Starting Solo Mode");
+        GameManager_PSH.Resource.CheckMusic();
 
         if (isMultiplayer)
         {

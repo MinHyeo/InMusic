@@ -101,7 +101,7 @@ public class Single_Lobby_UI : UI_Base_PSH
             case "Exit":
                 //키 입력 이벤트 제거
                 GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-                SceneManager.LoadScene(2);
+                SceneManager.LoadScene(0);
                 break;
             case "Enter":
                 if (curMusicItem.GetComponent<MusicItem>().HasBMS) {

@@ -64,4 +64,9 @@ public class SteamConnect : MonoBehaviour
         //GameManager_PSH.Web.UserSignUp(userID, userName);
     }
 
+    public void PlayWithdoutSteam()
+    {
+        GameManager_PSH.Resource.CheckMusic();
+        Destroy(gameObject);
+    }
 }
