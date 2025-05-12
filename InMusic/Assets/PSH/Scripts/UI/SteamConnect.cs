@@ -16,7 +16,7 @@ public class SteamConnect : MonoBehaviour
     //스팀 정보 -> 리소스 동기화 -> 로그인 로직 함수
     public void InitializeGame()
     {
-        if (GameManager_PSH.Data.GetPlayerID() != "" && GameManager_PSH.Data.GetPlayerName() != "")
+        if (GameManager_PSH.SteamCheck)
         {
             return;
         }
@@ -38,6 +38,7 @@ public class SteamConnect : MonoBehaviour
     {
         if (SteamManager.Initialized)
         {
+            GameManager_PSH.SteamCheck = true;
             userID = Convert.ToString(SteamUser.GetSteamID().m_SteamID);
             userName = SteamFriends.GetPersonaName();
         }
@@ -66,6 +67,7 @@ public class SteamConnect : MonoBehaviour
 
     public void PlayWithdoutSteam()
     {
+        GameManager_PSH.SteamCheck = true;
         GameManager_PSH.Resource.CheckMusic();
         Destroy(gameObject);
     }

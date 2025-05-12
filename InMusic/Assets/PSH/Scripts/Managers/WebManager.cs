@@ -18,7 +18,7 @@ public class WebManager : MonoBehaviour
 
     IEnumerator LoginToServer(string userID, string userName, string logID = "all")
     {
-        if (userID != "" && userName != "")
+        if (GameManager_PSH.SteamCheck && !GameManager_PSH.BackendCheck)
         {
             WWWForm form = new WWWForm();
             form.AddField("userID", userID);
@@ -50,6 +50,7 @@ public class WebManager : MonoBehaviour
                         Debug.Log("로그인 실패ㅠㅠ");
                     }
                 }
+                GameManager_PSH.BackendCheck = true;
             }
         }
         else
