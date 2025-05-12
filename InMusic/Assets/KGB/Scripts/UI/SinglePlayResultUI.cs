@@ -114,7 +114,7 @@ public class SinglePlayResultUI : MonoBehaviour
         string userID = GameManager_PSH.Data.GetPlayerID();
         DBManager.Instance.StartCheckHighScore(userID, musicID, playResult.Score, playResult.Combo, playResult.Accuracy, rate.text);
 
-        SceneManager.LoadScene(0);
+        LoadingScreen.Instance.LoadScene("Single_Lobby_PSH");
         
     }
 }
