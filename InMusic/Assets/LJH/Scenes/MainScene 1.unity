@@ -659,7 +659,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1729387214225751635, guid: 10151c6d79d952a42ab6682a61c471ec, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InitializeGame
+      value: PlayWithdoutSteam
       objectReference: {fileID: 0}
     - target: {fileID: 3392264767907151412, guid: 10151c6d79d952a42ab6682a61c471ec, type: 3}
       propertyPath: messageBox
@@ -667,11 +667,19 @@ PrefabInstance:
       objectReference: {fileID: 1021583349}
     - target: {fileID: 3619828871587488996, guid: 10151c6d79d952a42ab6682a61c471ec, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5221200971984533103, guid: 10151c6d79d952a42ab6682a61c471ec, type: 3}
       propertyPath: m_Name
       value: SteamConnector
+      objectReference: {fileID: 0}
+    - target: {fileID: 5221200971984533103, guid: 10151c6d79d952a42ab6682a61c471ec, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6212204519617900646, guid: 10151c6d79d952a42ab6682a61c471ec, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6619122597831783494, guid: 10151c6d79d952a42ab6682a61c471ec, type: 3}
       propertyPath: m_Pivot.x
@@ -1018,6 +1026,10 @@ PrefabInstance:
       propertyPath: m_RenderMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2221470008176310685, guid: 09d058288657e12458df5047cf21cdb8, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 3351481846526647182, guid: 09d058288657e12458df5047cf21cdb8, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -896
@@ -1197,9 +1209,9 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 619394802}
+  - {fileID: 1021583348}
   - {fileID: 6344444559361666583}
   - {fileID: 1782777765}
   - {fileID: 919326692}
-  - {fileID: 302841802}
   - {fileID: 1883582859}
-  - {fileID: 1021583348}
+  - {fileID: 302841802}

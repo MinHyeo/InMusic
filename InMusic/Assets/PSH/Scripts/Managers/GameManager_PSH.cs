@@ -4,6 +4,9 @@ public class GameManager_PSH : MonoBehaviour
 {
     string selectedMusic;
     static GameObject musicDataRoot;
+    [SerializeField] bool isSteamCheck = false;
+    [SerializeField] bool isBackendCheck = false;
+
 
     public GameObject DataRoot { get { return musicDataRoot; } }
 
@@ -35,6 +38,9 @@ public class GameManager_PSH : MonoBehaviour
     */
 
     #endregion
+
+    public static bool SteamCheck { get { return Instance.isSteamCheck; } set { Instance.isSteamCheck = value; } }
+    public static bool BackendCheck { get { return Instance.isBackendCheck; } set { Instance.isBackendCheck = value; } }
 
     static void Init()
     {

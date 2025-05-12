@@ -1,7 +1,6 @@
 using System;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.Windows;
 
 public class Message_UI : MonoBehaviour
@@ -13,7 +12,7 @@ public class Message_UI : MonoBehaviour
 
     public void MessageButton(string buttonname) {
         if (buttonname == "Exit") {
-            //EditorApplication.isPlaying = false; //에디터용
+            //EditorApplication.isPlaying = false; //에디터용 (빌드전에 지우기)
             Application.Quit();//인게임용
         }
         else if (buttonname == "Cancle") {

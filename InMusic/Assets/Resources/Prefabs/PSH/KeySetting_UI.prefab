@@ -1290,7 +1290,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5004031062504433419}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30d3da8ac93d01d4fbeef65565bbeb9c, type: 3}
+  m_Script: {fileID: 11500000, guid: e52913af42af41e4a8732233bf64d6c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   menuList: []
@@ -1299,6 +1299,8 @@ MonoBehaviour:
   numOfMenuList: 0
   curMenu: {fileID: 0}
   curMenuIndex: 0
+  curNote: 0
+  isSetMode: 0
 --- !u!1 &5125920664943126888
 GameObject:
   m_ObjectHideFlags: 0

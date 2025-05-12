@@ -501,7 +501,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6070444229546094914}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Guide_UI, Assembly-CSharp
         m_MethodName: GuideButton
         m_Mode: 5
@@ -755,7 +755,7 @@ GameObject:
   - component: {fileID: 316026526140096496}
   - component: {fileID: 5309466432693773589}
   - component: {fileID: 7593494810870972495}
-  - component: {fileID: 6070444229546094914}
+  - component: {fileID: 2994459692966995747}
   m_Layer: 5
   m_Name: KeyGuide_UI
   m_TagString: Untagged
@@ -868,7 +868,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6070444229546094914
+--- !u!114 &2994459692966995747
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -877,7 +877,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5022165352743982980}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecbbbe4eb451359448a438e35630e9d3, type: 3}
+  m_Script: {fileID: 11500000, guid: c991f2be032f09645baf2854e4583d6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5358298263988956370
