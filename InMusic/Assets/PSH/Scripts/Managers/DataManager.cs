@@ -5,11 +5,11 @@ public class DataManager
 {
     MusicData executeData;
     List<MusicLog> logList;
-    Player pData;
+    PlayerData pData;
     public bool isLogReady = false;
     public void Init() {
         executeData = GameManager_PSH.Instance.GetComponent<MusicData>();
-        pData = GameManager_PSH.Instance.GetComponent<Player>();
+        pData = GameManager_PSH.Instance.GetComponent<PlayerData>();
 
         if (executeData == null)
         {

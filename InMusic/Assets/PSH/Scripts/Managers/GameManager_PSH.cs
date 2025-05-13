@@ -53,7 +53,7 @@ public class GameManager_PSH : MonoBehaviour
                 gmObject.AddComponent<GameManager_PSH>();
                 gmObject.AddComponent<MusicData>();
                 gmObject.AddComponent<WebManager>();
-                gmObject.AddComponent<Player>();
+                gmObject.AddComponent<PlayerData>();
             }
             DontDestroyOnLoad(gmObject);
 
