@@ -34,9 +34,25 @@ public class RoomCreateUI : MonoBehaviour
 
     public void CreateRoom()
     {
-        if (roomNameInput.text != string.Empty)
+        if (roomNameInput.text == string.Empty) //방 이름을 입력 안했을 때
         {
-            networkManager.CreateSession(roomNameInput.text);
+            return;
+        }
+
+        if (passwordToggle.isOn) //비번 체크 on
+        {
+            if (roomPasswordInput == null) // 비번 체크하고 비번을 입력 안했을 때
+            {
+                return;
+            }
+            else // 비번 체크하고 비번 입력 완료
+            {
+                networkManager.CreateSession(roomNameInput.text, roomPasswordInput.text);
+            }
+        }
+        else //비번 체크 off
+        {
+            networkManager.CreateSession(roomPasswordInput.text);
         }
     }
 

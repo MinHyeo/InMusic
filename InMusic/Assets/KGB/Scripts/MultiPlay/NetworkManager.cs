@@ -18,8 +18,12 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public GameObject sessionListEntryPrefab;
     public Dictionary<string, GameObject> sessionListUiDictionnary = new Dictionary<string, GameObject>();
 
-    public string gameSecen = "KGB_Multi_Lobby";
-
+    private string lobbyScene = "KGB_Multi_Lobby";
+    private string gameplayScene = "SampleScene";
+    //public SceneAsset gameplaySceneAsset;
+    //public SceneAsset lobbySceneAsset;
+    public GameObject playerPrefab;
+    public GameObject passwordPanel;
     private void Awake()
     {
         
@@ -37,22 +41,35 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         runnerInstance.JoinSessionLobby(SessionLobby.Shared, lobbyName);
     }
 
+    public static void  ReturnToLobby()
+    {
+        NetworkManager.runnerInstance.Despawn(runnerInstance.GetPlayerObject(runnerInstance.LocalPlayer));
+        NetworkManager.runnerInstance.Shutdown(true, ShutdownReason.Ok);
+    }
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+    {
+        SceneManager.LoadScene(lobbyScene);
+    }
+
     public void CreateRandomSession()
     {
         int randomInt = UnityEngine.Random.Range(1000, 9999);
         string randomSessionName = "Room-"+randomInt.ToString();
+
         runnerInstance.StartGame(new StartGameArgs()
         {
+            Scene = SceneRef.FromIndex(GetSceneIndex(gameplayScene)),
             SessionName = randomSessionName,
             GameMode = GameMode.Shared,
         });
-    }
+    } 
 
     public void CreateSession(string roomName)
     {
         string newSessionName = roomName;
         runnerInstance.StartGame(new StartGameArgs()
         {
+            Scene = SceneRef.FromIndex(GetSceneIndex(gameplayScene)),
             SessionName = newSessionName,
             GameMode = GameMode.Shared,
         });
@@ -62,6 +79,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         string newSessionName = roomName;
         runnerInstance.StartGame(new StartGameArgs()
         {
+            Scene = SceneRef.FromIndex(GetSceneIndex(gameplayScene)), //юс╫ц
             SessionName = newSessionName,
             GameMode = GameMode.Shared,
             SessionProperties = new Dictionary<string, SessionProperty>
@@ -71,12 +89,28 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         });
     }
 
+    public int GetSceneIndex(string sceneName)
+    {
+        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+        {
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+            string name = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+            if(name == sceneName)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if(player == runnerInstance.LocalPlayer)
         {
-            SceneManager.LoadScene(gameSecen);
+            
+            NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero);
+            runner.SetPlayerObject(player, playerObject);
         }
     }
 
@@ -110,12 +144,17 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         GameObject newEntry = GameObject.Instantiate(sessionListEntryPrefab);
         newEntry.transform.parent = sessionListContentParent;
-        SessionListEntry entryScript = newEntry.GetComponent<SessionListEntry>();
-        sessionListUiDictionnary.Add(session.Name, newEntry);
 
-        entryScript.roomName.text = session.Name;
-        entryScript.playerCount.text = session.PlayerCount.ToString() +"/"+ session.MaxPlayers.ToString();
-        entryScript.joinButton.interactable = session.IsOpen;
+        SessionListEntry entryScript = newEntry.GetComponentInChildren<SessionListEntry>();
+        entryScript.Initialize(session);
+        sessionListUiDictionnary.Add(session.Name, newEntry);
+        if (passwordPanel != null)
+        {
+            entryScript.SetPasswordPanel(passwordPanel);
+        }
+        //entryScript.roomName.text = session.Name;
+        //entryScript.playerCount.text = session.PlayerCount.ToString() +"/"+ session.MaxPlayers.ToString();
+        //entryScript.joinButton.interactable = session.IsOpen;
 
         newEntry.SetActive(session.IsVisible);
     }
@@ -240,10 +279,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     }
 
 
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
-    {
-        
-    }
+
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
     {
