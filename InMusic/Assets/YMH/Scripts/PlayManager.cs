@@ -32,8 +32,10 @@ namespace Play
     }
     #endregion
 
-    public class PlayManager : SingleTon<PlayManager>
+    public class PlayManager : MonoBehaviour
     {
+        public static PlayManager Instance { get; private set; }
+
         [Header("관련 Scripts")]
         //점수 관련
         private ScoreManager scoreManager;
@@ -87,11 +89,13 @@ namespace Play
         }
         private States state = States.Ready;
 
-        protected override void Awake()
+        protected virtual void Awake()
         {
-            base.Awake();
-
-            if(SceneManager.GetActiveScene().name != "YMH")
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
             {
                 Destroy(gameObject);
             }

@@ -12,6 +12,7 @@ public class LobbyManager : SingleTon<LobbyManager>
 
     private void Start()
     {
+        Initialized();
     }
 
     public void Initialized()
@@ -24,7 +25,6 @@ public class LobbyManager : SingleTon<LobbyManager>
 
     // Create Room
     public void CreateRoom(){
-        Debug.Log("Create Room");
         createRoomUI.SetActive(true);
     }
 }

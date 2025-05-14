@@ -4,8 +4,9 @@ using Fusion.Sockets;
 using System.Collections.Generic;
 using System;
 using UnityEngine.SceneManagement;
+using UnityEngine.Timeline;
 
-public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
+public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 {
     public static NetworkRunner runnerInstance;
 
@@ -31,15 +32,28 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         runnerInstance.JoinSessionLobby(SessionLobby.Shared, lobbyName);
     }
 
-    public void CreateRandomSession()
+    public void CreateRoom(string roonName, string password, bool isPassword)
     {
-        int randomInt = UnityEngine.Random.Range(1000, 9999);
+        SessionProperty passwordProp = password;
+        SessionProperty isLockedProp = isPassword;
 
-        string randomSessionName = "Room" + randomInt.ToString();
+        var sessionProps = new Dictionary<string, SessionProperty>();
+
+        if (isPassword)
+        {
+            sessionProps.Add("isLocked", isLockedProp);   // ë°© ìž ê¹€ ì—¬ë¶€
+            sessionProps.Add("password", passwordProp); // ì‹¤ì œ ë¹„ë°€ë²ˆí˜¸
+        }    
+        else
+        {
+            sessionProps.Add("isLocked", isLockedProp);
+        }
+
         runnerInstance.StartGame(new StartGameArgs()
         {
-            SessionName = randomSessionName,
-            GameMode = GameMode.Shared, 
+            SessionName = roonName,
+            GameMode = GameMode.Shared,
+            SessionProperties = sessionProps, 
         });
     }
 
@@ -128,7 +142,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-        // ¿À·¡µÈ ¹æÀº »èÁ¦
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         DeleteOldSessionsFromUI(sessionList);
         //
         CompareLists(sessionList);

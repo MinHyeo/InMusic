@@ -16,11 +16,11 @@ public class SingleTon<T> : MonoBehaviour where T : MonoBehaviour
         {
             if (_instance == null)
             {
-                if (SceneManager.GetActiveScene().name != "YMH")
-                {
-                    Debug.LogWarning("PlayManager는 PlayScene에서만 생성됩니다.");
-                    return null;
-                }
+                // if (SceneManager.GetActiveScene().name != "YMH")
+                // {
+                //     Debug.LogWarning("PlayManager는 PlayScene에서만 생성됩니다.");
+                //     return null;
+                // }
 
                 _instance = FindAnyObjectByType<T>();
                 if (_instance == null)
