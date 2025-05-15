@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class SessionListEntry : MonoBehaviour
 {
     public Text roomName, playerCount;
+    public GameObject lockIcon;
     public Button joinButton;
 
     public void JoinRoom()

@@ -1,5 +1,7 @@
 using System;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Windows;
@@ -13,8 +15,10 @@ public class Message_UI : MonoBehaviour
 
     public void MessageButton(string buttonname) {
         if (buttonname == "Exit") {
-            EditorApplication.isPlaying = false; //¿¡µðÅÍ¿ë
-            Application.Quit();//ÀÎ°ÔÀÓ¿ë
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false; //ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½
+#endif
+            Application.Quit();//ï¿½Î°ï¿½ï¿½Ó¿ï¿½
         }
         else if (buttonname == "Cancle") {
             GameManager.Input.RemoveUIKeyEvent(MessageKeyEvent);

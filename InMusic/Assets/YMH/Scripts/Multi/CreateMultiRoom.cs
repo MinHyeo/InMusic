@@ -19,8 +19,6 @@ public class CreateMultiRoom : MonoBehaviour
         string password = passWordInputField.text;
         bool isPassword = isPasswordToggle.isOn;
 
-        Debug.Log("Room Name: " + roomName);
-        Debug.Log("Password: " + password);
         NetworkManager.Instance.CreateRoom(roomName, password, isPassword);
     }
 

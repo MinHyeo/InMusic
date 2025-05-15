@@ -32,7 +32,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         runnerInstance.JoinSessionLobby(SessionLobby.Shared, lobbyName);
     }
 
-    public void CreateRoom(string roonName, string password, bool isPassword)
+    public void CreateRoom(string roomName, string password, bool isPassword)
     {
         SessionProperty passwordProp = password;
         SessionProperty isLockedProp = isPassword;
@@ -48,10 +48,11 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         {
             sessionProps.Add("isLocked", isLockedProp);
         }
+        sessionProps.Add("maxPlayers", 2); // 방 이름
 
         runnerInstance.StartGame(new StartGameArgs()
         {
-            SessionName = roonName,
+            SessionName = roomName,
             GameMode = GameMode.Shared,
             SessionProperties = sessionProps, 
         });
@@ -59,52 +60,52 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
@@ -117,27 +118,27 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnSceneLoadStart(NetworkRunner runner)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
@@ -145,6 +146,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         // ������ ���� ����
         DeleteOldSessionsFromUI(sessionList);
         //
+        Debug.Log("Session List Count: " + sessionList.Count);
         CompareLists(sessionList);
     }
 
@@ -186,6 +188,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
             }
             else
             {
+                Debug.Log("1. Session Name: " + session.Name);
                 CreateEntryUI(session);
             }
         }
@@ -198,7 +201,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
         entryScript.roomName.text = session.Name;
         entryScript.playerCount.text = session.PlayerCount.ToString() + "/" + session.MaxPlayers.ToString();
-        entryScript.joinButton.interactable = session.IsOpen;
+        //entryScript.joinButton.interactable = session.IsOpen;
 
         newEntry.SetActive(session.IsVisible);
     }
@@ -209,21 +212,27 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         newEntry.transform.parent = sessionListContentParent;
         SessionListEntry entryScript = newEntry.GetComponent<SessionListEntry>();
         sessionListUIDictionary.Add(session.Name, newEntry);
-
         entryScript.roomName.text = session.Name;
         entryScript.playerCount.text = session.PlayerCount.ToString() + "/" + session.MaxPlayers.ToString();
-        entryScript.joinButton.interactable = session.IsOpen;
+
+        bool isLocked = false;
+        if(session.Properties.TryGetValue("isLocked", out var lockProp)){
+            isLocked = (bool)lockProp;
+        }
+        entryScript.lockIcon.SetActive(isLocked);
+        //entryScript.joinButton.interactable = session.IsOpen;
 
         newEntry.SetActive(session.IsVisible);
     }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
+        
     }
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 }

@@ -8,8 +8,6 @@ public class LobbyManager : SingleTon<LobbyManager>
     private GameObject createRoomUI;
     private CreateMultiRoom createMultiRoom;
 
-
-
     private void Start()
     {
         Initialized();
@@ -26,5 +24,10 @@ public class LobbyManager : SingleTon<LobbyManager>
     // Create Room
     public void CreateRoom(){
         createRoomUI.SetActive(true);
+    }
+
+    //Join Room
+    public void JoinRoom(){
+
     }
 }
