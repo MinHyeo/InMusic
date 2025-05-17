@@ -36,16 +36,17 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     public void CreateRoom(string roomName, string password, bool isPassword)
     {
-        SessionProperty passwordProp = password;
-        SessionProperty isLockedProp = isPassword;
-
         var sessionProps = new Dictionary<string, SessionProperty>();
+        SessionProperty isLockedProp = isPassword;
 
         if (isPassword)
         {
+            string hashedPassword = HashUtils.GetSha256(password);
+            SessionProperty passwordProp = hashedPassword;
+
             sessionProps.Add("isLocked", isLockedProp);   // 방 잠김 여부
             sessionProps.Add("password", passwordProp); // 실제 비밀번호
-        }    
+        }
         else
         {
             sessionProps.Add("isLocked", isLockedProp);

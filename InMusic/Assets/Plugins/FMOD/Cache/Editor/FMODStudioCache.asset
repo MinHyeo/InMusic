@@ -531,6 +531,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-8164506782898053552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/cjtaksskadmsrPghlreofhehlwldksgdk
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/cjtaksskadmsrPghlreofhehlwldksgdk
+  Guid:
+    Data1: 1687024633
+    Data2: 1207689756
+    Data3: 794416054
+    Data4: -822886691
+  Banks:
+  - {fileID: -7022844007337488882}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-8087955624480618149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -795,6 +822,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 189846
+--- !u!114 &-7739549680625685668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Supernova
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/Supernova
+  Guid:
+    Data1: -392076566
+    Data2: 1302274831
+    Data3: -1887188849
+    Data4: 1627706227
+  Banks:
+  - {fileID: -7022844007337488882}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-7672463929887348520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1037,6 +1091,26 @@ MonoBehaviour:
   Name: BGM
   StudioPath: bank:/BGM
   lastModified: 638759862013977105
+  FileSizes:
+  - Name: Desktop
+    Value: 27347008
+  Exists: 1
+--- !u!114 &-7022844007337488882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/BGM.bank
+  m_EditorClassIdentifier: 
+  Path: ../../../FMOD Studio/InMusic/Build/Desktop/BGM.bank
+  Name: BGM
+  StudioPath: bank:/BGM
+  lastModified: 638766896968114191
   FileSizes:
   - Name: Desktop
     Value: 27347008
@@ -1923,6 +1997,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-4651035429580804342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/SFX.bank
+  m_EditorClassIdentifier: 
+  Path: ../../../FMOD Studio/InMusic/Build/Desktop/SFX.bank
+  Name: SFX
+  StudioPath: bank:/SFX
+  lastModified: 638766896968276618
+  FileSizes:
+  - Name: Desktop
+    Value: 494
+  Exists: 1
 --- !u!114 &-4476481645103547250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2301,6 +2395,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 494
   Exists: 1
+--- !u!114 &-3871813351784513117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Armageddon
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/Armageddon
+  Guid:
+    Data1: 673150994
+    Data2: 1194093237
+    Data3: -1907635559
+    Data4: 822465114
+  Banks:
+  - {fileID: -7022844007337488882}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-3764671882463472662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2934,6 +3055,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1260
   Exists: 1
+--- !u!114 &-2883400149384649839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Magnetic
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/Magnetic
+  Guid:
+    Data1: -189931834
+    Data2: 1215367062
+    Data3: -1397852536
+    Data4: -1512409820
+  Banks:
+  - {fileID: -7022844007337488882}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-2839252487325195250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3279,6 +3427,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-2143343396913759034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/SksmsdkvmsrjsEkrwlftordlslRk
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/SksmsdkvmsrjsEkrwlftordlslRk
+  Guid:
+    Data1: 332357044
+    Data2: 1227446811
+    Data3: 629375892
+    Data4: 1396841440
+  Banks:
+  - {fileID: -7022844007337488882}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-2066986305596633900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3525,6 +3700,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-1596836762239517212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: ../../../FMOD Studio/InMusic/Build/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 638766896968179992
+  FileSizes:
+  - Name: Desktop
+    Value: 1260
+  Exists: 1
 --- !u!114 &-1562161363189531045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4170,26 +4365,26 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: 7711333493779800550}
-  - {fileID: 6007606078700764213}
-  - {fileID: -375805100450407527}
-  - {fileID: -1264873930440211623}
+  - {fileID: 7950840269622992261}
+  - {fileID: -7022844007337488882}
+  - {fileID: -1596836762239517212}
+  - {fileID: -4651035429580804342}
   EditorEvents:
-  - {fileID: 8020977296697953105}
-  - {fileID: 1490915861776345941}
-  - {fileID: 8348388874672216338}
-  - {fileID: 8633089963735583627}
-  - {fileID: -3255205523556377983}
-  - {fileID: 4198684891638305355}
-  - {fileID: 8603085889617783745}
-  - {fileID: 7494151179799301470}
-  - {fileID: -7772646355950746773}
-  - {fileID: -4713902765208900056}
+  - {fileID: -3871813351784513117}
+  - {fileID: 3335451668216914879}
+  - {fileID: 3305486147739968853}
+  - {fileID: 403021024371376162}
+  - {fileID: 5587976585189964053}
+  - {fileID: 642346838720444243}
+  - {fileID: -2143343396913759034}
+  - {fileID: -2883400149384649839}
+  - {fileID: -7739549680625685668}
+  - {fileID: -8164506782898053552}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -375805100450407527}
+  - {fileID: -1596836762239517212}
   StringsBanks:
-  - {fileID: 7711333493779800550}
+  - {fileID: 7950840269622992261}
   cacheTime: 638766896968276618
   cacheVersion: 131622
 --- !u!114 &32355937150719907
@@ -4421,6 +4616,34 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1348
   Exists: 1
+--- !u!114 &403021024371376162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Heya
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/Heya
+  Guid:
+    Data1: -1059381650
+    Data2: 1196767734
+    Data3: 1913780922
+    Data4: 779490037
+  Banks:
+  - {fileID: -7022844007337488882}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 9127012202284940883}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 189846
 --- !u!114 &405413463901527699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4543,6 +4766,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 189846
+--- !u!114 &642346838720444243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/HotSweet
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/HotSweet
+  Guid:
+    Data1: -1105830483
+    Data2: 1181299886
+    Data3: 1077103510
+    Data4: -1130565670
+  Banks:
+  - {fileID: -7022844007337488882}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &761546276154437994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5835,6 +6085,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &3305486147739968853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Klaxon
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/Klaxon
+  Guid:
+    Data1: 1255468108
+    Data2: 1208282549
+    Data3: 565847981
+    Data4: 359258207
+  Banks:
+  - {fileID: -7022844007337488882}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &3334537232586775899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5855,6 +6132,33 @@ MonoBehaviour:
     Data4: 822465114
   Banks:
   - {fileID: 8731904913751073303}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &3335451668216914879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/BubbleGum
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/BubbleGum
+  Guid:
+    Data1: -1708397504
+    Data2: 1298004118
+    Data3: 1386161543
+    Data4: -1300924601
+  Banks:
+  - {fileID: -7022844007337488882}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
@@ -6972,6 +7276,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1260
   Exists: 1
+--- !u!114 &5587976585189964053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Sticky
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/Sticky
+  Guid:
+    Data1: -36001128
+    Data2: 1170532226
+    Data3: -164994167
+    Data4: -1632466723
+  Banks:
+  - {fileID: -7022844007337488882}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &5600782619824341092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8289,6 +8620,26 @@ MonoBehaviour:
   - Name: Desktop
     Value: 494
   Exists: 1
+--- !u!114 &7950840269622992261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: ../../../FMOD Studio/InMusic/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638766896968205708
+  FileSizes:
+  - Name: Desktop
+    Value: 1348
+  Exists: 1
 --- !u!114 &8020947512419534402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9064,3 +9415,27 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &9127012202284940883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Heya/BGM_Loop
+  m_EditorClassIdentifier: 
+  Name: BGM_Loop
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2554854545
+    data2: 704839473
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1

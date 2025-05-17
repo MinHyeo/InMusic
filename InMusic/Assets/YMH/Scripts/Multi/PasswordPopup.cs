@@ -1,4 +1,5 @@
 using Fusion;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,9 +26,11 @@ public class PasswordPopup : MonoBehaviour
     public void OnConfirmButton()
     {
         string enteredPwd = passwordInputField.text;
-        string correctPwd = sessionInfo.Properties["password"];
+        string enteredPwdHash = HashUtils.GetSha256(enteredPwd);
 
-        if (correctPwd == enteredPwd)
+        string correctPwdHash = sessionInfo.Properties["password"];
+
+        if (correctPwdHash == enteredPwdHash)
         {
             // Close the password popup
             gameObject.SetActive(false);
