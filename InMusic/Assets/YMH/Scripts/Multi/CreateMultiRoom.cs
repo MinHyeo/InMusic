@@ -14,7 +14,7 @@ public class CreateMultiRoom : MonoBehaviour
     {
     }
 
-    public void Create(){
+    public void OnCreateButton(){
         string roomName = roomNameInputField.text;
         string password = passWordInputField.text;
         bool isPassword = isPasswordToggle.isOn;
@@ -22,8 +22,12 @@ public class CreateMultiRoom : MonoBehaviour
         NetworkManager.Instance.CreateRoom(roomName, password, isPassword);
     }
 
-    public void Cancel(){
+    public void OnCancelButton(){
+        roomNameInputField.text = "";
+        passWordInputField.text = "";
+        isPasswordToggle.isOn = false;
 
+        gameObject.SetActive(false);
     }
 
     public void IsCheckPassword(){

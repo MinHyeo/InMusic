@@ -18,8 +18,10 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     //public Scene gameplayScene;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        
         runnerInstance = gameObject.GetComponent<NetworkRunner>();
         if (runnerInstance == null)
         {
@@ -188,7 +190,6 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
             }
             else
             {
-                Debug.Log("1. Session Name: " + session.Name);
                 CreateEntryUI(session);
             }
         }
@@ -199,9 +200,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         sessionListUIDictionary.TryGetValue(session.Name, out GameObject newEntry);
         SessionListEntry entryScript = newEntry.GetComponent<SessionListEntry>();
 
-        entryScript.roomName.text = session.Name;
-        entryScript.playerCount.text = session.PlayerCount.ToString() + "/" + session.MaxPlayers.ToString();
-        //entryScript.joinButton.interactable = session.IsOpen;
+        entryScript.UpdateRoom(session);
 
         newEntry.SetActive(session.IsVisible);
     }
@@ -212,15 +211,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         newEntry.transform.parent = sessionListContentParent;
         SessionListEntry entryScript = newEntry.GetComponent<SessionListEntry>();
         sessionListUIDictionary.Add(session.Name, newEntry);
-        entryScript.roomName.text = session.Name;
-        entryScript.playerCount.text = session.PlayerCount.ToString() + "/" + session.MaxPlayers.ToString();
-
-        bool isLocked = false;
-        if(session.Properties.TryGetValue("isLocked", out var lockProp)){
-            isLocked = (bool)lockProp;
-        }
-        entryScript.lockIcon.SetActive(isLocked);
-        //entryScript.joinButton.interactable = session.IsOpen;
+        entryScript.CreateRoom(session);
 
         newEntry.SetActive(session.IsVisible);
     }
