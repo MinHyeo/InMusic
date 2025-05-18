@@ -453,8 +453,8 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: ../../FMOD Studio/InMusic/InMusic.fspro
-  sourceBankPath: ../../FMOD Studio/InMusic/Build
+  sourceProjectPath: ../../../FMOD Studio/InMusic/InMusic.fspro
+  sourceBankPath: ../../../FMOD Studio/InMusic/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
@@ -475,11 +475,8 @@ MonoBehaviour:
   VirtualChannelSettings: []
   RealChannelSettings: []
   Plugins: []
-  MasterBanks:
-  - Master
-  Banks:
-  - BGM
-  - SFX
+  MasterBanks: []
+  Banks: []
   BanksToLoad:
   - BGM
   - Master
@@ -493,8 +490,8 @@ MonoBehaviour:
   StopEventsOutsideMaxDistance: 0
   BoltUnitOptionsBuildPending: 0
   EnableErrorCallback: 0
-  SharedLibraryUpdateStage: 0
-  SharedLibraryTimeSinceStart: 0
+  SharedLibraryUpdateStage: 3
+  SharedLibraryTimeSinceStart: 653.3963747
   CurrentVersion: 131623
   HideSetupWizard: 1
   LastEventReferenceScanVersion: 131620
