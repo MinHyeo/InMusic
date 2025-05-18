@@ -148,8 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7042cce15da19647b268337633d41ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frequency: 0
-  positionInSamples: 0
+  currentPositionMs: 0
 --- !u!4 &287826500
 Transform:
   m_ObjectHideFlags: 0
@@ -469,6 +468,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _saveOrLoadUserURL: http://localhost/InMusic/handleSteamLogin.php
+  _updateMusicListURL: http://localhost/InMusic/updateMusicList.php
+  _handleGetAllSongsURL: http://localhost/InMusic/handleGetAllSongs.php
+  _getMusicLogURL: http://localhost/InMusic/handleGetMusicLog.php
+  _saveMusicLogURL: http://localhost/InMusic/handleSaveMusicLog.php
 --- !u!4 &444879741
 Transform:
   m_ObjectHideFlags: 0

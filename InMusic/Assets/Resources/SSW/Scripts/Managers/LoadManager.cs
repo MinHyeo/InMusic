@@ -26,6 +26,7 @@ namespace SongList {
             yield return StartCoroutine(LoadAllSongs());
             yield return new WaitForSeconds(1f);
             yield return StartCoroutine(FadeCanvas(logoCanvasGroup, 1f, 0f, fadeDuration));
+            GameManager.Instance.SetGameState(GameState.MainMenu);
             SceneManager.LoadScene("Main_Lobby_PSH");
         }
 

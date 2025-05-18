@@ -5,6 +5,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using SSW;
 
+public enum GameState{
+    None,
+    Loading,
+    MainMenu,
+    MusicSelect,
+    GamePlay,
+    Result,
+    Pause,
+    MultiLobby,
+    MultiRoom,
+    MultiGamePlay,
+}
+
 public class GameManager : MonoBehaviour
 {
     #region ManagerObject
@@ -25,6 +38,9 @@ public class GameManager : MonoBehaviour
     #endregion
 
     private Song songTitle;
+    
+    private GameState _gameState = GameState.Loading;
+    public GameState CurrentGameState { get { return _gameState; } private set {} }
 
     static void Init()
     {
@@ -79,5 +95,15 @@ public class GameManager : MonoBehaviour
 
         // 2) 저장 완료 후, 곡 선택 씬 등 원하는 씬으로 이동
         SceneManager.LoadScene("test_SSW");
+    }
+
+    public void SetGameState(GameState state){
+        if (_gameState == state)
+        {
+            Debug.LogError("GameState is already " + state);
+            return;
+        }
+        _gameState = state;
+        Debug.Log("GameState is " + state);
     }
 }

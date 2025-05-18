@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      RoomRockIcon_0: 2936214494600674168
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
