@@ -24,6 +24,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     //public SceneAsset lobbySceneAsset;
     public GameObject playerPrefab;
     public GameObject passwordPanel;
+
+    public List<SessionListEntry> sessionListEntries = new List<SessionListEntry>();
+    public event Action OnSessionListChanged;
+
     private void Awake()
     {
         
@@ -40,6 +44,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         runnerInstance.JoinSessionLobby(SessionLobby.Shared, lobbyName);
     }
+
 
     public static void  ReturnToLobby()
     {
@@ -108,8 +113,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         if(player == runnerInstance.LocalPlayer)
         {
-            
-            NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero);
+            Debug.Log("온 플레이어 조인드");
+            NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player);
             runner.SetPlayerObject(player, playerObject);
         }
     }
@@ -148,6 +153,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         SessionListEntry entryScript = newEntry.GetComponentInChildren<SessionListEntry>();
         entryScript.Initialize(session);
         sessionListUiDictionnary.Add(session.Name, newEntry);
+        sessionListEntries.Add(entryScript);
         if (passwordPanel != null)
         {
             entryScript.SetPasswordPanel(passwordPanel);
@@ -157,6 +163,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         //entryScript.joinButton.interactable = session.IsOpen;
 
         newEntry.SetActive(session.IsVisible);
+        OnSessionListChanged?.Invoke();
     }
 
     private void UpdateEntryUI(SessionInfo session)
@@ -199,6 +206,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
                 Destroy(uiToDelete);
             }
         }
+        OnSessionListChanged?.Invoke();
     }
 
 
@@ -233,7 +241,17 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+        Vector2 direction = Vector2.zero;
+        Debug.Log("온 인풋");
+        if (Input.GetKey(KeyCode.W)) direction.y += 1;
+        if (Input.GetKey(KeyCode.S)) direction.y -= 1;
+        if (Input.GetKey(KeyCode.A)) direction.x -= 1;
+        if (Input.GetKey(KeyCode.D)) direction.x += 1;
 
+        input.Set(new NetworkInputData
+        {
+            moveDirection = direction
+        });
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
@@ -285,4 +303,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         
     }
+
+    public List<SessionListEntry> GetSessionEntries()
+    {
+        return sessionListEntries;
+    }
+
 }

@@ -10,6 +10,11 @@ public class SessionListEntry : MonoBehaviour
     public TextMeshProUGUI roomName, playerCount;
     public Button joinButton;
 
+    public bool isSelected;
+    public Image curImage;
+    public Sprite defaultImage;
+    public Sprite selectedImage;
+
     private string lobbyScene = "KGB_Multi_Lobby";
     private string gameplayScene = "SampleScene";
     private GameObject passwordPanel; // 비밀번호 입력 패널
@@ -91,6 +96,16 @@ public class SessionListEntry : MonoBehaviour
             }
         }
         return -1;
+    }
+
+    public void SetSelected(bool selected)
+    {
+        isSelected = selected;
+
+        if (curImage != null)
+        {
+            curImage.sprite = selected ? selectedImage : defaultImage;
+        }
     }
 
 }

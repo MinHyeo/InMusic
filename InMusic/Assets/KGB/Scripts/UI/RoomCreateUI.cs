@@ -52,7 +52,7 @@ public class RoomCreateUI : MonoBehaviour
         }
         else //비번 체크 off
         {
-            networkManager.CreateSession(roomPasswordInput.text);
+            networkManager.CreateSession(roomNameInput.text);
         }
     }
 

@@ -1476,7 +1476,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 931920282907745379, guid: 9e792370c8f4849478b044cfe131a813, type: 3}
   m_PrefabInstance: {fileID: 1478961590}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1478961591}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1212b4972c51dc343b8119a8289d99e2, type: 3}
@@ -2038,11 +2038,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e792370c8f4849478b044cfe131a813, type: 3}
---- !u!1 &1478961591 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7285818891276971674, guid: 9e792370c8f4849478b044cfe131a813, type: 3}
-  m_PrefabInstance: {fileID: 1478961590}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1507762294
 GameObject:
   m_ObjectHideFlags: 0
@@ -2936,9 +2931,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26137a6ff38fcc54cbfd79f2bc8487f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createButton: {fileID: 1754635509}
-  roomCreateUI: {fileID: 1478961591}
-  roomJoinUI: {fileID: 1762020016}
+  networkManager: {fileID: 2098224644}
+  sessionListEntries: []
+  curSelectIndex: 0
 --- !u!1 &2059607381
 GameObject:
   m_ObjectHideFlags: 0
@@ -3109,6 +3104,7 @@ MonoBehaviour:
   sessionListEntryPrefab: {fileID: 7695767114921370378, guid: 2b5ada9f4ebb39b4fb1ee53bc97ed141, type: 3}
   playerPrefab: {fileID: 4796753175424583131, guid: 70e2c0007de42e24791f86bf59d6e5eb, type: 3}
   passwordPanel: {fileID: 1762020016}
+  sessionListEntries: []
 --- !u!4 &2098224645
 Transform:
   m_ObjectHideFlags: 0

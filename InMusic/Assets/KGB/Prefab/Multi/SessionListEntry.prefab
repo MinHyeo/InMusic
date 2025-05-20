@@ -402,6 +402,10 @@ MonoBehaviour:
   roomName: {fileID: 5666793164449028767}
   playerCount: {fileID: 795515787511793825}
   joinButton: {fileID: 6380646811901366986}
+  isSelected: 0
+  curImage: {fileID: 3220442731991724070}
+  defaultImage: {fileID: -4799463549298834122, guid: 4ae76439d789462439f58a61bd5fa8bb, type: 3}
+  selectedImage: {fileID: -5437719943162620774, guid: 5e632091c523eb24a86a85c7d4e4968a, type: 3}
 --- !u!1 &7771151990203164978
 GameObject:
   m_ObjectHideFlags: 0
