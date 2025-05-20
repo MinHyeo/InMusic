@@ -3,6 +3,7 @@ using UI_BASE_PSH;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
+using Fusion;
 
 public class Waiting_Room_UI : UI_Base_PSH
 {
@@ -16,7 +17,8 @@ public class Waiting_Room_UI : UI_Base_PSH
     [SerializeField] MusicList mList;
 
     [Header("방 정보")]
-    [SerializeField] Text rommName;
+    [SerializeField] SessionInfo roomInfo;
+    [SerializeField] Text roomName;
 
     [Header("플레이어 상태 정보")]
     [SerializeField] PlayerStatusController playerStatusController;
@@ -39,6 +41,7 @@ public class Waiting_Room_UI : UI_Base_PSH
     {
         StartCoroutine(SetLogData());
         LoadingScreen.Instance.SceneReady();
+        //roomName.text = roomInfo.Name;
     }
 
     void Update()

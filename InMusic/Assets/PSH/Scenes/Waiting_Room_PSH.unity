@@ -3948,9 +3948,11 @@ MonoBehaviour:
   player1Status:
   - {fileID: 1609230094}
   - {fileID: 2138053641}
+  - {fileID: 1561864510}
   player2Status:
   - {fileID: 1126636941}
   - {fileID: 406778992}
+  - {fileID: 139028156}
 --- !u!1001 &1517152282
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5082,10 +5084,10 @@ MonoBehaviour:
   curMusicItem: {fileID: 0}
   musicList: {fileID: 0}
   mList: {fileID: 0}
-  rommName: {fileID: 1066885349}
+  roomName: {fileID: 0}
   playerStatusController: {fileID: 1505192459}
   curPlayer: {fileID: 0}
-  isLobLeader: 0
+  isRoomCap: 0
 --- !u!1001 &1911801449
 PrefabInstance:
   m_ObjectHideFlags: 0
