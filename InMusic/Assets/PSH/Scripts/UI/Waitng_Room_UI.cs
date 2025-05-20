@@ -18,9 +18,10 @@ public class Waiting_Room_UI : UI_Base_PSH
     [Header("방 정보")]
     [SerializeField] Text rommName;
 
-    [Header("플레이어(본인) 상태 정보")]
+    [Header("플레이어 상태 정보")]
+    [SerializeField] PlayerStatusController playerStatusController;
     [SerializeField] PlayerData curPlayer;
-    [SerializeField] bool isLobLeader = false;
+    [SerializeField] bool isRoomCap = false;
 
 
     private void Awake()
