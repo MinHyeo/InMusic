@@ -60,6 +60,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 161631
   packageName: FMOD for Unity (2.02)
-  packageVersion: 2.02.26
+  packageVersion: 2.02.28
   assetPath: Assets/Plugins/FMOD/platforms/uwp/lib/x64/fmodL.dll
-  uploadId: 733879
+  uploadId: 745941
