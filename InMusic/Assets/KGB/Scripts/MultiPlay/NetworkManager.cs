@@ -20,6 +20,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     private string lobbyScene = "KGB_Multi_Lobby";
     private string gameplayScene = "SampleScene";
+    private string waitingRoomScene = "Waiting_Room_PSH";
     //public SceneAsset gameplaySceneAsset;
     //public SceneAsset lobbySceneAsset;
     public GameObject playerPrefab;
@@ -58,10 +59,12 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
         runnerInstance.StartGame(new StartGameArgs()
         {
-            Scene = SceneRef.FromIndex(GetSceneIndex(gameplayScene)),
+            Scene = SceneRef.FromIndex(GetSceneIndex(waitingRoomScene)),
             SessionName = randomSessionName,
             GameMode = GameMode.Shared,
         });
+
+        GameManager_PSH.PlayerRole = true;
     } 
 
     public void CreateSession(string roomName)
@@ -69,17 +72,20 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         string newSessionName = roomName;
         runnerInstance.StartGame(new StartGameArgs()
         {
-            Scene = SceneRef.FromIndex(GetSceneIndex(gameplayScene)),
+            Scene = SceneRef.FromIndex(GetSceneIndex(waitingRoomScene)),
             SessionName = newSessionName,
             GameMode = GameMode.Shared,
         });
+
+        GameManager_PSH.PlayerRole = true;
+
     }
     public void CreateSession(string roomName, string password)
     {
         string newSessionName = roomName;
         runnerInstance.StartGame(new StartGameArgs()
         {
-            Scene = SceneRef.FromIndex(GetSceneIndex(gameplayScene)), //임시
+            Scene = SceneRef.FromIndex(GetSceneIndex(waitingRoomScene)), //임시
             SessionName = newSessionName,
             GameMode = GameMode.Shared,
             SessionProperties = new Dictionary<string, SessionProperty>
@@ -87,6 +93,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
                 {"pw", password}
             }
         });
+
+        GameManager_PSH.PlayerRole = true;
     }
 
     public int GetSceneIndex(string sceneName)

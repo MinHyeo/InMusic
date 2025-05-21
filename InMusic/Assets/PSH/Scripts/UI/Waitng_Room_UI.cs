@@ -17,13 +17,12 @@ public class Waiting_Room_UI : UI_Base_PSH
     [SerializeField] MusicList mList;
 
     [Header("방 정보")]
-    [SerializeField] SessionInfo roomInfo;
     [SerializeField] Text roomName;
+    [SerializeField] SessionInfo roomInfo;
 
     [Header("플레이어 상태 정보")]
     [SerializeField] PlayerStatusController playerStatusController;
-    [SerializeField] PlayerData curPlayer;
-    [SerializeField] bool isRoomCap = false;
+    [SerializeField] string curPlayer; 
 
 
     private void Awake()
@@ -33,7 +32,10 @@ public class Waiting_Room_UI : UI_Base_PSH
             musicList = transform.Find("MusicList").gameObject;
         mList = musicList.GetComponent<MusicList>();
 
-        //네트워크 매니저 작접 (호스트 유무, 방 이름 등)
+        curPlayer = GameManager_PSH.Data.GetPlayerID();
+
+        //세션(방) 정보 가져오기
+        roomInfo = NetworkManager.runnerInstance.SessionInfo;
     }
 
 
@@ -41,7 +43,9 @@ public class Waiting_Room_UI : UI_Base_PSH
     {
         StartCoroutine(SetLogData());
         LoadingScreen.Instance.SceneReady();
-        //roomName.text = roomInfo.Name;
+        roomName.text = roomInfo.Name;
+
+        InitPlayerStatus();
     }
 
     void Update()
@@ -79,6 +83,19 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
     }
 
+    public void InitPlayerStatus() {
+        if (GameManager_PSH.PlayerRole)
+        {
+            playerStatusController.SetP1Name("Player1");
+            playerStatusController.SetP1ToOwner();
+            playerStatusController.InitP2Status();
+        }
+        else
+        {
+            playerStatusController.SetP2Name("Player2");
+        }
+    
+    }
     #region Detect
     void OnTriggerEnter2D(Collider2D listItem)
     {

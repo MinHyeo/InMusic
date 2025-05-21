@@ -4,30 +4,30 @@ using UnityEngine;
 public class PlayerStatusController : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI[] playerNames;
-    [SerializeField] GameObject[] isRoomCap;
+    [SerializeField] GameObject[] isRoomOwner;
     [SerializeField] GameObject[] player1Status;
     [SerializeField] GameObject[] player2Status;
 
-    void InitP1Status()
+    public void InitP1Status()
     {
-        isRoomCap[0].SetActive(true);
+        isRoomOwner[0].SetActive(true);
         foreach(GameObject info in player1Status)
         {
             info.SetActive(false);
         }
     }
 
-    void InitP2Status()
+    public void InitP2Status()
     {
-        isRoomCap[1].SetActive(false);
-        foreach (GameObject info in player1Status)
+        isRoomOwner[1].SetActive(false);
+        foreach (GameObject info in player2Status)
         {
             info.SetActive(false);
         }
         playerNames[1].text = "";
     }
 
-    void Setp1Status(bool isReady)
+    public void Setp1Status(bool isReady)
     {
         if (isReady)
         {
@@ -42,7 +42,7 @@ public class PlayerStatusController : MonoBehaviour
 
     }
 
-    void Setp2Status(bool isReady)
+    public void Setp2Status(bool isReady)
     {
         if (isReady)
         {
@@ -56,24 +56,24 @@ public class PlayerStatusController : MonoBehaviour
         }
     }
 
-    void SetP1Name(string name)
+    public void SetP1Name(string name)
     {
         playerNames[0].text = name;
     }
 
-    void SetP2Name(string name) 
+    public void SetP2Name(string name) 
     {
         playerNames[1].text = name;
     }
 
-    void SetP1ToCap() {
-        isRoomCap[0].SetActive(true);
-        isRoomCap[1].SetActive(false);
+    public void SetP1ToOwner() {
+        isRoomOwner[0].SetActive(true);
+        isRoomOwner[1].SetActive(false);
     }
 
-    void Setp2ToCap() {
-        isRoomCap[0].SetActive(false);
-        isRoomCap[1].SetActive(true);
+    public void Setp2ToOwner() {
+        isRoomOwner[0].SetActive(false);
+        isRoomOwner[1].SetActive(true);
     }
 
 }

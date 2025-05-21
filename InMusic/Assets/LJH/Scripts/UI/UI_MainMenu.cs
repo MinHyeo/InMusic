@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UI_MainMenu : UI_Base
@@ -136,6 +137,7 @@ public class UI_MainMenu : UI_Base
         if (isMultiplayer)
         {
             // Multiplayer scene load logic here
+            SceneManager.LoadScene("KGB_Multi_Lobby");
         }
         else
         {

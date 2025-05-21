@@ -773,7 +773,7 @@ GameObject:
   - component: {fileID: 271640748}
   - component: {fileID: 271640747}
   m_Layer: 5
-  m_Name: Master
+  m_Name: Owner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1700,7 +1700,7 @@ GameObject:
   - component: {fileID: 470494385}
   - component: {fileID: 470494384}
   m_Layer: 5
-  m_Name: Master
+  m_Name: Owner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3942,7 +3942,7 @@ MonoBehaviour:
   playerNames:
   - {fileID: 1211719012}
   - {fileID: 1731960499}
-  isRoomCap:
+  isRoomOwner:
   - {fileID: 271640745}
   - {fileID: 470494382}
   player1Status:
@@ -5084,10 +5084,9 @@ MonoBehaviour:
   curMusicItem: {fileID: 0}
   musicList: {fileID: 0}
   mList: {fileID: 0}
-  roomName: {fileID: 0}
+  roomName: {fileID: 1066885349}
   playerStatusController: {fileID: 1505192459}
-  curPlayer: {fileID: 0}
-  isRoomCap: 0
+  curPlayer: 
 --- !u!1001 &1911801449
 PrefabInstance:
   m_ObjectHideFlags: 0
