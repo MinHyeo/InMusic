@@ -66,14 +66,9 @@ public class PlayerStatusController : MonoBehaviour
         playerNames[1].text = name;
     }
 
-    public void SetP1ToOwner() {
-        isRoomOwner[0].SetActive(true);
-        isRoomOwner[1].SetActive(false);
-    }
-
-    public void Setp2ToOwner() {
-        isRoomOwner[0].SetActive(false);
-        isRoomOwner[1].SetActive(true);
+    public void SetRoomOwner(bool isP1) {
+        isRoomOwner[0].SetActive(isP1);
+        isRoomOwner[1].SetActive(!isP1);
     }
 
 }

@@ -18,7 +18,7 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     [Header("방 정보")]
     [SerializeField] Text roomName;
-    [SerializeField] SessionInfo roomInfo;
+   
 
     [Header("플레이어 상태 정보")]
     [SerializeField] PlayerStatusController playerStatusController;
@@ -33,9 +33,6 @@ public class Waiting_Room_UI : UI_Base_PSH
         mList = musicList.GetComponent<MusicList>();
 
         curPlayer = GameManager_PSH.Data.GetPlayerID();
-
-        //세션(방) 정보 가져오기
-        roomInfo = NetworkManager.runnerInstance.SessionInfo;
     }
 
 
@@ -43,7 +40,7 @@ public class Waiting_Room_UI : UI_Base_PSH
     {
         StartCoroutine(SetLogData());
         LoadingScreen.Instance.SceneReady();
-        roomName.text = roomInfo.Name;
+        roomName.text = NetworkManager.runnerInstance.SessionInfo.Name; //값 이상함
 
         InitPlayerStatus();
     }
@@ -87,14 +84,18 @@ public class Waiting_Room_UI : UI_Base_PSH
         if (GameManager_PSH.PlayerRole)
         {
             playerStatusController.SetP1Name("Player1");
-            playerStatusController.SetP1ToOwner();
             playerStatusController.InitP2Status();
+            ChangeRoomOwner(true);
         }
         else
         {
             playerStatusController.SetP2Name("Player2");
         }
     
+    }
+
+    public void ChangeRoomOwner(bool isP1) {
+        playerStatusController.SetRoomOwner(isP1);
     }
     #region Detect
     void OnTriggerEnter2D(Collider2D listItem)
