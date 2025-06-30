@@ -27,6 +27,14 @@ public class PlayerStatusController : MonoBehaviour
         playerNames[1].text = "";
     }
 
+    public bool GetP1Status() {
+        return player1Status[1].activeSelf;
+    }
+
+    public bool GetP2Status() {
+        return player2Status[1].activeSelf;
+    }
+
     public void Setp1Status(bool isReady)
     {
         if (isReady)

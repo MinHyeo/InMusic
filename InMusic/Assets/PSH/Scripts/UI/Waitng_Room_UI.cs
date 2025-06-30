@@ -24,7 +24,7 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     [Header("플레이어 상태 정보")]
     [SerializeField] PlayerStatusController playerStatusController;
-    [SerializeField] string curPlayer;
+    [Tooltip("플레이어 Prefab 관리용")]
     [SerializeField] private Dictionary<PlayerRef, PlayerInfo> _playerInfos = new Dictionary<PlayerRef, PlayerInfo>();
 
     void OnEnable()
@@ -46,8 +46,6 @@ public class Waiting_Room_UI : UI_Base_PSH
         if (musicList == null || mList == null)
             musicList = transform.Find("MusicList").gameObject;
         mList = musicList.GetComponent<MusicList>();
-
-        curPlayer = GameManager_PSH.Data.GetPlayerID();
     }
 
     void Start()
@@ -174,9 +172,11 @@ public class Waiting_Room_UI : UI_Base_PSH
             case "Exit":
                 //키 입력 이벤트 제거
                 GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-                SceneManager.LoadScene(0); //추후 로비씬으로 바꾸기
+                SceneManager.LoadScene(3); //추후 로비씬으로 바꾸기
                 break;
             case "Enter":
+                if (!CheckReady())
+                    return;
                 if (curMusicItem.GetComponent<MusicItem>().HasBMS) {
                     //키 입력 이벤트 제거
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
@@ -184,7 +184,7 @@ public class Waiting_Room_UI : UI_Base_PSH
                     //다음 씬에 넘겨줄 MusicData 값 설정
                     GameManager_PSH.Data.SetData(curMusicItem.GetComponent<MusicItem>());
 
-                    LoadingScreen.Instance.LoadScene("KGB_SinglePlay", GameManager_PSH.Data.GetData());
+                    //LoadingScreen.Instance.LoadScene("KGB_SinglePlay", GameManager_PSH.Data.GetData());
                 }
                 else
                 {
@@ -233,5 +233,13 @@ public class Waiting_Room_UI : UI_Base_PSH
             yield return null;
         //음악 목록 가져와서 아이템 목록에 넘겨주기
         mList.SetData(GameManager_PSH.Resource.GetMusicList());
+    }
+
+    //플레이어 준비 상태 확인
+    bool CheckReady() {
+        if (playerStatusController.GetP1Status() || playerStatusController.GetP2Status()) {
+            return true;
+        }
+        return false;
     }
 }

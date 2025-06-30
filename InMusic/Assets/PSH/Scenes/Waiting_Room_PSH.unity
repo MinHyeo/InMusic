@@ -2024,10 +2024,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Sound_Setting_UI, Assembly-CSharp
-        m_MethodName: ButtonEvent
-        m_Mode: 5
+      - m_Target: {fileID: 1890810794}
+        m_TargetAssemblyTypeName: UI_BASE_PSH.UI_Base_PSH, Assembly-CSharp
+        m_MethodName: Gear
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3582,8 +3582,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Single_Lobby_UI, Assembly-CSharp
+      - m_Target: {fileID: 1890810794}
+        m_TargetAssemblyTypeName: Waiting_Room_UI, Assembly-CSharp
         m_MethodName: ButtonEvent
         m_Mode: 5
         m_Arguments:
@@ -3833,8 +3833,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Single_Lobby_UI, Assembly-CSharp
+      - m_Target: {fileID: 1890810794}
+        m_TargetAssemblyTypeName: Waiting_Room_UI, Assembly-CSharp
         m_MethodName: ButtonEvent
         m_Mode: 5
         m_Arguments:
