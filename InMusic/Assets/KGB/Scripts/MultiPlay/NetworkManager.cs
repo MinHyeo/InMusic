@@ -25,6 +25,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     //public SceneAsset lobbySceneAsset;
     public GameObject playerPrefab;
     public GameObject passwordPanel;
+
+    public static event Action<PlayerRef> OnPlayerLeftEvt;
     private void Awake()
     {
         
@@ -114,9 +116,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+        Debug.Log($"플레이어 참가: {player.PlayerId}");
         if(player == runnerInstance.LocalPlayer)
         {
-            
             NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero);
             runner.SetPlayerObject(player, playerObject);
         }
@@ -263,7 +265,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-
+        Debug.Log($"플레이어 나감: {player.PlayerId}");
+        // Waiting_Room_UI에 해당 플레이어가 나갔음을 알립니다.
+        OnPlayerLeftEvt?.Invoke(player);
     }
 
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)

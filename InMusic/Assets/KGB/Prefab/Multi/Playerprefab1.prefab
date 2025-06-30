@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2437911576254723759}
   - component: {fileID: 3588649327406693491}
   - component: {fileID: 3982616183835466968}
+  - component: {fileID: -437942751736322312}
   m_Layer: 0
   m_Name: Playerprefab1
   m_TagString: Untagged
@@ -104,5 +105,22 @@ MonoBehaviour:
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
-  NetworkedBehaviours: []
+  NetworkedBehaviours:
+  - {fileID: -437942751736322312}
   ForceRemoteRenderTimeframe: 0
+--- !u!114 &-437942751736322312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4796753175424583131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1895492ed335c874d86df8180548a1ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _PlayerName:
+    _length: 0
+    _data:
+      Data: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

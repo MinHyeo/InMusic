@@ -1,9 +1,11 @@
-using UnityEngine;
-using UI_BASE_PSH;
-using UnityEngine.SceneManagement;
-using System.Collections;
-using UnityEngine.UI;
 using Fusion;
+using System.Collections;
+using System.Collections.Generic;
+using UI_BASE_PSH;
+using Unity.Services.Authentication;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Waiting_Room_UI : UI_Base_PSH
 {
@@ -22,7 +24,20 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     [Header("플레이어 상태 정보")]
     [SerializeField] PlayerStatusController playerStatusController;
-    [SerializeField] string curPlayer; 
+    [SerializeField] string curPlayer;
+    [SerializeField] private Dictionary<PlayerRef, PlayerInfo> _playerInfos = new Dictionary<PlayerRef, PlayerInfo>();
+
+    void OnEnable()
+    {
+        PlayerInfo.OnPlayerObjectInitialized += PlayerEnter;
+        NetworkManager.OnPlayerLeftEvt += PlayerLeft;
+    }
+
+    void OnDisable()
+    {
+        PlayerInfo.OnPlayerObjectInitialized -= PlayerEnter;
+        NetworkManager.OnPlayerLeftEvt -= PlayerLeft;
+    }
 
 
     private void Awake()
@@ -35,7 +50,6 @@ public class Waiting_Room_UI : UI_Base_PSH
         curPlayer = GameManager_PSH.Data.GetPlayerID();
     }
 
-
     void Start()
     {
         StartCoroutine(SetLogData());
@@ -43,6 +57,45 @@ public class Waiting_Room_UI : UI_Base_PSH
         roomName.text = NetworkManager.runnerInstance.SessionInfo.Name; //값 이상함
 
         InitPlayerStatus();
+    }
+
+    void PlayerEnter(PlayerRef playerRef, NetworkObject networkObject) {
+        PlayerInfo playerInfo = networkObject.GetComponent<PlayerInfo>();
+        if (!_playerInfos.ContainsKey(playerRef))
+        {
+            _playerInfos.Add(playerRef, playerInfo);
+        }
+        else
+        {
+            _playerInfos[playerRef] = playerInfo; // 이미 있다면 업데이트
+        }
+        UpdatePlayerStatusUI(playerRef, playerInfo); // UI 업데이트
+    }
+
+    void PlayerLeft(PlayerRef playerRef) {
+        Debug.Log($"플레이어 나감: {playerRef.PlayerId}");
+        if (_playerInfos.ContainsKey(playerRef))
+        {
+            _playerInfos.Remove(playerRef); // 딕셔너리에서 제거
+        }
+    }
+
+    void UpdatePlayerStatusUI(PlayerRef target, PlayerInfo info) {
+        // 로컬 플레이어 (자신)
+        if (target == NetworkManager.runnerInstance.LocalPlayer)
+        {
+            playerStatusController.SetP1Name(info.PlayerName.ToString());
+            playerStatusController.SetRoomOwner(NetworkManager.runnerInstance.IsServer);
+            playerStatusController.Setp1Status(false); // 준비 상태 설정
+            Debug.Log($"로컬 플레이어 UI 업데이트: {info.PlayerName.ToString()}");
+        }
+        else // 상대방 플레이어
+        {
+            playerStatusController.SetP2Name(info.PlayerName.ToString());
+            playerStatusController.Setp2Status(false);
+            Debug.Log($"상대방 플레이어 UI 업데이트: {info.PlayerName.ToString()}");
+        }
+
     }
 
     void Update()
@@ -91,7 +144,6 @@ public class Waiting_Room_UI : UI_Base_PSH
         {
             playerStatusController.SetP2Name("Player2");
         }
-    
     }
 
     public void ChangeRoomOwner(bool isP1) {
