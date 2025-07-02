@@ -16,16 +16,17 @@ public class SteamConnect : MonoBehaviour
     //스팀 정보 -> 리소스 동기화 -> 로그인 로직 함수
     public void InitializeGame()
     {
+        //서버와 유니티 음악 리소스랑 동기화
+        GameManager_PSH.Resource.CheckMusic();
+
         if (GameManager_PSH.SteamCheck)
         {
+            Debug.Log("스팀 연동 실패");
             return;
         }
 
         //스팀에서 유저 정보 가져오기
         if (GetSteamUserInfo()) {
-
-            //서버와 유니티 음악 리소스랑 동기화
-            GameManager_PSH.Resource.CheckMusic();
 
             //로그인
             LoginToWeb();

@@ -11,7 +11,7 @@ public class SessionListEntry : MonoBehaviour
     public Button joinButton;
 
     private string lobbyScene = "KGB_Multi_Lobby";
-    private string gameplayScene = "SampleScene";
+    private string waitingScene = "Waiting_Room_PSH";
     private GameObject passwordPanel; // 비밀번호 입력 패널
     private TMP_InputField passwordInputField;
     private Button passwordConfirmButton;
@@ -66,7 +66,7 @@ public class SessionListEntry : MonoBehaviour
         {
             SessionName = sessionName,
             GameMode = GameMode.Shared,
-            Scene = SceneRef.FromIndex(GetSceneIndex(gameplayScene)),
+            Scene = SceneRef.FromIndex(GetSceneIndex(waitingScene)),
         });
     }
 

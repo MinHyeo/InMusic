@@ -17,7 +17,8 @@ public class PlayerInfo : NetworkBehaviour
     {
         if (Object.HasInputAuthority)
         {
-            PlayerName = GameManager_PSH.Data.GetPlayerName();
+            //PlayerName = GameManager_PSH.Data.GetPlayerName();
+            PlayerName = "P1";
             Debug.Log($"로컬 플레이어({Object.InputAuthority.PlayerId}) 이름 설정: {PlayerName}");
 
             // 초기 준비 상태 설정 (예: 기본적으로 false)
