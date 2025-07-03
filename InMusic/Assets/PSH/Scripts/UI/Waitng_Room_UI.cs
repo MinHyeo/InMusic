@@ -2,7 +2,6 @@ using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UI_BASE_PSH;
-using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -53,8 +52,6 @@ public class Waiting_Room_UI : UI_Base_PSH
         StartCoroutine(SetLogData());
         LoadingScreen.Instance.SceneReady();
         roomName.text = NetworkManager.runnerInstance.SessionInfo.Name; //값 이상함
-
-        InitPlayerStatus();
     }
 
     void PlayerEnter(PlayerRef playerRef, NetworkObject networkObject) {
@@ -67,7 +64,9 @@ public class Waiting_Room_UI : UI_Base_PSH
         {
             _playerInfos[playerRef] = playerInfo; // 이미 있다면 업데이트
         }
-        UpdatePlayerStatusUI(playerRef, playerInfo); // UI 업데이트
+        bool isLocalPlayerObject = networkObject.HasInputAuthority;
+
+        UpdatePlayerStatusUI(playerInfo, isLocalPlayerObject); // UI 업데이트
     }
 
     void PlayerLeft(PlayerRef playerRef) {
@@ -76,24 +75,55 @@ public class Waiting_Room_UI : UI_Base_PSH
         {
             _playerInfos.Remove(playerRef); // 딕셔너리에서 제거
         }
+        playerStatusController.InitP2Status();
     }
 
-    void UpdatePlayerStatusUI(PlayerRef target, PlayerInfo info) {
-        // 로컬 플레이어 (자신)
-        if (target == NetworkManager.runnerInstance.LocalPlayer)
-        {
-            playerStatusController.SetP1Name(info.PlayerName.ToString());
-            playerStatusController.SetRoomOwner(NetworkManager.runnerInstance.IsServer);
-            playerStatusController.Setp1Status(false); // 준비 상태 설정
-            Debug.Log($"로컬 플레이어 UI 업데이트: {info.PlayerName.ToString()}");
-        }
-        else // 상대방 플레이어
-        {
-            playerStatusController.SetP2Name(info.PlayerName.ToString());
-            playerStatusController.Setp2Status(false);
-            Debug.Log($"상대방 플레이어 UI 업데이트: {info.PlayerName.ToString()}");
-        }
 
+    /// <summary>
+    /// 데이터를 입력하는 입장에서 봐야함
+    /// </summary>
+    /// <param name="info"></param>
+    /// <param name="isLocal"></param>
+    void UpdatePlayerStatusUI(PlayerInfo info, bool isLocal) {
+
+        bool isCurrentHost = GameManager_PSH.PlayerRole;
+
+        //방장 기준
+        if (isCurrentHost)
+        {
+            //P1 칸에 자신 정보 입력
+            if (isLocal)
+            {
+                playerStatusController.SetPlayerName(0, info.PlayerName.ToString());
+                playerStatusController.SetRoomOwner(true);
+                playerStatusController.SetPlayerStatus(0, false, true); // 준비 상태 설정
+                playerStatusController.SetPlayerMark(true);
+            }
+            //P2 칸에 상대방 정보 입력
+            else
+            {
+                playerStatusController.SetPlayerName(1, info.PlayerName.ToString());
+                playerStatusController.SetPlayerStatus(1,false, false);
+            }
+        }
+        //상대방 기준
+        else
+        {
+            //P2칸에 자신 정보 입력
+            if (isLocal)
+            {
+                playerStatusController.SetPlayerName(1, info.PlayerName.ToString());
+                playerStatusController.SetPlayerStatus(1, false, false);
+                playerStatusController.SetPlayerMark(false);
+            }
+            //P1칸에 상대방(방장) 정보 입력
+            else
+            {
+                playerStatusController.SetPlayerName(0, info.PlayerName.ToString());
+                playerStatusController.SetRoomOwner(true);
+                playerStatusController.SetPlayerStatus(0, false, true);
+            }
+        }
     }
 
     void Update()
@@ -131,17 +161,9 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
     }
 
+    //방 생성시 최소 한번만 실행
     public void InitPlayerStatus() {
-        if (GameManager_PSH.PlayerRole)
-        {
-            playerStatusController.SetP1Name("Player1");
-            playerStatusController.InitP2Status();
-            ChangeRoomOwner(true);
-        }
-        else
-        {
-            playerStatusController.SetP2Name("Player2");
-        }
+
     }
 
     public void ChangeRoomOwner(bool isP1) {
@@ -172,6 +194,7 @@ public class Waiting_Room_UI : UI_Base_PSH
             case "Exit":
                 //키 입력 이벤트 제거
                 GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
+                NetworkManager.runnerInstance.Shutdown();
                 SceneManager.LoadScene(3); //추후 로비씬으로 바꾸기
                 break;
             case "Enter":

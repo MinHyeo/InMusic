@@ -116,10 +116,12 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        Debug.Log($"플레이어 참가: {player.PlayerId}");
+        Debug.Log($"플레이어 입장 감지 PlayerId = {player.PlayerId}");
+
         if(player == runnerInstance.LocalPlayer)
         {
-            NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero);
+            //Quaternion.identity, player를 추가해서 input 권한 명시
+            NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player);
             runner.SetPlayerObject(player, playerObject);
         }
     }
@@ -262,7 +264,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     }
 
 
-
+    //실제로 나간사람의 네트워크 오브젝트를 삭제하는 메서드
+    //NetworkRunner.Shutdown() 실행 시 작동
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
         Debug.Log($"플레이어 나감: {player.PlayerId}");

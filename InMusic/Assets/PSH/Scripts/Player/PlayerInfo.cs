@@ -9,8 +9,12 @@ public class PlayerInfo : NetworkBehaviour
     [Networked]
     public NetworkString<_16> PlayerName { get; set; } // 16자 제한
 
+    
+    [Networked]
+    public bool PlayerType{get; set;}
+
     // 플레이어 준비 상태
-   // [Networked(OnChanged = nameof(OnPlayerReadyStatusChanged))] // IsReady 변경 시 호출될 콜백 함수 지정
+    // [Networked(OnChanged = nameof(OnPlayerReadyStatusChanged))] // IsReady 변경 시 호출될 콜백 함수 지정
     public bool IsReady { get; set; }
 
     public override void Spawned()
@@ -18,11 +22,11 @@ public class PlayerInfo : NetworkBehaviour
         if (Object.HasInputAuthority)
         {
             //PlayerName = GameManager_PSH.Data.GetPlayerName();
-            PlayerName = "P1";
             Debug.Log($"로컬 플레이어({Object.InputAuthority.PlayerId}) 이름 설정: {PlayerName}");
 
             // 초기 준비 상태 설정 (예: 기본적으로 false)
             IsReady = false;
+            PlayerType = GameManager_PSH.PlayerRole;
         }
         OnPlayerObjectInitialized?.Invoke(Object.InputAuthority, Object);
     }
