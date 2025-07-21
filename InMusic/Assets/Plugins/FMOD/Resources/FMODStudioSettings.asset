@@ -453,13 +453,13 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: ../../../FMOD Studio/InMusic/InMusic.fspro
-  sourceBankPath: ../../../FMOD Studio/InMusic/Build
+  sourceProjectPath: ../../FMOD Studio/InMusic/InMusic.fspro
+  sourceBankPath: ../../FMOD Studio/InMusic/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
   AutomaticEventLoading: 0
-  BankLoadType: 0
+  BankLoadType: 1
   AutomaticSampleLoading: 1
   EncryptionKey: 
   ImportType: 0
@@ -480,7 +480,11 @@ MonoBehaviour:
   Banks:
   - BGM
   - SFX
-  BanksToLoad: []
+  BanksToLoad:
+  - BGM
+  - Master
+  - Master.strings
+  - SFX
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
   AndroidUseOBB: 0

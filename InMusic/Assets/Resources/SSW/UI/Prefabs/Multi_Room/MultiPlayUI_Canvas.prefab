@@ -1122,7 +1122,7 @@ GameObject:
   - component: {fileID: 7894690793659024507}
   - component: {fileID: 7061990841028531281}
   m_Layer: 5
-  m_Name: SinglePlayUI_Canvas
+  m_Name: MultiPlayUI_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

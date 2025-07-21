@@ -44,14 +44,14 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
             string hashedPassword = HashUtils.GetSha256(password);
             SessionProperty passwordProp = hashedPassword;
 
-            sessionProps.Add("isLocked", isLockedProp);   // ë°© ì ê¹€ ì—¬ë¶€
-            sessionProps.Add("password", passwordProp); // ì‹¤ì œ ë¹„ë°€ë²ˆí˜¸
+            sessionProps.Add("isLocked", isLockedProp);   // ¹æ Àá±è ¿©ºÎ
+            sessionProps.Add("password", passwordProp); // ½ÇÁ¦ ºñ¹Ğ¹øÈ£
         }
         else
         {
             sessionProps.Add("isLocked", isLockedProp);
         }
-        sessionProps.Add("maxPlayers", 2); // ë°© ì´ë¦„
+        sessionProps.Add("maxPlayers", 2); // ¹æ ÀÌ¸§
 
         runnerInstance.StartGame(new StartGameArgs()
         {
@@ -146,7 +146,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // ?????? ???? ????
         DeleteOldSessionsFromUI(sessionList);
         //
         Debug.Log("Session List Count: " + sessionList.Count);
