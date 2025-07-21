@@ -7,7 +7,7 @@ public class MultiLobbyUI : MonoBehaviour
 
     public List<SessionListEntry> sessionListEntries = new List<SessionListEntry>();
     public int curSelectIndex = 0;
-
+    [SerializeField] GameObject roomCreateUI;
     private void OnEnable()
     {
         if (networkManager != null)
@@ -71,5 +71,10 @@ public class MultiLobbyUI : MonoBehaviour
         }
 
         Debug.Log("현재 선택 인덱스: " + curSelectIndex);
+    }
+
+    public void OnClickCreateRoomButton()
+    {
+        roomCreateUI.SetActive(true);
     }
 }
