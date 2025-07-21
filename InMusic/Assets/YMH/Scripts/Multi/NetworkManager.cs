@@ -4,7 +4,6 @@ using Fusion.Sockets;
 using System.Collections.Generic;
 using System;
 using UnityEngine.SceneManagement;
-using UnityEngine.Timeline;
 
 public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 {
@@ -17,11 +16,12 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
     public Dictionary<string, GameObject> sessionListUIDictionary = new Dictionary<string, GameObject>();
 
     //public Scene gameplayScene;
+    public GameObject playerPrefab;
 
     protected override void Awake()
     {
         base.Awake();
-        
+
         runnerInstance = gameObject.GetComponent<NetworkRunner>();
         if (runnerInstance == null)
         {
@@ -44,17 +44,20 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
             string hashedPassword = HashUtils.GetSha256(password);
             SessionProperty passwordProp = hashedPassword;
 
-            sessionProps.Add("isLocked", isLockedProp);   // πÊ ¿·±Ë ø©∫Œ
-            sessionProps.Add("password", passwordProp); // Ω«¡¶ ∫Òπ–π¯»£
+            sessionProps.Add("isLocked", isLockedProp);   // Î∞© Ïû†ÍπÄ Ïó¨Î∂Ä
+            sessionProps.Add("password", passwordProp);   // Ïã§Ï†ú ÎπÑÎ∞ÄÎ≤àÌò∏
         }
         else
         {
             sessionProps.Add("isLocked", isLockedProp);
         }
-        sessionProps.Add("maxPlayers", 2); // πÊ ¿Ã∏ß
+        sessionProps.Add("maxPlayers", 2); // Î∞© Ïù¥Î¶Ñ
 
+        int index = SceneUtility.GetBuildIndexByScenePath("Assets/YMH/Scene/MutilRoomTest.unity");
+        Debug.Log(index);
         runnerInstance.StartGame(new StartGameArgs()
         {
+            Scene = SceneRef.FromIndex(index),
             SessionName = roomName,
             GameMode = GameMode.Shared,
             SessionProperties = sessionProps, 
@@ -113,9 +116,10 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        if(player == runnerInstance.LocalPlayer)
+        if (player == runnerInstance.LocalPlayer)
         {
-            SceneManager.LoadScene("MutilRoomTest");
+            NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero);
+            runner.SetPlayerObject(player, playerObject);
         }
     }
 
@@ -146,7 +150,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-        // ?????? ???? ????
+        // ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ
         DeleteOldSessionsFromUI(sessionList);
         //
         Debug.Log("Session List Count: " + sessionList.Count);
