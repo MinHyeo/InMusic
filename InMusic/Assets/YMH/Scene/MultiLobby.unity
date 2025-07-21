@@ -2357,6 +2357,7 @@ MonoBehaviour:
   lobbyName: default
   sessionListContentParent: {fileID: 107040146}
   sessionListEntryPrefab: {fileID: 3041385672725122395, guid: 8e8e0eaa14064fc45aca7e9172b8e99e, type: 3}
+  playerPrefab: {fileID: 7787712050947556356, guid: a2251ae247daac3468f1569d0eeb4eb2, type: 3}
 --- !u!1 &1287832565
 GameObject:
   m_ObjectHideFlags: 0
