@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{84637ea7-861c-4cad-9e9b-7c20aa92cb10}">
+		<property name="assetPath">
+			<value>BGM/Magnetic.ogg</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>188.24417233560089</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b0e0f0f2-d163-4692-8a81-a63e7ae6a598}</destination>
+		</relationship>
+	</object>
+</objects>

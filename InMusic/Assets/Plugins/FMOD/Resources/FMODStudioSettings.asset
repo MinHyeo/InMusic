@@ -453,8 +453,8 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: ../../FMOD Studio/InMusic/InMusic.fspro
-  sourceBankPath: ../../FMOD Studio/InMusic/Build
+  sourceProjectPath: FMOD/InMusic/InMusic.fspro
+  sourceBankPath: FMOD/InMusic/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1

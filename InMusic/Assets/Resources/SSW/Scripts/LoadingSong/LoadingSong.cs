@@ -162,6 +162,7 @@ public class LoadingSong : MonoBehaviour
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
         if(arg0.name == loadSceneName) {
+            Debug.Log($"씬 {loadSceneName} 로딩 완료");
             StartCoroutine(Fade(false));
             SceneManager.sceneLoaded -= OnSceneLoaded;
 
