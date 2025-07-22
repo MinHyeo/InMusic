@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Resources/SSW/Scenes/test_SSW.unity
     guid: 76814152083bb554e913addef99efc6d
   - enabled: 1
-    path: Assets/YMH/Scene/SInglePlay.unity
+    path: Assets/YMH/Scene/SinglePlay.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
     path: Assets/YMH/Scene/MultiLobby.unity
