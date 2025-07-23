@@ -4,6 +4,7 @@ using Fusion.Sockets;
 using System.Collections.Generic;
 using System;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 {
@@ -22,6 +23,14 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
     {
         base.Awake();
 
+        if (runnerInstance != null && runnerInstance.IsRunning)
+        {
+            Debug.LogWarning("[Fusion] Found existing runner. Forcing shutdown.");
+            runnerInstance.Shutdown();
+            runnerInstance = null;
+        }
+
+        // runnerInstance 초기화
         runnerInstance = gameObject.GetComponent<NetworkRunner>();
         if (runnerInstance == null)
         {
@@ -34,7 +43,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         runnerInstance.JoinSessionLobby(SessionLobby.Shared, lobbyName);
     }
 
-    public void CreateRoom(string roomName, string password, bool isPassword)
+    public async Task CreateRoom(string roomName, string password, bool isPassword)
     {
         var sessionProps = new Dictionary<string, SessionProperty>();
         SessionProperty isLockedProp = isPassword;
@@ -53,14 +62,17 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         }
         sessionProps.Add("maxPlayers", 2); // 방 이름
 
-        int index = SceneUtility.GetBuildIndexByScenePath("Assets/YMH/Scene/MutilRoomTest.unity");
+        int index = SceneUtility.GetBuildIndexByScenePath("Assets/Resources/SSW/Scenes/MultiRoom.unity");
         Debug.Log(index);
-        runnerInstance.StartGame(new StartGameArgs()
+
+        await runnerInstance.JoinSessionLobby(SessionLobby.Shared);
+
+        await runnerInstance.StartGame(new StartGameArgs()
         {
             Scene = SceneRef.FromIndex(index),
             SessionName = roomName,
             GameMode = GameMode.Shared,
-            SessionProperties = sessionProps, 
+            SessionProperties = sessionProps,
         });
     }
 
@@ -116,10 +128,16 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+        Debug.Log($"[Fusion] Player Joined: {player}, LocalPlayer = {runner.LocalPlayer}");
         if (player == runnerInstance.LocalPlayer)
         {
+            Debug.Log("[Fusion] --> This is ME. Spawning my PlayerObject.");
             NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero);
             runner.SetPlayerObject(player, playerObject);
+        }
+        else
+        {
+            Debug.Log("[Fusion] --> This is NOT me. Waiting for the player to spawn their PlayerObject.");
         }
     }
 
@@ -167,9 +185,9 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         {
             string sessionKey = kvp.Key;
 
-            foreach (SessionInfo sessionInfo in sessionList) 
+            foreach (SessionInfo sessionInfo in sessionList)
             {
-                if(sessionInfo.Name == sessionKey)
+                if (sessionInfo.Name == sessionKey)
                 {
                     isContained = true;
                     break;
@@ -187,7 +205,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     private void CompareLists(List<SessionInfo> sessionList)
     {
-        foreach(SessionInfo session in sessionList)
+        foreach (SessionInfo session in sessionList)
         {
             if (sessionListUIDictionary.ContainsKey(session.Name))
             {
@@ -224,11 +242,32 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
         //throw new NotImplementedException();
-        
+
     }
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
     {
         //throw new NotImplementedException();
     }
+
+    private void OnApplicationQuit()
+    {
+        if (runnerInstance != null && runnerInstance.IsRunning)
+        {
+            Debug.Log("[Fusion] Shutting down runner on quit.");
+            runnerInstance.Shutdown();
+            runnerInstance = null;
+        }
+    }
+    
+    private void OnDestroy()
+    {
+        if (runnerInstance != null && runnerInstance.IsRunning)
+        {
+            Debug.Log("[Fusion] Shutting down runner in OnDestroy.");
+            runnerInstance.Shutdown();
+            runnerInstance = null;
+        }
+    }
+
 }
