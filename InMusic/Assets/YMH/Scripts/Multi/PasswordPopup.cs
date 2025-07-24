@@ -36,7 +36,7 @@ public class PasswordPopup : MonoBehaviour
             gameObject.SetActive(false);
 
             // Join the room
-            LobbyManager.Instance.JoinRoom(sessionInfo.Name);
+            LobbyManager.Instance.TryJoinRoom(sessionInfo.Name);
         }
         else
         {

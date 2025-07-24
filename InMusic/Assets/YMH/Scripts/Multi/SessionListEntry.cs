@@ -38,7 +38,7 @@ public class SessionListEntry : MonoBehaviour, IPointerEnterHandler, IPointerExi
             else
             {
                 // Join the room when clicked
-                LobbyManager.Instance.JoinRoom(roomName.text);
+                LobbyManager.Instance.TryJoinRoom(roomName.text);
             }
 
         }

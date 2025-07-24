@@ -132,7 +132,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         if (player == runnerInstance.LocalPlayer)
         {
             Debug.Log("[Fusion] --> This is ME. Spawning my PlayerObject.");
-            NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero);
+            NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player);
             runner.SetPlayerObject(player, playerObject);
         }
         else
