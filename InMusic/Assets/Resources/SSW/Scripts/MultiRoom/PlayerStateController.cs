@@ -29,11 +29,29 @@ public class PlayerStateController : NetworkBehaviour
     private void OnStateChanged()
     {
         Debug.Log($"[PlayerState] Updated: {Nickname} (Ready: {IsReady})");
+        
+        // UI에 상태 변경 알림
+        NotifyUIUpdate();
+    }
+    
+    private void NotifyUIUpdate()
+    {
+        // PlayerUIController 찾아서 해당 플레이어의 슬롯만 업데이트
+        PlayerUIController uiController = FindFirstObjectByType<PlayerUIController>();
+        if (uiController != null)
+        {
+            uiController.UpdatePlayerSlot(this);
+        }
     }
 
     public override void Spawned()
     {
         AllPlayers.Add(this);
+
+        Debug.Log($"[PlayerState] Spawned - Object.HasInputAuthority: {Object.HasInputAuthority}");
+        Debug.Log($"[PlayerState] Spawned - Object.InputAuthority: {Object.InputAuthority}");
+        Debug.Log($"[PlayerState] Spawned - Runner.LocalPlayer: {Runner.LocalPlayer}");
+        Debug.Log($"[PlayerState] Spawned - Object.HasStateAuthority: {Object.HasStateAuthority}");
 
         if (Object.HasInputAuthority)
         {
@@ -41,8 +59,12 @@ public class PlayerStateController : NetworkBehaviour
             Debug.Log($"[Spawned] Setting Nickname: {nickname}");
             RPC_SetNickname(nickname);
         }
+        else
+        {
+            Debug.Log($"[Spawned] No InputAuthority - skipping nickname setup");
+        }
 
-        Debug.Log($"[PlayerState] Spawned: {Nickname} (Ready: {IsReady})");
+        Debug.Log($"[PlayerState] Spawned Complete: {Nickname} (Ready: {IsReady})");
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)
@@ -53,7 +75,9 @@ public class PlayerStateController : NetworkBehaviour
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     public void RPC_SetNickname(string name)
     {
+        Debug.Log($"[RPC_SetNickname] Received: {name}");
         Nickname = name;
+        Debug.Log($"[RPC_SetNickname] Set Nickname to: {Nickname}");
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]

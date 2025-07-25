@@ -1,5 +1,6 @@
 using Fusion;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class LobbyManager : SingleTon<LobbyManager>
 {
@@ -33,14 +34,35 @@ public class LobbyManager : SingleTon<LobbyManager>
         createRoomUI.SetActive(true);
     }
 
-    //Join Room
-    public void JoinRoom(string roomName)
+    public async void TryJoinRoom(string roomName)
     {
-        NetworkManager.runnerInstance.StartGame(new StartGameArgs()
+        await JoinRoomAsync(roomName);
+    }
+
+    //Join Room
+    public async Task JoinRoomAsync(string roomName)
+    {
+        try
         {
-            SessionName = roomName,
-            GameMode = GameMode.Shared,
-        });
+            var result = await NetworkManager.runnerInstance.StartGame(new StartGameArgs()
+            {
+                GameMode = GameMode.Shared,
+                SessionName = roomName,
+            });
+
+            if (result.Ok)
+            {
+                Debug.Log($"방 '{roomName}'에 성공적으로 접속했습니다.");
+            }
+            else
+            {
+                Debug.LogError($"방 접속 실패: {result.ShutdownReason}");
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"방 접속 중 오류 발생: {e.Message}");
+        }
     }
 
     public void JoinLockedRoom(SessionInfo sessionInfo)

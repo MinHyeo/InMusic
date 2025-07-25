@@ -22,11 +22,33 @@ public static class PlayerInfoProvider
         if (UnityEditor.EditorPrefs.GetBool("ParrelSync_IsClone"))
         {
             string tag = UnityEditor.EditorPrefs.GetString("ParrelSyncProjectPath");
-            return "Tester_" + tag.GetHashCode();
+            string cloneName = "Tester_" + tag.GetHashCode();
+            Debug.Log($"[PlayerInfoProvider] ParrelSync Clone Nickname: {cloneName}");
+            return cloneName;
         }
-        return "EditorHost";
+        string hostName = "EditorHost";
+        Debug.Log($"[PlayerInfoProvider] Editor Host Nickname: {hostName}");
+        return hostName;
 #else
-        return Steamworks.SteamFriends.GetPersonaName();
+        try 
+        {
+            if (Steamworks.SteamManager.Initialized)
+            {
+                string steamName = Steamworks.SteamFriends.GetPersonaName();
+                Debug.Log($"[PlayerInfoProvider] Steam Nickname: {steamName}");
+                return string.IsNullOrEmpty(steamName) ? "SteamUser" : steamName;
+            }
+            else
+            {
+                Debug.LogWarning("[PlayerInfoProvider] Steam not initialized, using default name");
+                return "SteamUser";
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[PlayerInfoProvider] Steam error: {e.Message}");
+            return "SteamUser";
+        }
 #endif
     }
 }
