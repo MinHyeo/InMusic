@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Fusion;
 using UnityEngine;
 
-public class MultiRoomTest : NetworkBehaviour
+public class MultiRoomTest : MonoBehaviour
 {
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_StartGame()
