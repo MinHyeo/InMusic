@@ -269,6 +269,12 @@ public class ReadyStartController : MonoBehaviour
     private void StartGame()
     {
         Debug.Log("게임을 시작합니다!");
-        // 나중에 게임 시작 로직 구현
+        
+        // 방장만 게임 시작 가능
+        if (_boundPlayer != null && _boundPlayer.IsRoomHost)
+        {
+            // 서버에게 게임 시작 요청
+            _boundPlayer.RPC_RequestGameStart();
+        }
     }
 }

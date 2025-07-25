@@ -69,21 +69,13 @@ public class PlayerStateController : NetworkBehaviour
         Debug.Log($"[PlayerState] Spawned - Runner.LocalPlayer: {Runner.LocalPlayer}");
         Debug.Log($"[PlayerState] Spawned - Object.HasStateAuthority: {Object.HasStateAuthority}");
 
-        // 입장 순서 설정 (Server Authority로)
-        if (Object.HasStateAuthority)
-        {
-            JoinOrder = AllPlayers.Count;
-            Debug.Log($"[PlayerState] Join Order set to: {JoinOrder}");
-            
-            // 방장 권한 체크 및 설정
-            CheckAndAssignRoomHost();
-        }
-
         if (Object.HasInputAuthority)
         {
             string nickname = PlayerInfoProvider.GetUserNickname();
             Debug.Log($"[Spawned] Setting Nickname: {nickname}");
-            RPC_SetNickname(nickname);
+            
+            // 서버에게 초기화 요청 (RPC 사용)
+            RPC_RequestInitialization(nickname);
         }
         else
         {
@@ -95,21 +87,23 @@ public class PlayerStateController : NetworkBehaviour
 
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
-        bool wasRoomHost = IsRoomHost;
         AllPlayers.Remove(this);
         
-        // 방장이 나갔을 때 새로운 방장 선정
-        if (wasRoomHost && AllPlayers.Count > 0)
+        // 방장이 나갔을 때는 서버가 자동으로 새로운 방장을 선정
+        // (StateAuthority를 가진 서버에서만 실행됨)
+        if (Object.HasStateAuthority && IsRoomHost && AllPlayers.Count > 0)
         {
             AssignNewRoomHost();
         }
     }
 
     /// <summary>
-    /// 방장 권한을 체크하고 필요시 할당
+    /// 방장 권한을 체크하고 필요시 할당 (서버에서만 실행)
     /// </summary>
     private void CheckAndAssignRoomHost()
     {
+        if (!Object.HasStateAuthority) return; // 서버에서만 실행
+        
         // 현재 방장이 있는지 확인
         bool hasRoomHost = false;
         foreach (var player in AllPlayers)
@@ -134,10 +128,12 @@ public class PlayerStateController : NetworkBehaviour
     }
     
     /// <summary>
-    /// 새로운 방장 선정 (가장 먼저 들어온 플레이어)
+    /// 새로운 방장 선정 (서버에서만 실행)
     /// </summary>
     private void AssignNewRoomHost()
     {
+        if (!Object.HasStateAuthority) return; // 서버에서만 실행
+        
         PlayerStateController newHost = GetEarliestPlayer();
         if (newHost != null)
         {
@@ -167,6 +163,24 @@ public class PlayerStateController : NetworkBehaviour
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_RequestInitialization(string nickname)
+    {
+        Debug.Log($"[RPC_RequestInitialization] Received from {Object.InputAuthority}: {nickname}");
+        
+        // 닉네임 설정
+        Nickname = nickname;
+        
+        // 입장 순서 설정
+        JoinOrder = AllPlayers.Count;
+        Debug.Log($"[RPC_RequestInitialization] Join Order set to: {JoinOrder}");
+        
+        // 방장 권한 체크 및 설정
+        CheckAndAssignRoomHost();
+        
+        Debug.Log($"[RPC_RequestInitialization] Initialized: {Nickname} (JoinOrder: {JoinOrder}, IsRoomHost: {IsRoomHost})");
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     public void RPC_SetNickname(string name)
     {
         Debug.Log($"[RPC_SetNickname] Received: {name}");
@@ -181,8 +195,44 @@ public class PlayerStateController : NetworkBehaviour
     }
     
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_RequestGameStart()
+    {
+        if (!Object.HasStateAuthority) return; // 서버에서만 실행
+        
+        // 방장인지 확인
+        if (!IsRoomHost)
+        {
+            Debug.LogWarning($"[GameStart] {Nickname} is not room host, cannot start game");
+            return;
+        }
+        
+        Debug.Log($"[GameStart] Game start requested by room host: {Nickname}");
+        
+        // 게임 시작 로직 - MultiPlayManager에게 알림
+        NotifyGameStart();
+    }
+    
+    /// <summary>
+    /// 게임 시작을 MultiPlayManager에게 알림
+    /// </summary>
+    private void NotifyGameStart()
+    {
+        Debug.Log("[GameStart] Attempting to start game...");
+        
+        // 씬 전환이나 게임 시작 로직을 여기에 구현
+        // 예: SceneManager.LoadScene("GameScene");
+        
+        // 임시로 Debug 로그만 출력
+        Debug.Log("[GameStart] Game starting initiated by room host!");
+        
+        // TODO: 실제 게임 시작 로직 구현 필요
+    }
+    
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     public void RPC_TransferRoomHost(PlayerRef targetPlayer)
     {
+        if (!Object.HasStateAuthority) return; // 서버에서만 실행
+        
         // 현재 플레이어가 방장인지 확인
         if (!IsRoomHost)
         {
