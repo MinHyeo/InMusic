@@ -1,14 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class ReadyStartController : MonoBehaviour
 {
-    [Header("Ready Buttons")]
-    [SerializeField] private Button _readyActivateButton;    // 레디 활성화 버튼
-    [SerializeField] private Button _readyDeactivateButton;  // 레디 비활성화 버튼
+    [Header("Ready Buttons - 일반 플레이어 전용")]
+    [SerializeField] private Button _readyActivateButton;    // READY 버튼 (활성화용)
+    [SerializeField] private Button _readyDeactivateButton;  // CANCEL 버튼 (비활성화용)
     
-    [Header("Start Button")]
-    [SerializeField] private Button _startButton;            // 방장용 스타트 버튼
+    [Header("Start Buttons - 방장 전용")]
+    [SerializeField] private Button _startDisabledButton;    // START 버튼 (비활성화 상태)
+    [SerializeField] private Button _startEnabledButton;     // START 버튼 (활성화 상태)
     
     private PlayerStateController _boundPlayer;
 
@@ -30,9 +32,13 @@ public class ReadyStartController : MonoBehaviour
         {
             _readyDeactivateButton.onClick.RemoveAllListeners();
         }
-        if (_startButton != null)
+        if (_startDisabledButton != null)
         {
-            _startButton.onClick.RemoveAllListeners();
+            _startDisabledButton.onClick.RemoveAllListeners();
+        }
+        if (_startEnabledButton != null)
+        {
+            _startEnabledButton.onClick.RemoveAllListeners();
         }
         
         _boundPlayer = null;
@@ -42,24 +48,26 @@ public class ReadyStartController : MonoBehaviour
     {
         if (_boundPlayer == null) return;
         
+        // 자신의 플레이어일 때만 버튼을 활성화
         if (_boundPlayer.Object.HasInputAuthority)
         {
             if (IsHost())
             {
+                // 방장: 스타트 버튼만 표시
                 ShowStartButton();
                 HideReadyButtons();
             }
             else
             {
+                // 일반 플레이어: 레디 버튼만 표시
                 ShowReadyButtons();
                 HideStartButton();
             }
         }
         else
         {
-            // 다른 플레이어의 슬롯: 모든 버튼 비활성화 상태로 표시
-            ShowReadyButtonsAsDisabled();
-            HideStartButton();
+            // 다른 플레이어의 슬롯: 모든 버튼 숨김 (정보만 표시)
+            HideAllButtons();
         }
     }
     
@@ -79,47 +87,70 @@ public class ReadyStartController : MonoBehaviour
             _readyDeactivateButton.onClick.AddListener(OnReadyDeactivateClicked);
         }
         
-        // 스타트 버튼 설정
-        if (_startButton != null)
+        // 스타트 버튼들 설정 (활성화 버튼만 클릭 가능)
+        if (_startEnabledButton != null)
         {
-            _startButton.onClick.RemoveAllListeners();
-            _startButton.onClick.AddListener(OnStartButtonClicked);
+            _startEnabledButton.onClick.RemoveAllListeners();
+            _startEnabledButton.onClick.AddListener(OnStartButtonClicked);
+        }
+        
+        // 비활성화 스타트 버튼은 클릭 불가능하므로 이벤트 연결 안함
+        if (_startDisabledButton != null)
+        {
+            _startDisabledButton.onClick.RemoveAllListeners();
+            // 클릭 이벤트 연결 안함 (비활성화 상태)
         }
     }
     
     private bool IsHost()
     {
-        return _boundPlayer != null && _boundPlayer.Object.HasStateAuthority;
+        return _boundPlayer != null && _boundPlayer.IsRoomHost;  // 커스텀 방장 권한 사용
     }
     
     private void ShowStartButton()
     {
-        if (_startButton != null)
+        bool allPlayersReady = CheckAllPlayersReady();
+        
+        if (allPlayersReady)
         {
-            _startButton.gameObject.SetActive(true);
-            
-            bool allPlayersReady = CheckAllPlayersReady();
-            _startButton.interactable = allPlayersReady;
-            
-            // 스타트 버튼 텍스트 업데이트
-            Text buttonText = _startButton.GetComponentInChildren<Text>();
-            if (buttonText != null)
+            // 모든 플레이어가 준비되었을 때: 활성화 버튼 표시, 비활성화 버튼 숨김
+            if (_startEnabledButton != null)
             {
-                buttonText.text = allPlayersReady ? "START" : "WAIT";
+                _startEnabledButton.gameObject.SetActive(true);
+            }
+            if (_startDisabledButton != null)
+            {
+                _startDisabledButton.gameObject.SetActive(false);
             }
             
-            // 버튼 색상 변경
-            ColorBlock colors = _startButton.colors;
-            colors.normalColor = allPlayersReady ? Color.green : Color.gray;
-            _startButton.colors = colors;
+            Debug.Log("All players ready - showing enabled start button");
+        }
+        else
+        {
+            // 일부 플레이어가 준비되지 않았을 때: 비활성화 버튼 표시, 활성화 버튼 숨김
+            if (_startDisabledButton != null)
+            {
+                _startDisabledButton.gameObject.SetActive(true);
+            }
+            if (_startEnabledButton != null)
+            {
+                _startEnabledButton.gameObject.SetActive(false);
+            }
+            
+            Debug.Log("Not all players ready - showing disabled start button");
         }
     }
     
     private void HideStartButton()
     {
-        if (_startButton != null)
+        // 두 스타트 버튼 모두 숨김
+        if (_startEnabledButton != null)
         {
-            _startButton.gameObject.SetActive(false);
+            _startEnabledButton.gameObject.SetActive(false);
+        }
+        if (_startDisabledButton != null)
+        {
+            _startDisabledButton.gameObject.SetActive(false);
         }
     }
     
@@ -127,23 +158,29 @@ public class ReadyStartController : MonoBehaviour
     {
         if (_boundPlayer.IsReady)
         {
-            // 레디 상태: 비활성화 버튼만 표시
-            if (_readyActivateButton != null) _readyActivateButton.gameObject.SetActive(false);
+            // 레디 상태: CANCEL 버튼만 활성화, READY 버튼은 숨김
+            if (_readyActivateButton != null) 
+            {
+                _readyActivateButton.gameObject.SetActive(false);
+            }
             if (_readyDeactivateButton != null) 
             {
                 _readyDeactivateButton.gameObject.SetActive(true);
-                _readyDeactivateButton.interactable = true;
+                _readyDeactivateButton.interactable = true; // 클릭 가능 + 애니메이션 가능
             }
         }
         else
         {
-            // 레디 안한 상태: 활성화 버튼만 표시
+            // 레디 안한 상태: READY 버튼만 활성화, CANCEL 버튼은 숨김
             if (_readyActivateButton != null) 
             {
                 _readyActivateButton.gameObject.SetActive(true);
-                _readyActivateButton.interactable = true;
+                _readyActivateButton.interactable = true; // 클릭 가능 + 애니메이션 가능
             }
-            if (_readyDeactivateButton != null) _readyDeactivateButton.gameObject.SetActive(false);
+            if (_readyDeactivateButton != null) 
+            {
+                _readyDeactivateButton.gameObject.SetActive(false);
+            }
         }
     }
     
@@ -153,26 +190,11 @@ public class ReadyStartController : MonoBehaviour
         if (_readyDeactivateButton != null) _readyDeactivateButton.gameObject.SetActive(false);
     }
     
-    private void ShowReadyButtonsAsDisabled()
+    private void HideAllButtons()
     {
-        if (_boundPlayer.IsReady)
-        {
-            if (_readyActivateButton != null) _readyActivateButton.gameObject.SetActive(false);
-            if (_readyDeactivateButton != null) 
-            {
-                _readyDeactivateButton.gameObject.SetActive(true);
-                _readyDeactivateButton.interactable = false;
-            }
-        }
-        else
-        {
-            if (_readyActivateButton != null) 
-            {
-                _readyActivateButton.gameObject.SetActive(true);
-                _readyActivateButton.interactable = false;
-            }
-            if (_readyDeactivateButton != null) _readyDeactivateButton.gameObject.SetActive(false);
-        }
+        // 다른 플레이어의 슬롯에서는 모든 버튼 숨김
+        HideReadyButtons();
+        HideStartButton();
     }
     
     private bool CheckAllPlayersReady()
@@ -182,7 +204,7 @@ public class ReadyStartController : MonoBehaviour
         
         foreach (var player in PlayerStateController.AllPlayers)
         {
-            if (!player.Object.HasStateAuthority) // 방장이 아닌 플레이어
+            if (!player.IsRoomHost) // 방장이 아닌 플레이어
             {
                 nonHostCount++;
                 if (player.IsReady)
@@ -192,7 +214,8 @@ public class ReadyStartController : MonoBehaviour
             }
         }
         
-        return nonHostCount > 0 && readyCount == nonHostCount;
+        // 2명 고정: 방장 1명 + 일반 플레이어 1명 = 일반 플레이어가 레디되면 시작 가능
+        return nonHostCount == 1 && readyCount == 1;
     }
     
     // 버튼 이벤트 핸들러들
@@ -201,7 +224,11 @@ public class ReadyStartController : MonoBehaviour
         if (_boundPlayer != null && _boundPlayer.Object.HasInputAuthority && !_boundPlayer.IsReady)
         {
             Debug.Log($"[ReadyStartManager] Ready activate clicked by {_boundPlayer.Nickname}");
-            _boundPlayer.RPC_ToggleReady();
+            
+            // 애니메이션 후 버튼 전환을 위한 딜레이
+            StartCoroutine(DelayedButtonTransition(() => {
+                _boundPlayer.RPC_ToggleReady();
+            }));
         }
     }
     
@@ -210,17 +237,33 @@ public class ReadyStartController : MonoBehaviour
         if (_boundPlayer != null && _boundPlayer.Object.HasInputAuthority && _boundPlayer.IsReady)
         {
             Debug.Log($"[ReadyStartManager] Ready deactivate clicked by {_boundPlayer.Nickname}");
-            _boundPlayer.RPC_ToggleReady();
+            
+            // 애니메이션 후 버튼 전환을 위한 딜레이
+            StartCoroutine(DelayedButtonTransition(() => {
+                _boundPlayer.RPC_ToggleReady();
+            }));
         }
     }
     
     private void OnStartButtonClicked()
     {
-        if (_boundPlayer != null && _boundPlayer.Object.HasStateAuthority)
+        if (_boundPlayer != null && _boundPlayer.IsRoomHost)  // 커스텀 방장 권한 사용
         {
             Debug.Log($"[ReadyStartManager] Start button clicked by host {_boundPlayer.Nickname}");
+            
+            // 스타트 버튼은 즉시 게임 시작 (딜레이 없음)
             StartGame();
         }
+    }
+    
+    // 버튼 애니메이션을 위한 딜레이 코루틴
+    private IEnumerator DelayedButtonTransition(System.Action callback)
+    {
+        // 간단하게 고정된 시간 사용 (Unity 기본 버튼 애니메이션 시간)
+        yield return new WaitForSeconds(0.1f);
+        
+        // 상태 변경 실행
+        callback?.Invoke();
     }
     
     private void StartGame()

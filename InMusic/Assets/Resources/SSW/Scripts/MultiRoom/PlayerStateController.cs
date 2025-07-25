@@ -9,26 +9,42 @@ public class PlayerStateController : NetworkBehaviour
     
     [Networked] 
     public bool IsReady { get; set; }
+    
+    [Networked]
+    public bool IsRoomHost { get; set; }  // 커스텀 방장 권한
+    
+    [Networked]
+    public int JoinOrder { get; set; }  // 입장 순서 (방장 선정용)
 
     public static List<PlayerStateController> AllPlayers = new();
 
     private string _previousNickname;
     private bool _previousIsReady;
+    private bool _previousHasStateAuthority;
+    private bool _previousIsRoomHost;
 
     public override void FixedUpdateNetwork()
     {
-        // 네트워크 속성 변경 감지
-        if (Nickname != _previousNickname || IsReady != _previousIsReady)
+        // 네트워크 속성 변경 감지 (Host 권한 포함)
+        bool currentHasStateAuthority = Object.HasStateAuthority;
+        
+        if (Nickname != _previousNickname || 
+            IsReady != _previousIsReady || 
+            currentHasStateAuthority != _previousHasStateAuthority ||
+            IsRoomHost != _previousIsRoomHost)
         {
             OnStateChanged();
             _previousNickname = Nickname;
             _previousIsReady = IsReady;
+            _previousHasStateAuthority = currentHasStateAuthority;
+            _previousIsRoomHost = IsRoomHost;
         }
     }
 
     private void OnStateChanged()
     {
-        Debug.Log($"[PlayerState] Updated: {Nickname} (Ready: {IsReady})");
+        string hostStatus = IsRoomHost ? "ROOM HOST" : (Object.HasStateAuthority ? "SERVER" : "CLIENT");
+        Debug.Log($"[PlayerState] Updated: {Nickname} (Ready: {IsReady}, Role: {hostStatus})");
         
         // UI에 상태 변경 알림
         NotifyUIUpdate();
@@ -53,6 +69,16 @@ public class PlayerStateController : NetworkBehaviour
         Debug.Log($"[PlayerState] Spawned - Runner.LocalPlayer: {Runner.LocalPlayer}");
         Debug.Log($"[PlayerState] Spawned - Object.HasStateAuthority: {Object.HasStateAuthority}");
 
+        // 입장 순서 설정 (Server Authority로)
+        if (Object.HasStateAuthority)
+        {
+            JoinOrder = AllPlayers.Count;
+            Debug.Log($"[PlayerState] Join Order set to: {JoinOrder}");
+            
+            // 방장 권한 체크 및 설정
+            CheckAndAssignRoomHost();
+        }
+
         if (Object.HasInputAuthority)
         {
             string nickname = PlayerInfoProvider.GetUserNickname();
@@ -64,12 +90,80 @@ public class PlayerStateController : NetworkBehaviour
             Debug.Log($"[Spawned] No InputAuthority - skipping nickname setup");
         }
 
-        Debug.Log($"[PlayerState] Spawned Complete: {Nickname} (Ready: {IsReady})");
+        Debug.Log($"[PlayerState] Spawned Complete: {Nickname} (Ready: {IsReady}, IsRoomHost: {IsRoomHost})");
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
+        bool wasRoomHost = IsRoomHost;
         AllPlayers.Remove(this);
+        
+        // 방장이 나갔을 때 새로운 방장 선정
+        if (wasRoomHost && AllPlayers.Count > 0)
+        {
+            AssignNewRoomHost();
+        }
+    }
+
+    /// <summary>
+    /// 방장 권한을 체크하고 필요시 할당
+    /// </summary>
+    private void CheckAndAssignRoomHost()
+    {
+        // 현재 방장이 있는지 확인
+        bool hasRoomHost = false;
+        foreach (var player in AllPlayers)
+        {
+            if (player.IsRoomHost)
+            {
+                hasRoomHost = true;
+                break;
+            }
+        }
+        
+        // 방장이 없으면 가장 먼저 들어온 플레이어를 방장으로 설정
+        if (!hasRoomHost)
+        {
+            PlayerStateController earliestPlayer = GetEarliestPlayer();
+            if (earliestPlayer != null)
+            {
+                earliestPlayer.IsRoomHost = true;
+                Debug.Log($"[RoomHost] Assigned room host to: {earliestPlayer.Nickname} (Join Order: {earliestPlayer.JoinOrder})");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 새로운 방장 선정 (가장 먼저 들어온 플레이어)
+    /// </summary>
+    private void AssignNewRoomHost()
+    {
+        PlayerStateController newHost = GetEarliestPlayer();
+        if (newHost != null)
+        {
+            newHost.IsRoomHost = true;
+            Debug.Log($"[RoomHost] New room host assigned: {newHost.Nickname} (Join Order: {newHost.JoinOrder})");
+        }
+    }
+    
+    /// <summary>
+    /// 가장 먼저 들어온 플레이어 찾기
+    /// </summary>
+    private PlayerStateController GetEarliestPlayer()
+    {
+        PlayerStateController earliest = null;
+        int earliestJoinOrder = int.MaxValue;
+        
+        foreach (var player in AllPlayers)
+        {
+            if (player.JoinOrder < earliestJoinOrder)
+            {
+                earliestJoinOrder = player.JoinOrder;
+                earliest = player;
+            }
+        }
+        
+        return earliest;
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
@@ -84,5 +178,39 @@ public class PlayerStateController : NetworkBehaviour
     public void RPC_ToggleReady()
     {
         IsReady = !IsReady;
+    }
+    
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_TransferRoomHost(PlayerRef targetPlayer)
+    {
+        // 현재 플레이어가 방장인지 확인
+        if (!IsRoomHost)
+        {
+            Debug.LogWarning($"[RoomHost] {Nickname} is not room host, cannot transfer host");
+            return;
+        }
+        
+        // 대상 플레이어 찾기
+        PlayerStateController targetPlayerController = null;
+        foreach (var player in AllPlayers)
+        {
+            if (player.Object.InputAuthority == targetPlayer)
+            {
+                targetPlayerController = player;
+                break;
+            }
+        }
+        
+        if (targetPlayerController != null)
+        {
+            // 방장 권한 이전
+            IsRoomHost = false;
+            targetPlayerController.IsRoomHost = true;
+            Debug.Log($"[RoomHost] Host transferred from {Nickname} to {targetPlayerController.Nickname}");
+        }
+        else
+        {
+            Debug.LogWarning($"[RoomHost] Target player not found for host transfer");
+        }
     }
 }

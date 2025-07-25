@@ -62,7 +62,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         }
         sessionProps.Add("maxPlayers", 2); // 방 이름
 
-        int index = SceneUtility.GetBuildIndexByScenePath("Assets/Resources/SSW/Scenes/MultiRoom.unity");
+        int index = SceneUtility.GetBuildIndexByScenePath("Assets/YMH/Scene/MultiRoomTest.unity");
         Debug.Log(index);
 
         await runnerInstance.JoinSessionLobby(SessionLobby.Shared);
@@ -71,7 +71,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         {
             Scene = SceneRef.FromIndex(index),
             SessionName = roomName,
-            GameMode = GameMode.Shared,
+            GameMode = GameMode.Shared,  // Photon Cloud Server 방식으로 변경
             SessionProperties = sessionProps,
         });
     }
