@@ -1,0 +1,28 @@
+﻿
+*---------------------- HEADER FIELD
+
+#PLAYER 1
+#GENRE K-Pop
+#TITLE Klaxon
+#ARTIST (G)I-DLE
+#BPM 120
+#PLAYLEVEL 
+#RANK 2
+
+
+#LNTYPE 1
+
+
+
+*---------------------- MAIN DATA FIELD
+
+
+
+#00111:01
+#00112:00010100
+#00113:00000001
+
+#00214:01
+#00215:00010000
+
+

@@ -55,7 +55,8 @@ namespace Play
             noteCount = songInfo.NoteCount;
 
             // 노트 생성 시 음악과의 타이밍 맞추기 위해 초기화
-            songStartTime = Time.time + Metronome.Instance.preStartDelay; // 노래 시작 시간 설정
+            //songStartTime = Time.time + Metronome.Instance.preStartDelay; // 노래 시작 시간 설정
+            songStartTime = TimelineController.Instance.SongStartTime; // 노래 시작 시간 설정
 
             StartCoroutine(SpawnNotes());
         }
@@ -133,7 +134,7 @@ namespace Play
             note.transform.position = noteSpawnPoints[channel - 11].position;
             Note noteScript = note.GetComponent<Note>();
             NoteList.Add(noteScript);
-            noteScript.Initialize(channel, noteSpeed, 1000000 / noteCount, travelTime);
+            //noteScript.Initialize(channel, noteSpeed, 1000000 / noteCount, travelTime);
         }
 
         public void Restart()

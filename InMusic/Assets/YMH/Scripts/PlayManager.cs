@@ -3,7 +3,6 @@ using UnityEngine;
 using TMPro;
 using System;
 using Play.Result;
-using UnityEngine.SceneManagement;
 using SSW.DB;
 
 namespace Play
@@ -58,8 +57,6 @@ namespace Play
         [SerializeField]
         private TextMeshProUGUI accuracyText;
 
-        private SongInfo songInfo;
-
         [Header("Key Objects")]
         [SerializeField]
         private GameObject[] keyObjects;
@@ -103,6 +100,7 @@ namespace Play
 
         private void Start()
         {
+            GameManager.Instance.SetGameState(GameState.GamePlay);
             scoreManager = new ScoreManager(scoreText, accuracyText, accuracyScript, comboScript);
         }
 
@@ -262,6 +260,11 @@ namespace Play
             GameManager.Input.RemoveNoteKeyEvent(OnKeyPress);
             GameManager.Input.RemoveNoteKeyEvent(OnKeyRelase);
             GameManager.Input.RemoveUIKeyEvent(OnUIKkeyPress);
+        }
+
+        private void OnDestroy()
+        {
+            DestroyKeyEvent();
         }
 
         private Note FindClosestNoteToPressTime(int channel, float pressTime)

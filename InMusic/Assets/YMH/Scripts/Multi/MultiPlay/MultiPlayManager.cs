@@ -1,0 +1,215 @@
+using Play;
+using Fusion;
+using UnityEngine;
+using System.Collections;
+using TMPro;
+
+namespace Play
+{
+    public class MultiPlayManager : NetworkBehaviour
+    {
+        [Header("관련 Scripts")]
+        [SerializeField]
+        private MatchController matchController;
+        private ScoreManager scoreManager;
+        [SerializeField]
+        private Accuracy accuracyScript;
+        //콤보 관련
+        [SerializeField]
+        private Combo comboScript;
+
+        [Header("점수 관련")]
+        [SerializeField]
+        private TextMeshProUGUI scoreText;
+        [SerializeField]
+        private TextMeshProUGUI accuracyText;
+
+        [SerializeField]
+        private VideoPlay videoPlay;
+
+        [Header("Key Objects")]
+        [SerializeField]
+        private GameObject[] keyObjects;
+
+        private string songName;
+
+        // 판정 기준
+        private const float greateThreshold = 0.0533f;
+        private const float goodThreshold = 0.0416f;
+        private const float badThreshold = 0.0832f;
+        private const float missThreshold = 0.0416f;
+
+        private void Start()
+        {
+            var runner = NetworkManager.runnerInstance;
+            runner.SetPlayerObject(runner.LocalPlayer, Object);
+
+            GameManager.Instance.SetGameState(GameState.MultiGamePlay);
+            songName = "Heya"; // Default song name, can be set dynamically later
+            scoreManager = new ScoreManager(scoreText, accuracyText, accuracyScript, comboScript);
+
+            double delay = 3.0f;
+            double startTime = NetworkManager.runnerInstance.SimulationTime + delay;
+            Debug.Log($"Game will start at: {startTime}");
+            StartCoroutine(CallStartGameRpcWhenReady((float)startTime));
+        }
+
+        private void OnApplicationQuit()
+        {
+            //프로그램 종료
+            SoundManager.Instance.End();
+        }
+
+        private IEnumerator CallStartGameRpcWhenReady(float startTime)
+        {
+            // 네트워크 오브젝트가 완전히 초기화될 때까지 기다림
+            while (Object == null || !Object.IsValid)
+            {
+                Debug.Log("[MultiPlayManager] NetworkObject 초기화 대기 중...");
+                yield return null;
+            }
+
+            Debug.Log("[MultiPlayManager] StartGameRpc 호출");
+            StartGameRpc(startTime);
+        }
+
+        [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+        private void StartGameRpc(float startTime)
+        {
+            Debug.Log($"Starting game at: {startTime}");
+
+            StartCoroutine(StartGameAfterDelay(startTime));
+        }
+
+        private IEnumerator StartGameAfterDelay(float startTime)
+        {
+            while(NetworkManager.runnerInstance.SimulationTime < startTime)
+            {
+                yield return null; // Wait until the specified start time
+            }
+
+            Song song = (Song)System.Enum.Parse(typeof(Song), songName);
+            TimelineController.Instance.Initialize(BmsLoader.Instance.SelectSong(song));
+
+            //점수 초기화
+            scoreManager.Init();
+
+            GameManager.Input.SetNoteKeyPressEvent(OnKeyPress);
+            GameManager.Input.SetNoteKeyReleaseEvent(OnKeyRelase);
+
+            StartCoroutine(StartGameCoroutine(song));
+        }
+
+        private IEnumerator StartGameCoroutine(Song song)
+        {
+            yield return new WaitForSeconds(TimelineController.Instance.BeatDelayTime);
+
+            // Play the soung
+            Play.SoundManager.Instance.SongInit(song, PlayStyle.Normal);
+            Play.SoundManager.Instance.Play();
+            StartCoroutine(Play.SoundManager.Instance.WaitForMusicEnd(() => End()));
+
+            // Play the video associated with the song
+            videoPlay.GetVideoClip((Song)System.Enum.Parse(typeof(Song), songName));
+            videoPlay.Play();
+        }
+
+        private void OnKeyPress(Define.NoteControl keyEvent)
+        {
+            float pressTime = Time.time;
+            // 해당 라인에 있는 노트 중 판정할 노트 검색
+            Note closestNote = FindClosestNoteToPressTime((int)keyEvent, pressTime);
+            int noteId = closestNote != null ? closestNote.NoteId : -1;
+
+            //키 입력 임팩트
+            keyObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(true);
+
+            if (closestNote != null)
+            {
+                float timeDifference = Mathf.Abs(pressTime - closestNote.targetTime);
+
+                if (timeDifference <= greateThreshold)
+                {
+                    HandleNoteHit(closestNote, AccuracyType.Great, 100);
+                    RPC_ReceiveKeyInput((int)keyEvent - (int)Define.NoteControl.Key1, AccuracyType.Great, 100, noteId);
+                }
+                else if ((timeDifference -= greateThreshold) <= goodThreshold)
+                {
+                    HandleNoteHit(closestNote, AccuracyType.Good, 70);
+                    RPC_ReceiveKeyInput((int)keyEvent - (int)Define.NoteControl.Key1, AccuracyType.Good, 70, noteId);
+                }
+                else if ((timeDifference -= goodThreshold) <= badThreshold)
+                {
+                    HandleNoteHit(closestNote, AccuracyType.Bad, 40);
+                    RPC_ReceiveKeyInput((int)keyEvent - (int)Define.NoteControl.Key1, AccuracyType.Bad, 40, noteId);
+                }
+                else if ((timeDifference -= badThreshold) <= missThreshold)
+                {
+                    HandleNoteHit(closestNote, AccuracyType.Miss, 0);
+                    RPC_ReceiveKeyInput((int)keyEvent - (int)Define.NoteControl.Key1, AccuracyType.Miss, 0, noteId);
+                }
+            }
+        }
+
+        private Note FindClosestNoteToPressTime(int channel, float pressTime)
+        {
+            return TimelineController.Instance.GetClosestNote(channel, pressTime);
+        }
+
+        public void HandleNoteHit(Note note, AccuracyType accuracyResult, float percent)
+        {
+            float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
+
+            //점수 계산 및 표시
+            scoreManager.AddScore(noteScore, percent, accuracyResult);
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPC_ReceiveKeyInput(int ketIndex, AccuracyType accuracyType, float percent, int noteId, RpcInfo info = default)
+        {
+            if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
+            {
+                Debug.Log("응 전달 안해");
+                return;
+            }
+
+            Debug.Log("상대 입력 처리");
+            matchController.ShowKeyEffect(ketIndex, accuracyType, percent, noteId);
+        }
+
+        private void OnKeyRelase(Define.NoteControl keyEvent)
+        {
+            int index = (int)keyEvent - (int)Define.NoteControl.Key1;
+
+            // 리스트 크기 확인
+            if (keyObjects == null || keyObjects.Length <= index)
+            {
+                Debug.LogError($"keyObjects 배열이 초기화되지 않았거나 인덱스 {index}가 범위를 벗어났습니다.");
+                return;
+            }
+
+            // 개별 요소 null 체크
+            if (keyObjects[index] == null)
+            {
+                Debug.Log(keyObjects[0]);
+                Debug.LogError($"keyObjects[{index}]가 null입니다.");
+                return;
+            }
+
+            // 오브젝트가 삭제되지 않았는지 확인 후 SetActive(false)
+            if (keyObjects[index] != null && keyObjects[index].gameObject != null)
+            {
+                keyObjects[index].SetActive(false);
+            }
+            else
+            {
+                Debug.LogError($"keyObjects[{index}]가 삭제되었거나 비활성화된 상태입니다.");
+            }
+        }
+
+        private void End()
+        {
+            Debug.Log("Game Ended");
+        }
+    }
+}

@@ -6861,6 +6861,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1343810405}
   - component: {fileID: 1343810404}
+  - component: {fileID: 1343810407}
+  - component: {fileID: 1343810406}
   m_Layer: 0
   m_Name: TimelineController
   m_TagString: Untagged
@@ -6880,16 +6882,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a6e341f42c6a444aa0f1201f88a2dee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linePrefab: {fileID: 4328062452459893043, guid: ff143434f7694ce478b447bcdb540a42, type: 3}
-  note1Prefab: {fileID: 6864457216544786533, guid: 221e0df023c0fed4883efb3b5d9683c0, type: 3}
-  note2Prefab: {fileID: 6864457216544786533, guid: 37817e83f9b570e44ad67bf8927ee3a4, type: 3}
-  lineSpawnPoint: {fileID: 2019970740}
-  noteSpawnPoints:
-  - {fileID: 2064099624}
-  - {fileID: 430142135}
-  - {fileID: 456262725}
-  - {fileID: 1545973875}
-  judgementLine: {fileID: 874486164}
+  judgementLines:
+  - {fileID: 874486164}
 --- !u!4 &1343810405
 Transform:
   m_ObjectHideFlags: 0
@@ -6905,6 +6899,39 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1343810406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343810403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 394e64064800efb4bb2a5598697de5a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  linePrefab: {fileID: 4328062452459893043, guid: ff143434f7694ce478b447bcdb540a42, type: 3}
+  lineSpawnPoint: {fileID: 2019970740}
+--- !u!114 &1343810407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343810403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d97ef8caba079c4aa825f66f2f57284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  note1Prefab: {fileID: 6864457216544786533, guid: 221e0df023c0fed4883efb3b5d9683c0, type: 3}
+  note2Prefab: {fileID: 6864457216544786533, guid: 37817e83f9b570e44ad67bf8927ee3a4, type: 3}
+  noteSpawnPoints:
+  - {fileID: 2064099624}
+  - {fileID: 430142135}
+  - {fileID: 456262725}
+  - {fileID: 1545973875}
 --- !u!1 &1383133749
 GameObject:
   m_ObjectHideFlags: 0

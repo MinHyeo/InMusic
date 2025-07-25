@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Pool;
 
 namespace Play 
@@ -8,7 +10,9 @@ namespace Play
         public IObjectPool<GameObject> Pool { get; set; }
 
         //노트 변수
-        private int channel;
+        private int noteId;
+        public int NoteId { get { return noteId; } }
+        public int channel;
         private float speed;
         private float noteScore;
 
@@ -19,8 +23,9 @@ namespace Play
         public float Speed { get { return speed; } }
         public float NoteScore { get { return noteScore; } }
 
-        public void Initialize(int channel, float speed, float noteScore, float travelTime)
+        public void Initialize(int noteId, int channel, float speed, float noteScore, float travelTime)
         {
+            this.noteId = noteId;
             this.channel = channel;
             this.speed = speed;
             this.noteScore = noteScore;
@@ -51,7 +56,17 @@ namespace Play
         {
             if (collider.CompareTag("EndLine"))
             {
-                PlayManager.Instance.HandleNoteHit(this, AccuracyType.Miss, 0);
+                switch(GameManager.Instance.CurrentGameState)
+                {
+                    case GameState.GamePlay:
+                        PlayManager.Instance.HandleNoteHit(this, AccuracyType.Miss, 0);
+                        break;
+                    case GameState.MultiGamePlay:
+                        //MultiPlayManager.Instance.HandleNoteHit(this, AccuracyType.Miss, 0);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
