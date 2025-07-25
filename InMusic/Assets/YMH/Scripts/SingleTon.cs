@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,7 +9,7 @@ public class SingleTon<T> : MonoBehaviour where T : MonoBehaviour
     public static bool HasInstance => _instance != null;
     public static T TryGetInstance() => HasInstance ? _instance : null;
     public static T Current => _instance;
-
+    
     //싱글톤
     public static T Instance
     {

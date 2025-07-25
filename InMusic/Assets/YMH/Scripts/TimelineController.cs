@@ -1,4 +1,5 @@
-﻿using Fusion;
+﻿using ExitGames.Client.Photon.StructWrapping;
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,7 +7,6 @@ using UnityEngine;
 
 namespace Play
 {
-
     [System.Serializable]
     public class NoteData
     {
@@ -17,15 +17,10 @@ namespace Play
 
     public class TimelineController : SingleTon<TimelineController>
     {
-        // 오브젝트 프리팹
-        [SerializeField] private GameObject linePrefab;
-        [SerializeField] private GameObject note1Prefab;
-        [SerializeField] private GameObject note2Prefab;
-        // 노트 및 박자선 생성 위치
-        [SerializeField] private Transform lineSpawnPoint;
-        [SerializeField] private Transform[] noteSpawnPoints;
-        // 판정선
-        [SerializeField] private Transform judgementLine;
+        private INoteSpawn[] noteSpawners;
+        private IMeasureLineSpawn[] measureLineSpawners;
+
+        [SerializeField] private Transform[] judgementLines;
 
         // 시작 체크
         bool isStart = false;
@@ -35,12 +30,13 @@ namespace Play
         private float beatIntervalMs;
         private float measureInterval;
         private float travelTime;
-        private int beatCount = 0;
+        private int noteCount;
         private float speed = 5f;
         private float startDelayBeats = 2f;
         private float beatDelayTime;
         public float BeatDelayTime { get { return beatDelayTime; } private set { } }
         private float songStartTime = 0f;
+        public float SongStartTime { get { return songStartTime; } private set { } }
         private float nextSample;
         private int underBeats = 4;
         private int upperBeats = 1;
@@ -50,16 +46,12 @@ namespace Play
 
         // 노트 데이터 리스트 및 생성된 리스트
         private List<NoteData> noteDataList;
-        private int noteCount;
-        private List<GameObject> linesObject = new List<GameObject>();
-        private List<Note> activeNotes = new();
 
         public void Initialize(SongInfo songInfo)
         {
-            // 오브젝트 풀 생성
-            ObjectPoolManager.Instance.CreatePool(linePrefab);
-            ObjectPoolManager.Instance.CreatePool(note1Prefab);
-            ObjectPoolManager.Instance.CreatePool(note2Prefab);
+            noteSpawners = gameObject.GetComponents<INoteSpawn>();
+            measureLineSpawners = gameObject.GetComponents<IMeasureLineSpawn>();
+            Transform lineSpawnPoint = measureLineSpawners[0].GetLineSpawnPoint();
 
             // 곡 정보 받아오기
             noteDataList = songInfo.NoteList;
@@ -68,12 +60,12 @@ namespace Play
             // 비트 및 마디 계산
             beatIntervalMs = 60000f / bpm;
             measureInterval = beatIntervalMs * 4f;
-    
-            float beatIntervalSec = beatIntervalMs / 1000f;
+
+            // 마디 간격을 초 단위로 변환
             float measureIntervalSec = measureInterval / 1000f;
 
             // 내려오는데 걸리는 시간
-            float distanceToJudgementLine = lineSpawnPoint.position.y - judgementLine.position.y;
+            float distanceToJudgementLine = lineSpawnPoint.position.y - judgementLines[0].position.y;
             travelTime = distanceToJudgementLine / speed;
 
             // 시작 시간 계산(2마디 후 노래 시작)
@@ -110,7 +102,12 @@ namespace Play
 
                 float unitySpawnDelay = measureStartTime - travelTime - Time.time;
 
-                StartCoroutine(SpawnMeasureLine(unitySpawnDelay));
+                foreach (IMeasureLineSpawn measureLineSpawn in measureLineSpawners)
+                {
+                    if (measureLineSpawn == null) continue;
+
+                    coroutines.Add(StartCoroutine(measureLineSpawn.SpawnMeasureLine(speed, unitySpawnDelay, judgementLines[0].position.y)));
+                }
             }
 
             upperBeats++;
@@ -120,19 +117,9 @@ namespace Play
             yield return null;
         }
 
-        private IEnumerator SpawnMeasureLine(float delaySeconds)
-        {
-            // spawnTime까지 대기
-            yield return new WaitForSeconds(delaySeconds);
-
-            GameObject newLine = ObjectPoolManager.Instance.GetFromPool("Line");
-            newLine.transform.position = lineSpawnPoint.position;
-            newLine.GetComponent<Line>().Initialize(speed, judgementLine.position.y);
-            linesObject.Add(newLine);
-        }
-
         private IEnumerator SpawnRoutine()
         {
+            int noteId = 0;
             foreach (NoteData noteData in noteDataList)
             {
                 float barTime = noteData.bar * (measureInterval / 1000);
@@ -147,79 +134,64 @@ namespace Play
                     float noteAppearTime = barTime + ((measureInterval / divisions) / 1000) * i;
                     float spawnTime = songStartTime + noteAppearTime - travelTime;
 
-                    coroutines.Add(StartCoroutine(SpawnNote(channel, spawnTime)));
+                    foreach (INoteSpawn noteSpawner in noteSpawners)
+                    {
+                        if (noteSpawner == null) continue;
+
+                        coroutines.Add(StartCoroutine(noteSpawner.SpawnNote(noteId, channel, spawnTime, speed, noteCount, travelTime)));
+                    }
+                    noteId++;
                 }
 
                 yield return null;
             }
         }
 
-        private IEnumerator SpawnNote(int channel, float spawnTime)
-        {
-            yield return new WaitForSeconds(spawnTime - Time.time);
-
-            GameObject prefab = (channel == 11 || channel == 14) ? note1Prefab : note2Prefab;
-            GameObject note = ObjectPoolManager.Instance.GetFromPool(prefab.name);
-            note.transform.position = noteSpawnPoints[channel - 11].position;
-
-            Note noteScript = note.GetComponent<Note>();
-            noteScript.Initialize(channel, speed, 1000000 / noteCount, travelTime);
-            activeNotes.Add(noteScript);
-        }
-
         public Note GetClosestNote(int channel, float pressTime)
         {
-            Note closestNote = null;
-            float minTimeDifference = float.MaxValue;
-
-            foreach (Note note in activeNotes)
-            {
-                if (note.Channel == channel)
-                {
-                    float timeDifference = Mathf.Abs(note.targetTime - pressTime);
-                    if (timeDifference < minTimeDifference)
-                    {
-                        minTimeDifference = timeDifference;
-                        closestNote = note;
-                    }
-                }
-            }
-
-            return closestNote;
+            return noteSpawners[0].GetClosestNote(channel, pressTime);
         }
 
-        public void RemoveNote(Note note)
+        public Note GetClosestNoteById(int noteId)
         {
-            if (activeNotes.Contains(note))
-            {
-                activeNotes.Remove(note);
-                ObjectPoolManager.Instance.ReleaseToPool(note.gameObject.name, note.gameObject);
-            }
+            return noteSpawners[1].GetClosestNoteById(noteId);
         }
 
-        public void RemoveLine(GameObject line)
+        public void RemoveNote(Note note, int isMatch = 0)
         {
-            if (linesObject.Contains(line))
-            {
-                linesObject.Remove(line);
-                ObjectPoolManager.Instance.ReleaseToPool("Line", line);
-            }
+            noteSpawners[isMatch].RemoveNote(note);
+        }
+
+        public void RemoveLine(GameObject line, int isMatch = 0)
+        {
+            measureLineSpawners[isMatch].RemoveLine(line);
         }
 
         public void ClearAll()
         {
-            foreach (var line in linesObject)
-                ObjectPoolManager.Instance.ReleaseToPool("Line", line);
-            linesObject.Clear();
+            foreach (IMeasureLineSpawn measureLineSpawner in measureLineSpawners)
+            {
+                if (measureLineSpawner != null)
+                {
+                    measureLineSpawner.ClearAll();
+                }
+            }
 
-            foreach (var note in activeNotes)
-                ObjectPoolManager.Instance.ReleaseToPool(note.gameObject.name, note.gameObject);
-            activeNotes.Clear();
+            foreach (INoteSpawn noteSpawner in noteSpawners)
+            {
+                if (noteSpawner != null)
+                {
+                    noteSpawner.ClearAll();
+                }
+            }
         }
-
+        
         public void RemoveJudgementLine()
         {
-            judgementLine.gameObject.SetActive(false);
+            foreach (Transform judgementLine in judgementLines)
+            {
+                judgementLine.gameObject.SetActive(false);
+            }
         }
     }
 }

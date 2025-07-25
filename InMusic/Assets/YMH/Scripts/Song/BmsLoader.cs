@@ -72,12 +72,12 @@ public class BmsLoader : SingleTon<BmsLoader>
         tempStr = "";
         StrText = "";
         songName = "";
-        path = "Assets/Resources/Song/";
+        path = Path.Combine(Application.streamingAssetsPath, "Song", song.ToString());
         seps = new char[] { ' ', ':' };
 
         songName = song.ToString();
-        path += songName + "/";
-        fileName = new FileInfo(path + song.ToString() + ".bms");
+        //path += songName + "/";
+        fileName = new FileInfo(Path.Combine(path, song.ToString() + ".bms"));
 
         if (!fileName.Exists) // 디렉토리나 파일이 없는 경우 처리
         {
@@ -202,6 +202,7 @@ public class BmsLoader : SingleTon<BmsLoader>
 
                     int channel = 0;
                     Int32.TryParse(data[0].Substring(4, 2), out channel);
+                    Debug.Log($"채널이 이상해 {channel}");
 
                     string noteStr = data[0].Substring(7);
                     List<int> noteData = getNoteDataOfStr(noteStr);

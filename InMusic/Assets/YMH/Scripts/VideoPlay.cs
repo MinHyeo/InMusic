@@ -17,6 +17,7 @@ namespace Play
             videoPlayer = GetComponent<VideoPlayer>();
 
             string part = "Song/" + songName + "/" + songName;
+            //string part = Path.Combine(Application.streamingAssetsPath, "Songs", songName.ToString(), songName.ToString());
             videoClip = Resources.Load<VideoClip>(part);
             videoPlayer.clip = videoClip;
         }
