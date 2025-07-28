@@ -7,10 +7,16 @@ namespace Play
 {
     public class ScoreManager : MonoBehaviour
     {
+        [Header("Score and Accuracy Scripts")]
+        [SerializeField]
         private Accuracy accuracyScript;
+        [SerializeField]
         private Combo comboScript;
 
+        [Header("UI Elements")]
+        [SerializeField]
         private TextMeshProUGUI scoreText;
+        [SerializeField]
         private TextMeshProUGUI accuracyText;
 
         private float score = 0;
