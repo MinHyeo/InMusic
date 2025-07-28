@@ -48,26 +48,17 @@ public class ReadyStartController : MonoBehaviour
     {
         if (_boundPlayer == null) return;
         
-        // 자신의 플레이어일 때만 버튼을 활성화
-        if (_boundPlayer.Object.HasInputAuthority)
+        if (IsSharedModeMasterClient())
         {
-            if (IsHost())
-            {
-                // 방장: 스타트 버튼만 표시
-                ShowStartButton();
-                HideReadyButtons();
-            }
-            else
-            {
-                // 일반 플레이어: 레디 버튼만 표시
-                ShowReadyButtons();
-                HideStartButton();
-            }
+            // 방장: 스타트 버튼만 표시
+            ShowStartButton();
+            HideReadyButtons();
         }
         else
         {
-            // 다른 플레이어의 슬롯: 모든 버튼 숨김 (정보만 표시)
-            HideAllButtons();
+            // 일반 플레이어: 레디 버튼만 표시
+            ShowReadyButtons();
+            HideStartButton();
         }
     }
     
@@ -102,9 +93,10 @@ public class ReadyStartController : MonoBehaviour
         }
     }
     
-    private bool IsHost()
+    private bool IsSharedModeMasterClient()
     {
-        return _boundPlayer != null && _boundPlayer.IsRoomHost;  // 커스텀 방장 권한 사용
+        // SharedModeMasterClient 확인으로 변경
+        return SharedModeMasterClientTracker.IsPlayerSharedModeMasterClient(_boundPlayer.Object.InputAuthority);
     }
     
     private void ShowStartButton()
@@ -190,31 +182,32 @@ public class ReadyStartController : MonoBehaviour
         if (_readyDeactivateButton != null) _readyDeactivateButton.gameObject.SetActive(false);
     }
     
-    private void HideAllButtons()
-    {
-        // 다른 플레이어의 슬롯에서는 모든 버튼 숨김
-        HideReadyButtons();
-        HideStartButton();
-    }
-    
     private bool CheckAllPlayersReady()
     {
         int nonHostCount = 0;
         int readyCount = 0;
         
-        foreach (var player in PlayerStateController.AllPlayers)
+        // MultiRoomManager를 통해 모든 플레이어 확인
+        var allPlayers = MultiRoomManager.Instance?.GetAllPlayers();
+        if (allPlayers != null)
         {
-            if (!player.IsRoomHost) // 방장이 아닌 플레이어
+            foreach (var player in allPlayers)
             {
-                nonHostCount++;
-                if (player.IsReady)
+                // SharedModeMasterClient가 아닌 플레이어 확인
+                bool isSharedModeMasterClient = SharedModeMasterClientTracker.IsPlayerSharedModeMasterClient(player.Object.InputAuthority);
+                
+                if (!isSharedModeMasterClient) // SharedModeMasterClient가 아닌 플레이어
                 {
-                    readyCount++;
+                    nonHostCount++;
+                    if (player.IsReady)
+                    {
+                        readyCount++;
+                    }
                 }
             }
         }
         
-        // 2명 고정: 방장 1명 + 일반 플레이어 1명 = 일반 플레이어가 레디되면 시작 가능
+        // 2명 고정: SharedModeMasterClient 1명 + 일반 플레이어 1명 = 일반 플레이어가 레디되면 시작 가능
         return nonHostCount == 1 && readyCount == 1;
     }
     
@@ -247,9 +240,12 @@ public class ReadyStartController : MonoBehaviour
     
     private void OnStartButtonClicked()
     {
-        if (_boundPlayer != null && _boundPlayer.IsRoomHost)  // 커스텀 방장 권한 사용
+        // SharedModeMasterClient 확인으로 변경
+        bool isSharedModeMasterClient = SharedModeMasterClientTracker.IsPlayerSharedModeMasterClient(_boundPlayer.Object.InputAuthority);
+        
+        if (_boundPlayer != null && isSharedModeMasterClient)
         {
-            Debug.Log($"[ReadyStartManager] Start button clicked by host {_boundPlayer.Nickname}");
+            Debug.Log($"[ReadyStartManager] Start button clicked by SharedModeMasterClient {_boundPlayer.Nickname}");
             
             // 스타트 버튼은 즉시 게임 시작 (딜레이 없음)
             StartGame();
@@ -270,11 +266,21 @@ public class ReadyStartController : MonoBehaviour
     {
         Debug.Log("게임을 시작합니다!");
         
-        // 방장만 게임 시작 가능
-        if (_boundPlayer != null && _boundPlayer.IsRoomHost)
+        // SharedModeMasterClient만 게임 시작 가능
+        bool isSharedModeMasterClient = SharedModeMasterClientTracker.IsPlayerSharedModeMasterClient(_boundPlayer.Object.InputAuthority);
+        
+        if (_boundPlayer != null && isSharedModeMasterClient)
         {
-            // 서버에게 게임 시작 요청
-            _boundPlayer.RPC_RequestGameStart();
+            // GameStartManager를 통해 게임 시작
+            GameStartManager gameStartManager = FindFirstObjectByType<GameStartManager>();
+            if (gameStartManager != null)
+            {
+                gameStartManager.RequestGameStart();
+            }
+            else
+            {
+                Debug.LogError("[ReadyStartController] GameStartManager not found!");
+            }
         }
     }
 }

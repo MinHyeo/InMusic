@@ -7,7 +7,7 @@ using System.Collections;
 using SSW.DB;
 
 namespace SongList {
-    public class LoadManager : Singleton<LoadManager> {
+    public class LoadManager : Managers.Singleton<LoadManager> {
         [Header("UI for Splash/Fade")]
         [SerializeField] private CanvasGroup logoCanvasGroup; 
         [SerializeField] private float fadeDuration = 1f;

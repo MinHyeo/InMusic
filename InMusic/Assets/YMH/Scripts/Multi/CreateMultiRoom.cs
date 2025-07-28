@@ -1,6 +1,7 @@
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 public class CreateMultiRoom : MonoBehaviour
 {
     [SerializeField]
@@ -14,12 +15,13 @@ public class CreateMultiRoom : MonoBehaviour
     {
     }
 
-    public void OnCreateButton(){
+    public async void OnCreateButton(){
         string roomName = roomNameInputField.text;
         string password = passWordInputField.text;
         bool isPassword = isPasswordToggle.isOn;
 
-        NetworkManager.Instance.CreateRoom(roomName, password, isPassword);
+        MultiRoomManager.Instance.SetRoomName(roomName); 
+        await NetworkManager.Instance.CreateRoom(roomName, password, isPassword);
     }
 
     public void OnCancelButton(){

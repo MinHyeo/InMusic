@@ -28,6 +28,12 @@ public class LobbyManager : SingleTon<LobbyManager>
         createRoomUI.SetActive(false);
     }
 
+    public void BackToMainMenu()
+    {
+        // 메인 메뉴로 돌아가기
+        //SceneManager.LoadScene("MainMenu");
+    }
+
     // Create Room
     public void CreateRoom()
     {

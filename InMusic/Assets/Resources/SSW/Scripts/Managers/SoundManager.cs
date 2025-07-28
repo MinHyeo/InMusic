@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class SoundManager : SongList.Singleton<SoundManager>
+public class SoundManager : Managers.Singleton<SoundManager>
 {
     [Header("SFX용 AudioSource (2D 사운드)")]
     [SerializeField]

@@ -46,6 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Nickname: 
   _IsReady: 0
+  _IsRoomHost: 0
+  _JoinOrder: 0
 --- !u!1 &7787712050947556356
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +95,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 2300178102
   ObjectInterest: 1
-  Flags: 786433
+  Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 6896099619942894287}

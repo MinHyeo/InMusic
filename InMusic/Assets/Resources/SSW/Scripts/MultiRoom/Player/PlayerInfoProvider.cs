@@ -1,4 +1,5 @@
 using UnityEngine;
+using Steamworks;
 
 public static class PlayerInfoProvider
 {
@@ -96,9 +97,9 @@ public static class PlayerInfoProvider
 #else
         try 
         {
-            if (Steamworks.SteamManager.Initialized)
+            if (SteamManager.Initialized)
             {
-                string steamName = Steamworks.SteamFriends.GetPersonaName();
+                string steamName = SteamFriends.GetPersonaName();
                 Debug.Log($"[PlayerInfoProvider] Steam Nickname: {steamName}");
                 return string.IsNullOrEmpty(steamName) ? "SteamUser" : steamName;
             }

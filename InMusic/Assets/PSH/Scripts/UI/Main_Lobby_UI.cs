@@ -71,7 +71,7 @@ public class Main_Lobby_UI : UI_Base
                 //Todo
                 //SceneManager.LoadScene();
                 Debug.Log("Multi function is not implemented");
-                SceneLoading.Instance.LoadScene("MultiLobby");
+                SceneLoading.Instance.LoadScene("MultiLobbyScene");
                 break;
             case "KeyGuide":
                 //Todo

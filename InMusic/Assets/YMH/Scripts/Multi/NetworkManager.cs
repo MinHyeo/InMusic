@@ -62,7 +62,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
         }
         sessionProps.Add("maxPlayers", 2); // 방 이름
 
-        int index = SceneUtility.GetBuildIndexByScenePath("Assets/YMH/Scene/MultiRoomTest.unity");
+        int index = SceneUtility.GetBuildIndexByScenePath("Assets/Resources/SSW/Scenes/MultiRoom.unity");
         Debug.Log(index);
 
         await runnerInstance.JoinSessionLobby(SessionLobby.Shared);
@@ -78,6 +78,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
+        Debug.Log("[Fusion] Connected to server.");
         //throw new NotImplementedException();
     }
 
@@ -98,6 +99,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
     {
+        Debug.Log($"[Fusion] Disconnected from server: {reason}");
         //throw new NotImplementedException();
     }
 
@@ -143,7 +145,13 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        //throw new NotImplementedException();
+        Debug.Log($"[Fusion] Player Left: {player}");
+        
+        // MultiRoomManager에 플레이어 퇴장 알림
+        if (MultiRoomManager.Instance != null)
+        {
+            MultiRoomManager.Instance.NotifyPlayerLeft(player);
+        }
     }
 
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
@@ -231,7 +239,18 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
     private void CreateEntryUI(SessionInfo session)
     {
         GameObject newEntry = GameObject.Instantiate(sessionListEntryPrefab);
-        newEntry.transform.parent = sessionListContentParent;
+        
+        // UI 크기 문제 해결: RectTransform 설정
+        RectTransform rectTransform = newEntry.GetComponent<RectTransform>();
+        newEntry.transform.SetParent(sessionListContentParent, false); // worldPositionStays = false로 설정
+        
+        if (rectTransform != null)
+        {
+            // 원본 크기 유지
+            rectTransform.localScale = Vector3.one;
+            rectTransform.anchoredPosition = Vector2.zero;
+        }
+        
         SessionListEntry entryScript = newEntry.GetComponent<SessionListEntry>();
         sessionListUIDictionary.Add(session.Name, newEntry);
         entryScript.CreateRoom(session);

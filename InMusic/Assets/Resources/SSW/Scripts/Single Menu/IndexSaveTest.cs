@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace SongList {
-    public class IndexSaveTest : Singleton<IndexSaveTest> {
+    public class IndexSaveTest : Managers.Singleton<IndexSaveTest> {
         private static int _lastSelectedIndex = -1;
         protected override void Awake() {
             base.Awake();

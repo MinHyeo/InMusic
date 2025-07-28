@@ -15,7 +15,7 @@ namespace SSW.DB
         public bool newUser;
         public string message;
     }
-    public class DBService : Singleton<DBService>
+    public class DBService : Managers.Singleton<DBService>
     {
         [Header("PHP Server URLs")]
         [SerializeField] private string _saveOrLoadUserURL = "http://localhost/InMusic/handleSteamLogin.php";

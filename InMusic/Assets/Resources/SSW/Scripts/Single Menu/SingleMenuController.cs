@@ -51,14 +51,37 @@ public class SingleMenuController : MonoBehaviour
 
     public void OnClickBack()
     {
+        if (NetworkManager.runnerInstance != null && NetworkManager.runnerInstance.IsRunning)
+        {
+            Debug.Log("[SingleMenuController] Shutting down network runner...");
+            NetworkManager.runnerInstance.Shutdown();
+
+            // 셧다운 완료까지 잠시 대기 후 씬 전환
+            Invoke(nameof(LoadMainScene), 0.3f);
+        }
+        else
+        {
+            Debug.Log("[SingleMenuController] No active network runner found.");
+            LoadMainScene();
+        }
         Debug.Log("Back Button Clicked");
+    }
+    private void LoadMainScene()
+    {
+        Debug.Log("[SingleMenuController] Loading main lobby scene.");
+
+        if (MultiRoomManager.Instance != null)
+        {
+            Debug.Log("[SingleMenuController] Cleaning up MultiRoomManager before exiting.");
+            MultiRoomManager.Instance.DestroyRoomManager();
+        }
         SceneManager.LoadScene("Main_Lobby_PSH");
     }
 
     public void OnClickOption()
     {
         //TODO: Option UI 입출력 이벤트 처리
-        if(curSetUI == null)
+        if (curSetUI == null)
         {
             curSetUI = GameManager.Resource.Instantiate("SoundSetting_UI");
         }

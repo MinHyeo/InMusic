@@ -208,6 +208,7 @@ MonoBehaviour:
   playerCount: {fileID: 1664692376633548698}
   lockIcon: {fileID: 1425442818611675992}
   selectImage: {fileID: 2969283859598747406}
+  isLocked: 0
 --- !u!222 &797192756728001394
 CanvasRenderer:
   m_ObjectHideFlags: 0
