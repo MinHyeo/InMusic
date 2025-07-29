@@ -50,6 +50,7 @@ public class LobbyManager : SingleTon<LobbyManager>
     {
         try
         {
+            MultiRoomManager.Instance.SetRoomName(roomName);
             var result = await NetworkManager.runnerInstance.StartGame(new StartGameArgs()
             {
                 GameMode = GameMode.Shared,  // Photon Cloud Server 방식으로 변경

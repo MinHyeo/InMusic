@@ -44,10 +44,29 @@ public class ReadyStartController : MonoBehaviour
         _boundPlayer = null;
     }
     
+    /// <summary>
+    /// 로컬 플레이어(HasInputAuthority가 true인 플레이어) 가져오기
+    /// </summary>
+    private PlayerStateController GetLocalPlayer()
+    {
+        var allPlayers = MultiRoomManager.Instance?.GetAllPlayers();
+        if (allPlayers != null)
+        {
+            foreach (var player in allPlayers)
+            {
+                if (player.Object.HasInputAuthority)
+                {
+                    return player;
+                }
+            }
+        }
+        return null;
+    }
+    
     public void UpdateButtonStates()
     {
         if (_boundPlayer == null) return;
-        
+
         if (IsSharedModeMasterClient())
         {
             // 방장: 스타트 버튼만 표시
@@ -96,7 +115,7 @@ public class ReadyStartController : MonoBehaviour
     private bool IsSharedModeMasterClient()
     {
         // SharedModeMasterClient 확인으로 변경
-        return SharedModeMasterClientTracker.IsPlayerSharedModeMasterClient(_boundPlayer.Object.InputAuthority);
+        return SharedModeMasterClientTracker.IsLocalPlayerSharedModeMasterClient();
     }
     
     private void ShowStartButton()
@@ -148,7 +167,11 @@ public class ReadyStartController : MonoBehaviour
     
     private void ShowReadyButtons()
     {
-        if (_boundPlayer.IsReady)
+        // 로컬 플레이어 기준으로 버튼 상태 결정
+        var localPlayer = GetLocalPlayer();
+        if (localPlayer == null) return;
+        
+        if (localPlayer.IsReady)
         {
             // 레디 상태: CANCEL 버튼만 활성화, READY 버튼은 숨김
             if (_readyActivateButton != null) 
@@ -214,40 +237,46 @@ public class ReadyStartController : MonoBehaviour
     // 버튼 이벤트 핸들러들
     private void OnReadyActivateClicked()
     {
-        if (_boundPlayer != null && _boundPlayer.Object.HasInputAuthority && !_boundPlayer.IsReady)
+        var localPlayer = GetLocalPlayer();
+        if (localPlayer != null && !localPlayer.IsReady)
         {
-            Debug.Log($"[ReadyStartManager] Ready activate clicked by {_boundPlayer.Nickname}");
+            Debug.Log($"[ReadyStartManager] Ready activate clicked by {localPlayer.Nickname}");
             
             // 애니메이션 후 버튼 전환을 위한 딜레이
             StartCoroutine(DelayedButtonTransition(() => {
-                _boundPlayer.RPC_ToggleReady();
+                localPlayer.RPC_ToggleReady();
             }));
         }
     }
     
     private void OnReadyDeactivateClicked()
     {
-        if (_boundPlayer != null && _boundPlayer.Object.HasInputAuthority && _boundPlayer.IsReady)
+        var localPlayer = GetLocalPlayer();
+        if (localPlayer != null && localPlayer.IsReady)
         {
-            Debug.Log($"[ReadyStartManager] Ready deactivate clicked by {_boundPlayer.Nickname}");
+            Debug.Log($"[ReadyStartManager] Ready deactivate clicked by {localPlayer.Nickname}");
             
             // 애니메이션 후 버튼 전환을 위한 딜레이
             StartCoroutine(DelayedButtonTransition(() => {
-                _boundPlayer.RPC_ToggleReady();
+                localPlayer.RPC_ToggleReady();
             }));
         }
     }
     
     private void OnStartButtonClicked()
     {
-        // SharedModeMasterClient 확인으로 변경
-        bool isSharedModeMasterClient = SharedModeMasterClientTracker.IsPlayerSharedModeMasterClient(_boundPlayer.Object.InputAuthority);
+        // SharedModeMasterClient 확인
+        bool isSharedModeMasterClient = SharedModeMasterClientTracker.IsLocalPlayerSharedModeMasterClient();
         
-        if (_boundPlayer != null && isSharedModeMasterClient)
+        if (isSharedModeMasterClient)
         {
-            Debug.Log($"[ReadyStartManager] Start button clicked by SharedModeMasterClient {_boundPlayer.Nickname}");
+            // 로컬 플레이어 직접 가져오기
+            var localPlayer = GetLocalPlayer();
+            if (localPlayer != null)
+            {
+                Debug.Log($"[ReadyStartManager] Start button clicked by SharedModeMasterClient {localPlayer.Nickname}");
+            }
             
-            // 스타트 버튼은 즉시 게임 시작 (딜레이 없음)
             StartGame();
         }
     }
@@ -267,9 +296,9 @@ public class ReadyStartController : MonoBehaviour
         Debug.Log("게임을 시작합니다!");
         
         // SharedModeMasterClient만 게임 시작 가능
-        bool isSharedModeMasterClient = SharedModeMasterClientTracker.IsPlayerSharedModeMasterClient(_boundPlayer.Object.InputAuthority);
-        
-        if (_boundPlayer != null && isSharedModeMasterClient)
+        bool isSharedModeMasterClient = SharedModeMasterClientTracker.IsLocalPlayerSharedModeMasterClient();
+
+        if (isSharedModeMasterClient)
         {
             // GameStartManager를 통해 게임 시작
             GameStartManager gameStartManager = FindFirstObjectByType<GameStartManager>();

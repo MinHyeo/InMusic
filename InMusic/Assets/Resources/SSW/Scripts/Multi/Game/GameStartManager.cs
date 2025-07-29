@@ -7,11 +7,11 @@ using UnityEngine;
 /// </summary>
 public class GameStartManager : NetworkBehaviour
 {
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_StartGame()
     {
         // SharedModeMasterClient만 실제 게임 시작 로직 실행
-        if (NetworkManager.runnerInstance.IsSharedModeMasterClient && Object.HasInputAuthority)
+        if (NetworkManager.runnerInstance.IsSharedModeMasterClient)
         {
             Debug.Log("[GameStartManager] RPC_StartGame called by SharedModeMasterClient");
             StartGameInternal();
@@ -52,7 +52,7 @@ public class GameStartManager : NetworkBehaviour
     /// </summary>
     public void RequestGameStart()
     {
-        if (NetworkManager.runnerInstance.IsSharedModeMasterClient && Object.HasInputAuthority)
+        if (NetworkManager.runnerInstance.IsSharedModeMasterClient)
         {
             Debug.Log("[GameStartManager] Game start requested by SharedModeMasterClient");
             RPC_StartGame();

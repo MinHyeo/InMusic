@@ -30,7 +30,7 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
         return allPlayers.FirstOrDefault(p => IsSharedModeMasterClient(p));
     }
     
-    public bool IsHost(PlayerStateController player)
+    public bool IsMasterClient(PlayerStateController player)
     {
         if (player == null) return false;
         
@@ -67,7 +67,7 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
         _roomName = roomName;
         Debug.Log($"[MultiRoom Manager] Room name set to: {roomName}");
     }
-    
+
     /// <summary>
     /// NetworkManager에서 플레이어가 나갔을 때 호출됨
     /// SharedModeMasterClient 시스템이 자동으로 권한을 관리하므로 UI 업데이트만 처리
@@ -76,17 +76,15 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
     {
         Debug.Log($"[MultiRoomManager] Player left notification: {leftPlayer}");
         
-        // SharedModeMasterClient는 Fusion이 자동으로 관리하므로
-        // UI 업데이트나 추가 로직만 처리하면 됨
-        var allPlayers = GetAllPlayers();
-        var leftPlayerController = allPlayers.FirstOrDefault(p => p.Object.InputAuthority == leftPlayer);
-        
-        if (leftPlayerController != null)
+        PlayerUIController uiController = FindFirstObjectByType<PlayerUIController>();
+        if (uiController != null)
         {
-            Debug.Log($"[MultiRoomManager] Player {leftPlayerController.Nickname} left the room");
-            
-            // UI 업데이트나 기타 필요한 처리
-            // SharedModeMasterClient 변경은 Fusion이 자동으로 처리함
+            Debug.Log("[MultiRoomManager] PlayerUIController found! Forcing UI refresh due to player left");
+            uiController.ForceRefreshAllSlots();
+        }
+        else
+        {
+            Debug.LogError("[MultiRoomManager] PlayerUIController NOT FOUND!");
         }
     }
     

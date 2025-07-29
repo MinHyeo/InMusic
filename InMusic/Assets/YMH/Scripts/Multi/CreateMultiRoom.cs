@@ -20,7 +20,7 @@ public class CreateMultiRoom : MonoBehaviour
         string password = passWordInputField.text;
         bool isPassword = isPasswordToggle.isOn;
 
-        MultiRoomManager.Instance.SetRoomName(roomName); 
+        MultiRoomManager.Instance.SetRoomName(roomName);
         await NetworkManager.Instance.CreateRoom(roomName, password, isPassword);
     }
 

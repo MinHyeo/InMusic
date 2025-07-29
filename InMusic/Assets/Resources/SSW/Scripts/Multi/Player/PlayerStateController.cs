@@ -24,6 +24,13 @@ public class PlayerStateController : NetworkBehaviour
             _previousNickname = Nickname;
             _previousIsReady = IsReady;
         }
+
+        bool isMasterClient = SharedModeMasterClientTracker.IsPlayerSharedModeMasterClient(Object.InputAuthority);
+        if (isMasterClient && IsReady && Object.HasInputAuthority)
+        {
+            Debug.Log($"[PlayerStateController] {Nickname} became master client, auto-canceling ready state");
+            IsReady = false; // 방장이 되면 자동으로 레디 해제
+        }
     }
 
     private void OnStateChanged()
@@ -75,7 +82,7 @@ public class PlayerStateController : NetworkBehaviour
         string leavingPlayerName = Nickname;
         Debug.Log($"[Despawned] {leavingPlayerName} left the room");
         Debug.Log($"[Despawned] Authority Info - HasStateAuthority: {Object.HasStateAuthority}, InputAuthority: {Object.InputAuthority}");
-        
+
         // SharedModeMasterClient는 Fusion이 자동으로 승계 처리
     }
 
@@ -85,20 +92,20 @@ public class PlayerStateController : NetworkBehaviour
     public void RPC_RequestInitialization(string nickname)
     {
         Debug.Log($"[RPC_RequestInitialization] Initializing: {nickname}");
-        
+
         // 닉네임만 설정 (SharedModeMasterClient는 Fusion이 자동 관리)
         Nickname = nickname;
-        
+
         // 초기화 완료 후 UI 업데이트 강제 실행
         Invoke(nameof(ForceUIUpdateAfterInit), 0.2f);
-        
+
         Debug.Log($"[RPC_RequestInitialization] Player {nickname} initialized");
     }
 
     private void ForceUIUpdateAfterInit()
     {
         Debug.Log($"[PlayerState] Force UI update after initialization for {Nickname}");
-        
+
         // 모든 클라이언트에서 UI 업데이트
         PlayerUIController uiController = FindFirstObjectByType<PlayerUIController>();
         if (uiController != null)
@@ -121,7 +128,7 @@ public class PlayerStateController : NetworkBehaviour
         bool oldReady = IsReady;
         IsReady = !IsReady;
         Debug.Log($"[PlayerState] {Nickname} Ready toggled: {oldReady} → {IsReady}");
-        
+
         // Ready 상태 변경 후 모든 클라이언트에 강제 UI 업데이트 알림
         RPC_NotifyReadyStateChanged(Nickname, IsReady);
     }
@@ -130,7 +137,7 @@ public class PlayerStateController : NetworkBehaviour
     private void RPC_NotifyReadyStateChanged(string playerName, bool readyState)
     {
         Debug.Log($"[PlayerState] Ready state changed notification: {playerName} → {readyState}");
-        
+
         // 약간의 지연 후 UI 업데이트 (네트워크 동기화 완료 대기)
         Invoke(nameof(ForceUIUpdateAfterReady), 0.1f);
     }
@@ -138,7 +145,7 @@ public class PlayerStateController : NetworkBehaviour
     private void ForceUIUpdateAfterReady()
     {
         Debug.Log("[PlayerState] Force UI update after Ready state change");
-        
+
         PlayerUIController uiController = FindFirstObjectByType<PlayerUIController>();
         if (uiController != null)
         {
@@ -153,7 +160,7 @@ public class PlayerStateController : NetworkBehaviour
         if (NetworkManager.runnerInstance.IsSharedModeMasterClient && Object.HasInputAuthority)
         {
             Debug.Log($"[GameStart] Game start requested by SharedModeMasterClient: {Nickname}");
-            
+
             // GameStartManager를 통해 게임 시작
             GameStartManager gameStartManager = FindFirstObjectByType<GameStartManager>();
             if (gameStartManager != null)
@@ -166,6 +173,7 @@ public class PlayerStateController : NetworkBehaviour
             }
         }
     }
+    
     
     #endregion
 }

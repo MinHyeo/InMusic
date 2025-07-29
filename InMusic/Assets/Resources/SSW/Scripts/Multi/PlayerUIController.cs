@@ -66,7 +66,6 @@ public class PlayerUIController : MonoBehaviour
         }
     }
 
-    // SharedModeMasterClient 변경 시 강제로 모든 슬롯 새로고침
     public void ForceRefreshAllSlots()
     {
         Debug.Log("[PlayerUIController] Force refreshing all slots due to MasterClient change");
