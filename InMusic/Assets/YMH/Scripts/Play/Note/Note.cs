@@ -44,10 +44,10 @@ namespace Play
             }
         }
 
-        public float Hit()
+        public float Hit(int isMatch = 0)
         {
             // 노트가 맞았을 때의 처리 (예: 이펙트, 점수 추가, 노트 비활성화 등)
-            TimelineController.Instance.RemoveNote(this);
+            TimelineController.Instance.RemoveNote(this, isMatch);
 
             return noteScore;
         }
@@ -62,7 +62,7 @@ namespace Play
                         PlayManager.Instance.HandleNoteHit(this, AccuracyType.Miss, 0);
                         break;
                     case GameState.MultiGamePlay:
-                        //MultiPlayManager.Instance.HandleNoteHit(this, AccuracyType.Miss, 0);
+                        MultiPlayManager.Instance.HandleNoteHit(this, AccuracyType.Miss, 0, noteId);
                         break;
                     default:
                         break;
