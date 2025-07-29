@@ -202,7 +202,6 @@ public class BmsLoader : SingleTon<BmsLoader>
 
                     int channel = 0;
                     Int32.TryParse(data[0].Substring(4, 2), out channel);
-                    Debug.Log($"채널이 이상해 {channel}");
 
                     string noteStr = data[0].Substring(7);
                     List<int> noteData = getNoteDataOfStr(noteStr);

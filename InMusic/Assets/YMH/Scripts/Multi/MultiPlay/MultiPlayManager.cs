@@ -8,22 +8,26 @@ namespace Play
 {
     public class MultiPlayManager : NetworkBehaviour
     {
+        #region Singleton
+        // 싱글톤
+        public static MultiPlayManager Instance { get; private set; }
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+        #endregion
+
+        #region Fields
         [Header("관련 Scripts")]
         [SerializeField]
         private MatchController matchController;
-        private ScoreManager scoreManager;
-        [SerializeField]
-        private Accuracy accuracyScript;
-        //콤보 관련
-        [SerializeField]
-        private Combo comboScript;
-
-        [Header("점수 관련")]
-        [SerializeField]
-        private TextMeshProUGUI scoreText;
-        [SerializeField]
-        private TextMeshProUGUI accuracyText;
-
         [SerializeField]
         private VideoPlay videoPlay;
 
@@ -38,6 +42,7 @@ namespace Play
         private const float goodThreshold = 0.0416f;
         private const float badThreshold = 0.0832f;
         private const float missThreshold = 0.0416f;
+        #endregion
 
         private void Start()
         {
@@ -46,7 +51,6 @@ namespace Play
 
             GameManager.Instance.SetGameState(GameState.MultiGamePlay);
             songName = "Heya"; // Default song name, can be set dynamically later
-            scoreManager = new ScoreManager(scoreText, accuracyText, accuracyScript, comboScript);
 
             double delay = 3.0f;
             double startTime = NetworkManager.runnerInstance.SimulationTime + delay;
@@ -90,9 +94,6 @@ namespace Play
 
             Song song = (Song)System.Enum.Parse(typeof(Song), songName);
             TimelineController.Instance.Initialize(BmsLoader.Instance.SelectSong(song));
-
-            //점수 초기화
-            scoreManager.Init();
 
             GameManager.Input.SetNoteKeyPressEvent(OnKeyPress);
             GameManager.Input.SetNoteKeyReleaseEvent(OnKeyRelase);
@@ -159,9 +160,8 @@ namespace Play
         public void HandleNoteHit(Note note, AccuracyType accuracyResult, float percent)
         {
             float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
-
-            //점수 계산 및 표시
-            scoreManager.AddScore(noteScore, percent, accuracyResult);
+            Debug.Log("점수 처리 시작");
+            MultiScoreComparison.Instance.UpdateMyScore(noteScore, percent, accuracyResult);
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
@@ -169,11 +169,9 @@ namespace Play
         {
             if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
             {
-                Debug.Log("응 전달 안해");
                 return;
             }
 
-            Debug.Log("상대 입력 처리");
             matchController.ShowKeyEffect(ketIndex, accuracyType, percent, noteId);
         }
 
