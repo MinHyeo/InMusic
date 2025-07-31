@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a4ab1db3e7ddd543aea2a791b0b9486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _songListController: {fileID: 7798194863323981400}
+  _songListController: {fileID: 0}
   _detailTitleText: {fileID: 0}
   _detailArtistText: {fileID: 0}
   _detailImage: {fileID: 0}
@@ -1387,7 +1387,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6143225254556138487}
-  - component: {fileID: 7798194863323981400}
   m_Layer: 5
   m_Name: SongListController
   m_TagString: Untagged
@@ -1414,25 +1413,6 @@ RectTransform:
   m_AnchoredPosition: {x: 438.37927, y: 27}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7798194863323981400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8004124633252100471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5fe38cf4a384b34089db9b49b66a190, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _scrollRect: {fileID: 6495108080862918317}
-  _contentRect: {fileID: 5504968305245239608}
-  _songItemPrefab: {fileID: 6905251678252019351, guid: 3c7875108b5f26a4cbb4302d82eed171, type: 3}
-  _bufferItems: 10
-  _selectedSprite: {fileID: 5930141362655772493, guid: ef3ab89986ec9ba4b9d594d4d1485517, type: 3}
-  _defaultSprite: {fileID: 346123834412281656, guid: 18d76dcc5ab9c09438eccceaaaedbf0b, type: 3}
-  _scrollDebounceTime: 0.05
 --- !u!1 &8591826704255967181
 GameObject:
   m_ObjectHideFlags: 0

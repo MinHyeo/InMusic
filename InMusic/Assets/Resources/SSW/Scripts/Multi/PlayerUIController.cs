@@ -9,14 +9,15 @@ public class PlayerUIController : MonoBehaviour
     {
         RefreshAllSlots();
     }
-    
+
     private void Update()
     {
-        // 플레이어 수가 변경되었을 때만 전체 슬롯 재구성
-        if (HasPlayerListChanged())
+        // 플레이어 수가 변경되었을 때, 방장 변경 시 전체 슬롯 재구성
+        if (HasPlayerListChanged() || SharedModeMasterClientTracker.NotifyMasterClientChanged())
         {
             RefreshAllSlots();
         }
+        
     }
     
     private bool HasPlayerListChanged()

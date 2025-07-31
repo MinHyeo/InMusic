@@ -9,13 +9,14 @@ public class SharedModeMasterClientTracker : NetworkBehaviour
 {
     static SharedModeMasterClientTracker LocalInstance;
     private bool _wasLocalPlayerMasterClient;
+    private static bool _masterClientChangedFlag = false;
 
     public override void Spawned()
     {
         LocalInstance = this;
         _wasLocalPlayerMasterClient = Runner.IsSharedModeMasterClient;
         Debug.Log($"[SharedModeMasterClientTracker] Spawned - LocalPlayer: {Runner.LocalPlayer}, IsSharedModeMasterClient: {Runner.IsSharedModeMasterClient}");
-        
+
         // 로컬 플레이어가 SharedModeMasterClient인지 즉시 확인
         if (Runner.IsSharedModeMasterClient)
         {
@@ -38,16 +39,14 @@ public class SharedModeMasterClientTracker : NetworkBehaviour
         }
     }
 
-    private void NotifyMasterClientChanged()
+    public static bool NotifyMasterClientChanged()
     {
-        Debug.Log("[SharedModeMasterClientTracker] Notifying UI of MasterClient change");
-        
-        // PlayerUIController 강제 업데이트
-        PlayerUIController uiController = FindFirstObjectByType<PlayerUIController>();
-        if (uiController != null)
+        if (_masterClientChangedFlag)
         {
-            uiController.ForceRefreshAllSlots();
+            _masterClientChangedFlag = false; // 한 프레임만 true
+            return true;
         }
+        return false;
     }
 
     private void OnDestroy()
