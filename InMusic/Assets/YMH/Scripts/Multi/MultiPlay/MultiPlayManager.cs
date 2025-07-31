@@ -131,23 +131,19 @@ namespace Play
 
                 if (timeDifference <= greateThreshold)
                 {
-                    HandleNoteHit(closestNote, AccuracyType.Great, 100);
-                    RPC_ReceiveKeyInput((int)keyEvent - (int)Define.NoteControl.Key1, AccuracyType.Great, 100, noteId);
+                    HandleNoteHit(closestNote, AccuracyType.Great, 100, noteId);
                 }
                 else if ((timeDifference -= greateThreshold) <= goodThreshold)
                 {
-                    HandleNoteHit(closestNote, AccuracyType.Good, 70);
-                    RPC_ReceiveKeyInput((int)keyEvent - (int)Define.NoteControl.Key1, AccuracyType.Good, 70, noteId);
+                    HandleNoteHit(closestNote, AccuracyType.Good, 70, noteId);
                 }
                 else if ((timeDifference -= goodThreshold) <= badThreshold)
                 {
-                    HandleNoteHit(closestNote, AccuracyType.Bad, 40);
-                    RPC_ReceiveKeyInput((int)keyEvent - (int)Define.NoteControl.Key1, AccuracyType.Bad, 40, noteId);
+                    HandleNoteHit(closestNote, AccuracyType.Bad, 40, noteId);
                 }
                 else if ((timeDifference -= badThreshold) <= missThreshold)
                 {
-                    HandleNoteHit(closestNote, AccuracyType.Miss, 0);
-                    RPC_ReceiveKeyInput((int)keyEvent - (int)Define.NoteControl.Key1, AccuracyType.Miss, 0, noteId);
+                    HandleNoteHit(closestNote, AccuracyType.Miss, 0, noteId);
                 }
             }
         }
@@ -157,22 +153,23 @@ namespace Play
             return TimelineController.Instance.GetClosestNote(channel, pressTime);
         }
 
-        public void HandleNoteHit(Note note, AccuracyType accuracyResult, float percent)
+        public void HandleNoteHit(Note note, AccuracyType accuracyResult, float percent, int noteId)
         {
             float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
-            Debug.Log("점수 처리 시작");
             MultiScoreComparison.Instance.UpdateMyScore(noteScore, percent, accuracyResult);
+
+            RPC_ReceiveKeyInput(accuracyResult, percent, noteId);
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
-        public void RPC_ReceiveKeyInput(int ketIndex, AccuracyType accuracyType, float percent, int noteId, RpcInfo info = default)
+        public void RPC_ReceiveKeyInput(AccuracyType accuracyType, float percent, int noteId, RpcInfo info = default)
         {
             if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
             {
                 return;
             }
 
-            matchController.ShowKeyEffect(ketIndex, accuracyType, percent, noteId);
+            matchController.ShowKeyEffect(accuracyType, percent, noteId);
         }
 
         private void OnKeyRelase(Define.NoteControl keyEvent)
