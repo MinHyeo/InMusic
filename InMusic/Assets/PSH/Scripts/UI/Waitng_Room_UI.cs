@@ -24,6 +24,7 @@ public class Waiting_Room_UI : UI_Base_PSH
     [SerializeField] PlayerStatusController playerStatusController;
     [SerializeField] bool isCurrentHost; //방 생성 유무 (UI 구분용)
     [SerializeField] bool isOwner; //방장 유무
+    [SerializeField] bool canStart;
 
     [Tooltip("플레이어 Prefab 관리용")]
     [SerializeField] private Dictionary<PlayerRef, PlayerInfo> _playerInfos = new Dictionary<PlayerRef, PlayerInfo>();
@@ -215,9 +216,10 @@ public class Waiting_Room_UI : UI_Base_PSH
                 SceneManager.LoadScene(3); //추후 로비씬으로 바꾸기
                 break;
             case "Enter":
-                readyStatus();
-                if (!CheckReady() || !isOwner)
+                OnReadyButton();
+                if (!canStart || !isOwner)
                     return;
+                Debug.Log("게임 시작");
                 if (curMusicItem.GetComponent<MusicItem>().HasBMS) {
                     //키 입력 이벤트 제거
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
@@ -279,16 +281,10 @@ public class Waiting_Room_UI : UI_Base_PSH
         mList.SetData(GameManager_PSH.Resource.GetMusicList());
     }
 
-    //플레이어 준비 상태 확인
-    bool CheckReady() {
-        if (playerStatusController.GetP1Status() && playerStatusController.GetP2Status()) {
-            return true;
+    void OnReadyButton() {
+        if (canStart) {
+            return;
         }
-        Debug.Log("아직 준비중인 플레이어 존재");
-        return false;
-    }
-
-    void readyStatus() {
         NetworkObject localPlayerObject = NetworkManager.runnerInstance.GetPlayerObject(NetworkManager.runnerInstance.LocalPlayer);
         if (localPlayerObject != null)
         {
@@ -296,14 +292,49 @@ public class Waiting_Room_UI : UI_Base_PSH
             PlayerInfo localPlayerInfo = localPlayerObject.GetComponent<PlayerInfo>();
             bool newReadyState = !localPlayerInfo.IsReady;
             localPlayerInfo.Rpc_SetReady(newReadyState);
+        }
+    }
 
-            //UI 업데이트
+    public void UpdateAllPlayerReady() {
+        //현재 방에 있는 모든 플레이어(네트워크 오브젝트) 확인
+
+        foreach (var playerRef in NetworkManager.runnerInstance.ActivePlayers) {
+            NetworkObject pObject = NetworkManager.runnerInstance.GetPlayerObject(playerRef);
+            PlayerInfo pInfo = pObject.GetComponent<PlayerInfo>();
+            bool isLocalPlayer = pObject.HasInputAuthority;
+            //P1기준 본인 UI 조작
             if (isCurrentHost) {
-                //P1 정보 업데이트
-                playerStatusController.SetPlayerStatus(0, !playerStatusController.GetP1Status(), false);
+                if (isLocalPlayer) {
+                    playerStatusController.SetPlayerStatus(0, pInfo.IsReady, isOwner);
+                }
+                else
+                {
+                    playerStatusController.SetPlayerStatus(1, pInfo.IsReady, !isOwner);
+                }
             }
-            //P2 상태 업데이트
-            playerStatusController.SetPlayerStatus(1, !playerStatusController.GetP2Status(), false);
+            //P2기준 본인 UI 조작
+            else
+            {
+                if (isLocalPlayer)
+                {
+                    playerStatusController.SetPlayerStatus(1, pInfo.IsReady, isOwner);
+                }
+                else
+                {
+                    playerStatusController.SetPlayerStatus(0, pInfo.IsReady, !isOwner);
+                }
+            }
+        }
+        if (isOwner) {
+            if (playerStatusController.GetP1Status() && playerStatusController.GetP2Status()) {
+                canStart = true;
+                startButtonColor.sprite = startButtonTrue;
+            }
+            else
+            {
+                canStart = false;
+                startButtonColor.sprite = startButtonFalse;
+            }
         }
     }
 }

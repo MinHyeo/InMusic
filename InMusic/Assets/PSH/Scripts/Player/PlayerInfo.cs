@@ -13,7 +13,7 @@ public class PlayerInfo : NetworkBehaviour
     [Networked]
     public bool PlayerType{get; set;}
 
-    [Networked /**/]
+    [Networked ,OnChangedRender(nameof(OnReadyStateChangedRender))]
     // 플레이어 준비 상태
     public bool IsReady { get; set; }
 
@@ -28,6 +28,18 @@ public class PlayerInfo : NetworkBehaviour
             PlayerType = GameManager_PSH.PlayerRole;
         }
         OnPlayerObjectInitialized?.Invoke(Object.InputAuthority, Object);
+    }
+    public void OnReadyStateChangedRender() 
+    {
+        GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI"); 
+        if (waitingRoomUIManager != null)
+        {
+            waitingRoomUIManager.GetComponent<Waiting_Room_UI>().UpdateAllPlayerReady();
+        }
+        else
+        {
+            Debug.LogWarning("Waiting_Room_UI GameObject를 찾을 수 없습니다.");
+        }
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
