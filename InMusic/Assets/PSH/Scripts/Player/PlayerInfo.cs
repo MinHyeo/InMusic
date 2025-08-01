@@ -13,8 +13,8 @@ public class PlayerInfo : NetworkBehaviour
     [Networked]
     public bool PlayerType{get; set;}
 
+    [Networked /**/]
     // 플레이어 준비 상태
-    // [Networked(OnChanged = nameof(OnPlayerReadyStatusChanged))] // IsReady 변경 시 호출될 콜백 함수 지정
     public bool IsReady { get; set; }
 
     public override void Spawned()
@@ -23,18 +23,18 @@ public class PlayerInfo : NetworkBehaviour
         {
             //PlayerName = GameManager_PSH.Data.GetPlayerName();
             Debug.Log($"로컬 플레이어({Object.InputAuthority.PlayerId}) 이름 설정: {PlayerName}");
-
-            // 초기 준비 상태 설정 (예: 기본적으로 false)
+            //초기 준비 상태 설정
             IsReady = false;
             PlayerType = GameManager_PSH.PlayerRole;
         }
         OnPlayerObjectInitialized?.Invoke(Object.InputAuthority, Object);
     }
-    /*
-    public static void OnPlayerReadyStatusChanged(Changed<PlayerInfo> changed)
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void Rpc_SetReady(bool readyState)
     {
-        PlayerInfo playerInfo = changed.Behaviour;
-        Debug.Log($"플레이어 준비 상태 변경 감지: {playerInfo.PlayerName} IsReady: {playerInfo.IsReady}");
-        //TODO: UI한테 상태 정보 넘기기
-    }*/
+        //서버는 IsReady [Networked] 변수를 업데이트, 이 변경은 Fusion에 의해 자동으로 동기화
+        IsReady = readyState;
+        Debug.Log($"서버에서 {PlayerName.ToString()}의 준비 상태를 {IsReady}로 설정.");
+    }
 }

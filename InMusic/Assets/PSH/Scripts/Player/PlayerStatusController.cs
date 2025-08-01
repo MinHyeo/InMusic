@@ -45,7 +45,7 @@ public class PlayerStatusController : MonoBehaviour
     /// </summary>
     /// <param name="playerIndex">0: P1 1: P2</param>
     /// <param name="isReady"></param>
-    /// <param name="hasAuthority"></param>
+    /// <param name="hasAuthority">방장권한</param>
     public void SetPlayerStatus(int playerIndex, bool isReady, bool hasAuthority)
     {
         GameObject[] targetStatusUI;
@@ -104,5 +104,4 @@ public class PlayerStatusController : MonoBehaviour
         isRoomOwner[0].SetActive(isP1);
         isRoomOwner[1].SetActive(!isP1);
     }
-
 }

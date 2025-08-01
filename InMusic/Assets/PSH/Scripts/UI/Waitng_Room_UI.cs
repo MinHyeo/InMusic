@@ -19,12 +19,21 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     [Header("방 정보")]
     [SerializeField] Text roomName;
-   
 
     [Header("플레이어 상태 정보")]
     [SerializeField] PlayerStatusController playerStatusController;
+    [SerializeField] bool isCurrentHost; //방 생성 유무 (UI 구분용)
+    [SerializeField] bool isOwner; //방장 유무
+
     [Tooltip("플레이어 Prefab 관리용")]
     [SerializeField] private Dictionary<PlayerRef, PlayerInfo> _playerInfos = new Dictionary<PlayerRef, PlayerInfo>();
+
+    [Header("시작버튼")]
+    [SerializeField] Sprite startButtonTrue;
+    [SerializeField] Sprite startButtonFalse;
+    [SerializeField] Image startButtonColor;
+    [SerializeField] Text startButtonName;
+
 
     void OnEnable()
     {
@@ -52,6 +61,9 @@ public class Waiting_Room_UI : UI_Base_PSH
         StartCoroutine(SetLogData());
         LoadingScreen.Instance.SceneReady();
         roomName.text = NetworkManager.runnerInstance.SessionInfo.Name; //값 이상함
+        isCurrentHost = GameManager_PSH.PlayerRole; 
+        isOwner = GameManager_PSH.PlayerRole;
+        ChangeRoomOwner(isOwner);
     }
 
     void PlayerEnter(PlayerRef playerRef, NetworkObject networkObject) {
@@ -86,10 +98,8 @@ public class Waiting_Room_UI : UI_Base_PSH
     /// <param name="isLocal"></param>
     void UpdatePlayerStatusUI(PlayerInfo info, bool isLocal) {
 
-        bool isCurrentHost = GameManager_PSH.PlayerRole;
-
         //방장 기준
-        if (isCurrentHost)
+        if (isOwner)
         {
             //P1 칸에 자신 정보 입력
             if (isLocal)
@@ -159,15 +169,22 @@ public class Waiting_Room_UI : UI_Base_PSH
         {
             SingleLobbyKeyEvent(Define_PSH.UIControl.Enter);
         }
-    }
 
-    //방 생성시 최소 한번만 실행
-    public void InitPlayerStatus() {
-
+        if (isOwner) {
+            //상대방에게 신호 주기
+        }
     }
 
     public void ChangeRoomOwner(bool isP1) {
         playerStatusController.SetRoomOwner(isP1);
+        if (isOwner)
+        {
+            startButtonColor.sprite = startButtonFalse;
+        }
+        else
+        {
+            startButtonName.text = "ready";
+        }
     }
     #region Detect
     void OnTriggerEnter2D(Collider2D listItem)
@@ -198,7 +215,8 @@ public class Waiting_Room_UI : UI_Base_PSH
                 SceneManager.LoadScene(3); //추후 로비씬으로 바꾸기
                 break;
             case "Enter":
-                if (!CheckReady())
+                readyStatus();
+                if (!CheckReady() || !isOwner)
                     return;
                 if (curMusicItem.GetComponent<MusicItem>().HasBMS) {
                     //키 입력 이벤트 제거
@@ -263,9 +281,29 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     //플레이어 준비 상태 확인
     bool CheckReady() {
-        if (playerStatusController.GetP1Status() || playerStatusController.GetP2Status()) {
+        if (playerStatusController.GetP1Status() && playerStatusController.GetP2Status()) {
             return true;
         }
+        Debug.Log("아직 준비중인 플레이어 존재");
         return false;
+    }
+
+    void readyStatus() {
+        NetworkObject localPlayerObject = NetworkManager.runnerInstance.GetPlayerObject(NetworkManager.runnerInstance.LocalPlayer);
+        if (localPlayerObject != null)
+        {
+            //localPlayer 찾아서 상태 변경
+            PlayerInfo localPlayerInfo = localPlayerObject.GetComponent<PlayerInfo>();
+            bool newReadyState = !localPlayerInfo.IsReady;
+            localPlayerInfo.Rpc_SetReady(newReadyState);
+
+            //UI 업데이트
+            if (isCurrentHost) {
+                //P1 정보 업데이트
+                playerStatusController.SetPlayerStatus(0, !playerStatusController.GetP1Status(), false);
+            }
+            //P2 상태 업데이트
+            playerStatusController.SetPlayerStatus(1, !playerStatusController.GetP2Status(), false);
+        }
     }
 }

@@ -5086,7 +5086,11 @@ MonoBehaviour:
   mList: {fileID: 0}
   roomName: {fileID: 1066885349}
   playerStatusController: {fileID: 1505192459}
-  curPlayer: 
+  isCurrentHost: 0
+  startButtonTrue: {fileID: -66490268015967822, guid: 8f15ea038f23e5e4cb520612e4454431, type: 3}
+  startButtonFalse: {fileID: 6765302739450717683, guid: 76bc6b2fed546c0429ae743f3c7e272d, type: 3}
+  startButtonColor: {fileID: 1425971663}
+  startButtonName: {fileID: 1716650724}
 --- !u!1001 &1911801449
 PrefabInstance:
   m_ObjectHideFlags: 0
