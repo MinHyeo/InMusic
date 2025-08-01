@@ -495,5 +495,30 @@ public class MultiSongListController : MonoBehaviour
         int realIndex = ((centerDataIndex % _totalSongCount) + _totalSongCount) % _totalSongCount;
         return realIndex;
     }
+
+    /// <summary>
+    /// 현재 하이라이트된 곡 정보 반환 (GameStartManager에서 사용)
+    /// </summary>
+    public SongInfo GetCurrentHighlightedSong()
+    {
+        if (_selectedSlot != null)
+        {
+            ScrollSlot slotComponent = _selectedSlot.GetComponent<ScrollSlot>();
+            if (slotComponent != null)
+            {
+                return slotComponent.GetHighlightedSong();
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 현재 하이라이트된 곡 이름 반환 (GameStartManager에서 사용)
+    /// </summary>
+    public string GetCurrentHighlightedSongName()
+    {
+        var highlightedSong = GetCurrentHighlightedSong();
+        return highlightedSong?.Title ?? "Unknown";
+    }
     #endregion
 }

@@ -503,6 +503,10 @@ PrefabInstance:
       propertyPath: _bgVideo
       value: 
       objectReference: {fileID: 1995798049}
+    - target: {fileID: 154778196970679047, guid: 4cee0f9e9e61e1f4db48dcd7edbaf060, type: 3}
+      propertyPath: _bgController
+      value: 
+      objectReference: {fileID: 1878515571}
     - target: {fileID: 2107196331912146449, guid: 4cee0f9e9e61e1f4db48dcd7edbaf060, type: 3}
       propertyPath: m_Name
       value: SongPlayLoadUI_Canvas

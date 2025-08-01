@@ -28,9 +28,12 @@ public class GameStartManager : NetworkBehaviour
         
         try
         {
+            // 선택된 곡 정보 가져오기
+            string selectedSongName = GetSelectedSongName();
+            
             Dictionary<string, SessionProperty> newProps = new()
             {
-                { "songName", "Heya" },
+                { "songName", selectedSongName },
                 { "gameStarted", true }
             };
 
@@ -39,12 +42,30 @@ public class GameStartManager : NetworkBehaviour
             // 게임 씬 로드
             NetworkManager.runnerInstance.LoadScene("MultiPlay");
             
-            Debug.Log("[GameStartManager] Game started successfully!");
+            Debug.Log($"[GameStartManager] Game started successfully with song: {selectedSongName}!");
         }
         catch (System.Exception ex)
         {
             Debug.LogError($"[GameStartManager] Failed to start game: {ex.Message}");
         }
+    }
+
+    /// <summary>
+    /// 현재 선택된 곡 이름 가져오기
+    /// </summary>
+    private string GetSelectedSongName()
+    {
+        // MultiSongListController에서 현재 하이라이트된 곡 이름 바로 가져오기
+        var songListController = FindFirstObjectByType<MultiSongListController>();
+        if (songListController != null)
+        {
+            string songName = songListController.GetCurrentHighlightedSongName();
+            Debug.Log($"[GameStartManager] Selected song: {songName}");
+            return songName;
+        }
+        
+        Debug.LogWarning("[GameStartManager] Could not get selected song name, using fallback");
+        return "DefaultSong"; // 기본값
     }
 
     /// <summary>

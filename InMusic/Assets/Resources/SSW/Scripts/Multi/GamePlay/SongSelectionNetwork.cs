@@ -62,6 +62,9 @@ public class SongSelectionNetwork : NetworkBehaviour
         {
             SelectedSongIndex = newIndex;
             Debug.Log($"[SongSelectionNetwork] Updated song index to: {newIndex}");
+            
+            // 곡 선택 변경 시 일반 클라이언트들의 레디 상태 해제
+            ClearNonMasterPlayersReady();
         }
     }
 
@@ -87,5 +90,18 @@ public class SongSelectionNetwork : NetworkBehaviour
     public int GetCurrentSongIndex()
     {
         return SelectedSongIndex;
+    }
+
+    /// <summary>
+    /// 일반 클라이언트들의 레디 상태 해제 (곡 변경 시 호출)
+    /// </summary>
+    private void ClearNonMasterPlayersReady()
+    {
+        // ReadyStartController에 레디 해제 요청
+        var readyController = FindFirstObjectByType<ReadyStartController>();
+        if (readyController != null)
+        {
+            readyController.ClearNonMasterPlayersReady();
+        }
     }
 }

@@ -312,4 +312,24 @@ public class ReadyStartController : MonoBehaviour
             }
         }
     }
+    
+    /// <summary>
+    /// 곡 선택 변경 시 일반 클라이언트들의 레디 상태 해제
+    /// </summary>
+    public void ClearNonMasterPlayersReady()
+    {
+        // 로컬 플레이어가 마스터가 아니면서 레디 상태라면 해제
+        if (!SharedModeMasterClientTracker.IsLocalPlayerSharedModeMasterClient())
+        {
+            var localPlayer = GetLocalPlayer();
+            if (localPlayer != null && localPlayer.IsReady)
+            {
+                Debug.Log($"[ReadyStartController] Clearing ready state for local non-master client: {localPlayer.Nickname}");
+                localPlayer.IsReady = false;
+                
+                // UI 업데이트
+                UpdateButtonStates();
+            }
+        }
+    }
 }
