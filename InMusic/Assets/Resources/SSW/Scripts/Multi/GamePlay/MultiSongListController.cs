@@ -46,6 +46,7 @@ public class MultiSongListController : MonoBehaviour
     private SingleMenuController _singleMenuController;
 
     private Dictionary<string, MusicLogRecord> _musicLogRecords;
+    private bool _isRestoringPosition = false;
     #endregion
 
     #region Unity Methods
@@ -179,7 +180,11 @@ public class MultiSongListController : MonoBehaviour
             if (!SharedModeMasterClientTracker.IsLocalPlayerSharedModeMasterClient()) 
             {
                 // 스크롤을 원래 위치로 되돌림
-                StartCoroutine(RestoreScrollPosition());
+                if (!_isRestoringPosition)
+                {
+                    _isRestoringPosition = true;
+                    StartCoroutine(RestoreScrollPosition());
+                }
             }
             if (Time.time - _lastScrollTime > _scrollDebounceTime)
             {
@@ -205,12 +210,14 @@ public class MultiSongListController : MonoBehaviour
     private IEnumerator RestoreScrollPosition()
     {
         yield return new WaitForSeconds(3.0f);
-        
+
         if (SongSelectionNetwork.Instance != null)
         {
             int networkIndex = SongSelectionNetwork.Instance.GetCurrentSongIndex();
             ForceCenterAtIndex(networkIndex);
         }
+        
+        _isRestoringPosition = false;
     }
 
     private void SnapToNearestSlot()

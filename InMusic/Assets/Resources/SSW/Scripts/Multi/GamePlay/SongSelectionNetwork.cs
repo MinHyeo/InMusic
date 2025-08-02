@@ -52,7 +52,7 @@ public class SongSelectionNetwork : NetworkBehaviour
     /// </summary>
     public void UpdateSongIndex(int newIndex)
     {
-        if (!SharedModeMasterClientTracker.IsLocalPlayerSharedModeMasterClient())
+        if (!Runner.IsSharedModeMasterClient)
         {
             Debug.LogWarning("[SongSelectionNetwork] Only SharedModeMasterClient can update song index");
             return;
@@ -66,6 +66,10 @@ public class SongSelectionNetwork : NetworkBehaviour
             // 곡 선택 변경 시 일반 클라이언트들의 레디 상태 해제
             ClearNonMasterPlayersReady();
         }
+        else
+        {
+            Debug.Log($"[SongSelectionNetwork] No change needed, already at index: {newIndex}");
+        }
     }
 
     /// <summary>
@@ -73,14 +77,24 @@ public class SongSelectionNetwork : NetworkBehaviour
     /// </summary>
     private void OnSongIndexChanged()
     {
+        Debug.Log($"[SongSelectionNetwork] OnSongIndexChanged called - IsMaster: {Runner.IsSharedModeMasterClient}");
+        
         // 마스터 클라이언트는 자기가 변경한 것이므로 UI 업데이트 스킵
-        if (SharedModeMasterClientTracker.IsLocalPlayerSharedModeMasterClient()) return;
+        if (Runner.IsSharedModeMasterClient) 
+        {
+            Debug.Log("[SongSelectionNetwork] Skipping UI sync - This is master client");
+            return;
+        }
 
         // 일반 클라이언트만 UI 동기화
         if (_controller != null)
         {
             Debug.Log($"[SongSelectionNetwork] Syncing UI to song index: {SelectedSongIndex}");
             _controller.ForceCenterAtIndex(SelectedSongIndex);
+        }
+        else
+        {
+            Debug.LogError("[SongSelectionNetwork] Controller is null! Cannot sync UI");
         }
     }
 
