@@ -7,6 +7,8 @@ namespace Play
 {
     public class ScoreManager : MonoBehaviour
     {
+        private int userIndex = 0;
+
         [Header("Score and Accuracy Scripts")]
         [SerializeField]
         private Accuracy accuracyScript;
@@ -34,15 +36,6 @@ namespace Play
         public string Rank { get { return rank; } private set { } }
         public int[] InputCount { get { return inputCount; } private set { } }
 
-        public ScoreManager(TextMeshProUGUI scoreText, TextMeshProUGUI accuracyText, Accuracy accuracy, Combo combo)
-        {
-            this.scoreText = scoreText;
-            this.accuracyText = accuracyText;
-
-            this.accuracyScript = accuracy;
-            this.comboScript = combo;
-        }
-
         public void Init()
         {
             score = 0;
@@ -53,7 +46,7 @@ namespace Play
             scoreText.text = "0";
             accuracyText.text = "0.00%";
         }
-        
+
         public void AddScore(float noteScore, float percent, AccuracyType accuracyResult)
         {
             //점수 계산
@@ -99,6 +92,29 @@ namespace Play
             {
                 rank = Result.Rank.D.ToString();
             }
+        }
+        
+        public ScoreData SaveScore(string songName, string artist)
+        {
+            SetRank();
+
+            ScoreData scoreData = new ScoreData
+            {
+                songName = songName,
+                artist = artist,
+                songKey = $"{songName}_{artist}",
+                score = (int)score,
+                accuracy = accuracy,
+                rank = rank,
+                great = inputCount[0],
+                good = inputCount[1],
+                bad = inputCount[2],
+                miss = inputCount[3],
+                maxCombo = comboScript.MaxCombo,
+                isFullCombo = comboScript.IsFullCombo
+            };
+
+            return scoreData;
         }
     }
 }

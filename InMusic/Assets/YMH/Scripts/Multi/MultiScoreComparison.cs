@@ -57,6 +57,17 @@ namespace Play
             multiAccuracy.UpdateAccuracy(MyScoreManager.Accuracy, MatchScoreManager.Accuracy);
             multiMiss.UpdateMissCount(MyScoreManager.InputCount[3], MatchScoreManager.InputCount[3]);
         }
+
+        public ScoreData[] SetScore(string songName, string artist)
+        {
+            MyScoreManager.SetRank();
+            MatchScoreManager.SetRank();
+
+            ScoreData[] scores = new ScoreData[2];
+            scores[0] = MyScoreManager.SaveScore(songName, artist);
+            scores[1] = MatchScoreManager.SaveScore(songName, artist);
+
+            return scores;
+        }
     }
 }
-

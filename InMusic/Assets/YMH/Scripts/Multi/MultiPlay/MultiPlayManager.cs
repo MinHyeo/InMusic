@@ -36,6 +36,7 @@ namespace Play
         private GameObject[] keyObjects;
 
         private string songName;
+        private string artist;
 
         // 판정 기준
         private const float greateThreshold = 0.0533f;
@@ -50,7 +51,8 @@ namespace Play
             runner.SetPlayerObject(runner.LocalPlayer, Object);
 
             GameManager.Instance.SetGameState(GameState.MultiGamePlay);
-            songName = "Heya"; // Default song name, can be set dynamically later
+            songName = "Supernova"; // Default song name, can be set dynamically later
+            artist = "Artist"; // Default artist name, can be set dynamically later
 
             double delay = 3.0f;
             double startTime = NetworkManager.runnerInstance.SimulationTime + delay;
@@ -205,6 +207,13 @@ namespace Play
         private void End()
         {
             Debug.Log("Game Ended");
+
+            // 게임 종료 처리
+            SoundManager.Instance.End();
+            videoPlay.End();
+            TimelineController.Instance.RemoveJudgementLine();
+            ScoreData[] scoreDatas = MultiScoreComparison.Instance.SetScore(songName.ToString(), artist);
+            Result.MultiResultManager.Instance.ReceiveResult(scoreDatas);
         }
     }
 }

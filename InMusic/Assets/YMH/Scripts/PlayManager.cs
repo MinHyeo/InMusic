@@ -37,6 +37,7 @@ namespace Play
 
         [Header("관련 Scripts")]
         //점수 관련
+        [SerializeField]
         private ScoreManager scoreManager;
         //정확도 관련
         [SerializeField]
@@ -101,7 +102,6 @@ namespace Play
         private void Start()
         {
             GameManager.Instance.SetGameState(GameState.GamePlay);
-            scoreManager = new ScoreManager(scoreText, accuracyText, accuracyScript, comboScript);
         }
 
         public void OnClickButton()
@@ -357,7 +357,7 @@ namespace Play
             DBService.Instance.SaveMusicLog(userId, scoreData);
         }
 
-        public ScoreData SaveScore()
+        private ScoreData SaveScore()
         {
             ScoreData scoreData = new ScoreData();
 
