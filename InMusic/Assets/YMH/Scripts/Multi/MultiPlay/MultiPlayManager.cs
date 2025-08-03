@@ -29,6 +29,10 @@ namespace Play
         [SerializeField]
         private MatchController matchController;
         [SerializeField]
+        private HpBar myHpBar;
+        [SerializeField]
+        private GameObject deathText;
+        [SerializeField]
         private VideoPlay videoPlay;
 
         [Header("Key Objects")]
@@ -51,12 +55,13 @@ namespace Play
             runner.SetPlayerObject(runner.LocalPlayer, Object);
 
             GameManager.Instance.SetGameState(GameState.MultiGamePlay);
-            songName = "Supernova"; // Default song name, can be set dynamically later
+            songName = "Heya"; // Default song name, can be set dynamically later
             artist = "Artist"; // Default artist name, can be set dynamically later
 
             double delay = 3.0f;
             double startTime = NetworkManager.runnerInstance.SimulationTime + delay;
             Debug.Log($"Game will start at: {startTime}");
+            deathText.SetActive(false);
             StartCoroutine(CallStartGameRpcWhenReady((float)startTime));
         }
 
@@ -160,18 +165,29 @@ namespace Play
             float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
             MultiScoreComparison.Instance.UpdateMyScore(noteScore, percent, accuracyResult);
 
+            switch (accuracyResult)
+            {
+                case AccuracyType.Miss:
+                    if(myHpBar.SetHp(-10))
+                        deathText.SetActive(true);
+                    break;
+                default:
+                    myHpBar.SetHp(5);
+                    break;
+            }
+
             RPC_ReceiveKeyInput(accuracyResult, percent, noteId);
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
-        public void RPC_ReceiveKeyInput(AccuracyType accuracyType, float percent, int noteId, RpcInfo info = default)
+        public void RPC_ReceiveKeyInput(AccuracyType accuracyResult, float percent, int noteId, RpcInfo info = default)
         {
             if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
             {
                 return;
             }
 
-            matchController.ShowKeyEffect(accuracyType, percent, noteId);
+            matchController.ShowKeyEffect(accuracyResult, percent, noteId);
         }
 
         private void OnKeyRelase(Define.NoteControl keyEvent)
