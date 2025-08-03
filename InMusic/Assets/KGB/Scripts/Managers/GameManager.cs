@@ -6,7 +6,7 @@ using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IGameManager
 {
     public static GameManager Instance { get; private set; }
 
@@ -254,4 +254,19 @@ public class GameManager : MonoBehaviour
         // 이벤트 해제
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+
+    // ====== 인터페이스 구현 ======
+
+    public bool IsGameActive => isGameActive;
+    public int TotalNotes => totalNotes;
+    public float TotalScore => totalScore;
+    public float Accuracy => accuracy;
+    public int GreatCount => greatCount;
+    public int GoodCount => goodCount;
+    public int BadCount => badCount;
+    public int MissCount => missCount;
+    public int MaxCombo => maxCombo;
+    public int Combo => combo;
+    public float CurHP => curHP;
+    public float MaxHP => maxHP;
 }

@@ -248,10 +248,13 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         if (Input.GetKey(KeyCode.A)) direction.x -= 1;
         if (Input.GetKey(KeyCode.D)) direction.x += 1;
 
-        input.Set(new NetworkInputData
+        if (direction != Vector2.zero)
         {
-            moveDirection = direction
-        });
+            input.Set(new NetworkInputData
+            {
+                moveDirection = direction
+            });
+        }
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)

@@ -47,8 +47,8 @@ public class PlayManager : MonoBehaviour
     void SetMusic()
     {
         //선택한 노래 리소스 세팅
-        //string musicName = GameManager.Instance.curBMS.wavInfo.wav;
-        //string path = $"{GameManager.Instance.resourcePath}/{musicName}";
+        //string musicName = GameManagerProvider.Instance.curBMS.wavInfo.wav;
+        //string path = $"{GameManagerProvider.Instance.resourcePath}/{musicName}";
         //musicSound.clip = Resources.Load<AudioClip>(path);
         //Debug.Log(path);
         musicSound.clip = GameManager_PSH.Instance.GetComponent<MusicData>().Audio;
@@ -64,8 +64,8 @@ public class PlayManager : MonoBehaviour
     
     void SetBackground()
     {
-        //string musicName = GameManager.Instance.curBMS.wavInfo.wav;
-        //string path = GameManager.Instance.resourcePath + $"/Back_{musicName}";
+        //string musicName = GameManagerProvider.Instance.curBMS.wavInfo.wav;
+        //string path = GameManagerProvider.Instance.resourcePath + $"/Back_{musicName}";
         //Debug.Log(path);
         //playBackgroundVideo = Resources.Load<VideoClip>(path);
         //if (playBackgroundVideo != null) {

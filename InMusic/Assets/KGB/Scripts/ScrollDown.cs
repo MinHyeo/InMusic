@@ -8,18 +8,23 @@ public class ScrollDown : MonoBehaviour
 
     public bool isMoving = false;
 
+    private bool isMultiplayer = false;
+
     private Note note;
     void Start()
     {
         objectPool = GetComponentInParent<ObjectPool>();
         scrollSpeed = NoteManager.Instance.baseScrollSpeed;
         note = GetComponent<Note>();
+
+        isMultiplayer = (KGB_GameManager_Multi.Instance != null);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if ((!GameManager.Instance.isGameActive))
+
+        if (!IsGameActive())
         {
             return;
         }
@@ -51,5 +56,10 @@ public class ScrollDown : MonoBehaviour
     public void SetScrollSpeed(float speed)
     {
         scrollSpeed = speed;
+    }
+
+    bool IsGameActive()
+    {
+        return GameManagerProvider.Instance.IsGameActive;
     }
 }

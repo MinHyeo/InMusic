@@ -36,24 +36,24 @@ public class SinglePlayResultUI : MonoBehaviour
     {
         playResult = new PlayResultData
         {
-            Score = (int)GameManager.Instance.totalScore,
-            Great = GameManager.Instance.greatCount,
-            Good = GameManager.Instance.goodCount,
-            Bad = GameManager.Instance.badCount,
-            Miss = GameManager.Instance.missCount,
-            Accuracy = GameManager.Instance.accuracy,
-            Combo = GameManager.Instance.maxCombo,
-            Rank = (float)GameManager.Instance.totalScore / 1000000f * 100f,
-            FullCombo = (GameManager.Instance.combo == GameManager.Instance.totalNotes)
+            Score = (int)GameManagerProvider.Instance.TotalScore,
+            Great = GameManagerProvider.Instance.GreatCount,
+            Good = GameManagerProvider.Instance.GoodCount,
+            Bad = GameManagerProvider.Instance.BadCount,
+            Miss = GameManagerProvider.Instance.MissCount,
+            Accuracy = GameManagerProvider.Instance.Accuracy,
+            Combo = GameManagerProvider.Instance.MaxCombo,
+            Rank = (float)GameManagerProvider.Instance.TotalScore / 1000000f * 100f,
+            FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)
         };
 
-        //score.text = GameManager.Instance.totalScore.ToString();
-        //great.text = GameManager.Instance.greatCount.ToString();
-        //good.text = GameManager.Instance.goodCount.ToString();
-        //bad.text = GameManager.Instance.badCount.ToString();
-        //miss.text = GameManager.Instance.missCount.ToString();
-        //accuracy.text = GameManager.Instance.accuracy.ToString();
-        //combo.text = GameManager.Instance.maxCombo.ToString();
+        //score.text = GameManagerProvider.Instance.totalScore.ToString();
+        //great.text = GameManagerProvider.Instance.greatCount.ToString();
+        //good.text = GameManagerProvider.Instance.goodCount.ToString();
+        //bad.text = GameManagerProvider.Instance.badCount.ToString();
+        //miss.text = GameManagerProvider.Instance.missCount.ToString();
+        //accuracy.text = GameManagerProvider.Instance.accuracy.ToString();
+        //combo.text = GameManagerProvider.Instance.maxCombo.ToString();
 
         score.text = playResult.Score.ToString();
         great.text = playResult.Great.ToString();
@@ -63,7 +63,7 @@ public class SinglePlayResultUI : MonoBehaviour
         accuracy.text = playResult.Accuracy.ToString();
         combo.text = playResult.Combo.ToString();
 
-        //float percentage = (float)GameManager.Instance.totalScore / 1000000f * 100f;
+        //float percentage = (float)GameManagerProvider.Instance.totalScore / 1000000f * 100f;
         //if (percentage >= 95f)
         //{
         //    rate.text = "S";

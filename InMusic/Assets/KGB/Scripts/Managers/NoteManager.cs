@@ -32,6 +32,7 @@ public class NoteManager : MonoBehaviour
     public int totalNotes; // 총 노트 개수
 
 
+
     public static NoteManager Instance { get; private set; }
 
     void Awake()
@@ -90,7 +91,7 @@ public class NoteManager : MonoBehaviour
         for (int i = 0; i < lineCount; i++)
         {
             
-            Vector3 spawnPosition = new Vector3(0, i * lineInterval - noteOffset+ startPositionY+ spawnArea.position.y, 0);
+            Vector3 spawnPosition = new Vector3(spawnArea.position.x, i * lineInterval - noteOffset+ startPositionY+ spawnArea.position.y, 0);
 
             GameObject measureLine = measureLinePool.GetObject();
             measureLine.transform.position = spawnPosition;
@@ -142,18 +143,29 @@ public class NoteManager : MonoBehaviour
             }
         }
         Debug.Log($"Total Notes: {totalNotes}");
-        GameManager.Instance.InitializeGame();
+        if (GameManager.Instance != null)
+        {
+            GameManagerProvider.Instance.InitializeGame();
+        }
+        else if (KGB_GameManager_Multi.Instance != null)
+        {
+            KGB_GameManager_Multi.Instance.InitializeGame();
+        }
+        else
+        {
+            Debug.LogWarning("No GameManager instance found.");
+        }
     }
 
     private float GetChannelPosition(int channel)
     {
         switch (channel)
         {
-            case 11: return -2.25f; // 1번 키
-            case 12: return -0.74f; // 2번 키
-            case 13: return 0.75f;  // 3번 키
-            case 14: return 2.25f;  // 4번 키
-            default: return 0f;     // 기본 값
+            case 11: return -2.25f + spawnArea.position.x; // 1번 키
+            case 12: return -0.74f + spawnArea.position.x; // 2번 키
+            case 13: return 0.75f + spawnArea.position.x;  // 3번 키
+            case 14: return 2.25f + spawnArea.position.x;  // 4번 키
+            default: return 0f + spawnArea.position.x;     // 기본 값
         }
     }
     private ObjectPool SelectNotePool(int channel)

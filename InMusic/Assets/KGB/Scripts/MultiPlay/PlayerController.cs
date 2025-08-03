@@ -14,6 +14,8 @@ public class PlayerController : NetworkBehaviour
         {
             Vector2 moveDir = input.moveDirection.normalized;
             transform.position += (Vector3)moveDir * moveSpeed * Runner.DeltaTime;
+
+            NoteJudgeNetwork.Instance.SendJudge(12, "ÆÇÁ¤1");
         }
     }
 }

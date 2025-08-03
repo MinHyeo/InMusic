@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class Note : MonoBehaviour
 {
+    int noteIndex; //노트 판정 정보를 주고받기 위해 인덱스 추가, 노트 생성 시 순서대로 1부터 부여
+    // 노래의 총 노트가 100개라면 첫 노트는 1, 마지막은 100
+    //노트 판정 정보는 노트인덱스, 판정(good, bad 등)으로 필요 시 입력 시간 추가
+
     float ScrollSpeed;
     float perfectThresholdDistance;
     float greatThresholdDistance;
@@ -34,28 +38,28 @@ public class Note : MonoBehaviour
         if (distance <= greatThresholdDistance)
         {
             Debug.Log($"Great");
-            GameManager.Instance.AddScore("Great");
+            GameManagerProvider.Instance.AddScore("Great");
         }
         else if (distance <= goodThresholdDistance)
         {
             Debug.Log($"Good");
-            GameManager.Instance.AddScore("Good");
+            GameManagerProvider.Instance.AddScore("Good");
         }
         else if (distance <= badThresholdDistance)
         {
             Debug.Log($"Bad");
-            GameManager.Instance.AddScore("Bad");
+            GameManagerProvider.Instance.AddScore("Bad");
         }
         else
         {
             Debug.Log($"Miss");
-            GameManager.Instance.AddScore("Miss");
+            GameManagerProvider.Instance.AddScore("Miss");
         }
     }
 
     public void MissNote()
     {
         Debug.Log($"Miss");
-        GameManager.Instance.AddScore("Miss");
+        GameManagerProvider.Instance.AddScore("Miss");
     }
 }

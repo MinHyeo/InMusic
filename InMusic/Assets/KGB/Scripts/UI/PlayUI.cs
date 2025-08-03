@@ -15,8 +15,8 @@ public class PlayUI : MonoBehaviour
 
     void Start()
     {
-        hpBar.value = GameManager.Instance.maxHP;
-        comboText.text = GameManager.Instance.combo.ToString();
+        hpBar.value = GameManagerProvider.Instance.MaxHP;
+        comboText.text = GameManagerProvider.Instance.Combo.ToString();
         countText.text = "";
     }
 
@@ -27,8 +27,8 @@ public class PlayUI : MonoBehaviour
 
     public void UpdatePlayUI()
     {
-        comboText.text = GameManager.Instance.combo.ToString();
-        hpBar.value = GameManager.Instance.curHP/100f;
+        comboText.text = GameManagerProvider.Instance.Combo.ToString();
+        hpBar.value = GameManagerProvider.Instance.CurHP/100f;
     }
 
     public void JudgeTextUpdate(string judgement)

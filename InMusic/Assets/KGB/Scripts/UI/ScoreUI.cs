@@ -21,7 +21,7 @@ public class ScoreUI : MonoBehaviour
     public void UpdateScoreDisplay()
     {
         
-        scoreText.text = $"{GameManager.Instance.totalScore:F0}";
-        accuracyText.text = $"{GameManager.Instance.accuracy:F2}%";
+        scoreText.text = $"{GameManagerProvider.Instance.TotalScore:F0}";
+        accuracyText.text = $"{GameManagerProvider.Instance.Accuracy:F2}%";
     }
 }

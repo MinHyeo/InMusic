@@ -57,7 +57,7 @@ public class PauseUI : MonoBehaviour
 
     public void Continue()
     {
-        GameManager.Instance.ResumeGame();
+        GameManagerProvider.Instance.ResumeGame();
     }
     public void Restart()
     {
