@@ -9,23 +9,22 @@ namespace Play
         private TextMeshProUGUI comboText;
         private Animator anim;
 
-        //ÄÞº¸ º¯¼ö
+        //ï¿½Þºï¿½ ï¿½ï¿½ï¿½ï¿½
         private int combo = 0;
         private int maxCombo = 0;
+        private int totalNotes;
 
         public int MaxCombo { get { return maxCombo; } private set { } }
         public bool IsFullCombo
         {
             get
             {
-                if (maxCombo == 0)
-                    return false;
-                else
-                    return combo == maxCombo;
+                int totalNotes = TimelineController.Instance.NoteCount;
+                return maxCombo == totalNotes;
             }
         }
 
-        //½Ã°£ º¯¼ö
+        //ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
         private float currentTime = 0.0f;
         private const float showTime = 2f;
 
@@ -38,7 +37,7 @@ namespace Play
             maxCombo = 0;
         }
 
-        //ÃÊ±âÈ­
+        //ï¿½Ê±ï¿½È­
         private void Start()
         {
             comboText = GetComponent<TextMeshProUGUI>();
@@ -61,12 +60,13 @@ namespace Play
             }
         }
 
-        //¿ÜºÎ¿¡¼­ ÄÞº¸ Á¶ÀÛ
+        //ï¿½ÜºÎ¿ï¿½ï¿½ï¿½ ï¿½Þºï¿½ ï¿½ï¿½ï¿½ï¿½
         public void ChangeInCombo(AccuracyType accuracy)
         {
             if (accuracy != AccuracyType.Miss)
             {
                 combo += 1;
+                Debug.Log($"AccuracyType : {accuracy.ToString()}, Combo: {combo}");
                 if (combo > maxCombo)
                 {
                     maxCombo = combo;
@@ -74,6 +74,7 @@ namespace Play
             }
             else
             {
+                Debug.Log("Miss");
                 combo = 0;
             }
 
@@ -82,7 +83,7 @@ namespace Play
 
         private void ShowCombo()
         {
-            //ÄÞº¸ ÅØ½ºÆ® º¯°æ ¹× È°¼ºÈ­
+            //ï¿½Þºï¿½ ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È°ï¿½ï¿½È­
             comboText.text = string.Format($"{combo}");
             if (!gameObject.activeSelf)
             {
@@ -93,7 +94,7 @@ namespace Play
             }
                 
 
-            //½Ã°£ ÃÊ±âÈ­
+            //ï¿½Ã°ï¿½ ï¿½Ê±ï¿½È­
             if (!isShow)
                 isShow = !isShow;
             currentTime = 0.0f;
@@ -101,7 +102,7 @@ namespace Play
 
         public void HideCombo()
         {
-            //ºñÈ°¼ºÈ­
+            //ï¿½ï¿½È°ï¿½ï¿½È­
             gameObject.SetActive(false);
         }
     }

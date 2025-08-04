@@ -55,7 +55,7 @@ namespace Play
             runner.SetPlayerObject(runner.LocalPlayer, Object);
 
             GameManager.Instance.SetGameState(GameState.MultiGamePlay);
-            songName = "Heya"; // Default song name, can be set dynamically later
+            songName = "Supernova"; // Default song name, can be set dynamically later
             artist = "Artist"; // Default artist name, can be set dynamically later
 
             double delay = 3.0f;

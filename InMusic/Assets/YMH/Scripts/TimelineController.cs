@@ -31,6 +31,7 @@ namespace Play
         private float measureInterval;
         private float travelTime;
         private int noteCount;
+        public int NoteCount { get { return noteCount; } private set { } }
         private float speed = 5f;
         private float startDelayBeats = 2f;
         private float beatDelayTime;
