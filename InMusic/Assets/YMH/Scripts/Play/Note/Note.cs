@@ -15,6 +15,7 @@ namespace Play
         public int channel;
         private float speed;
         private float noteScore;
+        private bool isHited = false;
 
         public float targetTime;
 
@@ -30,6 +31,7 @@ namespace Play
             this.speed = speed;
             this.noteScore = noteScore;
             targetTime = travelTime + Time.time;
+            isHited = false;
         }
 
         private void Update()
@@ -47,7 +49,9 @@ namespace Play
         public float Hit(int isMatch = 0)
         {
             // 노트가 맞았을 때의 처리 (예: 이펙트, 점수 추가, 노트 비활성화 등)
+            isHited = true;
             TimelineController.Instance.RemoveNote(this, isMatch);
+            Debug.Log("---Hit---");
 
             return noteScore;
         }
@@ -56,13 +60,17 @@ namespace Play
         {
             if (collider.CompareTag("EndLine"))
             {
-                switch(GameManager.Instance.CurrentGameState)
+                if (isHited)
+                    return;
+                    
+                switch (GameManager.Instance.CurrentGameState)
                 {
                     case GameState.GamePlay:
                         PlayManager.Instance.HandleNoteHit(this, AccuracyType.Miss, 0);
                         break;
                     case GameState.MultiGamePlay:
                         MultiPlayManager.Instance.HandleNoteHit(this, AccuracyType.Miss, 0, noteId);
+                        Debug.Log("___Miss___");
                         break;
                     default:
                         break;
