@@ -511,10 +511,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SongPlayLoadUI_Canvas
       objectReference: {fileID: 0}
-    - target: {fileID: 2107196331912146449, guid: 4cee0f9e9e61e1f4db48dcd7edbaf060, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2651884139398342361, guid: 4cee0f9e9e61e1f4db48dcd7edbaf060, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -594,26 +590,6 @@ PrefabInstance:
     - target: {fileID: 2651884139398342361, guid: 4cee0f9e9e61e1f4db48dcd7edbaf060, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4893405059349147933, guid: 4cee0f9e9e61e1f4db48dcd7edbaf060, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8653573825990142014, guid: 4cee0f9e9e61e1f4db48dcd7edbaf060, type: 3}
-      propertyPath: m_UiScaleMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8653573825990142014, guid: 4cee0f9e9e61e1f4db48dcd7edbaf060, type: 3}
-      propertyPath: m_ScreenMatchMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8653573825990142014, guid: 4cee0f9e9e61e1f4db48dcd7edbaf060, type: 3}
-      propertyPath: m_ReferenceResolution.x
-      value: 1920
-      objectReference: {fileID: 0}
-    - target: {fileID: 8653573825990142014, guid: 4cee0f9e9e61e1f4db48dcd7edbaf060, type: 3}
-      propertyPath: m_ReferenceResolution.y
-      value: 1080
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1638,6 +1614,7 @@ MonoBehaviour:
   _songListController: {fileID: 45358250}
   _detailTitleText: {fileID: 1174743300}
   _detailArtistText: {fileID: 1716697188}
+  _detailPlayTime: 
   _detailImage: {fileID: 1868857856}
   loadingSongObj: {fileID: 0}
   _songHighestScoreText: {fileID: 1537023557}

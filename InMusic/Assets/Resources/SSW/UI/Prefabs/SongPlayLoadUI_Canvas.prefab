@@ -218,6 +218,8 @@ MonoBehaviour:
   _songImage: {fileID: 4168889042751509804}
   _songTitle: {fileID: 6355101904690914475}
   _songArtist: {fileID: 963364964843698803}
+  _songDuration: {fileID: 9134800505191994549}
+  _bgController: {fileID: 0}
   _bgVideo: {fileID: 0}
   _bgAudio: {fileID: 0}
 --- !u!1 &2149049872998651701
@@ -258,7 +260,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0.000061035156}
   m_SizeDelta: {x: 49.111, y: -678.757}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3056151163228703821

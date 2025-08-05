@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<objects serializationModel="Studio.02.02.00">
+<objects serializationModel="Studio.02.03.00">
 	<object class="AudioFile" id="{52afe151-7d15-4be3-93bf-97dc188a594b}">
-		<property name="note" />
 		<property name="assetPath">
 			<value>BGM/Heya.ogg</value>
 		</property>

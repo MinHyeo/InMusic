@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using SongList;
 
 public class ReadyStartController : MonoBehaviour
 {
@@ -274,9 +275,10 @@ public class ReadyStartController : MonoBehaviour
             var localPlayer = GetLocalPlayer();
             if (localPlayer != null)
             {
-                Debug.Log($"[ReadyStartManager] Start button clicked by SharedModeMasterClient {localPlayer.Nickname}");
+                Debug.Log($"[ReadyStartController] Start button clicked by SharedModeMasterClient {localPlayer.Nickname}");
             }
             
+            // GameStartManager를 통해 게임 시작
             StartGame();
         }
     }

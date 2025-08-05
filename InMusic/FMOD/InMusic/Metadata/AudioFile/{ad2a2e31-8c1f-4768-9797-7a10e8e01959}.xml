@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<objects serializationModel="Studio.02.02.00">
+<objects serializationModel="Studio.02.03.00">
 	<object class="AudioFile" id="{ad2a2e31-8c1f-4768-9797-7a10e8e01959}">
 		<property name="assetPath">
 			<value>BGM/Klaxon.ogg</value>

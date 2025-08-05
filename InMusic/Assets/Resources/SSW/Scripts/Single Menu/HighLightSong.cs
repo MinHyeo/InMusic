@@ -15,7 +15,7 @@ namespace SongList{
         [Header("Detail UI")]
         [SerializeField] private Text _detailTitleText; // 좌측에 표시할 제목 Text
         [SerializeField] private Text _detailArtistText; // 좌측에 표시할 아티스트 Text
-        //[SerializeField] private Text _detailPlayTimeText; // 좌측에 표시할 플레이 시간 Text
+        [SerializeField] private string _detailPlayTime; // 플레이 시간
         [SerializeField] private Image _detailImage; // 좌측에 표시할 이미지
         [SerializeField] private LoadingSong loadingSongObj;
 
@@ -59,9 +59,16 @@ namespace SongList{
             // 제목 / 아티스트 갱신
             if (_detailTitleText != null)  _detailTitleText.text  = songInfo.Title;
             if (_detailArtistText != null) _detailArtistText.text = songInfo.Artist;
+            
+            // Duration을 MM:SS 형태로 포맷팅해서 저장
+            int totalSeconds = Mathf.RoundToInt(songInfo.Duration);
+            int minutes = totalSeconds / 60;
+            int seconds = totalSeconds % 60;
+            _detailPlayTime = $"{minutes:00}:{seconds:00}";
 
             // 이미지 로드
-            if (_detailImage != null) {
+            if (_detailImage != null)
+            {
                 Sprite songSprite = Resources.Load<Sprite>($"Song/{songInfo.Title}/{songInfo.Title}");
                 _detailImage.sprite = songSprite;
             }
@@ -157,7 +164,7 @@ namespace SongList{
             //SoundManager.Instance.PlaySFX(SFXType.PlayStart);
             //Play.SoundManager.Instance.PlayBGMHighLight()
             loadingSongObj = LoadingSong.Instance;
-            loadingSongObj.LoadPlay("SinglePlay", _detailTitleText.text, _detailArtistText.text, _detailImage.sprite);
+            loadingSongObj.LoadPlay("SinglePlay", _detailTitleText.text, _detailArtistText.text, _detailPlayTime, _detailImage.sprite);
         }
 
         // /// <summary>

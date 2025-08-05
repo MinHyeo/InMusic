@@ -20,6 +20,7 @@ public class LoadingSong : MonoBehaviour
     [SerializeField] private Image _songImage;
     [SerializeField] private Text _songTitle;
     [SerializeField] private Text _songArtist;
+    [SerializeField] private Text _songDuration;
 
     [Header("Background Settings")]
     [SerializeField] private BackgroundController _bgController;
@@ -71,7 +72,7 @@ public class LoadingSong : MonoBehaviour
     /// <summary>
     /// 외부에서 호출하여 씬을 로드하는 함수
     /// </summary>
-    public void LoadPlay(string sceneName, string SongTitle, string Artist, Sprite songSprite) {
+    public void LoadPlay(string sceneName, string SongTitle, string Artist, string SongDuration, Sprite songSprite) {
         gameObject.SetActive(true);
         Enum.TryParse(SongTitle, out songTitle);
         artist = Artist;
@@ -87,6 +88,7 @@ public class LoadingSong : MonoBehaviour
         _songImage.sprite = songSprite;
         _songTitle.text = SongTitle;
         _songArtist.text = Artist;
+        _songDuration.text = SongDuration;
         _defaultLoadingText = _loadingText.rectTransform.anchoredPosition.x;
         GlobalInputControl.IsInputEnabled = false;
         _bgController = BackgroundController.Instance;

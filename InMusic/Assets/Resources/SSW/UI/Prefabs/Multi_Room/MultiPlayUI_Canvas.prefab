@@ -85,7 +85,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1090069575800210604}
-  - component: {fileID: 2714707888477790745}
   m_Layer: 5
   m_Name: HighlightSongControl
   m_TagString: Untagged
@@ -112,28 +111,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2714707888477790745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 574932042340086028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a4ab1db3e7ddd543aea2a791b0b9486, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _songListController: {fileID: 0}
-  _detailTitleText: {fileID: 0}
-  _detailArtistText: {fileID: 0}
-  _detailImage: {fileID: 0}
-  loadingSongObj: {fileID: 0}
-  _songHighestScoreText: {fileID: 0}
-  _songMaxComboText: {fileID: 0}
-  _songHighestAccuracyText: {fileID: 0}
-  _songHighestRankText: {fileID: 0}
-  startButton: {fileID: 7559814365013804441}
 --- !u!1 &771889756338866215
 GameObject:
   m_ObjectHideFlags: 0
