@@ -8,14 +8,31 @@ public class PlayerInfo : NetworkBehaviour
 
     [Networked]
     public NetworkString<_16> PlayerName { get; set; } // 16자 제한
-
     
     [Networked]
     public bool PlayerType{get; set;}
 
+    [Networked]
+    public bool IsOwner { get; set; } = false;
+
     [Networked ,OnChangedRender(nameof(OnReadyStateChangedRender))]
     // 플레이어 준비 상태
     public bool IsReady { get; set; }
+
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void Rpc_SetReady(bool readyState)
+    {
+        //서버는 IsReady [Networked] 변수를 업데이트, 이 변경은 Fusion에 의해 자동으로 동기화
+        IsReady = readyState;
+        Debug.Log($"서버에서 {PlayerName.ToString()}의 준비 상태를 {IsReady}로 설정.");
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void Rpc_UpdatePlayerStatus(bool readyState)
+    {
+
+    }
 
     public override void Spawned()
     {
@@ -26,6 +43,9 @@ public class PlayerInfo : NetworkBehaviour
             //초기 준비 상태 설정
             IsReady = false;
             PlayerType = GameManager_PSH.PlayerRole;
+            if (PlayerType) { 
+                IsOwner = true;
+            }
         }
         OnPlayerObjectInitialized?.Invoke(Object.InputAuthority, Object);
     }
@@ -40,13 +60,5 @@ public class PlayerInfo : NetworkBehaviour
         {
             Debug.LogWarning("Waiting_Room_UI GameObject를 찾을 수 없습니다.");
         }
-    }
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void Rpc_SetReady(bool readyState)
-    {
-        //서버는 IsReady [Networked] 변수를 업데이트, 이 변경은 Fusion에 의해 자동으로 동기화
-        IsReady = readyState;
-        Debug.Log($"서버에서 {PlayerName.ToString()}의 준비 상태를 {IsReady}로 설정.");
     }
 }

@@ -25,9 +25,8 @@ public class Waiting_Room_UI : UI_Base_PSH
     [SerializeField] bool isCurrentHost; //방 생성 유무 (UI 구분용)
     [SerializeField] bool isOwner; //방장 유무
     [SerializeField] bool canStart;
-
-    [Tooltip("플레이어 Prefab 관리용")]
-    [SerializeField] private Dictionary<PlayerRef, PlayerInfo> _playerInfos = new Dictionary<PlayerRef, PlayerInfo>();
+    [SerializeField] NetworkObject localPlayerObject;
+    [SerializeField] NetworkObject otherPlayerObject;
 
     [Header("시작버튼")]
     [SerializeField] Sprite startButtonTrue;
@@ -59,6 +58,7 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     void Start()
     {
+        StartCoroutine(GetLocalPlayerObject());
         StartCoroutine(SetLogData());
         LoadingScreen.Instance.SceneReady();
         roomName.text = NetworkManager.runnerInstance.SessionInfo.Name; //값 이상함
@@ -68,15 +68,9 @@ public class Waiting_Room_UI : UI_Base_PSH
     }
 
     void PlayerEnter(PlayerRef playerRef, NetworkObject networkObject) {
+        otherPlayerObject = networkObject;
         PlayerInfo playerInfo = networkObject.GetComponent<PlayerInfo>();
-        if (!_playerInfos.ContainsKey(playerRef))
-        {
-            _playerInfos.Add(playerRef, playerInfo);
-        }
-        else
-        {
-            _playerInfos[playerRef] = playerInfo; // 이미 있다면 업데이트
-        }
+        Debug.Log($"플레이어 입장: {playerInfo.PlayerName}");
         bool isLocalPlayerObject = networkObject.HasInputAuthority;
 
         UpdatePlayerStatusUI(playerInfo, isLocalPlayerObject); // UI 업데이트
@@ -84,10 +78,8 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     void PlayerLeft(PlayerRef playerRef) {
         Debug.Log($"플레이어 나감: {playerRef.PlayerId}");
-        if (_playerInfos.ContainsKey(playerRef))
-        {
-            _playerInfos.Remove(playerRef); // 딕셔너리에서 제거
-        }
+        otherPlayerObject = null;
+
         playerStatusController.InitP2Status();
     }
 
@@ -139,40 +131,27 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     void Update()
     {
-        //목록을 휠로 조작 처리
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-
-        if (!mList.IsScrolling) {
-            if (scroll > 0) //휠을 위로 돌렸을 때
-            {
-                mList.ScrollDown();
-            }
-
-            else if (scroll < 0)  //휠을 아래로 돌렸을 때
-            {
-                mList.ScrollUp();
-            }
+        if (mList.IsScrolling || !localPlayerObject.GetComponent<PlayerInfo>().IsOwner){
+            return;
         }
+
+         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         //방식 변경 예정
         //UpArrow
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.UpArrow) || scroll < 0)
         {
-            SingleLobbyKeyEvent(Define_PSH.UIControl.Up);
+            localPlayerObject.GetComponent<PlayerUIController>().BroadScrollUp();
         }
         //DownArrow
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyCode.DownArrow) || scroll > 0)
         {
-            SingleLobbyKeyEvent(Define_PSH.UIControl.Down);
+            localPlayerObject.GetComponent<PlayerUIController>().BroadScrollDown();
         }
         //Enter
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            SingleLobbyKeyEvent(Define_PSH.UIControl.Enter);
-        }
-
-        if (isOwner) {
-            //상대방에게 신호 주기
+            localPlayerObject.GetComponent<PlayerUIController>().BroadGameStart();
         }
     }
 
@@ -217,10 +196,13 @@ public class Waiting_Room_UI : UI_Base_PSH
                 break;
             case "Enter":
                 OnReadyButton();
+                break;
+            case "Start":
                 if (!canStart || !isOwner)
                     return;
                 Debug.Log("게임 시작");
-                if (curMusicItem.GetComponent<MusicItem>().HasBMS) {
+                if (curMusicItem.GetComponent<MusicItem>().HasBMS)
+                {
                     //키 입력 이벤트 제거
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
 
@@ -269,16 +251,6 @@ public class Waiting_Room_UI : UI_Base_PSH
                 ButtonEvent("Gear");
                 break;
         }
-    }
-    IEnumerator SetLogData()
-    {
-        if (!GameManager_PSH.Data.isLogReady)
-            yield return null;
-
-        //서버와 유니티 음악 리소스랑 동기화
-        GameManager_PSH.Resource.CheckMusic();
-        //음악 목록 가져와서 아이템 목록에 넘겨주기
-        mList.SetData(GameManager_PSH.Resource.GetMusicList());
     }
 
     void OnReadyButton() {
@@ -337,4 +309,33 @@ public class Waiting_Room_UI : UI_Base_PSH
             }
         }
     }
+
+    IEnumerator SetLogData()
+    {
+        if (!GameManager_PSH.Data.isLogReady)
+            yield return null;
+
+        //서버와 유니티 음악 리소스랑 동기화
+        GameManager_PSH.Resource.CheckMusic();
+        //음악 목록 가져와서 아이템 목록에 넘겨주기
+        mList.SetData(GameManager_PSH.Resource.GetMusicList());
+    }
+
+    IEnumerator GetLocalPlayerObject()
+    {
+        while (NetworkManager.runnerInstance == null || !NetworkManager.runnerInstance.IsRunning)
+        {
+            yield return null;
+        }
+
+        // 로컬 플레이어 NetworkObject가 스폰될 때까지 기다립니다.
+        while (localPlayerObject == null)
+        {
+            localPlayerObject = NetworkManager.runnerInstance.GetPlayerObject(NetworkManager.runnerInstance.LocalPlayer);
+            if (localPlayerObject == null)
+            {
+                yield return null;
+            }
+        }
+    }   
 }
