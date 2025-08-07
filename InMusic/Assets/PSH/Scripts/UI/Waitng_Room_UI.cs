@@ -34,7 +34,6 @@ public class Waiting_Room_UI : UI_Base_PSH
     [SerializeField] Image startButtonColor;
     [SerializeField] Text startButtonName;
 
-
     void OnEnable()
     {
         PlayerInfo.OnPlayerObjectInitialized += PlayerEnter;
@@ -64,7 +63,8 @@ public class Waiting_Room_UI : UI_Base_PSH
         roomName.text = NetworkManager.runnerInstance.SessionInfo.Name; //값 이상함
     }
 
-    void PlayerEnter(PlayerRef playerRef, NetworkObject networkObject) {
+    void PlayerEnter(PlayerRef playerRef, NetworkObject networkObject)
+    {
         otherPlayerObject = networkObject;
         PlayerInfo playerInfo = networkObject.GetComponent<PlayerInfo>();
         //Debug.Log($"플레이어 입장: {playerInfo.PlayerName}");
@@ -77,10 +77,12 @@ public class Waiting_Room_UI : UI_Base_PSH
         */
     }
 
-    void PlayerLeft(PlayerRef playerRef) {
+    void PlayerLeft(PlayerRef playerRef)
+    {
         //Debug.Log($"플레이어 나감: {playerRef.PlayerId}");
 
-        if (playerRef.PlayerId == 1){
+        if (playerRef.PlayerId == 1)
+        {
             //세션 연결 끊기
             NetworkManager.runnerInstance.Shutdown();
             SceneManager.LoadScene(3);
@@ -96,7 +98,8 @@ public class Waiting_Room_UI : UI_Base_PSH
     /// </summary>
     /// <param name="info"></param>
     /// <param name="isLocal"></param>
-    void UpdatePlayerStatusUI(PlayerInfo info, bool isLocal) {
+    void UpdatePlayerStatusUI(PlayerInfo info, bool isLocal)
+    {
 
         //방장 기준
         if (info.IsOwner)
@@ -113,7 +116,7 @@ public class Waiting_Room_UI : UI_Base_PSH
             else
             {
                 playerStatusController.SetPlayerName(1, info.PlayerName.ToString());
-                playerStatusController.SetPlayerStatus(1,false, false);
+                playerStatusController.SetPlayerStatus(1, false, false);
             }
         }
         //상대방 기준
@@ -138,11 +141,12 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     void Update()
     {
-        if (mList.IsScrolling || !localPlayerObject.GetComponent<PlayerInfo>().IsOwner){
+        if (mList.IsScrolling || !localPlayerObject.GetComponent<PlayerInfo>().IsOwner)
+        {
             return;
         }
 
-         float scroll = Input.GetAxis("Mouse ScrollWheel");
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         //방식 변경 예정
         //UpArrow
@@ -162,7 +166,8 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
     }
 
-    void InitHost() {
+    void InitHost()
+    {
         //P1칸 초기화
         ChangeRoomOwner(true);
         playerStatusController.SetPlayerMark(true);
@@ -172,11 +177,13 @@ public class Waiting_Room_UI : UI_Base_PSH
         playerStatusController.InitP2Status();
     }
 
-    void InitClient() {
+    void InitClient()
+    {
         foreach (var playerRef in NetworkManager.runnerInstance.ActivePlayers)
         {
             NetworkObject pObject = NetworkManager.runnerInstance.GetPlayerObject(playerRef);
-            if (pObject.GetComponent<PlayerInfo>().PlayerRole == PlayerInfo.PlayerType.Client) {
+            if (pObject.GetComponent<PlayerInfo>().PlayerRole == PlayerInfo.PlayerType.Client)
+            {
                 localPlayerObject = pObject;
                 //P2칸 초기화
                 ChangeRoomOwner(true);
@@ -194,7 +201,8 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
     }
 
-    public void ChangeRoomOwner(bool isP1) {
+    public void ChangeRoomOwner(bool isP1)
+    {
         playerStatusController.SetRoomOwner(isP1);
         if (localPlayerObject.GetComponent<PlayerInfo>().IsOwner)
         {
@@ -218,7 +226,8 @@ public class Waiting_Room_UI : UI_Base_PSH
     }
     #endregion
 
-    public void ButtonEvent(string type) {
+    public void ButtonEvent(string type)
+    {
         switch (type)
         {
             case "Up":
@@ -236,20 +245,16 @@ public class Waiting_Room_UI : UI_Base_PSH
                 break;
             case "Enter":
                 OnReadyButton();
-                break;
-            case "Start":
                 if (!canStart || !isOwner)
                     return;
+
                 Debug.Log("게임 시작");
                 if (curMusicItem.GetComponent<MusicItem>().HasBMS)
                 {
-                    //키 입력 이벤트 제거
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-
-                    //다음 씬에 넘겨줄 MusicData 값 설정
                     GameManager_PSH.Data.SetData(curMusicItem.GetComponent<MusicItem>());
-
-                    //LoadingScreen.Instance.LoadScene("KGB_SinglePlay", GameManager_PSH.Data.GetData());
+                    //게임 시작
+                    localPlayerObject.GetComponent<PlayerUIController>().BroadGameStart();
                 }
                 else
                 {
@@ -293,10 +298,8 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
     }
 
-    void OnReadyButton() {
-        if (canStart) {
-            return;
-        }
+    void OnReadyButton()
+    {
         NetworkObject localPlayerObject = NetworkManager.runnerInstance.GetPlayerObject(NetworkManager.runnerInstance.LocalPlayer);
         if (localPlayerObject != null)
         {
@@ -307,13 +310,15 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
     }
 
-    public void UpdateAllPlayerReady() {
+    public void UpdateAllPlayerReady()
+    {
         PlayerInfo me = localPlayerObject.GetComponent<PlayerInfo>();
         PlayerInfo you = otherPlayerObject.GetComponent<PlayerInfo>();
         Debug.Log($"내 상태: {me.IsReady} {me.IsOwner}");
         Debug.Log($"너 상태: {you.IsReady} {you.IsOwner}");
 
-        if (me.PlayerRole == PlayerInfo.PlayerType.Host) {
+        if (me.PlayerRole == PlayerInfo.PlayerType.Host)
+        {
             playerStatusController.SetPlayerStatus(0, me.IsReady, me.IsOwner);
             playerStatusController.SetPlayerStatus(1, you.IsReady, you.IsOwner);
         }
@@ -322,7 +327,12 @@ public class Waiting_Room_UI : UI_Base_PSH
             playerStatusController.SetPlayerStatus(1, me.IsReady, me.IsOwner);
             playerStatusController.SetPlayerStatus(0, you.IsReady, you.IsOwner);
         }
-        
+
+        if (me.IsOwner && you.IsReady)
+        {
+            canStart = true;
+            startButtonColor.sprite = startButtonTrue;
+        }
     }
 
     #region Coroutine

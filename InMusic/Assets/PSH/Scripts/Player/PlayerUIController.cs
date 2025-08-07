@@ -3,14 +3,6 @@ using UnityEngine;
 
 public class PlayerUIController : NetworkBehaviour
 {
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
-    public void Rpc_GameStart()
-    {
-        GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI");
-        waitingRoomUIManager.GetComponent<Waiting_Room_UI>().ButtonEvent("Start");
-    }
-
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
     public void Rpc_ScrollDown()
     {
@@ -23,6 +15,12 @@ public class PlayerUIController : NetworkBehaviour
     {
         GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI");
         waitingRoomUIManager.GetComponent<Waiting_Room_UI>().ButtonEvent("Up");
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void Rpc_GameStart()
+    {
+        //TODO: 게임 플레이 씬으로 이동
     }
 
     public void BroadScrollUp() {
