@@ -268,7 +268,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     //NetworkRunner.Shutdown() 실행 시 작동
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        Debug.Log($"플레이어 나감: {player.PlayerId}");
+        Debug.Log($"Netwrok: 플레이어 나감 ({player.PlayerId})");
         // Waiting_Room_UI에 해당 플레이어가 나갔음을 알립니다.
         OnPlayerLeftEvt?.Invoke(player);
     }

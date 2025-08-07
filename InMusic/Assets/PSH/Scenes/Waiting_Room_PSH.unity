@@ -3899,7 +3899,7 @@ GameObject:
   - component: {fileID: 1505192458}
   - component: {fileID: 1505192459}
   m_Layer: 5
-  m_Name: PlayerRoot
+  m_Name: PlayerUIRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5087,6 +5087,10 @@ MonoBehaviour:
   roomName: {fileID: 1066885349}
   playerStatusController: {fileID: 1505192459}
   isCurrentHost: 0
+  isOwner: 0
+  canStart: 0
+  localPlayerObject: {fileID: 0}
+  otherPlayerObject: {fileID: 0}
   startButtonTrue: {fileID: -66490268015967822, guid: 8f15ea038f23e5e4cb520612e4454431, type: 3}
   startButtonFalse: {fileID: 6765302739450717683, guid: 76bc6b2fed546c0429ae743f3c7e272d, type: 3}
   startButtonColor: {fileID: 1425971663}

@@ -4,13 +4,17 @@ using System; // Action을 사용하기 위해 추가
 
 public class PlayerInfo : NetworkBehaviour
 {
+    public enum PlayerType{
+        Host = 0,
+        Client = 1
+    }
     public static event Action<PlayerRef, NetworkObject> OnPlayerObjectInitialized;
 
     [Networked]
     public NetworkString<_16> PlayerName { get; set; } // 16자 제한
     
     [Networked]
-    public bool PlayerType{get; set;}
+    public PlayerType PlayerRole{get; set;}
 
     [Networked]
     public bool IsOwner { get; set; } = false;
@@ -28,12 +32,6 @@ public class PlayerInfo : NetworkBehaviour
         Debug.Log($"서버에서 {PlayerName.ToString()}의 준비 상태를 {IsReady}로 설정.");
     }
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void Rpc_UpdatePlayerStatus(bool readyState)
-    {
-
-    }
-
     public override void Spawned()
     {
         if (Object.HasInputAuthority)
@@ -42,9 +40,14 @@ public class PlayerInfo : NetworkBehaviour
             Debug.Log($"로컬 플레이어({Object.InputAuthority.PlayerId}) 이름 설정: {PlayerName}");
             //초기 준비 상태 설정
             IsReady = false;
-            PlayerType = GameManager_PSH.PlayerRole;
-            if (PlayerType) { 
+            if (GameManager_PSH.PlayerRole) {
+                PlayerRole = PlayerType.Host;
                 IsOwner = true;
+            }
+            else
+            {
+                PlayerRole = PlayerType.Client;
+                IsOwner = false;
             }
         }
         OnPlayerObjectInitialized?.Invoke(Object.InputAuthority, Object);

@@ -5,8 +5,9 @@ public class PlayerStatusController : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI[] playerNames;
     [SerializeField] GameObject[] isRoomOwner;
-    [Tooltip("방장")] [SerializeField] GameObject[] player1Status;
-    [Tooltip("참가자")] [SerializeField] GameObject[] player2Status;
+    //0: Selecting | 1: Ready | 2 :Me
+    [Tooltip("P1 (방장)")] [SerializeField] GameObject[] player1Status;
+    [Tooltip("P2 (참가자)")] [SerializeField] GameObject[] player2Status;
 
 
     private void Awake()
@@ -82,7 +83,7 @@ public class PlayerStatusController : MonoBehaviour
     /// <summary>
     /// 플레이어 이름 설정
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="name">0: P1 1: P2</param>
     public void SetPlayerName(int playerIndex, string name)
     {
         playerNames[playerIndex].text = name;

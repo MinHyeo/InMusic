@@ -1,6 +1,7 @@
 using Fusion;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using UI_BASE_PSH;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,7 +23,6 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     [Header("플레이어 상태 정보")]
     [SerializeField] PlayerStatusController playerStatusController;
-    [SerializeField] bool isCurrentHost; //방 생성 유무 (UI 구분용)
     [SerializeField] bool isOwner; //방장 유무
     [SerializeField] bool canStart;
     [SerializeField] NetworkObject localPlayerObject;
@@ -62,24 +62,31 @@ public class Waiting_Room_UI : UI_Base_PSH
         StartCoroutine(SetLogData());
         LoadingScreen.Instance.SceneReady();
         roomName.text = NetworkManager.runnerInstance.SessionInfo.Name; //값 이상함
-        isCurrentHost = GameManager_PSH.PlayerRole; 
-        isOwner = GameManager_PSH.PlayerRole;
-        ChangeRoomOwner(isOwner);
     }
 
     void PlayerEnter(PlayerRef playerRef, NetworkObject networkObject) {
         otherPlayerObject = networkObject;
         PlayerInfo playerInfo = networkObject.GetComponent<PlayerInfo>();
-        Debug.Log($"플레이어 입장: {playerInfo.PlayerName}");
-        bool isLocalPlayerObject = networkObject.HasInputAuthority;
+        //Debug.Log($"플레이어 입장: {playerInfo.PlayerName}");
+        playerStatusController.SetPlayerName(1, playerInfo.PlayerName.ToString());
+        playerStatusController.SetPlayerStatus(1, false, false);
 
+        /*
+        bool isLocalPlayerObject = networkObject.HasInputAuthority;
         UpdatePlayerStatusUI(playerInfo, isLocalPlayerObject); // UI 업데이트
+        */
     }
 
     void PlayerLeft(PlayerRef playerRef) {
-        Debug.Log($"플레이어 나감: {playerRef.PlayerId}");
-        otherPlayerObject = null;
+        //Debug.Log($"플레이어 나감: {playerRef.PlayerId}");
 
+        if (playerRef.PlayerId == 1){
+            //세션 연결 끊기
+            NetworkManager.runnerInstance.Shutdown();
+            SceneManager.LoadScene(3);
+            return;
+        }
+        otherPlayerObject = null;
         playerStatusController.InitP2Status();
     }
 
@@ -92,7 +99,7 @@ public class Waiting_Room_UI : UI_Base_PSH
     void UpdatePlayerStatusUI(PlayerInfo info, bool isLocal) {
 
         //방장 기준
-        if (isOwner)
+        if (info.IsOwner)
         {
             //P1 칸에 자신 정보 입력
             if (isLocal)
@@ -155,9 +162,41 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
     }
 
+    void InitHost() {
+        //P1칸 초기화
+        ChangeRoomOwner(true);
+        playerStatusController.SetPlayerMark(true);
+        playerStatusController.SetPlayerName(0, localPlayerObject.GetComponent<PlayerInfo>().PlayerName.ToString());
+        playerStatusController.SetPlayerStatus(0, false, true);
+        //P2칸 초기화
+        playerStatusController.InitP2Status();
+    }
+
+    void InitClient() {
+        foreach (var playerRef in NetworkManager.runnerInstance.ActivePlayers)
+        {
+            NetworkObject pObject = NetworkManager.runnerInstance.GetPlayerObject(playerRef);
+            if (pObject.GetComponent<PlayerInfo>().PlayerRole == PlayerInfo.PlayerType.Client) {
+                localPlayerObject = pObject;
+                //P2칸 초기화
+                ChangeRoomOwner(true);
+                playerStatusController.SetPlayerMark(false);
+                playerStatusController.SetPlayerStatus(1, false, false);
+                playerStatusController.SetPlayerName(1, pObject.GetComponent<PlayerInfo>().PlayerName.ToString());
+            }
+            else
+            {
+                otherPlayerObject = pObject;
+                //P1칸 초기화
+                playerStatusController.SetPlayerStatus(0, false, true);
+                playerStatusController.SetPlayerName(0, pObject.GetComponent<PlayerInfo>().PlayerName.ToString());
+            }
+        }
+    }
+
     public void ChangeRoomOwner(bool isP1) {
         playerStatusController.SetRoomOwner(isP1);
-        if (isOwner)
+        if (localPlayerObject.GetComponent<PlayerInfo>().IsOwner)
         {
             startButtonColor.sprite = startButtonFalse;
         }
@@ -191,6 +230,7 @@ public class Waiting_Room_UI : UI_Base_PSH
             case "Exit":
                 //키 입력 이벤트 제거
                 GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
+                GameManager_PSH.PlayerRole = false;
                 NetworkManager.runnerInstance.Shutdown();
                 SceneManager.LoadScene(3); //추후 로비씬으로 바꾸기
                 break;
@@ -268,48 +308,24 @@ public class Waiting_Room_UI : UI_Base_PSH
     }
 
     public void UpdateAllPlayerReady() {
-        //현재 방에 있는 모든 플레이어(네트워크 오브젝트) 확인
+        PlayerInfo me = localPlayerObject.GetComponent<PlayerInfo>();
+        PlayerInfo you = otherPlayerObject.GetComponent<PlayerInfo>();
+        Debug.Log($"내 상태: {me.IsReady} {me.IsOwner}");
+        Debug.Log($"너 상태: {you.IsReady} {you.IsOwner}");
 
-        foreach (var playerRef in NetworkManager.runnerInstance.ActivePlayers) {
-            NetworkObject pObject = NetworkManager.runnerInstance.GetPlayerObject(playerRef);
-            PlayerInfo pInfo = pObject.GetComponent<PlayerInfo>();
-            bool isLocalPlayer = pObject.HasInputAuthority;
-            //P1기준 본인 UI 조작
-            if (isCurrentHost) {
-                if (isLocalPlayer) {
-                    playerStatusController.SetPlayerStatus(0, pInfo.IsReady, isOwner);
-                }
-                else
-                {
-                    playerStatusController.SetPlayerStatus(1, pInfo.IsReady, !isOwner);
-                }
-            }
-            //P2기준 본인 UI 조작
-            else
-            {
-                if (isLocalPlayer)
-                {
-                    playerStatusController.SetPlayerStatus(1, pInfo.IsReady, isOwner);
-                }
-                else
-                {
-                    playerStatusController.SetPlayerStatus(0, pInfo.IsReady, !isOwner);
-                }
-            }
+        if (me.PlayerRole == PlayerInfo.PlayerType.Host) {
+            playerStatusController.SetPlayerStatus(0, me.IsReady, me.IsOwner);
+            playerStatusController.SetPlayerStatus(1, you.IsReady, you.IsOwner);
         }
-        if (isOwner) {
-            if (playerStatusController.GetP1Status() && playerStatusController.GetP2Status()) {
-                canStart = true;
-                startButtonColor.sprite = startButtonTrue;
-            }
-            else
-            {
-                canStart = false;
-                startButtonColor.sprite = startButtonFalse;
-            }
+        else
+        {
+            playerStatusController.SetPlayerStatus(1, me.IsReady, me.IsOwner);
+            playerStatusController.SetPlayerStatus(0, you.IsReady, you.IsOwner);
         }
+        
     }
 
+    #region Coroutine
     IEnumerator SetLogData()
     {
         if (!GameManager_PSH.Data.isLogReady)
@@ -321,6 +337,7 @@ public class Waiting_Room_UI : UI_Base_PSH
         mList.SetData(GameManager_PSH.Resource.GetMusicList());
     }
 
+    //네트워크 오브젝트 할당
     IEnumerator GetLocalPlayerObject()
     {
         while (NetworkManager.runnerInstance == null || !NetworkManager.runnerInstance.IsRunning)
@@ -337,5 +354,16 @@ public class Waiting_Room_UI : UI_Base_PSH
                 yield return null;
             }
         }
-    }   
+        if (localPlayerObject.GetComponent<PlayerInfo>().PlayerRole == PlayerInfo.PlayerType.Host)
+        {
+            isOwner = true;
+            InitHost();
+        }
+        else
+        {
+            isOwner = false;
+            InitClient();
+        }
+    }
+    #endregion
 }
