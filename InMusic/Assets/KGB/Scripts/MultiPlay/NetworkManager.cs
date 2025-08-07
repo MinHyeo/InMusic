@@ -37,6 +37,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             runnerInstance = gameObject.AddComponent<NetworkRunner>();
         }
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()

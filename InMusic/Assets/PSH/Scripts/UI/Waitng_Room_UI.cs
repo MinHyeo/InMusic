@@ -34,7 +34,6 @@ public class Waiting_Room_UI : UI_Base_PSH
     [SerializeField] Image startButtonColor;
     [SerializeField] Text startButtonName;
 
-
     void OnEnable()
     {
         PlayerInfo.OnPlayerObjectInitialized += PlayerEnter;
@@ -236,20 +235,16 @@ public class Waiting_Room_UI : UI_Base_PSH
                 break;
             case "Enter":
                 OnReadyButton();
-                break;
-            case "Start":
                 if (!canStart || !isOwner)
                     return;
+
                 Debug.Log("게임 시작");
                 if (curMusicItem.GetComponent<MusicItem>().HasBMS)
                 {
-                    //키 입력 이벤트 제거
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-
-                    //다음 씬에 넘겨줄 MusicData 값 설정
                     GameManager_PSH.Data.SetData(curMusicItem.GetComponent<MusicItem>());
-
-                    //LoadingScreen.Instance.LoadScene("KGB_SinglePlay", GameManager_PSH.Data.GetData());
+                    //게임 시작
+                    localPlayerObject.GetComponent<PlayerUIController>().BroadGameStart();
                 }
                 else
                 {
@@ -294,9 +289,6 @@ public class Waiting_Room_UI : UI_Base_PSH
     }
 
     void OnReadyButton() {
-        if (canStart) {
-            return;
-        }
         NetworkObject localPlayerObject = NetworkManager.runnerInstance.GetPlayerObject(NetworkManager.runnerInstance.LocalPlayer);
         if (localPlayerObject != null)
         {
@@ -322,7 +314,11 @@ public class Waiting_Room_UI : UI_Base_PSH
             playerStatusController.SetPlayerStatus(1, me.IsReady, me.IsOwner);
             playerStatusController.SetPlayerStatus(0, you.IsReady, you.IsOwner);
         }
-        
+
+        if (me.IsOwner && you.IsReady) {
+            canStart = true;
+            startButtonColor.sprite = startButtonTrue;
+        }
     }
 
     #region Coroutine

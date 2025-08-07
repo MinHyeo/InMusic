@@ -1,28 +1,27 @@
 using Fusion;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerUIController : NetworkBehaviour
 {
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
-    public void Rpc_GameStart()
-    {
-        GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI");
-        waitingRoomUIManager.GetComponent<Waiting_Room_UI>().ButtonEvent("Start");
-    }
-
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
     public void Rpc_ScrollDown()
     {
-        GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI");
-        waitingRoomUIManager.GetComponent<Waiting_Room_UI>().ButtonEvent("Down");
+        GameObject waitingRoomUI = GameObject.Find("Waiting_Room_UI");
+        waitingRoomUI.GetComponent<Waiting_Room_UI>().ButtonEvent("Down");
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
     public void Rpc_ScrollUp()
     {
-        GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI");
-        waitingRoomUIManager.GetComponent<Waiting_Room_UI>().ButtonEvent("Up");
+        GameObject waitingRoomUI = GameObject.Find("Waiting_Room_UI");
+        waitingRoomUI.GetComponent<Waiting_Room_UI>().ButtonEvent("Up");
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void Rpc_GameStart()
+    {
+        Runner.LoadScene(SceneRef.FromIndex(5));
     }
 
     public void BroadScrollUp() {
