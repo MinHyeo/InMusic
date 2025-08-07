@@ -31,7 +31,7 @@ public class NoteManager : MonoBehaviour
 
     public int totalNotes; // 총 노트 개수
 
-
+    private Dictionary<int, Note> notesByIndex = new Dictionary<int, Note>();
 
     public static NoteManager Instance { get; private set; }
 
@@ -108,6 +108,7 @@ public class NoteManager : MonoBehaviour
     public void SpawnNotes(BMSData bmsData, Transform spawnArea)
     {
         totalNotes = 0; // 총 노트 개수 초기화
+        notesByIndex.Clear(); // 기존에 있던 노트 정보 초기화
         foreach (var noteData in bmsData.notes)
         {
             string data = noteData.noteString;
@@ -126,7 +127,7 @@ public class NoteManager : MonoBehaviour
                     float xPosition = GetChannelPosition(noteData.channel);
                     if (noteID == "02")
                     {
-                        // "02"일 때 프리팹 생성
+                        // "02"일 때 프리팹 생성 //노래를 시작시키는 투명노트
                         GameObject specialNote = Instantiate(songStartNote, new Vector3(xPosition, yPosition-1f, 0), Quaternion.identity, spawnArea);
                         specialNote.GetComponent<ScrollDown>().SetScrollSpeed(baseScrollSpeed);
                         specialNote.SetActive(true);
@@ -138,6 +139,13 @@ public class NoteManager : MonoBehaviour
                         selectedNote.GetComponent<ScrollDown>().SetScrollSpeed(baseScrollSpeed);
                         selectedNote.transform.position = new Vector3(xPosition, yPosition, 0);
                         selectedNote.SetActive(true);
+
+                        Note noteComp = selectedNote.GetComponent<Note>();
+                        if (noteComp != null)
+                        {
+                            noteComp.noteIndex = totalNotes; // 1부터 시작하는 인덱스 할당 //판정을 보내기 위해 해당 노트의 인덱스를 알기 위해 씀
+                            notesByIndex.Add(totalNotes, noteComp); //딕셔너리에 추가 //판정을 받아서 노트를 찾을 때만 씀
+                        }
                     }
                 }
             }

@@ -19,7 +19,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public Dictionary<string, GameObject> sessionListUiDictionnary = new Dictionary<string, GameObject>();
 
     private string lobbyScene = "KGB_Multi_Lobby";
-    private string gameplayScene = "SampleScene";
+    private string gameplayScene = "KGB_MultiPlay";
     //public SceneAsset gameplaySceneAsset;
     //public SceneAsset lobbySceneAsset;
     public GameObject playerPrefab;

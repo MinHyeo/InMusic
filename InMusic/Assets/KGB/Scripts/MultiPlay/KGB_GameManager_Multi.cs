@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -94,9 +95,48 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         isGameActive = true;
     }
 
-    public void AddScore(string judgement)
+    public void AddScore(string judgement, int noteIndex)
     {
+        float scoreToAdd = 0;
+        float accuracyPenalty = 0;
+        switch (judgement)
+        {
+            case "Great":
+                scoreToAdd = maxScorePerNote * 1.0f;
+                accuracyPenalty = 0f;
+                combo++;
+                greatCount++;
+                break;
+            case "Good":
+                scoreToAdd = maxScorePerNote * 0.8f;
+                accuracyPenalty = 20f / totalNotes;
+                combo++;
+                goodCount++;
+                break;
+            case "Bad":
+                scoreToAdd = maxScorePerNote * 0.5f;
+                accuracyPenalty = 50f / totalNotes;
+                combo++;
+                badCount++;
+                break;
+            case "Miss":
+                scoreToAdd = 0;
+                accuracyPenalty = 100f / totalNotes;
+                curHP -= 10f;
+                combo = 0;
+                missCount++;
+                break;
+        }
+        //playUI.JudgeTextUpdate(judgement);
+        if (combo > maxCombo)
+            maxCombo = combo;
 
+        //playUI.UpdatePlayUI();
+        totalScore += scoreToAdd;
+        totalNotesPlayed++;
+        accuracy = Mathf.Clamp(accuracy - accuracyPenalty, 0f, 100f);
+
+        MultPlayManager.Instance.RPC_SendNoteJudgement(noteIndex, judgement, 1, accuracy);
     }
     public void PauseGame()
     {

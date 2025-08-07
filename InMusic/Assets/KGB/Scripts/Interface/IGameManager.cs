@@ -12,7 +12,7 @@ public interface IGameManager
     void ResumeGame();
 
     // 점수 관련
-    void AddScore(string judgement);
+    void AddScore(string judgement, int noteIndex);
     void StartMusic();
 
     // 판정 점수 관련

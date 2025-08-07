@@ -136,6 +136,7 @@ public class UI_MainMenu : UI_Base
         if (isMultiplayer)
         {
             // Multiplayer scene load logic here
+            LoadingScreen.Instance.LoadScene("KGB_Multi_Lobby");
         }
         else
         {

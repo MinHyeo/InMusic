@@ -5,13 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/LJH/Scenes/MainScene 1.unity
     guid: 24793cf2a262de445846dbd970476107
-  - enabled: 0
+  - enabled: 1
     path: Assets/PSH/Scenes/Single_Lobby_PSH.unity
     guid: b85a531087a37b642af3ea6a6cae6c3c
-  - enabled: 0
+  - enabled: 1
     path: Assets/KGB/Scenes/KGB_SinglePlay.unity
     guid: da846b8f70c24d643964379075a9a9b5
   - enabled: 1
@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/KGB/Scenes/SampleScene.unity
     guid: 4e70672d2bfcbd84083859065070a37d
+  - enabled: 1
+    path: Assets/KGB/Scenes/KGB_MultiPlay.unity
+    guid: 12bc41330a74dce418cce7ec7c453c04
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

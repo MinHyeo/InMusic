@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour, IGameManager
     }
 
 
-    public void AddScore(string judgement)
+    public void AddScore(string judgement, int noteIndex)
     {
         float scoreToAdd = 0;
         float accuracyPenalty = 0;

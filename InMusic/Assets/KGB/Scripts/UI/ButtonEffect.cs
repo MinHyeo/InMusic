@@ -56,6 +56,7 @@ public class ButtonEffect : MonoBehaviour
 
     void OnKeyDown(int index)
     {
+        Debug.Log("온 키 다운");
         if (buttonImages[index] != null)
             buttonImages[index].sprite = pressedSprites[index];
 
