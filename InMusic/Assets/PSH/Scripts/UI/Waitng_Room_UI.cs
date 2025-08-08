@@ -79,9 +79,9 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     void PlayerLeft(PlayerRef playerRef)
     {
-        //Debug.Log($"플레이어 나감: {playerRef.PlayerId}");
+        Debug.Log($"플레이어 나감: {playerRef.PlayerId}");
 
-        if (playerRef.PlayerId == 1)
+        if (playerRef.PlayerId != 2)
         {
             //세션 연결 끊기
             NetworkManager.runnerInstance.Shutdown();
@@ -270,6 +270,17 @@ public class Waiting_Room_UI : UI_Base_PSH
                 break;
         }
     }
+    void OnReadyButton()
+    {
+        NetworkObject localPlayerObject = NetworkManager.runnerInstance.GetPlayerObject(NetworkManager.runnerInstance.LocalPlayer);
+        if (localPlayerObject != null)
+        {
+            //localPlayer 찾아서 상태 변경
+            PlayerInfo localPlayerInfo = localPlayerObject.GetComponent<PlayerInfo>();
+            bool newReadyState = !localPlayerInfo.IsReady;
+            localPlayerInfo.Rpc_SetReady(newReadyState);
+        }
+    }
 
     void SingleLobbyKeyEvent(Define_PSH.UIControl keyEvent)
     {
@@ -295,18 +306,6 @@ public class Waiting_Room_UI : UI_Base_PSH
             case Define_PSH.UIControl.Setting:
                 ButtonEvent("Gear");
                 break;
-        }
-    }
-
-    void OnReadyButton()
-    {
-        NetworkObject localPlayerObject = NetworkManager.runnerInstance.GetPlayerObject(NetworkManager.runnerInstance.LocalPlayer);
-        if (localPlayerObject != null)
-        {
-            //localPlayer 찾아서 상태 변경
-            PlayerInfo localPlayerInfo = localPlayerObject.GetComponent<PlayerInfo>();
-            bool newReadyState = !localPlayerInfo.IsReady;
-            localPlayerInfo.Rpc_SetReady(newReadyState);
         }
     }
 

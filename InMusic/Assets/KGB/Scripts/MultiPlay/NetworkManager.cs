@@ -19,7 +19,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public Dictionary<string, GameObject> sessionListUiDictionnary = new Dictionary<string, GameObject>();
 
     private string lobbyScene = "KGB_Multi_Lobby";
-    private string gameplayScene = "KGB_MultiPlay";
+    private string waitngScene = "Waiting_Room_PSH";
+    private string gamePlayScene = "KGB_";
     //public SceneAsset gameplaySceneAsset;
     //public SceneAsset lobbySceneAsset;
     public GameObject playerPrefab;
@@ -27,6 +28,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public List<SessionListEntry> sessionListEntries = new List<SessionListEntry>();
     public event Action OnSessionListChanged;
+
+    public static event Action<PlayerRef> OnPlayerLeftEvt;
 
     private void Awake()
     {
@@ -63,10 +66,12 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
         runnerInstance.StartGame(new StartGameArgs()
         {
-            Scene = SceneRef.FromIndex(GetSceneIndex(gameplayScene)),
+            Scene = SceneRef.FromIndex(GetSceneIndex(waitngScene)),
             SessionName = randomSessionName,
             GameMode = GameMode.Shared,
         });
+
+        GameManager_PSH.PlayerRole = true;
     } 
 
     public void CreateSession(string roomName)
@@ -74,17 +79,19 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         string newSessionName = roomName;
         runnerInstance.StartGame(new StartGameArgs()
         {
-            Scene = SceneRef.FromIndex(GetSceneIndex(gameplayScene)),
+            Scene = SceneRef.FromIndex(GetSceneIndex(waitngScene)),
             SessionName = newSessionName,
             GameMode = GameMode.Shared,
         });
+
+        GameManager_PSH.PlayerRole = true;
     }
     public void CreateSession(string roomName, string password)
     {
         string newSessionName = roomName;
         runnerInstance.StartGame(new StartGameArgs()
         {
-            Scene = SceneRef.FromIndex(GetSceneIndex(gameplayScene)), //임시
+            Scene = SceneRef.FromIndex(GetSceneIndex(waitngScene)), //임시
             SessionName = newSessionName,
             GameMode = GameMode.Shared,
             SessionProperties = new Dictionary<string, SessionProperty>
@@ -92,6 +99,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
                 {"pw", password}
             }
         });
+
+        GameManager_PSH.PlayerRole = true;
     }
 
     public int GetSceneIndex(string sceneName)
@@ -113,7 +122,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         if(player == runnerInstance.LocalPlayer)
         {
-            Debug.Log("온 플레이어 조인드");
+            Debug.Log($"플레이어 입장: {player.PlayerId}");
             NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player);
             runner.SetPlayerObject(player, playerObject);
         }
@@ -276,7 +285,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-
+        Debug.Log($"Netwrok: 플레이어 나감 ({player.PlayerId})");
+        // Waiting_Room_UI에 해당 플레이어가 나갔음을 알립니다.
+        OnPlayerLeftEvt?.Invoke(player);
     }
 
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
