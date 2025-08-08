@@ -191,6 +191,8 @@ public class Single_Lobby_UI : UI_Base_PSH
     {
         if (!GameManager_PSH.Data.isLogReady)
             yield return null;
+        //서버와 유니티 음악 리소스랑 동기화
+        GameManager_PSH.Resource.CheckMusic();
         //음악 목록 가져와서 아이템 목록에 넘겨주기
         mList.SetData(GameManager_PSH.Resource.GetMusicList());
     }

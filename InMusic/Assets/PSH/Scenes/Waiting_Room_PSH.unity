@@ -773,7 +773,7 @@ GameObject:
   - component: {fileID: 271640748}
   - component: {fileID: 271640747}
   m_Layer: 5
-  m_Name: Master
+  m_Name: Owner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1700,7 +1700,7 @@ GameObject:
   - component: {fileID: 470494385}
   - component: {fileID: 470494384}
   m_Layer: 5
-  m_Name: Master
+  m_Name: Owner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2024,10 +2024,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Sound_Setting_UI, Assembly-CSharp
-        m_MethodName: ButtonEvent
-        m_Mode: 5
+      - m_Target: {fileID: 1890810794}
+        m_TargetAssemblyTypeName: UI_BASE_PSH.UI_Base_PSH, Assembly-CSharp
+        m_MethodName: Gear
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3582,8 +3582,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Single_Lobby_UI, Assembly-CSharp
+      - m_Target: {fileID: 1890810794}
+        m_TargetAssemblyTypeName: Waiting_Room_UI, Assembly-CSharp
         m_MethodName: ButtonEvent
         m_Mode: 5
         m_Arguments:
@@ -3833,8 +3833,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Single_Lobby_UI, Assembly-CSharp
+      - m_Target: {fileID: 1890810794}
+        m_TargetAssemblyTypeName: Waiting_Room_UI, Assembly-CSharp
         m_MethodName: ButtonEvent
         m_Mode: 5
         m_Arguments:
@@ -3899,7 +3899,7 @@ GameObject:
   - component: {fileID: 1505192458}
   - component: {fileID: 1505192459}
   m_Layer: 5
-  m_Name: PlayerRoot
+  m_Name: PlayerUIRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3942,7 +3942,7 @@ MonoBehaviour:
   playerNames:
   - {fileID: 1211719012}
   - {fileID: 1731960499}
-  isRoomCap:
+  isRoomOwner:
   - {fileID: 271640745}
   - {fileID: 470494382}
   player1Status:
@@ -5084,10 +5084,17 @@ MonoBehaviour:
   curMusicItem: {fileID: 0}
   musicList: {fileID: 0}
   mList: {fileID: 0}
-  roomName: {fileID: 0}
+  roomName: {fileID: 1066885349}
   playerStatusController: {fileID: 1505192459}
-  curPlayer: {fileID: 0}
-  isRoomCap: 0
+  isCurrentHost: 0
+  isOwner: 0
+  canStart: 0
+  localPlayerObject: {fileID: 0}
+  otherPlayerObject: {fileID: 0}
+  startButtonTrue: {fileID: -66490268015967822, guid: 8f15ea038f23e5e4cb520612e4454431, type: 3}
+  startButtonFalse: {fileID: 6765302739450717683, guid: 76bc6b2fed546c0429ae743f3c7e272d, type: 3}
+  startButtonColor: {fileID: 1425971663}
+  startButtonName: {fileID: 1716650724}
 --- !u!1001 &1911801449
 PrefabInstance:
   m_ObjectHideFlags: 0

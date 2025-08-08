@@ -6,6 +6,7 @@ public class GameManager_PSH : MonoBehaviour
     static GameObject musicDataRoot;
     [SerializeField] bool isSteamCheck = false;
     [SerializeField] bool isBackendCheck = false;
+    [SerializeField] bool isServer = false;
 
 
     public GameObject DataRoot { get { return musicDataRoot; } }
@@ -42,6 +43,7 @@ public class GameManager_PSH : MonoBehaviour
     public static bool SteamCheck { get { return Instance.isSteamCheck; } set { Instance.isSteamCheck = value; } }
     public static bool BackendCheck { get { return Instance.isBackendCheck; } set { Instance.isBackendCheck = value; } }
 
+    public static bool PlayerRole { get { return Instance.isServer; } set { Instance.isServer= value; } }
     static void Init()
     {
         if (GM_Instance == null)
