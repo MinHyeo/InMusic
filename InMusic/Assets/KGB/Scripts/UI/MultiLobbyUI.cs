@@ -1,5 +1,7 @@
+using Fusion;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MultiLobbyUI : MonoBehaviour
 {
@@ -76,5 +78,10 @@ public class MultiLobbyUI : MonoBehaviour
     public void OnClickCreateRoomButton()
     {
         roomCreateUI.SetActive(true);
+    }
+
+    public void OnClickBackButton()
+    {
+        SceneManager.LoadScene("MainScene 1");
     }
 }
