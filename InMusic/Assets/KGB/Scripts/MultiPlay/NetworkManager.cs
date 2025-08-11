@@ -321,27 +321,6 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
 
 
-    public void StartGamePlay()
-    {
-        // 호스트만 씬 전환 가능
-        if (runnerInstance.IsClient)
-        {
-            int gameplayIndex = GetSceneIndex(gamePlayScene); // gamePlayScene = "KGB_" 이런 식
-            if (gameplayIndex >= 0)
-            {
-                runnerInstance.LoadScene(SceneRef.FromIndex(GetSceneIndex(gamePlayScene)));
-            }
-            else
-            {
-                Debug.LogError("게임 플레이 씬을 찾을 수 없음");
-            }
-        }
-        else
-        {
-            Debug.Log("호스트만 게임 시작 가능");
-        }
-    }
-
 
 
 

@@ -26,7 +26,7 @@ public class PlayerRespawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        if (SceneManager.GetActiveScene().name == "tmp")
+        if (SceneManager.GetActiveScene().name == "KGB_MultiPlay")
         {
             Debug.Log("게임 씬 로딩 완료!");
 
