@@ -11,18 +11,23 @@ namespace Play
         private GameObject DeathPanel;
         private bool isDead = false;
 
+        [Header("Key Effects")]
+        [SerializeField]
+        private GameObject[] keyEffectObjects;
+
         private void Start()
         {
             DeathPanel.SetActive(false);
         }
 
-        public void ShowKeyEffect(AccuracyType accuracyType, float percent, int noteId)
+        public void ShowKeyEffect(int channel, AccuracyType accuracyType, float percent, int noteId)
         {
             Note targetNote = TimelineController.Instance.GetClosestNoteById(noteId);
             if (targetNote != null)
             {
                 // 노트에 대한 판정 처리
                 float score = targetNote.Hit(1);
+                keyEffectObjects[channel - 11].SetActive(true);
 
                 switch (accuracyType)
                 {
