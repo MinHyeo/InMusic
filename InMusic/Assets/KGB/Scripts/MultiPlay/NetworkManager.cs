@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -20,7 +21,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     private string lobbyScene = "KGB_Multi_Lobby";
     private string waitngScene = "Waiting_Room_PSH";
-    private string gamePlayScene = "KGB_";
+    private string gamePlayScene = "KGB_MultiPlay";
     //public SceneAsset gameplaySceneAsset;
     //public SceneAsset lobbySceneAsset;
     public GameObject playerPrefab;
@@ -30,6 +31,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public event Action OnSessionListChanged;
 
     public static event Action<PlayerRef> OnPlayerLeftEvt;
+
+    private HashSet<PlayerRef> loadedPlayers = new HashSet<PlayerRef>();
 
     private void Awake()
     {
@@ -41,6 +44,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             runnerInstance = gameObject.AddComponent<NetworkRunner>();
         }
+        DontDestroyOnLoad(gameObject);
+        runnerInstance.AddCallbacks(this);
+
     }
 
     private void Start()
@@ -302,13 +308,40 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        
+
+        Debug.Log($"씬 로딩 끝: {runner.LocalPlayer}");
+        // 여기서 호스트에 "나 로딩 끝남"을 알림
     }
 
     public void OnSceneLoadStart(NetworkRunner runner)
     {
-        
+        Debug.Log($"씬 로딩 시작: {runner.LocalPlayer}");
     }
+
+
+
+
+    public void StartGamePlay()
+    {
+        // 호스트만 씬 전환 가능
+        if (runnerInstance.IsClient)
+        {
+            int gameplayIndex = GetSceneIndex(gamePlayScene); // gamePlayScene = "KGB_" 이런 식
+            if (gameplayIndex >= 0)
+            {
+                runnerInstance.LoadScene(SceneRef.FromIndex(GetSceneIndex(gamePlayScene)));
+            }
+            else
+            {
+                Debug.LogError("게임 플레이 씬을 찾을 수 없음");
+            }
+        }
+        else
+        {
+            Debug.Log("호스트만 게임 시작 가능");
+        }
+    }
+
 
 
 

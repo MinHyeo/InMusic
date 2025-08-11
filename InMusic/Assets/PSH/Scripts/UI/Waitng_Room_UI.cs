@@ -34,6 +34,9 @@ public class Waiting_Room_UI : UI_Base_PSH
     [SerializeField] Image startButtonColor;
     [SerializeField] Text startButtonName;
 
+    [Header("네트워크매니저")]
+    [SerializeField] NetworkManager networkManager;
+
     void OnEnable()
     {
         PlayerInfo.OnPlayerObjectInitialized += PlayerEnter;
@@ -53,6 +56,15 @@ public class Waiting_Room_UI : UI_Base_PSH
         if (musicList == null || mList == null)
             musicList = transform.Find("MusicList").gameObject;
         mList = musicList.GetComponent<MusicList>();
+
+        if (networkManager == null)
+        {
+            networkManager = FindFirstObjectByType<NetworkManager>();
+            if (networkManager == null)
+            {
+                Debug.LogError("NetworkManager를 씬에서 찾지 못했습니다.");
+            }
+        }
     }
 
     void Start()
@@ -254,7 +266,9 @@ public class Waiting_Room_UI : UI_Base_PSH
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
                     GameManager_PSH.Data.SetData(curMusicItem.GetComponent<MusicItem>());
                     //게임 시작
+                    Debug.Log("게임 시작2");
                     localPlayerObject.GetComponent<PlayerUIController>().BroadGameStart();
+                    networkManager.StartGamePlay();
                 }
                 else
                 {
