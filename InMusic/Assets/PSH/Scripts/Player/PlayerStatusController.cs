@@ -6,14 +6,26 @@ public class PlayerStatusController : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] playerNames;
     [SerializeField] GameObject[] isRoomOwner;
     //0: Selecting | 1: Ready | 2 :Me
-    [Tooltip("P1 (방장)")] [SerializeField] GameObject[] player1Status;
-    [Tooltip("P2 (참가자)")] [SerializeField] GameObject[] player2Status;
+    [Tooltip("P1 (방장)")] 
+    [SerializeField] GameObject[] player1Status;
+    [SerializeField] PlayerUI p1UI;
+    [Tooltip("P2 (참가자)")] 
+    [SerializeField] GameObject[] player2Status;
+    [SerializeField] PlayerUI p2UI;
 
 
     private void Awake()
     {
         InitP2Status();
     }
+    public void SetP1Object(GameObject playerObject) {
+        p1UI.SetPlayerGameObject(playerObject);
+    }
+
+    public void SetP2Object(GameObject playerObject) {
+        p2UI.SetPlayerGameObject(playerObject); 
+    }
+
     public void InitP1Status()
     {
         isRoomOwner[0].SetActive(true);

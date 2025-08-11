@@ -251,7 +251,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         Vector2 direction = Vector2.zero;
-        Debug.Log("¿Â ÀÎÇ²");
+        //Debug.Log("¿Â ÀÎÇ²");
         if (Input.GetKey(KeyCode.W)) direction.y += 1;
         if (Input.GetKey(KeyCode.S)) direction.y -= 1;
         if (Input.GetKey(KeyCode.A)) direction.x -= 1;

@@ -63,18 +63,15 @@ public class Waiting_Room_UI : UI_Base_PSH
         roomName.text = NetworkManager.runnerInstance.SessionInfo.Name; //값 이상함
     }
 
+    //p2 초기화
     void PlayerEnter(PlayerRef playerRef, NetworkObject networkObject)
     {
         otherPlayerObject = networkObject;
         PlayerInfo playerInfo = networkObject.GetComponent<PlayerInfo>();
-        //Debug.Log($"플레이어 입장: {playerInfo.PlayerName}");
+        playerStatusController.SetP2Object(networkObject.gameObject);
         playerStatusController.SetPlayerName(1, playerInfo.PlayerName.ToString());
         playerStatusController.SetPlayerStatus(1, false, false);
-
-        /*
-        bool isLocalPlayerObject = networkObject.HasInputAuthority;
-        UpdatePlayerStatusUI(playerInfo, isLocalPlayerObject); // UI 업데이트
-        */
+        
     }
 
     void PlayerLeft(PlayerRef playerRef)
@@ -173,6 +170,7 @@ public class Waiting_Room_UI : UI_Base_PSH
         playerStatusController.SetPlayerMark(true);
         playerStatusController.SetPlayerName(0, localPlayerObject.GetComponent<PlayerInfo>().PlayerName.ToString());
         playerStatusController.SetPlayerStatus(0, false, true);
+        playerStatusController.SetP1Object(localPlayerObject.gameObject);
         //P2칸 초기화
         playerStatusController.InitP2Status();
     }
@@ -190,6 +188,7 @@ public class Waiting_Room_UI : UI_Base_PSH
                 playerStatusController.SetPlayerMark(false);
                 playerStatusController.SetPlayerStatus(1, false, false);
                 playerStatusController.SetPlayerName(1, pObject.GetComponent<PlayerInfo>().PlayerName.ToString());
+                playerStatusController.SetP2Object(localPlayerObject.gameObject);
             }
             else
             {
@@ -197,6 +196,7 @@ public class Waiting_Room_UI : UI_Base_PSH
                 //P1칸 초기화
                 playerStatusController.SetPlayerStatus(0, false, true);
                 playerStatusController.SetPlayerName(0, pObject.GetComponent<PlayerInfo>().PlayerName.ToString());
+                playerStatusController.SetP1Object(otherPlayerObject.gameObject);
             }
         }
     }
