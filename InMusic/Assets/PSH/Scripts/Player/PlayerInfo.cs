@@ -16,6 +16,9 @@ public class PlayerInfo : NetworkBehaviour
     [Networked]
     public PlayerType PlayerRole{get; set;}
 
+    [Networked, OnChangedRender(nameof(OnLoadStateChangedRender))]
+    public bool IsLoaded { get; set; } = false;
+
     [Networked, OnChangedRender(nameof(OnOwnerStateChangedRender))]
     public bool IsOwner { get; set; } = false;
 
@@ -37,6 +40,17 @@ public class PlayerInfo : NetworkBehaviour
         IsReady = false;
     }
 
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void Rpc_CheckLoad()
+    {
+        GameObject gamePlayeySceneRespawner= GameObject.Find("PlayerRespawner");
+        if (gamePlayeySceneRespawner == null) {
+            Debug.Log("현재 다른 씬");
+            return;
+        }
+        gamePlayeySceneRespawner.GetComponent<PlayerRespawner>().CheckPlayerLoad();
+    }
+
     public override void Spawned()
     {
         if (Object.HasInputAuthority)
@@ -56,6 +70,8 @@ public class PlayerInfo : NetworkBehaviour
             }
         }
         OnPlayerObjectInitialized?.Invoke(Object.InputAuthority, Object);
+
+        IsLoaded = true;
     }
 
     public void InitReady() {
@@ -84,6 +100,10 @@ public class PlayerInfo : NetworkBehaviour
         {
             Debug.LogWarning("Waiting_Room_UI GameObject를 찾을 수 없습니다.");
         }
+    }
+
+    public void OnLoadStateChangedRender() {
+        Rpc_CheckLoad();
     }
 
 }

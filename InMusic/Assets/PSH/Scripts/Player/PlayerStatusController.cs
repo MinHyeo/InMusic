@@ -8,10 +8,10 @@ public class PlayerStatusController : MonoBehaviour
     //0: Selecting | 1: Ready | 2 :Me
     [Tooltip("P1 (방장)")] 
     [SerializeField] GameObject[] player1Status;
-    [SerializeField] PlayerUI p1UI;
+    [SerializeField] PlayerSceneUI p1UI;
     [Tooltip("P2 (참가자)")] 
     [SerializeField] GameObject[] player2Status;
-    [SerializeField] PlayerUI p2UI;
+    [SerializeField] PlayerSceneUI p2UI;
 
 
     private void Awake()

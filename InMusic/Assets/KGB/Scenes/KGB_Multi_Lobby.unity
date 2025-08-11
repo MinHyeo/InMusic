@@ -3087,6 +3087,7 @@ GameObject:
   - component: {fileID: 2098224645}
   - component: {fileID: 2098224644}
   - component: {fileID: 2098224646}
+  - component: {fileID: 2098224647}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -3141,6 +3142,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsSceneTakeOverEnabled: 1
   LogSceneLoadErrors: 1
+--- !u!114 &2098224647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098224643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10533623ed629624c8acc6869f609bf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DelayIfSceneManagerIsBusy: 1
 --- !u!1 &2146926713
 GameObject:
   m_ObjectHideFlags: 0

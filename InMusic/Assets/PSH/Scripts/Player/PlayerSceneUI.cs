@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerUI : MonoBehaviour, IPointerClickHandler
+public class PlayerSceneUI : MonoBehaviour, IPointerClickHandler
 {
     [Header("플레이어 프리팹")]
     [SerializeField] public GameObject pNetworkObject;

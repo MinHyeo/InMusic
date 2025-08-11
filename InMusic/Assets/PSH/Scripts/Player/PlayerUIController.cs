@@ -21,6 +21,7 @@ public class PlayerUIController : NetworkBehaviour
     public void Rpc_GameStart()
     {
         //TODO: 게임 플레이 씬으로 이동
+        Runner.LoadScene(SceneRef.FromIndex(6));
     }
 
     public void BroadScrollUp() {
