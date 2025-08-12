@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStatusUIController : MonoBehaviour
 {
@@ -16,6 +17,11 @@ public class PlayerStatusUIController : MonoBehaviour
 
     private void Awake()
     {
+        //멀티플레이 결과에서도 재활용 중 -> Awake 필요 없음
+        if (SceneManager.GetActiveScene().name == "MultiPlay_Result") {
+            return;
+        }
+
         InitP2Status();
     }
     public void SetP1Object(GameObject playerObject) {

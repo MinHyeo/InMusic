@@ -26,9 +26,9 @@ public class PlayerRespawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        if (SceneManager.GetActiveScene().name == "KGB_MultiPlay")
+        if (SceneManager.GetActiveScene().name == "KGB_MultiPlay" || SceneManager.GetActiveScene().name == "MultiPlay_Result")
         {
-            Debug.Log("게임 씬 로딩 완료!");
+            Debug.Log("씬 로딩 완료!");
 
             if (runner.GetPlayerObject(runner.LocalPlayer) == null)
             {
