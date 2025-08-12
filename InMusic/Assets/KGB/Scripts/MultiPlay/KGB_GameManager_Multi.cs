@@ -61,6 +61,7 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         if (testBMS != null)
         {
             NoteManager.Instance.SetNote(testBMS);
+            MultiNoteManager.Instance.SetNote(testBMS);
             Debug.Log("BMS 데이터 할당 완료");
         }
         else
@@ -136,7 +137,7 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         totalNotesPlayed++;
         accuracy = Mathf.Clamp(accuracy - accuracyPenalty, 0f, 100f);
 
-        MultPlayManager.Instance.RPC_SendNoteJudgement(noteIndex, judgement, 1, accuracy);
+        //MultPlayManager.Instance.RPC_SendNoteJudgement(noteIndex, judgement, 1, accuracy);
     }
     public void PauseGame()
     {
