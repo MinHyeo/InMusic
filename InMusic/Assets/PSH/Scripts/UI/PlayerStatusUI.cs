@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerSceneUI : MonoBehaviour, IPointerClickHandler
+public class PlayerStatusUI : MonoBehaviour, IPointerClickHandler
 {
     [Header("플레이어 프리팹")]
     [SerializeField] public GameObject pNetworkObject;
@@ -11,16 +11,14 @@ public class PlayerSceneUI : MonoBehaviour, IPointerClickHandler
 
     void Update()
     {
-        // 팝업 메뉴가 활성화된 상태에서만 작동
-        if (playerMenuUI.activeSelf)
+        if (!playerMenuUI.activeSelf) return;
+
+        // 마우스 좌클릭이 발생했을 때
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
-            // 마우스 좌클릭이 발생했을 때
-            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+            if (!EventSystem.current.IsPointerOverGameObject())
             {
-                if (!EventSystem.current.IsPointerOverGameObject())
-                {
-                    playerMenuUI.SetActive(false);
-                }
+                playerMenuUI.SetActive(false);
             }
         }
     }
@@ -47,7 +45,7 @@ public class PlayerSceneUI : MonoBehaviour, IPointerClickHandler
         {
             playerMenuUI.SetActive(true); //활성화
             playerMenuUI.GetComponent<RectTransform>().position = eventData.position; //위치 이동
-            playerMenuUI.GetComponent<PlayerMenuUI>().SetTarget(pNetworkObject.GetComponent<PlayerInfo>());
+            playerMenuUI.GetComponent<PlayerMenuUI>().SetTarget(uIID);
         }
     }
 }

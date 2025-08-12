@@ -1,17 +1,17 @@
 using TMPro;
 using UnityEngine;
 
-public class PlayerStatusController : MonoBehaviour
+public class PlayerStatusUIController : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI[] playerNames;
     [SerializeField] GameObject[] isRoomOwner;
     //0: Selecting | 1: Ready | 2 :Me
     [Tooltip("P1 (방장)")] 
     [SerializeField] GameObject[] player1Status;
-    [SerializeField] PlayerSceneUI p1UI;
+    [SerializeField] PlayerStatusUI p1UI;
     [Tooltip("P2 (참가자)")] 
     [SerializeField] GameObject[] player2Status;
-    [SerializeField] PlayerSceneUI p2UI;
+    [SerializeField] PlayerStatusUI p2UI;
 
 
     private void Awake()

@@ -21,8 +21,8 @@ public class Waiting_Room_UI : UI_Base_PSH
     [Header("방 정보")]
     [SerializeField] Text roomName;
 
-    [Header("플레이어 상태 정보")]
-    [SerializeField] PlayerStatusController playerStatusController;
+    [Header("플레이어 상태 정보 (로컬 오브젝트)")]
+    [SerializeField] PlayerStatusUIController playerStatusController;
     [SerializeField] bool isOwner; //방장 유무
     [SerializeField] bool canStart;
     [SerializeField] NetworkObject localPlayerObject;
@@ -88,6 +88,10 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
         otherPlayerObject = null;
         playerStatusController.InitP2Status();
+
+        //방장 권한 가져오기
+        localPlayerObject.GetComponent<PlayerInfo>().Rpc_SetOwner(true);
+        canStart = false;
     }
 
 
@@ -139,7 +143,8 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     void Update()
     {
-        if (mList.IsScrolling || !localPlayerObject.GetComponent<PlayerInfo>().IsOwner)
+        if (mList.IsScrolling ||  localPlayerObject  == null || !localPlayerObject.GetComponent<PlayerInfo>().IsOwner || 
+            (isOwner && localPlayerObject.GetComponent<PlayerInfo>().IsReady)) //방장이 준비된 상태면 키 입력 막음
         {
             return;
         }
@@ -207,11 +212,11 @@ public class Waiting_Room_UI : UI_Base_PSH
         playerStatusController.SetRoomOwner(isP1);
         if (localPlayerObject.GetComponent<PlayerInfo>().IsOwner)
         {
-            startButtonColor.sprite = startButtonFalse;
+            InitOwnerReadyButton();
         }
         else
         {
-            startButtonName.text = "ready";
+            InitClintReadyButton();
         }
     }
     #region Detect
@@ -238,9 +243,9 @@ public class Waiting_Room_UI : UI_Base_PSH
                 mList.ScrollDown();
                 break;
             case "Exit":
+                GameManager_PSH.PlayerRole = false;
                 //키 입력 이벤트 제거
                 GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-                GameManager_PSH.PlayerRole = false;
                 NetworkManager.runnerInstance.Shutdown();
                 SceneManager.LoadScene(3); //추후 로비씬으로 바꾸기
                 break;
@@ -311,28 +316,56 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
     }
 
-    public void UpdateAllPlayerReady()
+    public void UpdateAllPlayerStatus()
     {
         PlayerInfo me = localPlayerObject.GetComponent<PlayerInfo>();
         PlayerInfo you = otherPlayerObject.GetComponent<PlayerInfo>();
-        Debug.Log($"내 상태: {me.IsReady} {me.IsOwner}");
-        Debug.Log($"너 상태: {you.IsReady} {you.IsOwner}");
+        Debug.Log($"내 상태: 준비 {me.IsReady} 방장 {me.IsOwner}");
+        Debug.Log($"너 상태: 준비 {you.IsReady} 방장{you.IsOwner}");
+
+        isOwner = me.IsOwner;
 
         if (me.PlayerRole == PlayerInfo.PlayerType.Host)
         {
-            playerStatusController.SetPlayerStatus(0, me.IsReady, me.IsOwner);
+            playerStatusController.SetPlayerStatus(0, me.IsReady, isOwner);
             playerStatusController.SetPlayerStatus(1, you.IsReady, you.IsOwner);
+            playerStatusController.SetRoomOwner(isOwner);
         }
         else
         {
-            playerStatusController.SetPlayerStatus(1, me.IsReady, me.IsOwner);
+            playerStatusController.SetPlayerStatus(1, me.IsReady, isOwner);
             playerStatusController.SetPlayerStatus(0, you.IsReady, you.IsOwner);
+            playerStatusController.SetRoomOwner(you.IsOwner);
         }
 
-        if (me.IsOwner && you.IsReady)
+        if (isOwner) {
+            InitOwnerReadyButton();
+            if (you.IsReady && me.IsReady) {
+                canStart = true;
+                startButtonColor.sprite = startButtonTrue;
+            }
+            else
+            {
+                canStart = false;
+                startButtonColor.sprite = startButtonFalse;
+            }
+        }
+        else
         {
-            canStart = true;
-            startButtonColor.sprite = startButtonTrue;
+            InitClintReadyButton();
+        }
+    }
+
+    public void SetOwner(bool isP1) {
+        if (localPlayerObject.GetComponent<PlayerInfo>().PlayerRole == PlayerInfo.PlayerType.Host) {
+            localPlayerObject.GetComponent<PlayerInfo>().Rpc_SetOwner(isP1);
+            otherPlayerObject.GetComponent<PlayerInfo>().Rpc_SetOwner(!isP1);
+        }
+        else
+        {
+
+            localPlayerObject.GetComponent<PlayerInfo>().Rpc_SetOwner(!isP1);
+            otherPlayerObject.GetComponent<PlayerInfo>().Rpc_SetOwner(isP1);
         }
     }
 
@@ -375,6 +408,17 @@ public class Waiting_Room_UI : UI_Base_PSH
             isOwner = false;
             InitClient();
         }
+    }
+
+    void InitOwnerReadyButton() {
+        startButtonColor.sprite = startButtonFalse;
+        startButtonName.text = "start";
+
+    }
+
+    void InitClintReadyButton() {
+        startButtonColor.sprite = startButtonTrue;
+        startButtonName.text = "ready";
     }
     #endregion
 }
