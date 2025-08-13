@@ -9,8 +9,10 @@ using SSW.DB;
 namespace SongList {
     public class LoadManager : Managers.Singleton<LoadManager> {
         [Header("UI for Splash/Fade")]
-        [SerializeField] private CanvasGroup logoCanvasGroup; 
+        [SerializeField] private CanvasGroup logoCanvasGroup;
+        [SerializeField] private CanvasGroup fmodCanvasGroup;
         [SerializeField] private float fadeDuration = 1f;
+        [SerializeField] private float logoDisplayDuration = 1.5f;
         public List<SongInfo> Songs { get; private set; }
         protected override void Awake() {
             base.Awake();
@@ -22,9 +24,12 @@ namespace SongList {
 
         private IEnumerator GameResourcesLoad()
         {
-            yield return StartCoroutine(FadeCanvas(logoCanvasGroup, 0f, 1f, fadeDuration));
+            yield return StartCoroutine(FadeCanvas(fmodCanvasGroup, 0f, 1f, fadeDuration));
+            yield return new WaitForSeconds(logoDisplayDuration);
             yield return StartCoroutine(LoadAllSongs());
-            yield return new WaitForSeconds(1f);
+            yield return StartCoroutine(FadeCanvas(fmodCanvasGroup, 1f, 0f, fadeDuration));
+            yield return StartCoroutine(FadeCanvas(logoCanvasGroup, 0f, 1f, fadeDuration));
+            yield return new WaitForSeconds(logoDisplayDuration);
             yield return StartCoroutine(FadeCanvas(logoCanvasGroup, 1f, 0f, fadeDuration));
             GameManager.Instance.SetGameState(GameState.MainMenu);
             SceneManager.LoadScene("Main_Lobby_PSH");
