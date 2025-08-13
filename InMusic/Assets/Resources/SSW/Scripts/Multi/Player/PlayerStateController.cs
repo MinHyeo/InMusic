@@ -1,5 +1,6 @@
 using UnityEngine;
 using Fusion;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -150,6 +151,29 @@ public class PlayerStateController : NetworkBehaviour
         if (uiController != null)
         {
             uiController.ForceRefreshAllSlots();
+            
+            // UI 재바인딩 후 SongSelectionNetwork 상태 복원
+            StartCoroutine(RestoreSongSelectionSync());
+        }
+    }
+
+    private IEnumerator RestoreSongSelectionSync()
+    {
+        // UI 재바인딩 완료 대기
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForFixedUpdate();
+        
+        // SongSelectionNetwork 동기화 복원
+        if (SongSelectionNetwork.Instance != null)
+        {
+            int currentIndex = SongSelectionNetwork.Instance.GetCurrentSongIndex();
+            Debug.Log($"[PlayerState] Restoring song selection sync to index: {currentIndex}");
+            
+            MultiSongListController controller = FindFirstObjectByType<MultiSongListController>();
+            if (controller != null)
+            {
+                controller.ForceCenterAtIndex(currentIndex);
+            }
         }
     }
 

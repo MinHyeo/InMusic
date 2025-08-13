@@ -3,12 +3,11 @@ using Fusion;
 
 public class SongSelectionNetwork : NetworkBehaviour
 {
-    [Networked] public int SelectedSongIndex { get; set; }
+    [Networked, OnChangedRender(nameof(OnSongIndexNetworkChanged))] 
+    public int SelectedSongIndex { get; set; }
 
     public static SongSelectionNetwork Instance { get; private set; }
     private MultiSongListController _controller;
-    
-    private int _previousSelectedSongIndex = -1;
 
     public override void Spawned()
     {
@@ -21,8 +20,6 @@ public class SongSelectionNetwork : NetworkBehaviour
             {
                 Debug.LogError("[SongSelectionNetwork] MultiSongListController not found");
             }
-            
-            _previousSelectedSongIndex = SelectedSongIndex;
         }
         else
         {
@@ -40,10 +37,33 @@ public class SongSelectionNetwork : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (_previousSelectedSongIndex != SelectedSongIndex)
+        // 기존에 해당 메소드에서 변경감지를 시도했는데, 일반 클라이언트에서 정상적으로 동기화되지 않는 문제가 발생함
+        // OnChangedRender 콜백 사용
+    }
+
+    /// <summary>
+    /// SelectedSongIndex가 네트워크를 통해 변경될 때 모든 클라이언트에서 호출되는 콜백
+    /// </summary>
+    private void OnSongIndexNetworkChanged()
+    {
+        Debug.Log($"[SongSelectionNetwork] OnSongIndexNetworkChanged called - IsMaster: {Runner.IsSharedModeMasterClient}, Index: {SelectedSongIndex}");
+        
+        // 마스터 클라이언트는 자기가 변경한 것이므로 UI 업데이트 스킵
+        if (Runner.IsSharedModeMasterClient) 
         {
-            OnSongIndexChanged();
-            _previousSelectedSongIndex = SelectedSongIndex;
+            Debug.Log("[SongSelectionNetwork] Skipping UI sync - This is master client");
+            return;
+        }
+
+        // 일반 클라이언트만 UI 동기화
+        if (_controller != null)
+        {
+            Debug.Log($"[SongSelectionNetwork] Syncing UI to song index: {SelectedSongIndex}");
+            _controller.ForceCenterAtIndex(SelectedSongIndex);
+        }
+        else
+        {
+            Debug.LogError("[SongSelectionNetwork] Controller is null! Cannot sync UI");
         }
     }
 
@@ -69,32 +89,6 @@ public class SongSelectionNetwork : NetworkBehaviour
         else
         {
             Debug.Log($"[SongSelectionNetwork] No change needed, already at index: {newIndex}");
-        }
-    }
-
-    /// <summary>
-    /// SelectedSongIndex가 변경될 때 자동 호출되는 콜백
-    /// </summary>
-    private void OnSongIndexChanged()
-    {
-        Debug.Log($"[SongSelectionNetwork] OnSongIndexChanged called - IsMaster: {Runner.IsSharedModeMasterClient}");
-        
-        // 마스터 클라이언트는 자기가 변경한 것이므로 UI 업데이트 스킵
-        if (Runner.IsSharedModeMasterClient) 
-        {
-            Debug.Log("[SongSelectionNetwork] Skipping UI sync - This is master client");
-            return;
-        }
-
-        // 일반 클라이언트만 UI 동기화
-        if (_controller != null)
-        {
-            Debug.Log($"[SongSelectionNetwork] Syncing UI to song index: {SelectedSongIndex}");
-            _controller.ForceCenterAtIndex(SelectedSongIndex);
-        }
-        else
-        {
-            Debug.LogError("[SongSelectionNetwork] Controller is null! Cannot sync UI");
         }
     }
 
