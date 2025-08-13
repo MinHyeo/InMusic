@@ -39,6 +39,10 @@ namespace Play
         [SerializeField]
         private GameObject[] keyObjects;
 
+        [Header("키 입력 Effect")]
+        [SerializeField]
+        private GameObject[] keyEffectObjects;
+
         private string songName;
         private string artist;
 
@@ -55,6 +59,7 @@ namespace Play
             runner.SetPlayerObject(runner.LocalPlayer, Object);
 
             GameManager.Instance.SetGameState(GameState.MultiGamePlay);
+            
             songName = "Heya"; // Default song name, can be set dynamically later
             artist = "Artist"; // Default artist name, can be set dynamically later
 
@@ -138,19 +143,19 @@ namespace Play
 
                 if (timeDifference <= greateThreshold)
                 {
-                    HandleNoteHit(closestNote, AccuracyType.Great, 100, noteId);
+                    HandleNoteHit((int)keyEvent, closestNote, AccuracyType.Great, 100, noteId);
                 }
                 else if ((timeDifference -= greateThreshold) <= goodThreshold)
                 {
-                    HandleNoteHit(closestNote, AccuracyType.Good, 70, noteId);
+                    HandleNoteHit((int)keyEvent, closestNote, AccuracyType.Good, 70, noteId);
                 }
                 else if ((timeDifference -= goodThreshold) <= badThreshold)
                 {
-                    HandleNoteHit(closestNote, AccuracyType.Bad, 40, noteId);
+                    HandleNoteHit((int)keyEvent, closestNote, AccuracyType.Bad, 40, noteId);
                 }
                 else if ((timeDifference -= badThreshold) <= missThreshold)
                 {
-                    HandleNoteHit(closestNote, AccuracyType.Miss, 0, noteId);
+                    HandleNoteHit((int)keyEvent, closestNote, AccuracyType.Miss, 0, noteId);
                 }
             }
         }
@@ -160,9 +165,11 @@ namespace Play
             return TimelineController.Instance.GetClosestNote(channel, pressTime);
         }
 
-        public void HandleNoteHit(Note note, AccuracyType accuracyResult, float percent, int noteId)
+        public void HandleNoteHit(int channel, Note note, AccuracyType accuracyResult, float percent, int noteId)
         {
             float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
+            if (channel != -1)  //채널이 -1이면 Miss 처리(이펙트 X)
+                keyEffectObjects[channel - 11].SetActive(true);
             MultiScoreComparison.Instance.UpdateMyScore(noteScore, percent, accuracyResult);
 
             switch (accuracyResult)
@@ -176,18 +183,18 @@ namespace Play
                     break;
             }
 
-            RPC_ReceiveKeyInput(accuracyResult, percent, noteId);
+            RPC_ReceiveKeyInput(channel, accuracyResult, percent, noteId);
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
-        public void RPC_ReceiveKeyInput(AccuracyType accuracyResult, float percent, int noteId, RpcInfo info = default)
+        public void RPC_ReceiveKeyInput(int channel, AccuracyType accuracyResult, float percent, int noteId, RpcInfo info = default)
         {
             if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
             {
                 return;
             }
 
-            matchController.ShowKeyEffect(accuracyResult, percent, noteId);
+            matchController.ShowKeyEffect(channel, accuracyResult, percent, noteId);
         }
 
         private void OnKeyRelase(Define.NoteControl keyEvent)
