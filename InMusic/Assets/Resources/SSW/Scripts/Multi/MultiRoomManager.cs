@@ -9,31 +9,34 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
 
     public string RoomName => _roomName;
 
+    public string songName;
+    public string artist;
+
     // PlayerStateController들을 조회해서 정보 가져오기
     public List<PlayerStateController> GetAllPlayers()
     {
         return FindObjectsByType<PlayerStateController>(FindObjectsSortMode.None).ToList();
     }
-    
+
     public PlayerStateController GetRoomHost()
     {
         var allPlayers = GetAllPlayers();
-        
+
         // SharedModeMasterClientTracker 사용 (존재하는 경우)
         var masterClientPlayer = SharedModeMasterClientTracker.GetSharedModeMasterClientPlayerRef();
         if (masterClientPlayer.HasValue)
         {
             return allPlayers.FirstOrDefault(p => p.Object.InputAuthority == masterClientPlayer.Value);
         }
-        
+
         // Tracker가 없으면 로컬 플레이어 기준으로만 확인
         return allPlayers.FirstOrDefault(p => IsSharedModeMasterClient(p));
     }
-    
+
     public bool IsMasterClient(PlayerStateController player)
     {
         if (player == null) return false;
-        
+
         // SharedModeMasterClientTracker 사용 (존재하는 경우)
         return SharedModeMasterClientTracker.IsPlayerSharedModeMasterClient(player.Object.InputAuthority);
     }
@@ -45,18 +48,18 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
     {
         var runner = NetworkManager.runnerInstance;
         if (runner == null) return false;
-        
+
         // 로컬 플레이어가 Master Client이고, 해당 player가 로컬 플레이어인 경우
         if (runner.IsSharedModeMasterClient && player.Object.InputAuthority == runner.LocalPlayer)
         {
             return true;
         }
-        
+
         // 다른 플레이어가 Master Client인지 확인하려면 별도 추적 시스템 필요
         // 현재는 로컬 Master Client만 확인 가능
         return false;
     }
-    
+
     public int GetPlayerCount()
     {
         return GetAllPlayers().Count;
@@ -75,7 +78,7 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
     public void NotifyPlayerLeft(Fusion.PlayerRef leftPlayer)
     {
         Debug.Log($"[MultiRoomManager] Player left notification: {leftPlayer}");
-        
+
         PlayerUIController uiController = FindFirstObjectByType<PlayerUIController>();
         if (uiController != null)
         {
@@ -87,7 +90,7 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
             Debug.LogError("[MultiRoomManager] PlayerUIController NOT FOUND!");
         }
     }
-    
+
     /// <summary>
     /// 방장 권한 양도 처리 (SharedModeMasterClient 활용)
     /// </summary>
@@ -96,7 +99,7 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
         if (targetPlayer != null)
         {
             Debug.Log($"[MultiRoomManager] Transferring master client to: {targetPlayer.Nickname}");
-            
+
             // Fusion의 내장 Master Client 시스템 사용
             var runner = NetworkManager.runnerInstance;
             if (runner != null && runner.IsSharedModeMasterClient)
@@ -110,7 +113,7 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
             }
         }
     }
-    
+
     public void DestroyRoomManager()
     {
         Debug.Log("[MultiRoom Manager] Destroying Room Manager instance.");
@@ -131,17 +134,17 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
         }
 
         Debug.Log($"[MultiRoomManager] Starting game - Loading scene: {sceneName}");
-        
+
         // 모든 플레이어가 준비되었는지 확인
         var allPlayers = GetAllPlayers();
         var notReadyPlayers = allPlayers.Where(p => !p.IsReady).ToList();
-        
+
         if (notReadyPlayers.Count > 0)
         {
             Debug.LogWarning($"[MultiRoomManager] Cannot start - {notReadyPlayers.Count} players not ready");
             return;
         }
-        
+
         // 씬 로딩 (MasterClient만 가능)
         Debug.Log($"[MultiRoomManager] Loading scene: {sceneName}");
         runner.LoadScene(sceneName);
@@ -161,7 +164,7 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
         }
 
         Debug.Log($"[MultiRoomManager] Changing room settings - MaxPlayers: {maxPlayers}, Private: {isPrivate}");
-        
+
         // TODO: 실제 방 설정 변경 로직
         // NetworkRunner의 방 설정 API 사용
     }
@@ -180,11 +183,17 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
         }
 
         Debug.Log($"[MultiRoomManager] Kicking player: {targetPlayer.Nickname}");
-        
+
         if (runner != null)
         {
             // TODO: 플레이어 강제 퇴장 로직
             // runner.Disconnect(targetPlayer.Object.InputAuthority);
         }
+    }
+
+    public void SetSongInfo(string songTitle, string artist)
+    {
+        this.songName = songTitle;
+        this.artist = artist;
     }
 }

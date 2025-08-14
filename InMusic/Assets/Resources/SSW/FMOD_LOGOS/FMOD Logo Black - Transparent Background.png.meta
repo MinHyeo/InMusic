@@ -260,7 +260,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      FMOD Logo Black - Transparent Background_0: -8153389488409320440
+      FMOD Logo Black - Transparent Background_1: 7616724038702620306
+      FMOD Logo Black - Transparent Background_2: 8507069432805537885
+      FMOD Logo Black - Transparent Background_3: -3216319396620640089
+      FMOD Logo Black - Transparent Background_4: -6272183973744529675
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -74,7 +74,7 @@ public class GameStartManager : NetworkBehaviour
                 var (title, artist, duration, sprite) = highlightSong.GetSelectedSongInfo();
                 
                 // 🔥 중요: 세션 프로퍼티를 RPC 호출 전에 미리 업데이트
-                UpdateSessionProperties(title);
+                UpdateSessionProperties(title, artist);
                 
                 // 그 다음에 RPC 호출하여 씬 로딩 시작
                 RPC_StartGame(title, artist, duration);
@@ -86,7 +86,7 @@ public class GameStartManager : NetworkBehaviour
                 string selectedSongName = GetSelectedSongName();
                 
                 // 🔥 폴백의 경우에도 세션 프로퍼티 먼저 업데이트
-                UpdateSessionProperties(selectedSongName);
+                UpdateSessionProperties(selectedSongName, "Unknown Artist");
                 
                 RPC_StartGame(selectedSongName, "Unknown Artist", "00:00");
             }
@@ -96,29 +96,30 @@ public class GameStartManager : NetworkBehaviour
             Debug.LogWarning("[GameStartManager] Game start denied - not SharedModeMasterClient");
         }
     }
-    
+
     /// <summary>
     /// 세션 프로퍼티 업데이트 (씬 로딩 전에 호출)
     /// </summary>
-    private void UpdateSessionProperties(string selectedSongName)
+    private void UpdateSessionProperties(string selectedSongName, string selectedSongArtist)
     {
         Debug.Log($"[GameStartManager] Updating session properties BEFORE scene loading - Song: {selectedSongName}");
         
-        try
-        {
-            Dictionary<string, SessionProperty> newProps = new()
-            {
-                { "songName", selectedSongName },
-                { "gameStarted", true }
-            };
+        MultiRoomManager.Instance.SetSongInfo(selectedSongName, selectedSongArtist);
+        // try
+        // {
+        //     Dictionary<string, SessionProperty> newProps = new()
+        //     {
+        //         { "songName", selectedSongName },
+        //         { "gameStarted", true }
+        //     };
 
-            NetworkManager.runnerInstance.SessionInfo.UpdateCustomProperties(newProps);
-            
-            Debug.Log($"[GameStartManager] Session properties updated successfully - gameStarted: true, songName: {selectedSongName}");
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"[GameStartManager] Failed to update session properties: {ex.Message}");
-        }
+        //     NetworkManager.runnerInstance.SessionInfo.UpdateCustomProperties(newProps);
+
+        //     Debug.Log($"[GameStartManager] Session properties updated successfully - gameStarted: true, songName: {selectedSongName}");
+        // }
+        // catch (System.Exception ex)
+        // {
+        //     Debug.LogError($"[GameStartManager] Failed to update session properties: {ex.Message}");
+        // }
     }
 }

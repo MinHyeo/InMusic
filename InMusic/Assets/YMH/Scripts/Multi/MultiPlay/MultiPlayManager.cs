@@ -3,6 +3,7 @@ using Fusion;
 using UnityEngine;
 using System.Collections;
 using TMPro;
+using ExitGames.Client.Photon.StructWrapping;
 
 namespace Play
 {
@@ -59,9 +60,9 @@ namespace Play
             runner.SetPlayerObject(runner.LocalPlayer, Object);
 
             GameManager.Instance.SetGameState(GameState.MultiGamePlay);
-            
-            songName = "Heya"; // Default song name, can be set dynamically later
-            artist = "Artist"; // Default artist name, can be set dynamically later
+
+            songName = MultiRoomManager.Instance.songName;
+            artist = MultiRoomManager.Instance.artist;
 
             double delay = 3.0f;
             double startTime = NetworkManager.runnerInstance.SimulationTime + delay;

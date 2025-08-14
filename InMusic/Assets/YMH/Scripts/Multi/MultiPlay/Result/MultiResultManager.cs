@@ -68,6 +68,7 @@ namespace Play.Result
 
         public void OnClickNextButton()
         {
+            NetworkManager.runnerInstance.LoadScene("MultiRoom");
         }
     }
 }
