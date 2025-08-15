@@ -47,6 +47,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         DontDestroyOnLoad(gameObject);
         runnerInstance.AddCallbacks(this);
 
+
     }
 
     private void Start()

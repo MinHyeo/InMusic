@@ -40,6 +40,24 @@ public class MultPlayManager : NetworkBehaviour
 
         Debug.Log($"[RPC] 상대의 노트 판정 처리: noteId={noteId} , judgement={judgement}, key={keyIndex}, percent={percent}");
         //판정처리 (플레이어1 이 보내면 플레이어2가 여기 실행 -> 해당값을 가지고 메서드(값)으로 진행)
+        var multiNoteManager =  MultiNoteManager.Instance;
+        if (multiNoteManager == null)
+        {
+            Debug.LogWarning("[RPC] MultiNoteManager 인스턴스를 찾을 수 없습니다.");
+            return;
+        }
+        // 상대 노트 찾기
+        if (multiNoteManager.TryGetNoteByIndex(noteId, out Note_Multi note))
+        {
+            // 판정에 맞는 처리
+            note.JudgmentSimulateNote(judgement, percent);
+        }
+        else
+        {
+            Debug.LogWarning($"[RPC] 해당 noteId({noteId})를 찾을 수 없습니다.");
+        }
+
+
     }
 
 

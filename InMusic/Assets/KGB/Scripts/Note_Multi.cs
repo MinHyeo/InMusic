@@ -39,25 +39,28 @@ public class Note_Multi : MonoBehaviour
         get => index;
         set => index = value;
     }
-    public void JudgmentNote()
+    public void JudgmentSimulateNote(string judgement, float percent)
     {
-        distance = Mathf.Abs(transform.position.y - line.position.y);
-        if (distance <= greatThresholdDistance)
+        Debug.Log($"[SimulateJudge] 판정: {judgement}, 정확도: {percent}");
+
+        // 판정별 이펙트/애니메이션
+        switch (judgement)
         {
-            Debug.Log($"Great");
+            case "Perfect":
+                break;
+            case "Great":
+
+                break;
+            case "Good":
+
+                break;
+            case "Miss":
+
+                break;
         }
-        else if (distance <= goodThresholdDistance)
-        {
-            Debug.Log($"Good");
-        }
-        else if (distance <= badThresholdDistance)
-        {
-            Debug.Log($"Bad");
-        }
-        else
-        {
-            Debug.Log($"Miss");
-        }
+
+        // 노트 제거
+        gameObject.SetActive(false);
     }
 
     public void MissNote()

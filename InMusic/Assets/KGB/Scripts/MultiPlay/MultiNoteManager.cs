@@ -54,11 +54,11 @@ public class MultiNoteManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        UpdateMeasureLines();
     }
 
     public void SetNote(BMSData bms)
     {
+        isMoving = false;
         baseScrollSpeed = 5f;
 
         if (bms != null)
@@ -177,4 +177,8 @@ public class MultiNoteManager : MonoBehaviour
 
     }
 
+    public bool TryGetNoteByIndex(int index, out Note_Multi note)
+    {
+        return notesByIndex.TryGetValue(index, out note);
+    }
 }

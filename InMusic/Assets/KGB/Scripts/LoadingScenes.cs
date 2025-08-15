@@ -19,7 +19,7 @@ public class LoadingScreen : MonoBehaviour
     private MusicData musicData;
 
     private CanvasGroup canvasGroup; // 페이드 효과를 위한 CanvasGroup
-
+    private string targetScene; // 로드할 씬 이름
     private void Awake()
     {
         if (Instance == null)
@@ -47,11 +47,13 @@ public class LoadingScreen : MonoBehaviour
 
     public void LoadScene(string sceneName) // 기본 로딩 화면
     {
+        targetScene = sceneName;
         StartCoroutine(LoadSceneProcess(sceneName, null));
     }
 
     public void LoadScene(string sceneName, MusicData data) // 플레이 씬으로 가는 로딩 화면
     {
+        targetScene = sceneName;
         StartCoroutine(LoadSceneProcess(sceneName, data));
     }
 
@@ -149,6 +151,7 @@ public class LoadingScreen : MonoBehaviour
     // 씬이 변경되면 자동으로 호출되는 함수
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.name != targetScene) return;
         //StartCoroutine(FadeOut()); // 새로운 씬에서 페이드아웃 실행
         Debug.Log("씬 로드됨");
         if (scene.name == "Single_Lobby_PSH")
@@ -159,6 +162,11 @@ public class LoadingScreen : MonoBehaviour
         else if(scene.name == "KGB_SinglePlay")
         {
             Debug.Log("플레이 씬");
+            return;
+        }
+        else if (scene.name == "Waiting_Room_PSH")
+        {
+            Debug.Log("Waiting_Room_PSH 씬");
             return;
         }
         else

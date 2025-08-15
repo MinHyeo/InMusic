@@ -6,7 +6,6 @@ public class ScrollDown_Multi : MonoBehaviour
     public float despawnYPosition = -2.0f; // 사라질 Y 위치
     public ObjectPool objectPool;
 
-    public bool isMoving = false;
 
     private bool isMultiplayer = false;
 
@@ -14,7 +13,7 @@ public class ScrollDown_Multi : MonoBehaviour
     void Start()
     {
         objectPool = GetComponentInParent<ObjectPool>();
-        scrollSpeed = NoteManager.Instance.baseScrollSpeed;
+        scrollSpeed = MultiNoteManager.Instance.baseScrollSpeed;
         note = GetComponent<Note_Multi>();
 
         isMultiplayer = (KGB_GameManager_Multi.Instance != null);
@@ -28,7 +27,7 @@ public class ScrollDown_Multi : MonoBehaviour
         {
             return;
         }
-        if (NoteManager.Instance.isMoving)
+        if (MultiNoteManager.Instance.isMoving)
         {
             MoveDown();
         }

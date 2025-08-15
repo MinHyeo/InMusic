@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -86,14 +87,24 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         maxCombo = 0;   //최대 콤보수
         combo = 0; //현재 콤포
         //LoadingScreen.Instance.SceneReady();
-
-        StartGame();
         Debug.Log("Game Initialized");
     }
 
     public void StartGame()
     {
         isGameActive = true;
+        Debug.Log("게임시작");
+        //1초 뒤 시뮬레이션도 시작
+        StartCoroutine(StartSimulationAfterDelay(1f));
+    }
+    private IEnumerator StartSimulationAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay); // delay만큼 기다림
+        if (MultiNoteManager.Instance != null)
+        {
+            Debug.Log("1초 뒤 시뮬 시작");
+            MultiNoteManager.Instance.isMoving = true;
+        }
     }
 
     public void AddScore(string judgement, int noteIndex)
@@ -137,7 +148,7 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         totalNotesPlayed++;
         accuracy = Mathf.Clamp(accuracy - accuracyPenalty, 0f, 100f);
 
-        //MultPlayManager.Instance.RPC_SendNoteJudgement(noteIndex, judgement, 1, accuracy);
+        MultPlayManager.Instance.RPC_SendNoteJudgement(noteIndex, judgement, 1, accuracy);
     }
     public void PauseGame()
     {
