@@ -42,7 +42,7 @@ namespace Play
 
         private void Start()
         {
-            //FMOD ÃÊ±âÈ­
+            //FMOD ï¿½Ê±ï¿½È­
             Init();
         }
 
@@ -53,7 +53,7 @@ namespace Play
             RuntimeManager.LoadBank("BGM");
             RuntimeManager.LoadBank("SFX");
 
-            // FMOD¿¡¼­ Bus °¡Á®¿À±â
+            // FMODï¿½ï¿½ï¿½ï¿½ Bus ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             masterBus = RuntimeManager.GetBus("bus:/");
             bgmBus = RuntimeManager.GetBus("bus:/BGM");
             sfxBus = RuntimeManager.GetBus("bus:/SFX");
@@ -78,39 +78,39 @@ namespace Play
                     break;
             }
 
-            #region º¼·ý º¯°æ È®ÀÎ Å×½ºÆ® ÄÚµå
+            #region ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½×½ï¿½Æ® ï¿½Úµï¿½
             //float masterVolume, sfxVolume, bgmVolume;
             //masterBus.getVolume(out masterVolume);
             //sfxBus.getVolume(out sfxVolume);
             //bgmBus.getVolume(out bgmVolume);
-            //Debug.Log($"master º¼·ý : {masterVolume}, SFX º¼·ý : {sfxVolume}, BGM º¼·ý : {bgmVolume}");
+            //Debug.Log($"master ï¿½ï¿½ï¿½ï¿½ : {masterVolume}, SFX ï¿½ï¿½ï¿½ï¿½ : {sfxVolume}, BGM ï¿½ï¿½ï¿½ï¿½ : {bgmVolume}");
             #endregion
         }
         #endregion
 
         #region Play Music
         /// <summary>
-        /// SoundManager ³ë·¡ ÃÊ±â¼³Á¤
+        /// SoundManager ï¿½ë·¡ ï¿½Ê±â¼³ï¿½ï¿½
         /// </summary>
         /// <param name="songName"></param>
         public void SongInit(Song songName, PlayStyle style)
         {
-            //³ë·¡ Á¦¸ñ ¹®ÀÚ¿­ º¯È¯
+            //ï¿½ë·¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ ï¿½ï¿½È¯
             string songTitle = songName.ToString();
 
-            //³ë·¡ ºÒ·¯¿À±â
-            //FMOD »óÅÂ Ã¼Å© ¹× ÃÊ±âÈ­
+            //ï¿½ë·¡ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
+            //FMOD ï¿½ï¿½ï¿½ï¿½ Ã¼Å© ï¿½ï¿½ ï¿½Ê±ï¿½È­
             if (bgmInstance.isValid())
             {
                 bgmInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 bgmInstance.release();
             }
 
-            //³ë·¡ ÀÌº¥Æ® ºÒ·¯¿À±â
+            //ï¿½ë·¡ ï¿½Ìºï¿½Æ® ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
             string bgmEventPart = "event:/BGM/" + songTitle;
             bgmInstance = RuntimeManager.CreateInstance(bgmEventPart);
 
-            //³ë·¡ ÇÏÀÌ¶óÀÌÆ® ¼³Á¤
+            //ï¿½ë·¡ ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
             if(style == PlayStyle.Highlight)
             {
                 int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000);
@@ -127,9 +127,9 @@ namespace Play
 
         #region Pause Music
         /// <summary>
-        /// ³ë·¡ ÀÏ½ÃÁ¤Áö
+        /// ï¿½ë·¡ ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
-        /// <param name="isPause">¸ØÃß°í ½ÍÀ¸¸é true</param>
+        /// <param name="isPause">ï¿½ï¿½ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ true</param>
         public void SetPause(bool isPause)
         {
             if(isPlaying == isPause)
@@ -139,7 +139,7 @@ namespace Play
             }
             else
             {
-                UnityEngine.Debug.LogError("³ë·¡ ÇÃ·¹ÀÌ »óÅÂ °ãÄ§");
+                UnityEngine.Debug.LogError("ï¿½ë·¡ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä§");
             }
         }
         #endregion
@@ -149,7 +149,7 @@ namespace Play
         {
             if (!bgmInstance.isValid())
             {
-                UnityEngine.Debug.LogError("BGM ÀÎ½ºÅÏ½º°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
+                UnityEngine.Debug.LogError("BGM ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
                 yield break;
             }
 
@@ -158,11 +158,11 @@ namespace Play
             do
             {
                 bgmInstance.getPlaybackState(out state);
-                yield return null; // ¸Å ÇÁ·¹ÀÓ¸¶´Ù È®ÀÎ
+                yield return null; // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ó¸ï¿½ï¿½ï¿½ È®ï¿½ï¿½
             } while (state != FMOD.Studio.PLAYBACK_STATE.STOPPED);
 
-            UnityEngine.Debug.Log("³ë·¡°¡ ³¡³µ½À´Ï´Ù!");
-            onComplete?.Invoke(); // ÄÝ¹é ½ÇÇà
+            UnityEngine.Debug.Log("ï¿½ë·¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½!");
+            onComplete?.Invoke(); // ï¿½Ý¹ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
         #endregion
 
@@ -172,16 +172,10 @@ namespace Play
 
             return currentPositionMs;
         }
-
-        private void OnMusicEnd()
+        
+        public void End()
         {
-            UnityEngine.Debug.Log("³ë·¡ ³¡");
-            PlayManager.Instance.End();
-        }
-
-        public void End() 
-        {
-            //bgmInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            bgmInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
 
             isPlaying = false;
         }

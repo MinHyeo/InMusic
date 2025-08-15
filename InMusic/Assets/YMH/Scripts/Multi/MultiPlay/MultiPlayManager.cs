@@ -54,29 +54,42 @@ namespace Play
         private const float missThreshold = 0.0416f;
         #endregion
 
+        #region Init
         private void Start()
         {
             var runner = NetworkManager.runnerInstance;
             runner.SetPlayerObject(runner.LocalPlayer, Object);
 
+            // 멀티플레이 게임으로 상태 변경
             GameManager.Instance.SetGameState(GameState.MultiGamePlay);
 
+            // 노래 제목, 가수 불러오기
             songName = MultiRoomManager.Instance.songName;
             artist = MultiRoomManager.Instance.artist;
 
+            // 시작 시간 계산
             double delay = 3.0f;
             double startTime = NetworkManager.runnerInstance.SimulationTime + delay;
-            Debug.Log($"Game will start at: {startTime}");
+
+            // Esc 키(나가기) 활성화
+            GameManager.Input.SetUIKeyEvent(LeaveMultiPlay);
+
+            // 죽었을 때 표시 비활성화
             deathText.SetActive(false);
+            // 게임 시작 코루틴
             StartCoroutine(CallStartGameRpcWhenReady((float)startTime));
         }
+        #endregion
 
+        #region App Quit
         private void OnApplicationQuit()
         {
             //프로그램 종료
             SoundManager.Instance.End();
         }
+        #endregion
 
+        #region Start Game
         private IEnumerator CallStartGameRpcWhenReady(float startTime)
         {
             // 네트워크 오브젝트가 완전히 초기화될 때까지 기다림
@@ -100,7 +113,7 @@ namespace Play
 
         private IEnumerator StartGameAfterDelay(float startTime)
         {
-            while(NetworkManager.runnerInstance.SimulationTime < startTime)
+            while (NetworkManager.runnerInstance.SimulationTime < startTime)
             {
                 yield return null; // Wait until the specified start time
             }
@@ -127,7 +140,9 @@ namespace Play
             videoPlay.GetVideoClip((Song)System.Enum.Parse(typeof(Song), songName));
             videoPlay.Play();
         }
+        #endregion
 
+        #region Play
         private void OnKeyPress(Define.NoteControl keyEvent)
         {
             float pressTime = Time.time;
@@ -176,7 +191,7 @@ namespace Play
             switch (accuracyResult)
             {
                 case AccuracyType.Miss:
-                    if(myHpBar.SetHp(-10))
+                    if (myHpBar.SetHp(-10))
                         deathText.SetActive(true);
                     break;
                 default:
@@ -227,7 +242,43 @@ namespace Play
                 Debug.LogError($"keyObjects[{index}]가 삭제되었거나 비활성화된 상태입니다.");
             }
         }
+        #endregion
 
+        #region Leave Multi Play
+        private void LeaveMultiPlay(Define.UIControl keyEvent)
+        {
+            // ESC 키 누르면 퇴장
+            if (keyEvent != Define.UIControl.Esc)
+                return;
+
+            // 사운드, 비디오 종료
+            SoundManager.Instance.End();
+            videoPlay.End();
+
+            // 게임 상태 변경
+            GameManager.Instance.SetGameState(GameState.MultiLobby);
+
+            // 상대에게 나갔다는 신호 보내기
+            RPC_LeaveMultiPlay();
+            
+            // 로비로 이동
+            NetworkManager.runnerInstance.LoadScene("MultiLobby");
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        private void RPC_LeaveMultiPlay(RpcInfo info = default)
+        {
+            if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
+            {
+                return;
+            }
+
+            // 상대에게 나갔다는 신호 보내기
+            matchController.OnPlayerLeft();
+        }
+        #endregion
+
+        #region End
         private void End()
         {
             Debug.Log("Game Ended");
@@ -236,8 +287,12 @@ namespace Play
             SoundManager.Instance.End();
             videoPlay.End();
             TimelineController.Instance.RemoveJudgementLine();
+            GameManager.Instance.SetGameState(GameState.MultiRoom);
+
+            // 결과 처리
             ScoreData[] scoreDatas = MultiScoreComparison.Instance.SetScore(songName.ToString(), artist);
             Result.MultiResultManager.Instance.ReceiveResult(scoreDatas);
         }
+        #endregion
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 namespace Play
 {
@@ -9,6 +10,9 @@ namespace Play
         private HpBar matchHpBar;
         [SerializeField]
         private GameObject DeathPanel;
+        [SerializeField]
+        private GameObject leftText;
+
         private bool isDead = false;
 
         [Header("Key Effects")]
@@ -18,6 +22,7 @@ namespace Play
         private void Start()
         {
             DeathPanel.SetActive(false);
+            leftText.SetActive(false);
         }
 
         public void ShowKeyEffect(int channel, AccuracyType accuracyType, float percent, int noteId)
@@ -51,6 +56,11 @@ namespace Play
 
                 DeathPanel.SetActive(true);
             }
+        }
+
+        public void OnPlayerLeft()
+        {
+            leftText.SetActive(true);
         }
     }    
 }
