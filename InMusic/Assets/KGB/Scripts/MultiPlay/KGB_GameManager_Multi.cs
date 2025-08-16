@@ -26,8 +26,13 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
     public float maxHP = 100;
 
     public bool isGameActive = false; // 게임 상태
+    private string curJudgement;
 
     BMSManager bmsManager;
+
+    public PlayUI playUI;
+    public PlayUI_Multi playUI_Multi;
+    public ScoreBoardUI scoreBoardUI;
 
     void Awake()
     {
@@ -80,6 +85,7 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         totalScore = 0;
         totalNotesPlayed = 0;
         accuracy = 100f; // 초기 정확도
+        curHP = maxHP;
         greatCount = 0; //Great 횟수
         goodCount = 0;  //Good 횟수
         badCount = 0;   //bad 획수
@@ -95,7 +101,7 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         isGameActive = true;
         Debug.Log("게임시작");
         //1초 뒤 시뮬레이션도 시작
-        StartCoroutine(StartSimulationAfterDelay(1f));
+        StartCoroutine(StartSimulationAfterDelay(0.5f));
     }
     private IEnumerator StartSimulationAfterDelay(float delay)
     {
@@ -137,18 +143,23 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
                 curHP -= 10f;
                 combo = 0;
                 missCount++;
+                playUI.UpdatePlayUI();
                 break;
         }
-        //playUI.JudgeTextUpdate(judgement);
+        playUI.JudgeTextUpdate(judgement);
+        curJudgement = judgement;
         if (combo > maxCombo)
             maxCombo = combo;
 
-        //playUI.UpdatePlayUI();
+        playUI.UpdatePlayUI();
         totalScore += scoreToAdd;
         totalNotesPlayed++;
         accuracy = Mathf.Clamp(accuracy - accuracyPenalty, 0f, 100f);
 
-        MultPlayManager.Instance.RPC_SendNoteJudgement(noteIndex, judgement, 1, accuracy);
+
+        scoreBoardUI.UpdateScoreBoard_p1();
+        MultPlayManager.Instance.RPC_SendNoteJudgement(noteIndex, 1, accuracy, curHP, totalScore, combo, missCount, judgement);
+        //MultPlayManager.Instance.RPC_SendScoreData(curHP, totalScore, accuracy, combo, missCount, judgement);
     }
     public void PauseGame()
     {
@@ -163,6 +174,13 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
     public void StartMusic()
     {
     }
+
+    public ScoreData GetScoreData()
+    {
+        ScoreData scoreData = new ScoreData(curHP, totalScore, accuracy, combo, missCount, curJudgement);
+        return scoreData;
+    }
+
 
 
     // ====== 인터페이스 구현 ======

@@ -29,7 +29,7 @@ public class MultPlayManager : NetworkBehaviour
 
     // 판정 정보를 상대에게 보내는 RPC
     [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_SendNoteJudgement(int noteId, string judgement, int keyIndex, float percent, RpcInfo info = default)
+    public void RPC_SendNoteJudgement(int noteId, int keyIndex, float percent, float curHp, float totalScore, int combo, int missCount, string judgement, RpcInfo info = default)
     {
         // 내가 보낸 메시지는 무시
         Debug.Log($"[RPC]노트 판정 보냄: noteId={noteId} , judgement={judgement}, key={keyIndex}, percent={percent}");
@@ -50,15 +50,17 @@ public class MultPlayManager : NetworkBehaviour
         if (multiNoteManager.TryGetNoteByIndex(noteId, out Note_Multi note))
         {
             // 판정에 맞는 처리
-            note.JudgmentSimulateNote(judgement, percent);
+            //note.JudgmentSimulateNote(judgement, percent);
+            MultiNoteManager.Instance.InsertJudgement(noteId, judgement, keyIndex, percent);
+            MultiNoteManager.Instance.InsertScoreData(noteId, percent, curHp, totalScore, combo, missCount, judgement);
         }
         else
         {
             Debug.LogWarning($"[RPC] 해당 noteId({noteId})를 찾을 수 없습니다.");
         }
-
-
     }
+
+
 
 
 }

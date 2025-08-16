@@ -151,7 +151,6 @@ MonoBehaviour:
   scrollSpeed: 5
   despawnYPosition: -2
   objectPool: {fileID: 0}
-  isMoving: 0
 --- !u!114 &1989993249150701191
 MonoBehaviour:
   m_ObjectHideFlags: 0

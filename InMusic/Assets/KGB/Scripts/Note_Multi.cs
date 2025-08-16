@@ -12,7 +12,7 @@ public class Note_Multi : MonoBehaviour
     public int index = -1;
     public Transform line;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-
+    private bool isChecked = false; // 중복 호출 방지
     private void Awake()
     {
         noteIndex = -1;
@@ -28,10 +28,20 @@ public class Note_Multi : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
+        if (isChecked) return;
 
+        // 노트가 라인보다 밑으로 내려갔는지 체크
+        if (transform.position.y < line.position.y)
+        {
+            isChecked = true;
+
+            // 판정 요청
+            MultiNoteManager.Instance.OutJudgement(noteIndex);
+
+            Debug.Log($"[Note_Multi] noteId={noteIndex} 라인을 지나감 → OutJudgement 실행");
+        }
     }
 
     public int noteIndex
@@ -66,5 +76,6 @@ public class Note_Multi : MonoBehaviour
     public void MissNote()
     {
         Debug.Log($"Miss");
+        gameObject.SetActive(false);
     }
 }

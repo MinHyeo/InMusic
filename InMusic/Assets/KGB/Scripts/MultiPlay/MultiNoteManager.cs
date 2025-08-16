@@ -32,6 +32,9 @@ public class MultiNoteManager : MonoBehaviour
 
     private Dictionary<int, Note_Multi> notesByIndex = new Dictionary<int, Note_Multi>();
 
+    // noteId 기준 판정 저장소
+    private Dictionary<int, JudgementData> judgementDict = new Dictionary<int, JudgementData>();
+    private Dictionary<int, ScoreData> scoreDataDict = new Dictionary<int, ScoreData>();
     public static MultiNoteManager Instance { get; private set; }
 
     void Awake()
@@ -181,4 +184,37 @@ public class MultiNoteManager : MonoBehaviour
     {
         return notesByIndex.TryGetValue(index, out note);
     }
+
+
+    public void InsertJudgement(int noteId, string judgement, int keyIndex, float percent)
+    {
+        judgementDict[noteId] = new JudgementData(noteId, judgement, keyIndex, percent);
+        Debug.Log($"[MultiNoteManager] 판정 등록: noteId={noteId}, {judgement}, key={keyIndex}, percent={percent}");
+    }
+    public void InsertScoreData(int noteId, float percent, float curHp, float totalScore, int combo, int missCount, string judgement)
+    {
+        scoreDataDict[noteId] = new ScoreData(curHp, totalScore, percent, combo, missCount, judgement);
+    }
+
+    public void OutJudgement(int noteId)
+    {
+        if (!judgementDict.TryGetValue(noteId, out JudgementData data))
+        {
+            Debug.LogWarning($"[MultiNoteManager] noteId={noteId}에 대한 판정 데이터가 없습니다.");
+            return;
+        }
+        if (!notesByIndex.TryGetValue(noteId, out Note_Multi note))
+        {
+            Debug.LogWarning($"[MultiNoteManager] noteId={noteId}에 해당하는 노트를 찾을 수 없습니다.");
+            return;
+        }
+
+        
+        note.JudgmentSimulateNote(data.judgement, data.percent);
+        KGB_GameManager_Multi.Instance.playUI_Multi.UpdatePlayUI_Multi(scoreDataDict[noteId]);
+        KGB_GameManager_Multi.Instance.scoreBoardUI.UpdateScoreBoard_p2(scoreDataDict[noteId]);
+
+        judgementDict.Remove(noteId);
+    }
+
 }
