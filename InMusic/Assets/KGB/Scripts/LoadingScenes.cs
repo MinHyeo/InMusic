@@ -169,6 +169,11 @@ public class LoadingScreen : MonoBehaviour
             Debug.Log("Waiting_Room_PSH æ¿");
             return;
         }
+        else if(scene.name == "KGB_MultiPlay")
+        {
+            Debug.Log("KGB_MultiPlay æ¿");
+            return;
+        }
         else
         {
             Debug.Log("πŸ∑Œ æ¿ ¡ÿ∫Ò ≥°");

@@ -83,6 +83,7 @@ public class PlayerRespawner : MonoBehaviour, INetworkRunnerCallbacks
         if (IsP1Loaded && IsP2Loaded) {
             Debug.Log("모든 플레이어 로드 완료");
             KGB_GameManager_Multi.Instance.StartGame();
+            LoadingScreen.Instance.SceneReady();
         }
     }
 }
