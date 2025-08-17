@@ -46,7 +46,7 @@ public class PlayerInfo : NetworkBehaviour
         IsReady = false;
     }
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.InputAuthority)]
     public void Rpc_CheckLoad()
     {
         GameObject gamePlayeySceneRespawner= GameObject.Find("PlayerRespawner");

@@ -1,3 +1,4 @@
+using Fusion;
 using System.Collections;
 using System.IO;
 using System.Threading.Tasks;
@@ -107,7 +108,10 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         combo = 0; //현재 콤포
         //LoadingScreen.Instance.SceneReady();
         Debug.Log("Game Initialized");
+
+        StartCoroutine(Ready());
     }
+
 
     public void StartGame()
     {
@@ -220,7 +224,12 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         return scoreData;
     }
 
-
+    public IEnumerator Ready()
+    {
+        Debug.Log("레디 기다리는중");
+        yield return new WaitUntil(() => MultPlayManager.Instance != null);
+        MultPlayManager.Instance.RPC_CheckReady();
+    }
 
 
     // ====== 인터페이스 구현 ======

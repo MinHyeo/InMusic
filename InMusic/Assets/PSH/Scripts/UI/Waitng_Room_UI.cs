@@ -189,9 +189,11 @@ public class Waiting_Room_UI : UI_Base_PSH
         {
             case "Up":
                 mList.ScrollUp();
+                SetBMS();
                 break;
             case "Down":
                 mList.ScrollDown();
+                SetBMS();
                 break;
             case "Exit":
                 GameManager_PSH.PlayerRole = false;

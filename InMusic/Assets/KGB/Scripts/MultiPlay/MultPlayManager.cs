@@ -5,6 +5,8 @@ public class MultPlayManager : NetworkBehaviour
 {
     public static MultPlayManager Instance { get; private set; }
 
+    public bool p1_ready = false;
+    public bool p2_ready = false;
     private void Awake()
     {
         // 싱글톤 초기화 (중복 방지)
@@ -58,6 +60,46 @@ public class MultPlayManager : NetworkBehaviour
         {
             Debug.LogWarning($"[RPC] 해당 noteId({noteId})를 찾을 수 없습니다.");
         }
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_CheckReady(RpcInfo info = default)
+    {
+        
+        // 내가 보낸 메시지는 무시
+        if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
+        {
+            Debug.Log("레디 체크 보냄");
+            p1_ready = true;
+            if (p1_ready && p2_ready)
+            {
+                Debug.Log("둘다 레디 체크함");
+                RPC_GameStart();
+            }
+
+            return;
+        }
+        else
+        {
+            p2_ready = true;
+            Debug.Log("상대 레디 체크 받음");
+        }
+
+
+        if (p1_ready && p2_ready&& info.Source == NetworkManager.runnerInstance.LocalPlayer)
+        {
+            Debug.Log("둘다 레디 체크함");
+            RPC_GameStart();
+        }
+
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_GameStart(RpcInfo info = default)
+    {
+        KGB_GameManager_Multi.Instance.StartGame();
+        Debug.Log("게임시작 RPC");
+
     }
 
 
