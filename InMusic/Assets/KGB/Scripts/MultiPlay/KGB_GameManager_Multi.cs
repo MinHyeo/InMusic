@@ -1,5 +1,6 @@
 using System.Collections;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +10,7 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
     public static KGB_GameManager_Multi Instance { get; private set; }
 
     [SerializeField] BMSData testBMS; //테스트용으로 폴더에서 드래그로 할당해서 쓰는 중
+    [SerializeField] BMSData curBMS; //테스트용으로 폴더에서 드래그로 할당해서 쓰는 중
 
     public int totalNotes; // 총 노트 개수
     private float maxScorePerNote; // 노트 하나당 최대 점수
@@ -33,6 +35,7 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
     public PlayUI playUI;
     public PlayUI_Multi playUI_Multi;
     public ScoreBoardUI scoreBoardUI;
+    public PlayManager playManager;
 
     void Awake()
     {
@@ -61,24 +64,34 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
     public void SetBMS()
     {
         //testBMS = GameManager_PSH.Instance.GetComponent<MusicData>().BMS; //나중에 씬 연결되면 선택된 곡 BMS 가져오기
-
-        string fileName = "Music/Heya2/HeyaBMS";
-        testBMS = bmsManager.ParseBMS(fileName);
-        if (testBMS != null)
+        curBMS = GameManager_PSH.Instance.GetComponent<MusicData>().BMS;
+        //string fileName = "Music/Heya2/HeyaBMS";
+        //testBMS = bmsManager.ParseBMS(fileName);
+        if (curBMS != null)
         {
-            NoteManager.Instance.SetNote(testBMS);
-            MultiNoteManager.Instance.SetNote(testBMS);
+            playManager = GetComponent<PlayManager>();
+            playManager.SetResources(); // 노래 리소스 세팅
+            NoteManager.Instance.SetNote(curBMS);
+            MultiNoteManager.Instance.SetNote(curBMS);
             Debug.Log("BMS 데이터 할당 완료");
         }
         else
         {
-            Debug.LogError("BMS 데이터 파싱 실패");
+            Debug.LogError("BMS 데이터 할당 실패");
         }
 
     }
 
     public void InitializeGame()
     {
+        if (playManager.musicSound.clip.loadState == AudioDataLoadState.Unloaded)
+        {
+            playManager.musicSound.clip.LoadAudioData(); // 오디오 데이터를 미리 로드
+        }
+        if (playManager.videoPlayer.clip != null)
+        {
+            playManager.videoPlayer.Prepare();
+        }
         // 초기화 (노트 데이터 가져오기)
         totalNotes = NoteManager.Instance.totalNotes; // NoteManager에서 총 노트 수 가져오기
         maxScorePerNote = 1000000f / totalNotes; // 노트 하나당 최대 점수 계산
@@ -124,18 +137,21 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
                 accuracyPenalty = 0f;
                 combo++;
                 greatCount++;
+                playManager.hitSound.Play();
                 break;
             case "Good":
                 scoreToAdd = maxScorePerNote * 0.8f;
                 accuracyPenalty = 20f / totalNotes;
                 combo++;
                 goodCount++;
+                playManager.hitSound.Play();
                 break;
             case "Bad":
                 scoreToAdd = maxScorePerNote * 0.5f;
                 accuracyPenalty = 50f / totalNotes;
                 combo++;
                 badCount++;
+                playManager.hitSound.Play();
                 break;
             case "Miss":
                 scoreToAdd = 0;
@@ -160,6 +176,13 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         scoreBoardUI.UpdateScoreBoard_p1();
         MultPlayManager.Instance.RPC_SendNoteJudgement(noteIndex, 1, accuracy, curHP, totalScore, combo, missCount, judgement);
         //MultPlayManager.Instance.RPC_SendScoreData(curHP, totalScore, accuracy, combo, missCount, judgement);
+        // 마지막 노트에서 점수 조정
+        if (totalNotesPlayed == totalNotes)
+        {
+            totalScore = Mathf.Round(totalScore); // 최종 점수 반올림
+            accuracy = Mathf.Round(accuracy * 100f) / 100f;
+            EndGame();
+        }
     }
     public void PauseGame()
     {
@@ -173,6 +196,22 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
 
     public void StartMusic()
     {
+        if (playManager.videoPlayer.clip != null)
+            playManager.videoPlayer.Play();
+        playManager.musicSound.Play();
+    }
+    void EndGame()
+    {
+        isGameActive = false;
+        playManager.musicSound.Stop();
+        playUI.countText.text = "End";
+        EndingGame();
+    }
+    private async void EndingGame()
+    {
+        await Task.Delay(3000);
+        //결과창 띄우기
+
     }
 
     public ScoreData GetScoreData()
@@ -180,6 +219,7 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         ScoreData scoreData = new ScoreData(curHP, totalScore, accuracy, combo, missCount, curJudgement);
         return scoreData;
     }
+
 
 
 

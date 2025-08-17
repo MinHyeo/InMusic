@@ -37,6 +37,8 @@ public class MultiNoteManager : MonoBehaviour
     private Dictionary<int, ScoreData> scoreDataDict = new Dictionary<int, ScoreData>();
     public static MultiNoteManager Instance { get; private set; }
 
+
+
     void Awake()
     {
         // 싱글톤 인스턴스 설정
@@ -51,7 +53,6 @@ public class MultiNoteManager : MonoBehaviour
     }
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -118,9 +119,9 @@ public class MultiNoteManager : MonoBehaviour
                     if (noteID == "02")
                     {
                         // "02"일 때 프리팹 생성 //노래를 시작시키는 투명노트
-                        GameObject specialNote = Instantiate(songStartNote, new Vector3(xPosition, yPosition - 1f, 0), Quaternion.identity, spawnArea);
-                        specialNote.GetComponent<ScrollDown_Multi>().SetScrollSpeed(baseScrollSpeed);
-                        specialNote.SetActive(true);
+                        //GameObject specialNote = Instantiate(songStartNote, new Vector3(xPosition, yPosition - 1f, 0), Quaternion.identity, spawnArea);
+                        //specialNote.GetComponent<ScrollDown_Multi>().SetScrollSpeed(baseScrollSpeed);
+                        //specialNote.SetActive(true);
                     }
                     else
                     {
