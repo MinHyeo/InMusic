@@ -249,7 +249,7 @@ public class Waiting_Room_UI : UI_Base_PSH
                 break;
             case "Enter":
                 OnReadyButton();
-                if (!canStart || !isOwner)
+                if (!canStart)
                     return;
 
                 Debug.Log("게임 시작");
@@ -277,6 +277,9 @@ public class Waiting_Room_UI : UI_Base_PSH
     }
     void OnReadyButton()
     {
+        if (canStart) {
+            return;
+        }
         NetworkObject localPlayerObject = NetworkManager.runnerInstance.GetPlayerObject(NetworkManager.runnerInstance.LocalPlayer);
         if (localPlayerObject != null)
         {
@@ -336,22 +339,25 @@ public class Waiting_Room_UI : UI_Base_PSH
             playerStatusController.SetRoomOwner(you.IsOwner);
         }
 
+        if (you.IsReady && me.IsReady)
+        {
+            canStart = true;
+            startButtonColor.sprite = startButtonTrue;
+        }
+        else
+        {
+            canStart = false;
+            startButtonColor.sprite = startButtonFalse;
+        }
+
         if (isOwner) {
             InitOwnerReadyButton();
-            if (you.IsReady && me.IsReady) {
-                canStart = true;
-                startButtonColor.sprite = startButtonTrue;
-            }
-            else
-            {
-                canStart = false;
-                startButtonColor.sprite = startButtonFalse;
-            }
         }
         else
         {
             InitClintReadyButton();
         }
+
     }
 
     public void SetOwner(bool isP1) {
