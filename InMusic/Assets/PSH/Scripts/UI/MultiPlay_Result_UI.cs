@@ -36,6 +36,9 @@ public class MultiPlay_Result_UI : MonoBehaviour
         else {
             InitClient();
         }
+        //Notice: 변경 예정
+        pResult.SetP1Name("p1");
+        pResult.SetP2Name("p2");
     }
 
     public void NextButton()
@@ -53,6 +56,7 @@ public class MultiPlay_Result_UI : MonoBehaviour
 
         //세션 종료 및 방 목록 로비로 이동
         NetworkManager.runnerInstance.Shutdown();
+        GameManager_PSH.PlayerRole = false;
         LoadingScreen.Instance.LoadScene("KGB_Multi_Lobby");
     }
 
@@ -85,6 +89,7 @@ public class MultiPlay_Result_UI : MonoBehaviour
     void InitHost() {
         playResult1data = new PlayResultData
         {
+            /*
             Score = (int)GameManagerProvider.Instance.TotalScore,
             Great = GameManagerProvider.Instance.GreatCount,
             Good = GameManagerProvider.Instance.GoodCount,
@@ -93,9 +98,32 @@ public class MultiPlay_Result_UI : MonoBehaviour
             Accuracy = GameManagerProvider.Instance.Accuracy,
             Combo = GameManagerProvider.Instance.MaxCombo,
             Rank = (float)GameManagerProvider.Instance.TotalScore / 1000000f * 100f,
-            FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)
+            FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)*/
+
+            //Notice: 임시
+            Score = 1,
+            Great = 1,
+            Good = 1,
+            Bad = 1,
+            Miss = 1,
+            Accuracy = 1,
+            Combo = 1,
+            Rank = 1.1f,
+            FullCombo = true
         };
         //TODO: P2 정보 가져오기
+        playResult2data = new PlayResultData
+        {
+            Score = 0,
+            Great = 0,
+            Good = 0,
+            Bad = 0,
+            Miss = 0,
+            Accuracy = 0,
+            Combo = 0,
+            Rank = 0.0f,
+            FullCombo = false
+        };
 
         CheckWinner();
         ShowP1ResulltButton();
@@ -103,7 +131,7 @@ public class MultiPlay_Result_UI : MonoBehaviour
 
     void InitClient() {
         playResult2data = new PlayResultData
-        {
+        {/*
             Score = (int)GameManagerProvider.Instance.TotalScore,
             Great = GameManagerProvider.Instance.GreatCount,
             Good = GameManagerProvider.Instance.GoodCount,
@@ -112,12 +140,47 @@ public class MultiPlay_Result_UI : MonoBehaviour
             Accuracy = GameManagerProvider.Instance.Accuracy,
             Combo = GameManagerProvider.Instance.MaxCombo,
             Rank = (float)GameManagerProvider.Instance.TotalScore / 1000000f * 100f,
-            FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)
+            FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)*/
+
+            //Notice: 임시
+            Score = 1,
+            Great = 1,
+            Good = 1,
+            Bad = 1,
+            Miss = 1,
+            Accuracy = 1,
+            Combo = 1,
+            Rank = 1.1f,
+            FullCombo = true
         };
         //TODO: P1 정보 가져오기
+        playResult1data = new PlayResultData
+        {
+            Score = (int)0,
+            Great = 0,
+            Good = 0,
+            Bad = 0,
+            Miss = 0,
+            Accuracy = 0,
+            Combo = 0,
+            Rank = 0.0f,
+            FullCombo = false
+        };
 
         CheckWinner();
         ShowP2ResulltButton();
+    }
+
+    void CheckWinner()
+    {
+        if (playResult1data.Score >= playResult2data.Score)
+        {
+            pResult.SetP1Win();
+        }
+        else
+        {
+            pResult.SetP2Win();
+        }
     }
 
     void CheckRank(int score, bool isFullCombo)
@@ -139,17 +202,5 @@ public class MultiPlay_Result_UI : MonoBehaviour
             rate.colorGradientPreset = rateColor;
         }
         return;
-    }
-
-    void CheckWinner()
-    {
-        if (playResult1data.Score >= playResult2data.Score)
-        {
-            pResult.SetP1Win();
-        }
-        else
-        {
-            pResult.SetP2Win();
-        }
     }
 }
