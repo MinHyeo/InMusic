@@ -26,15 +26,12 @@ public class PlayerRespawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        if (SceneManager.GetActiveScene().name == "KGB_MultiPlay")
+        Debug.Log("게임 씬 로딩 완료!");
+        if (runner.GetPlayerObject(runner.LocalPlayer) == null)
         {
-            Debug.Log("게임 씬 로딩 완료!");
-
-            if (runner.GetPlayerObject(runner.LocalPlayer) == null)
-            {
-                NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, runner.LocalPlayer);
-                runner.SetPlayerObject(runner.LocalPlayer, playerObject);
-            }
+            NetworkObject playerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, runner.LocalPlayer);
+            runner.SetPlayerObject(runner.LocalPlayer, playerObject);
+            //DontDestroyOnLoad(playerObject);
         }
     }
 

@@ -54,6 +54,7 @@ public class PlayerInfo : NetworkBehaviour
             Debug.Log("현재 다른 씬");
             return;
         }
+        Debug.Log("게임 플레이 씬");
         gamePlayeySceneRespawner.GetComponent<PlayerRespawner>().CheckPlayerLoad();
     }
 

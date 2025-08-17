@@ -92,53 +92,6 @@ public class Waiting_Room_UI : UI_Base_PSH
         canStart = false;
     }
 
-
-    /// <summary>
-    /// 데이터를 입력하는 입장에서 봐야함
-    /// </summary>
-    /// <param name="info"></param>
-    /// <param name="isLocal"></param>
-    void UpdatePlayerStatusUI(PlayerInfo info, bool isLocal)
-    {
-
-        //방장 기준
-        if (info.IsOwner)
-        {
-            //P1 칸에 자신 정보 입력
-            if (isLocal)
-            {
-                playerStatusController.SetPlayerName(0, info.PlayerName.ToString());
-                playerStatusController.SetRoomOwner(true);
-                playerStatusController.SetPlayerStatus(0, false, true); // 준비 상태 설정
-                playerStatusController.SetPlayerMark(true);
-            }
-            //P2 칸에 상대방 정보 입력
-            else
-            {
-                playerStatusController.SetPlayerName(1, info.PlayerName.ToString());
-                playerStatusController.SetPlayerStatus(1, false, false);
-            }
-        }
-        //상대방 기준
-        else
-        {
-            //P2칸에 자신 정보 입력
-            if (isLocal)
-            {
-                playerStatusController.SetPlayerName(1, info.PlayerName.ToString());
-                playerStatusController.SetPlayerStatus(1, false, false);
-                playerStatusController.SetPlayerMark(false);
-            }
-            //P1칸에 상대방(방장) 정보 입력
-            else
-            {
-                playerStatusController.SetPlayerName(0, info.PlayerName.ToString());
-                playerStatusController.SetRoomOwner(true);
-                playerStatusController.SetPlayerStatus(0, false, true);
-            }
-        }
-    }
-
     void Update()
     {
         if (mList.IsScrolling ||  localPlayerObject  == null || !localPlayerObject.GetComponent<PlayerInfo>().IsOwner || 
@@ -163,7 +116,7 @@ public class Waiting_Room_UI : UI_Base_PSH
         //Enter
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            localPlayerObject.GetComponent<PlayerUIController>().BroadGameStart();
+            ButtonEvent("Enter");
         }
     }
 
@@ -248,26 +201,13 @@ public class Waiting_Room_UI : UI_Base_PSH
                 SceneManager.LoadScene(3); //추후 로비씬으로 바꾸기
                 break;
             case "Enter":
-                OnReadyButton();
-                if (!canStart)
-                    return;
-                if (isOwner) {
-                    localPlayerObject.GetComponent<PlayerUIController>().Rpc_GameSet();
-                }
 
+                OnReadyButton();
+                if (!canStart || !isOwner)
+                    return;
                 Debug.Log("게임 시작");
-                if (curMusicItem.GetComponent<MusicItem>().HasBMS)
-                {
-                    GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-                    GameManager_PSH.Data.SetData(curMusicItem.GetComponent<MusicItem>());
-                    //게임 시작
-                    localPlayerObject.GetComponent<PlayerUIController>().BroadGameStart();
-                }
-                else
-                {
-                    //popupUI = GameManager_PSH.Resource.Instantiate("Notice_UI");
-                    Debug.Log("BMS 파일이 없는 곡");
-                }
+                localPlayerObject.GetComponent<PlayerUIController>().BroadGameStart();
+
                 break;
             case "KeyGuide":
                 Guide();
@@ -279,10 +219,6 @@ public class Waiting_Room_UI : UI_Base_PSH
     }
     void OnReadyButton()
     {
-        if (canStart) {
-            return;
-        }
-
         NetworkObject localPlayerObject = NetworkManager.runnerInstance.GetPlayerObject(NetworkManager.runnerInstance.LocalPlayer);
         if (localPlayerObject != null)
         {
@@ -320,6 +256,21 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
     }
 
+    public void SetBMS() {
+        if (curMusicItem.GetComponent<MusicItem>().HasBMS)
+        {
+            GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
+            GameManager_PSH.Data.SetData(curMusicItem.GetComponent<MusicItem>());
+            //게임 시작
+            Debug.Log("BMS 할당 완료");
+        }
+        else
+        {
+            //popupUI = GameManager_PSH.Resource.Instantiate("Notice_UI");
+            Debug.Log("BMS 파일이 없는 곡");
+        }
+    }
+
     public void UpdateAllPlayerStatus()
     {
         PlayerInfo me = localPlayerObject.GetComponent<PlayerInfo>();
@@ -346,12 +297,10 @@ public class Waiting_Room_UI : UI_Base_PSH
         {
             canStart = true;
             Debug.Log("시작 가능");
-            startButtonColor.sprite = startButtonTrue;
         }
         else
         {
             canStart = false;
-            startButtonColor.sprite = startButtonFalse;
         }
 
         if (isOwner) {
@@ -361,7 +310,6 @@ public class Waiting_Room_UI : UI_Base_PSH
         {
             InitClintReadyButton();
         }
-
     }
 
     public void SetOwner(bool isP1) {
@@ -419,14 +367,20 @@ public class Waiting_Room_UI : UI_Base_PSH
     }
 
     void InitOwnerReadyButton() {
-        startButtonColor.sprite = startButtonFalse;
         startButtonName.text = "start";
+        if (canStart) {
+            startButtonColor.sprite = startButtonTrue;
+        }
+        else
+        {
+            startButtonColor.sprite = startButtonFalse;
+        }
 
     }
 
     void InitClintReadyButton() {
-        startButtonColor.sprite = startButtonTrue;
         startButtonName.text = "ready";
+        startButtonColor.sprite = startButtonTrue;
     }
     #endregion
 }
