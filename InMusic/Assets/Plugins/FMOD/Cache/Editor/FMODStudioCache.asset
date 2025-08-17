@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8343500085272235018
+--- !u!114 &-8021027965930559793
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10,16 +10,44 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/BGM/Sticky
+  m_Name: event:/BGM/Heya
   m_EditorClassIdentifier: 
-  Path: event:/BGM/Sticky
+  Path: event:/BGM/Heya
   Guid:
-    Data1: -36001128
-    Data2: 1170532226
-    Data3: -164994167
-    Data4: -1632466723
+    Data1: -1059381650
+    Data2: 1196767734
+    Data3: 1913780922
+    Data4: 779490037
   Banks:
-  - {fileID: -1542941709067739055}
+  - {fileID: -1793632156551993023}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 5347593727367080931}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 189846
+--- !u!114 &-5845645022740480420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Klaxon
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/Klaxon
+  Guid:
+    Data1: 1255468108
+    Data2: 1208282549
+    Data3: 565847981
+    Data4: 359258207
+  Banks:
+  - {fileID: -1793632156551993023}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
@@ -27,7 +55,61 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &-7411467638551936653
+--- !u!114 &-4141936480949776611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/cjtaksskadmsrPghlreofhehlwldksgdk
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/cjtaksskadmsrPghlreofhehlwldksgdk
+  Guid:
+    Data1: 1687024633
+    Data2: 1207689756
+    Data3: 794416054
+    Data4: -822886691
+  Banks:
+  - {fileID: -1793632156551993023}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-2026385379951559830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/BubbleGum
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/BubbleGum
+  Guid:
+    Data1: -1708397504
+    Data2: 1298004118
+    Data3: 1386161543
+    Data4: -1300924601
+  Banks:
+  - {fileID: -1793632156551993023}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-1793632156551993023
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -37,17 +119,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/SFX.bank
+  m_Name: bank:/BGM.bank
   m_EditorClassIdentifier: 
-  Path: FMOD/InMusic/Build/Desktop/SFX.bank
-  Name: SFX
-  StudioPath: bank:/SFX
-  lastModified: 638759326271270664
+  Path: FMOD/InMusic/Build/Desktop/BGM.bank
+  Name: BGM
+  StudioPath: bank:/BGM
+  lastModified: 638900380616796465
   FileSizes:
   - Name: Desktop
-    Value: 494
+    Value: 25110048
   Exists: 1
---- !u!114 &-6553756030416500213
+--- !u!114 &-973457262210440787
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -57,17 +139,154 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Master.bank
+  m_Name: bank:/Master.strings.bank
   m_EditorClassIdentifier: 
-  Path: FMOD/InMusic/Build/Desktop/Master.bank
-  Name: Master
-  StudioPath: bank:/Master
-  lastModified: 638759861905885264
+  Path: FMOD/InMusic/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638900380616851662
   FileSizes:
   - Name: Desktop
-    Value: 1260
+    Value: 1360
   Exists: 1
---- !u!114 &-4750287494510488090
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32cf7c32a3ed8347bac48ef5ed56d82, type: 3}
+  m_Name: FMODStudioCache
+  m_EditorClassIdentifier: 
+  EditorBanks:
+  - {fileID: -973457262210440787}
+  - {fileID: -1793632156551993023}
+  - {fileID: 6930437500590990105}
+  - {fileID: 7168812128880830652}
+  EditorEvents:
+  - {fileID: 5002624731780801831}
+  - {fileID: -2026385379951559830}
+  - {fileID: -5845645022740480420}
+  - {fileID: -8021027965930559793}
+  - {fileID: 8769999848961162749}
+  - {fileID: 6208519690172605979}
+  - {fileID: 128956516902512484}
+  - {fileID: 6087317005332956555}
+  - {fileID: 3449742824335871340}
+  - {fileID: -4141936480949776611}
+  EditorParameters: []
+  MasterBanks:
+  - {fileID: 6930437500590990105}
+  StringsBanks:
+  - {fileID: -973457262210440787}
+  cacheVersion: 131849
+  cacheTime: 638900380616891680
+  SerializableEventsDict:
+  - key: event:/BGM/Armageddon
+    index: 0
+  - key: event:/BGM/BubbleGum
+    index: 1
+  - key: event:/BGM/Klaxon
+    index: 2
+  - key: event:/BGM/Heya
+    index: 3
+  - key: event:/BGM/Sticky
+    index: 4
+  - key: event:/BGM/HotSweet
+    index: 5
+  - key: event:/BGM/SksmsdkvmsrjsEkrwlftordlslRk
+    index: 6
+  - key: event:/BGM/Magnetic
+    index: 7
+  - key: event:/BGM/Supernova
+    index: 8
+  - key: event:/BGM/cjtaksskadmsrPghlreofhehlwldksgdk
+    index: 9
+--- !u!114 &128956516902512484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/SksmsdkvmsrjsEkrwlftordlslRk
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/SksmsdkvmsrjsEkrwlftordlslRk
+  Guid:
+    Data1: 332357044
+    Data2: 1227446811
+    Data3: 629375892
+    Data4: 1396841440
+  Banks:
+  - {fileID: -1793632156551993023}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &3449742824335871340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Supernova
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/Supernova
+  Guid:
+    Data1: -392076566
+    Data2: 1302274831
+    Data3: -1887188849
+    Data4: 1627706227
+  Banks:
+  - {fileID: -1793632156551993023}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &5002624731780801831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BGM/Armageddon
+  m_EditorClassIdentifier: 
+  Path: event:/BGM/Armageddon
+  Guid:
+    Data1: 673150994
+    Data2: 1194093237
+    Data3: -1907635559
+    Data4: 822465114
+  Banks:
+  - {fileID: -1793632156551993023}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &5347593727367080931
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,7 +310,7 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
---- !u!114 &-3208877479042088435
+--- !u!114 &6087317005332956555
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,7 +329,7 @@ MonoBehaviour:
     Data3: -1397852536
     Data4: -1512409820
   Banks:
-  - {fileID: -1542941709067739055}
+  - {fileID: -1793632156551993023}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
@@ -118,54 +337,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &-2938269522948305550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Master.strings.bank
-  m_EditorClassIdentifier: 
-  Path: FMOD/InMusic/Build/Desktop/Master.strings.bank
-  Name: Master.strings
-  StudioPath: bank:/Master.strings
-  lastModified: 638759861905905495
-  FileSizes:
-  - Name: Desktop
-    Value: 1348
-  Exists: 1
---- !u!114 &-2781576558202859501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/BGM/BubbleGum
-  m_EditorClassIdentifier: 
-  Path: event:/BGM/BubbleGum
-  Guid:
-    Data1: -1708397504
-    Data2: 1298004118
-    Data3: 1386161543
-    Data4: -1300924601
-  Banks:
-  - {fileID: -1542941709067739055}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
---- !u!114 &-1587158799425640037
+--- !u!114 &6208519690172605979
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,7 +356,7 @@ MonoBehaviour:
     Data3: 1077103510
     Data4: -1130565670
   Banks:
-  - {fileID: -1542941709067739055}
+  - {fileID: -1793632156551993023}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
@@ -192,7 +364,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &-1542941709067739055
+--- !u!114 &6930437500590990105
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -202,17 +374,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/BGM.bank
+  m_Name: bank:/Master.bank
   m_EditorClassIdentifier: 
-  Path: FMOD/InMusic/Build/Desktop/BGM.bank
-  Name: BGM
-  StudioPath: bank:/BGM
-  lastModified: 638887918296234732
+  Path: FMOD/InMusic/Build/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 638900380616826529
   FileSizes:
   - Name: Desktop
-    Value: 25110208
+    Value: 1298
   Exists: 1
---- !u!114 &11400000
+--- !u!114 &7168812128880830652
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,33 +393,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d32cf7c32a3ed8347bac48ef5ed56d82, type: 3}
-  m_Name: FMODStudioCache
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/SFX.bank
   m_EditorClassIdentifier: 
-  EditorBanks:
-  - {fileID: -2938269522948305550}
-  - {fileID: -1542941709067739055}
-  - {fileID: -6553756030416500213}
-  - {fileID: -7411467638551936653}
-  EditorEvents:
-  - {fileID: 7182259478105916741}
-  - {fileID: -2781576558202859501}
-  - {fileID: 2920709655151531725}
-  - {fileID: 7982590610097851270}
-  - {fileID: -8343500085272235018}
-  - {fileID: -1587158799425640037}
-  - {fileID: 1907404382308813403}
-  - {fileID: -3208877479042088435}
-  - {fileID: 7052397964143624291}
-  - {fileID: 2896273070504586957}
-  EditorParameters: []
-  MasterBanks:
-  - {fileID: -6553756030416500213}
-  StringsBanks:
-  - {fileID: -2938269522948305550}
-  cacheTime: 638887918296234732
-  cacheVersion: 131624
---- !u!114 &1907404382308813403
+  Path: FMOD/InMusic/Build/Desktop/SFX.bank
+  Name: SFX
+  StudioPath: bank:/SFX
+  lastModified: 638900380616891680
+  FileSizes:
+  - Name: Desktop
+    Value: 506
+  Exists: 1
+--- !u!114 &8769999848961162749
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -257,16 +414,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/BGM/SksmsdkvmsrjsEkrwlftordlslRk
+  m_Name: event:/BGM/Sticky
   m_EditorClassIdentifier: 
-  Path: event:/BGM/SksmsdkvmsrjsEkrwlftordlslRk
+  Path: event:/BGM/Sticky
   Guid:
-    Data1: 332357044
-    Data2: 1227446811
-    Data3: 629375892
-    Data4: 1396841440
+    Data1: -36001128
+    Data2: 1170532226
+    Data3: -164994167
+    Data4: -1632466723
   Banks:
-  - {fileID: -1542941709067739055}
+  - {fileID: -1793632156551993023}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
@@ -274,139 +431,3 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &2896273070504586957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/BGM/cjtaksskadmsrPghlreofhehlwldksgdk
-  m_EditorClassIdentifier: 
-  Path: event:/BGM/cjtaksskadmsrPghlreofhehlwldksgdk
-  Guid:
-    Data1: 1687024633
-    Data2: 1207689756
-    Data3: 794416054
-    Data4: -822886691
-  Banks:
-  - {fileID: -1542941709067739055}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
---- !u!114 &2920709655151531725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/BGM/Klaxon
-  m_EditorClassIdentifier: 
-  Path: event:/BGM/Klaxon
-  Guid:
-    Data1: 1255468108
-    Data2: 1208282549
-    Data3: 565847981
-    Data4: 359258207
-  Banks:
-  - {fileID: -1542941709067739055}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
---- !u!114 &7052397964143624291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/BGM/Supernova
-  m_EditorClassIdentifier: 
-  Path: event:/BGM/Supernova
-  Guid:
-    Data1: -392076566
-    Data2: 1302274831
-    Data3: -1887188849
-    Data4: 1627706227
-  Banks:
-  - {fileID: -1542941709067739055}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
---- !u!114 &7182259478105916741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/BGM/Armageddon
-  m_EditorClassIdentifier: 
-  Path: event:/BGM/Armageddon
-  Guid:
-    Data1: 673150994
-    Data2: 1194093237
-    Data3: -1907635559
-    Data4: 822465114
-  Banks:
-  - {fileID: -1542941709067739055}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
---- !u!114 &7982590610097851270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/BGM/Heya
-  m_EditorClassIdentifier: 
-  Path: event:/BGM/Heya
-  Guid:
-    Data1: -1059381650
-    Data2: 1196767734
-    Data3: 1913780922
-    Data4: 779490037
-  Banks:
-  - {fileID: -1542941709067739055}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 0
-  Parameters:
-  - {fileID: -4750287494510488090}
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 189846

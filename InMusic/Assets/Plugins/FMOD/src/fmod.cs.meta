@@ -10,8 +10,8 @@ MonoImporter:
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 161631
-  packageName: FMOD for Unity (2.02)
-  packageVersion: 2.02.28
+  productId: 311497
+  packageName: FMOD for Unity (2.03)
+  packageVersion: 2.03.08
   assetPath: Assets/Plugins/FMOD/src/fmod.cs
-  uploadId: 745941
+  uploadId: 778161

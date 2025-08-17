@@ -466,6 +466,7 @@ MonoBehaviour:
   TargetAssetPath: FMODBanks
   TargetBankFolder: FMODBanks
   EventLinkage: 0
+  SerializeGUIDsOnly: 0
   LoggingLevel: 4
   SpeakerModeSettings: []
   SampleRateSettings: []
@@ -480,11 +481,7 @@ MonoBehaviour:
   Banks:
   - BGM
   - SFX
-  BanksToLoad:
-  - BGM
-  - Master
-  - Master.strings
-  - SFX
+  BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
   AndroidUseOBB: 0
@@ -495,8 +492,8 @@ MonoBehaviour:
   EnableErrorCallback: 0
   SharedLibraryUpdateStage: 0
   SharedLibraryTimeSinceStart: 0
-  CurrentVersion: 131624
-  HideSetupWizard: 1
+  CurrentVersion: 131849
+  HideSetupWizard: 0
   LastEventReferenceScanVersion: 131620
   Platforms:
   - {fileID: -8264529419716019935}
