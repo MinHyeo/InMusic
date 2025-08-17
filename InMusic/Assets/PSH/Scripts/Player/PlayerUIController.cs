@@ -20,9 +20,18 @@ public class PlayerUIController : NetworkBehaviour
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
     public void Rpc_GameStart()
     {
-        //TODO: 게임 플레이 씬으로 이동
-        //Runner.LoadScene(SceneRef.FromIndex(5));
         LoadingScreen.Instance.LoadScene("KGB_MultiPlay");
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void Rpc_GameSet(RpcInfo info = default)
+    {
+        if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
+        {
+            return;
+        }
+        GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI");
+        waitingRoomUIManager.GetComponent<Waiting_Room_UI>().ButtonEvent("Enter");
     }
 
     public void BroadScrollUp() {

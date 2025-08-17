@@ -251,6 +251,9 @@ public class Waiting_Room_UI : UI_Base_PSH
                 OnReadyButton();
                 if (!canStart)
                     return;
+                if (isOwner) {
+                    localPlayerObject.GetComponent<PlayerUIController>().Rpc_GameSet();
+                }
 
                 Debug.Log("게임 시작");
                 if (curMusicItem.GetComponent<MusicItem>().HasBMS)
@@ -258,7 +261,6 @@ public class Waiting_Room_UI : UI_Base_PSH
                     GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
                     GameManager_PSH.Data.SetData(curMusicItem.GetComponent<MusicItem>());
                     //게임 시작
-                    Debug.Log("게임 시작2");
                     localPlayerObject.GetComponent<PlayerUIController>().BroadGameStart();
                 }
                 else
@@ -280,6 +282,7 @@ public class Waiting_Room_UI : UI_Base_PSH
         if (canStart) {
             return;
         }
+
         NetworkObject localPlayerObject = NetworkManager.runnerInstance.GetPlayerObject(NetworkManager.runnerInstance.LocalPlayer);
         if (localPlayerObject != null)
         {
@@ -342,6 +345,7 @@ public class Waiting_Room_UI : UI_Base_PSH
         if (you.IsReady && me.IsReady)
         {
             canStart = true;
+            Debug.Log("시작 가능");
             startButtonColor.sprite = startButtonTrue;
         }
         else
