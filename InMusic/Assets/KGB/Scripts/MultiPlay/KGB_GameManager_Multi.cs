@@ -202,7 +202,7 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
     }
     void EndGame()
     {
-        isGameActive = false;
+        //isGameActive = false;
         playManager.musicSound.Stop();
         playUI.countText.text = "End";
         EndingGame();
