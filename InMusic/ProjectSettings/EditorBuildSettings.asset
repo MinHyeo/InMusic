@@ -23,9 +23,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/KGB/Scenes/KGB_MultiPlay.unity
     guid: 12bc41330a74dce418cce7ec7c453c04
-  - enabled: 1
-    path: Assets/PSH/Scenes/tmp.unity
-    guid: 287b85cc8af412f49a13d58b2a89163a
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -1,21 +1,27 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class PlayerStatusController : MonoBehaviour
+public class PlayerStatusUIController : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI[] playerNames;
     [SerializeField] GameObject[] isRoomOwner;
     //0: Selecting | 1: Ready | 2 :Me
     [Tooltip("P1 (방장)")] 
     [SerializeField] GameObject[] player1Status;
-    [SerializeField] PlayerSceneUI p1UI;
+    [SerializeField] PlayerStatusUI p1UI;
     [Tooltip("P2 (참가자)")] 
     [SerializeField] GameObject[] player2Status;
-    [SerializeField] PlayerSceneUI p2UI;
+    [SerializeField] PlayerStatusUI p2UI;
 
 
     private void Awake()
     {
+        //멀티플레이 결과에서도 재활용 중 -> Awake 필요 없음
+        if (SceneManager.GetActiveScene().name == "MultiPlay_Result") {
+            return;
+        }
+
         InitP2Status();
     }
     public void SetP1Object(GameObject playerObject) {

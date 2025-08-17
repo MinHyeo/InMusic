@@ -1,17 +1,24 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMenuUI : MonoBehaviour
 {
-    [SerializeField] PlayerInfo targetPlayer;
+    [SerializeField] Waiting_Room_UI waitUI;
+    [SerializeField] int uITarget;
 
-    public void SetTarget(PlayerInfo target) {
-        targetPlayer = target;
+    public void SetTarget(int target) {
+        uITarget = target;
     }
 
     public void OnOwnerButton() {
-        targetPlayer.IsOwner = true;
-
-        gameObject.SetActive(false);
+        if (uITarget == 1) {
+            waitUI.SetOwner(true);
+        }
+        else
+        {
+            waitUI.SetOwner(false);
+        }
+            gameObject.SetActive(false);
     }
 
     public void OnKickButton() {
