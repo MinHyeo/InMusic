@@ -1,5 +1,6 @@
 using Fusion;
 using UnityEngine;
+using static Unity.Collections.Unicode;
 
 public class PlayerUIController : NetworkBehaviour
 {
@@ -22,7 +23,8 @@ public class PlayerUIController : NetworkBehaviour
     {
         GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI");
         waitingRoomUIManager.GetComponent<Waiting_Room_UI>().SetBMS();
-        LoadingScreen.Instance.LoadScene("KGB_MultiPlay");
+        Runner.LoadScene(SceneRef.FromIndex(5));
+        //LoadingScreen.Instance.LoadScene("KGB_MultiPlay");
     }
 
     public void BroadScrollUp() {
