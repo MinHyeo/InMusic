@@ -1,7 +1,7 @@
 using UnityEngine;
 using Fusion;
 
-public class ResultRCPManager : MonoBehaviour
+public class ResultRCPManager : NetworkBehaviour
 {
     /// <summary>
     /// ΩÃ±€≈Ê
@@ -18,6 +18,7 @@ public class ResultRCPManager : MonoBehaviour
         }
         Instance = this;
     }
+
 
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_SendMyReult(int score, int great, int good, int bad, int miss, float acc, int combo, float rank, bool fullcom, RpcInfo info = default)

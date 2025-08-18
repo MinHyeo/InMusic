@@ -1,6 +1,7 @@
 using Fusion;
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// SinglePlayResultUI 파쿠리
@@ -74,7 +75,6 @@ public class MultiPlay_Result_UI : MonoBehaviour
         //P1 결과 보여주기
         if (GameManager_PSH.PlayerRole)
         {
-            CheckRank(myResult.Rank, myResult.FullCombo);
             score.text = otherResult.Score.ToString();
             great.text = otherResult.Great.ToString();
             good.text = otherResult.Good.ToString();
@@ -93,6 +93,7 @@ public class MultiPlay_Result_UI : MonoBehaviour
             miss.text = myResult.Miss.ToString();
             accuracy.text = myResult.Accuracy.ToString();
             combo.text = myResult.Combo.ToString();
+            CheckRank(myResult.Rank, myResult.FullCombo);
         }
     }
 
@@ -168,8 +169,7 @@ public class MultiPlay_Result_UI : MonoBehaviour
         };
         Debug.Log("본인 결과 설정 완료");
         //결과 전달
-        ResultRCPManager.Instance.RPC_SendMyReult(myResult.Score, myResult.Great, myResult.Good, myResult.Bad, myResult.Miss,
-                                                                                  myResult.Accuracy, myResult.Combo, myResult.Rank, myResult.FullCombo);
+        StartCoroutine(Ready());
 
         //결과 확인
         if (GameManager_PSH.PlayerRole) {
@@ -180,4 +180,12 @@ public class MultiPlay_Result_UI : MonoBehaviour
             ShowP2ResulltButton();
         }
     }
+    public IEnumerator Ready()
+    {
+        Debug.Log("레디 기다리는중");
+        yield return new WaitUntil(() => ResultRCPManager.Instance != null);
+        ResultRCPManager.Instance.RPC_SendMyReult(myResult.Score, myResult.Great, myResult.Good, myResult.Bad, myResult.Miss,
+                                                                          myResult.Accuracy, myResult.Combo, myResult.Rank, myResult.FullCombo);
+    }
+
 }
