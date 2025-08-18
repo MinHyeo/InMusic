@@ -35,6 +35,7 @@ public class MultiNoteManager : MonoBehaviour
     // noteId 기준 판정 저장소
     private Dictionary<int, JudgementData> judgementDict = new Dictionary<int, JudgementData>();
     private Dictionary<int, ScoreData> scoreDataDict = new Dictionary<int, ScoreData>();
+    private Queue<ScoreData> scoreDataQueue = new Queue<ScoreData>();
     public static MultiNoteManager Instance { get; private set; }
 
 
@@ -194,7 +195,8 @@ public class MultiNoteManager : MonoBehaviour
     }
     public void InsertScoreData(int noteId, float percent, float curHp, float totalScore, int combo, int missCount, string judgement)
     {
-        scoreDataDict[noteId] = new ScoreData(curHp, totalScore, percent, combo, missCount, judgement);
+        //scoreDataDict[noteId] = new ScoreData(curHp, totalScore, percent, combo, missCount, judgement);
+        scoreDataQueue.Enqueue(new ScoreData(curHp, totalScore, percent, combo, missCount, judgement));
     }
 
     public void OutJudgement(int noteId)
@@ -212,8 +214,11 @@ public class MultiNoteManager : MonoBehaviour
 
         
         note.JudgmentSimulateNote(data.judgement, data.percent);
-        KGB_GameManager_Multi.Instance.playUI_Multi.UpdatePlayUI_Multi(scoreDataDict[noteId]);
-        KGB_GameManager_Multi.Instance.scoreBoardUI.UpdateScoreBoard_p2(scoreDataDict[noteId]);
+
+        if (scoreDataQueue.Count == 0) return;
+        var score_data = scoreDataQueue.Dequeue();
+        KGB_GameManager_Multi.Instance.playUI_Multi.UpdatePlayUI_Multi(score_data);
+        KGB_GameManager_Multi.Instance.scoreBoardUI.UpdateScoreBoard_p2(score_data);
 
         judgementDict.Remove(noteId);
     }
