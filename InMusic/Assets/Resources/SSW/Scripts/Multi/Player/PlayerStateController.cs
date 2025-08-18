@@ -11,6 +11,9 @@ public class PlayerStateController : NetworkBehaviour
 
     [Networked]
     public bool IsReady { get; set; }
+    
+    [Networked]
+    public bool IsRed { get; set; }
 
     private string _previousNickname;
     private bool _previousIsReady;
@@ -57,6 +60,8 @@ public class PlayerStateController : NetworkBehaviour
 
     public override void Spawned()
     {
+        // DontDestroyOnLoad 테스트
+        DontDestroyOnLoad(gameObject);
         Debug.Log($"[PlayerState] Spawned - Object.HasInputAuthority: {Object.HasInputAuthority}");
         Debug.Log($"[PlayerState] Spawned - Object.InputAuthority: {Object.InputAuthority}");
         Debug.Log($"[PlayerState] Spawned - Runner.LocalPlayer: {Runner.LocalPlayer}");
@@ -83,8 +88,9 @@ public class PlayerStateController : NetworkBehaviour
         string leavingPlayerName = Nickname;
         Debug.Log($"[Despawned] {leavingPlayerName} left the room");
         Debug.Log($"[Despawned] Authority Info - HasStateAuthority: {Object.HasStateAuthority}, InputAuthority: {Object.InputAuthority}");
+        Debug.Log($"[Despawned] DontDestroyOnLoad 적용되어 있지만 Despawned 호출");
 
-        // SharedModeMasterClient는 Fusion이 자동으로 승계 처리
+        // SharedModeMasterClient는 Fusion이 자동으로 승계
     }
 
     #region Fusion Callbacks
@@ -175,6 +181,13 @@ public class PlayerStateController : NetworkBehaviour
                 controller.ForceCenterAtIndex(currentIndex);
             }
         }
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_SetColor(bool isRed)
+    {
+        Debug.Log($"[PlayerState] RPC_SetColor: {Nickname} → {(isRed ? "RED" : "BLUE")}");
+        IsRed = isRed;
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]

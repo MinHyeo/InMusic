@@ -37,6 +37,9 @@ public class SongSelectionNetwork : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+        // StateAuthority 확인 로그 (디버깅용)
+        Debug.Log($"[SongSelectionNetwork] FixedUpdateNetwork - HasStateAuthority: {Object.HasStateAuthority}, IsMaster: {Runner.IsSharedModeMasterClient}");
+        
         // 기존에 해당 메소드에서 변경감지를 시도했는데, 일반 클라이언트에서 정상적으로 동기화되지 않는 문제가 발생함
         // OnChangedRender 콜백 사용
     }

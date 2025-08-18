@@ -135,7 +135,7 @@ public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        Debug.Log($"[Fusion] Player Joined: {player}, LocalPlayer = {runner.LocalPlayer}");
+        Debug.Log($"[Fusion] Player Joined: {player}, PlayerId: {player.PlayerId}, LocalPlayer = {runner.LocalPlayer}");
         if (player == runnerInstance.LocalPlayer)
         {
             Debug.Log("[Fusion] --> This is ME. Spawning my PlayerObject.");

@@ -8,6 +8,9 @@ public class PlayerUIController : MonoBehaviour
     private void Start()
     {
         RefreshAllSlots();
+        
+        // 씬 전환 후 NetworkObject 준비 대기용 재시도
+        Invoke(nameof(RefreshAllSlots), 0.1f);
     }
 
     private void Update()
@@ -36,6 +39,8 @@ public class PlayerUIController : MonoBehaviour
     
     private void RefreshAllSlots()
     {
+        Debug.Log("[PlayerUIController] RefreshAllSlots() called");
+        
         // 모든 슬롯 초기화
         foreach (var slot in playerSlots)
         {
@@ -44,13 +49,25 @@ public class PlayerUIController : MonoBehaviour
         
         // PlayerId 순서로 정렬 (모든 클라이언트에서 동일한 순서 보장)
         var players = MultiRoomManager.Instance?.GetAllPlayers() ?? new List<PlayerStateController>();
+        Debug.Log($"[PlayerUIController] Found {players.Count} players");
+        
         var sortedPlayers = new List<PlayerStateController>(players);
         sortedPlayers.Sort((a, b) => a.Object.InputAuthority.PlayerId.CompareTo(b.Object.InputAuthority.PlayerId));
         
-        // 정렬된 순서대로 슬롯 0, 1에 배치
+        // 정렬된 순서대로 슬롯 0, 1에 배치 및 색상 할당
         for (int i = 0; i < sortedPlayers.Count && i < 2; i++)
         {
-            playerSlots[i].Bind(sortedPlayers[i]);
+            var player = sortedPlayers[i];
+            Debug.Log($"[PlayerUIController] Binding {player.Nickname} to slot {i}");
+            
+            // 색상 할당: 슬롯 0 = Red, 슬롯 1 = Blue
+            bool shouldBeRed = (i == 0);
+            if (player.Object.HasInputAuthority) // 자신의 플레이어만 색상 설정
+            {
+                player.RPC_SetColor(shouldBeRed);
+            }
+            
+            playerSlots[i].Bind(player);
         }
     }
     
