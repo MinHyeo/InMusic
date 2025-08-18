@@ -48,6 +48,8 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         {
             Destroy(gameObject);
         }
+
+        DontDestroyOnLoad(gameObject);
     }
     void Start()
     {
@@ -215,7 +217,8 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
     {
         await Task.Delay(3000);
         //°á°úÃ¢ ¶ç¿ì±â (¾À ÀÌµ¿)
-        playerRespawner.P1.GetComponent<PlayerUIController>().BroadGameEnd();
+        SceneManager.LoadScene("MultiPlay_Result");
+        //playerRespawner.P1.GetComponent<PlayerUIController>().BroadGameEnd();
     }
 
     public ScoreData GetScoreData()

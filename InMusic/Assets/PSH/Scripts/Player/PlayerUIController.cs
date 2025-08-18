@@ -32,8 +32,6 @@ public class PlayerUIController : NetworkBehaviour
         Runner.LoadScene(SceneRef.FromIndex(6));    
     }
 
-
-
     public void BroadScrollUp() {
         Rpc_ScrollUp();
     }
