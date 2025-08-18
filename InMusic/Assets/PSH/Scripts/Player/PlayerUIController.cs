@@ -26,6 +26,12 @@ public class PlayerUIController : NetworkBehaviour
         Runner.LoadScene(SceneRef.FromIndex(5));                      //Runner.LoadScene:  모든 클라이언트가 실행 되므로, 한 명만 호출하도록 주의
     }
 
+    [Rpc(RpcSources.InputAuthority, RpcTargets.InputAuthority)]
+    public void Rpc_GameEnd()
+    {
+        Runner.LoadScene(SceneRef.FromIndex(6));    
+    }
+
 
 
     public void BroadScrollUp() {
@@ -39,5 +45,10 @@ public class PlayerUIController : NetworkBehaviour
     public void BroadGameStart()
     {
         Rpc_GameStart();
+    }
+
+    public void BroadGameEnd()
+    {
+        Rpc_GameEnd();
     }
 }

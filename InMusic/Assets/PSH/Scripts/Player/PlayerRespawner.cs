@@ -10,9 +10,9 @@ public class PlayerRespawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     public GameObject playerPrefab;
 
-    [SerializeField] NetworkObject P1;
+    [SerializeField] public NetworkObject P1;
     [SerializeField]  bool IsP1Loaded = false;
-    [SerializeField]  NetworkObject P2;
+    [SerializeField]  public NetworkObject P2;
     [SerializeField] bool IsP2Loaded = false;
 
     private void Awake()

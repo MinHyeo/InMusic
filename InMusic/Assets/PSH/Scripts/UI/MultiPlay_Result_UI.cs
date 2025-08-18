@@ -1,3 +1,4 @@
+using Fusion;
 using TMPro;
 using UnityEngine;
 
@@ -22,8 +23,11 @@ public class MultiPlay_Result_UI : MonoBehaviour
     [SerializeField] Player_Result pResult;
 
     [Header("플레이 결과")]
-    [SerializeField] private PlayResultData playResult1data;
-    [SerializeField] private PlayResultData playResult2data;
+    [SerializeField] PlayResultData playResult1data;
+    [SerializeField] NetworkObject P1;
+    [SerializeField] PlayResultData playResult2data;
+    [SerializeField] NetworkObject P2;
+
 
     void Start()
     {
@@ -36,13 +40,12 @@ public class MultiPlay_Result_UI : MonoBehaviour
         else {
             InitClient();
         }
-        //Notice: 변경 예정
-        pResult.SetP1Name("p1");
-        pResult.SetP2Name("p2");
     }
 
     public void SetOtherPlayerResult(int score, int great, int good, int bad, int miss, float acc, int combo, float rank, bool fullcom) {
+        Debug.Log($"{score} {great} {good} {bad} {miss} {acc}");
         if (GameManager_PSH.PlayerRole) {
+            Debug.Log("P2값 저장");
             playResult2data = new PlayResultData
             {
                 Score = score,
@@ -58,6 +61,7 @@ public class MultiPlay_Result_UI : MonoBehaviour
         }
         else
         {
+            Debug.Log("P1값 저장");
             playResult1data = new PlayResultData
             {
                 Score = score,
@@ -122,6 +126,7 @@ public class MultiPlay_Result_UI : MonoBehaviour
     }
 
     void InitHost() {
+
         playResult1data = new PlayResultData
         {
             Score = (int)GameManagerProvider.Instance.TotalScore,
