@@ -36,6 +36,7 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
     public PlayUI playUI;
     public PlayUI_Multi playUI_Multi;
     public ScoreBoardUI scoreBoardUI;
+    public GameObject resultUI;
     public PlayManager playManager;
 
     void Awake()
@@ -216,8 +217,9 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
     private async void EndingGame()
     {
         await Task.Delay(3000);
-        //°á°úÃ¢ ¶ç¿ì±â (¾À ÀÌµ¿)
-        SceneManager.LoadScene("MultiPlay_Result");
+        //°á°úÃ¢ ¶ç¿ì±â
+        resultUI.SetActive(true);
+        //SceneManager.LoadScene("MultiPlay_Result");
         //playerRespawner.P1.GetComponent<PlayerUIController>().BroadGameEnd();
     }
 
