@@ -175,6 +175,7 @@ public class Waiting_Room_UI : UI_Base_PSH
     {
         curMusicItem = listItem.gameObject;
         curMusicItem.GetComponent<MusicItem>().ItemSelect();
+        SetBMS();
     }
 
     private void OnTriggerExit2D(Collider2D listItem)
@@ -189,11 +190,9 @@ public class Waiting_Room_UI : UI_Base_PSH
         {
             case "Up":
                 mList.ScrollUp();
-                SetBMS();
                 break;
             case "Down":
                 mList.ScrollDown();
-                SetBMS();
                 break;
             case "Exit":
                 GameManager_PSH.PlayerRole = false;
@@ -203,13 +202,11 @@ public class Waiting_Room_UI : UI_Base_PSH
                 SceneManager.LoadScene(3); //추후 로비씬으로 바꾸기
                 break;
             case "Enter":
-
                 OnReadyButton();
                 if (!canStart || !isOwner)
                     return;
                 Debug.Log("게임 시작");
                 localPlayerObject.GetComponent<PlayerUIController>().BroadGameStart();
-
                 break;
             case "KeyGuide":
                 Guide();
@@ -221,6 +218,11 @@ public class Waiting_Room_UI : UI_Base_PSH
     }
     void OnReadyButton()
     {
+        //씬 이동 전 준비 상태 해제 방지
+        if (canStart && isOwner) {
+            return;
+        }
+
         NetworkObject localPlayerObject = NetworkManager.runnerInstance.GetPlayerObject(NetworkManager.runnerInstance.LocalPlayer);
         if (localPlayerObject != null)
         {

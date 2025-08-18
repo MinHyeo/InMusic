@@ -70,7 +70,8 @@ public class MultiPlay_Result_UI : MonoBehaviour
         miss.text = playResult1data.Miss.ToString();
         accuracy.text = playResult1data.Accuracy.ToString();
         combo.text = playResult1data.Combo.ToString();
-        CheckRank(playResult1data.Score, playResult1data.FullCombo);
+
+        CheckRank(playResult1data.Rank, playResult1data.FullCombo);
     }
 
     public void ShowP2ResulltButton() {
@@ -83,13 +84,13 @@ public class MultiPlay_Result_UI : MonoBehaviour
         miss.text = playResult2data.Miss.ToString();
         accuracy.text = playResult2data.Accuracy.ToString();
         combo.text = playResult2data.Combo.ToString();
-        CheckRank(playResult2data.Score, playResult2data.FullCombo);
+
+        CheckRank(playResult2data.Rank, playResult2data.FullCombo);
     }
 
     void InitHost() {
         playResult1data = new PlayResultData
         {
-            /*
             Score = (int)GameManagerProvider.Instance.TotalScore,
             Great = GameManagerProvider.Instance.GreatCount,
             Good = GameManagerProvider.Instance.GoodCount,
@@ -98,8 +99,9 @@ public class MultiPlay_Result_UI : MonoBehaviour
             Accuracy = GameManagerProvider.Instance.Accuracy,
             Combo = GameManagerProvider.Instance.MaxCombo,
             Rank = (float)GameManagerProvider.Instance.TotalScore / 1000000f * 100f,
-            FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)*/
+            FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)
 
+            /*
             //Notice: 임시
             Score = 1,
             Great = 1,
@@ -109,7 +111,7 @@ public class MultiPlay_Result_UI : MonoBehaviour
             Accuracy = 1,
             Combo = 1,
             Rank = 1.1f,
-            FullCombo = true
+            FullCombo = true*/
         };
         //TODO: P2 정보 가져오기
         playResult2data = new PlayResultData
@@ -131,7 +133,7 @@ public class MultiPlay_Result_UI : MonoBehaviour
 
     void InitClient() {
         playResult2data = new PlayResultData
-        {/*
+        {
             Score = (int)GameManagerProvider.Instance.TotalScore,
             Great = GameManagerProvider.Instance.GreatCount,
             Good = GameManagerProvider.Instance.GoodCount,
@@ -140,8 +142,10 @@ public class MultiPlay_Result_UI : MonoBehaviour
             Accuracy = GameManagerProvider.Instance.Accuracy,
             Combo = GameManagerProvider.Instance.MaxCombo,
             Rank = (float)GameManagerProvider.Instance.TotalScore / 1000000f * 100f,
-            FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)*/
+            FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)
 
+
+            /*
             //Notice: 임시
             Score = 1,
             Great = 1,
@@ -152,6 +156,7 @@ public class MultiPlay_Result_UI : MonoBehaviour
             Combo = 1,
             Rank = 1.1f,
             FullCombo = true
+            */
         };
         //TODO: P1 정보 가져오기
         playResult1data = new PlayResultData
@@ -183,12 +188,12 @@ public class MultiPlay_Result_UI : MonoBehaviour
         }
     }
 
-    void CheckRank(int score, bool isFullCombo)
+    void CheckRank(float rank, bool isFullCombo)
     {
-        if (score >= 95f) rate.text = "S";
-        else if (score >= 90f) rate.text = "A";
-        else if (score >= 80f) rate.text = "B";
-        else if (score >= 70f) rate.text = "C";
+        if (rank >= 95f) rate.text = "S";
+        else if (rank >= 90f) rate.text = "A";
+        else if (rank >= 80f) rate.text = "B";
+        else if (rank >= 70f) rate.text = "C";
         else rate.text = "D";
 
         if (isFullCombo)

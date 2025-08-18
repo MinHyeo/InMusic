@@ -22,12 +22,8 @@ public class PlayerUIController : NetworkBehaviour
     [Rpc(RpcSources.InputAuthority, RpcTargets.InputAuthority)]
     public void Rpc_GameStart()
     {
-        GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI");
-
-        //waitingRoomUIManager.GetComponent<Waiting_Room_UI>().SetBMS();
-        //Runner.LoadScene(SceneRef.FromIndex(5));
-        //LoadingScreen.Instance.LoadScene("KGB_MultiPlay");
-        Runner.LoadScene(SceneRef.FromIndex(5));
+        //LoadingScreen.Instance.LoadScene("KGB_MultiPlay");    //로딩씬: 모든 클라이언트가 별도로 실행해야 됨
+        Runner.LoadScene(SceneRef.FromIndex(5));                      //Runner.LoadScene:  모든 클라이언트가 실행 되므로, 한 명만 호출하도록 주의
     }
 
 

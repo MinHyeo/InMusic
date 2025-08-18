@@ -66,12 +66,14 @@ public class PlayerRespawner : MonoBehaviour, INetworkRunnerCallbacks
             PlayerInfo pInfo = pObject.GetComponent<PlayerInfo>();
             if (pInfo.PlayerRole == PlayerInfo.PlayerType.Host)
             {
+                P1 = pObject;
                 IsP1Loaded = true;
                 Debug.Log("P1 로드 완료");
             }
             //P2기준 본인 UI 조작
             else
             {
+                P2 = pObject;
                 IsP2Loaded = true;
                 Debug.Log("P2 로드 완료");
             }
