@@ -75,17 +75,6 @@ public class MultiPlay_Result_UI : MonoBehaviour
         //P1 결과 보여주기
         if (GameManager_PSH.PlayerRole)
         {
-            score.text = otherResult.Score.ToString();
-            great.text = otherResult.Great.ToString();
-            good.text = otherResult.Good.ToString();
-            bad.text = otherResult.Bad.ToString();
-            miss.text = otherResult.Miss.ToString();
-            accuracy.text = otherResult.Accuracy.ToString();
-            combo.text = otherResult.Combo.ToString();
-            CheckRank(otherResult.Rank, otherResult.FullCombo);
-        }
-        else
-        {
             score.text = myResult.Score.ToString();
             great.text = myResult.Great.ToString();
             good.text = myResult.Good.ToString();
@@ -94,6 +83,18 @@ public class MultiPlay_Result_UI : MonoBehaviour
             accuracy.text = myResult.Accuracy.ToString();
             combo.text = myResult.Combo.ToString();
             CheckRank(myResult.Rank, myResult.FullCombo);
+        }
+        else
+        {
+            
+            score.text = otherResult.Score.ToString();
+            great.text = otherResult.Great.ToString();
+            good.text = otherResult.Good.ToString();
+            bad.text = otherResult.Bad.ToString();
+            miss.text = otherResult.Miss.ToString();
+            accuracy.text = otherResult.Accuracy.ToString();
+            combo.text = otherResult.Combo.ToString();
+            CheckRank(otherResult.Rank, otherResult.FullCombo);
         }
     }
 
@@ -123,13 +124,27 @@ public class MultiPlay_Result_UI : MonoBehaviour
     }
     void CheckWinner()
     {
-        if (myResult.Score >= otherResult.Score)
+        if (GameManager_PSH.PlayerRole)
         {
-            pResult.SetP1Win();
+            if (myResult.Score >= otherResult.Score)
+            {
+                pResult.SetP1Win();
+            }
+            else
+            {
+                pResult.SetP2Win();
+            }
         }
         else
         {
-            pResult.SetP2Win();
+            if (myResult.Score >= otherResult.Score)
+            {
+                pResult.SetP2Win();
+            }
+            else
+            {
+                pResult.SetP1Win();
+            }
         }
     }
 

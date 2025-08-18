@@ -6090,6 +6090,7 @@ GameObject:
   m_Component:
   - component: {fileID: 818270748}
   - component: {fileID: 818270749}
+  - component: {fileID: 818270750}
   m_Layer: 0
   m_Name: ResultRCPManager
   m_TagString: Untagged
@@ -6125,6 +6126,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   result_UI: {fileID: 1550329172}
+--- !u!114 &818270750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818270747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 275394931
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 818270749}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &823624548
 GameObject:
   m_ObjectHideFlags: 0
