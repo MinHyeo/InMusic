@@ -70,7 +70,6 @@ public class Waiting_Room_UI : UI_Base_PSH
         playerStatusController.SetP2Object(networkObject.gameObject);
         playerStatusController.SetPlayerName(1, playerInfo.PlayerName.ToString());
         playerStatusController.SetPlayerStatus(1, false, false);
-        
     }
 
     void PlayerLeft(PlayerRef playerRef)

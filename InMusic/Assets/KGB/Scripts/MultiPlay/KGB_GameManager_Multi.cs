@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
 {
-
+    [SerializeField] PlayerRespawner playerRespawner;
     public static KGB_GameManager_Multi Instance { get; private set; }
 
     [SerializeField] BMSData testBMS; //테스트용으로 폴더에서 드래그로 할당해서 쓰는 중
@@ -36,6 +36,7 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
     public PlayUI playUI;
     public PlayUI_Multi playUI_Multi;
     public ScoreBoardUI scoreBoardUI;
+    public GameObject resultUI;
     public PlayManager playManager;
 
     void Awake()
@@ -48,6 +49,8 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
         {
             Destroy(gameObject);
         }
+
+        DontDestroyOnLoad(gameObject);
     }
     void Start()
     {
@@ -215,7 +218,9 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
     {
         await Task.Delay(3000);
         //결과창 띄우기
-
+        resultUI.SetActive(true);
+        //SceneManager.LoadScene("MultiPlay_Result");
+        //playerRespawner.P1.GetComponent<PlayerUIController>().BroadGameEnd();
     }
 
     public ScoreData GetScoreData()

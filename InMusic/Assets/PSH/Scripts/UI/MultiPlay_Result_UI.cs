@@ -1,5 +1,7 @@
+using Fusion;
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// SinglePlayResultUI 파쿠리
@@ -22,36 +24,44 @@ public class MultiPlay_Result_UI : MonoBehaviour
     [SerializeField] Player_Result pResult;
 
     [Header("플레이 결과")]
-    [SerializeField] private PlayResultData playResult1data;
-    [SerializeField] private PlayResultData playResult2data;
+    [SerializeField] PlayResultData myResult;
+    [SerializeField] PlayResultData otherResult;
+
 
     void Start()
     {
         fullCombo.SetActive(false);
-
-        if (GameManager_PSH.PlayerRole)
-        {
-            InitHost();
-        }
-        else {
-            InitClient();
-        }
-        //Notice: 변경 예정
-        pResult.SetP1Name("p1");
-        pResult.SetP2Name("p2");
+        InintMyResult();
     }
 
+    public void SetOtherPlayerResult(int score, int great, int good, int bad, int miss, float acc, int combo, float rank, bool fullcom) {
+        Debug.Log($"{score} {great} {good} {bad} {miss} {acc}");
+        otherResult = new PlayResultData
+        {
+            Score = score,
+            Great = great,
+            Good = good,
+            Bad = bad,
+            Miss = miss,
+            Accuracy = acc,
+            Combo = combo,
+            Rank = rank,
+            FullCombo = fullcom
+        };
+        Debug.Log("상대방 정보 입력 완료");
+        CheckWinner();
+    }
     public void NextButton()
     {
         //결과 저장
         string musicID = GameManager_PSH.Instance.GetComponent<MusicData>().MusicID;
         string userID = GameManager_PSH.Data.GetPlayerID();
         if (GameManager_PSH.PlayerRole) {
-            DBManager.Instance.StartCheckHighScore(userID, musicID, playResult1data.Score, playResult1data.Combo, playResult1data.Accuracy, rate.text);
+            DBManager.Instance.StartCheckHighScore(userID, musicID, myResult.Score, myResult.Combo, myResult.Accuracy, rate.text);
         }
         else
         {
-            DBManager.Instance.StartCheckHighScore(userID, musicID, playResult2data.Score, playResult2data.Combo, playResult2data.Accuracy, rate.text);
+            DBManager.Instance.StartCheckHighScore(userID, musicID, myResult.Score, myResult.Combo, myResult.Accuracy, rate.text);
         }
 
         //세션 종료 및 방 목록 로비로 이동
@@ -63,128 +73,78 @@ public class MultiPlay_Result_UI : MonoBehaviour
     public void ShowP1ResulltButton() {
         pResult.SelectP1();
         //P1 결과 보여주기
-        score.text = playResult1data.Score.ToString();
-        great.text = playResult1data.Great.ToString();
-        good.text = playResult1data.Good.ToString();
-        bad.text = playResult1data.Bad.ToString();
-        miss.text = playResult1data.Miss.ToString();
-        accuracy.text = playResult1data.Accuracy.ToString();
-        combo.text = playResult1data.Combo.ToString();
-
-        CheckRank(playResult1data.Rank, playResult1data.FullCombo);
+        if (GameManager_PSH.PlayerRole)
+        {
+            score.text = myResult.Score.ToString();
+            great.text = myResult.Great.ToString();
+            good.text = myResult.Good.ToString();
+            bad.text = myResult.Bad.ToString();
+            miss.text = myResult.Miss.ToString();
+            accuracy.text = myResult.Accuracy.ToString();
+            combo.text = myResult.Combo.ToString();
+            CheckRank(myResult.Rank, myResult.FullCombo);
+        }
+        else
+        {
+            
+            score.text = otherResult.Score.ToString();
+            great.text = otherResult.Great.ToString();
+            good.text = otherResult.Good.ToString();
+            bad.text = otherResult.Bad.ToString();
+            miss.text = otherResult.Miss.ToString();
+            accuracy.text = otherResult.Accuracy.ToString();
+            combo.text = otherResult.Combo.ToString();
+            CheckRank(otherResult.Rank, otherResult.FullCombo);
+        }
     }
 
     public void ShowP2ResulltButton() {
         pResult.SelectP2();
-        //P2 결과 보여주기
-        score.text = playResult2data.Score.ToString();
-        great.text = playResult2data.Great.ToString();
-        good.text = playResult2data.Good.ToString();
-        bad.text = playResult2data.Bad.ToString();
-        miss.text = playResult2data.Miss.ToString();
-        accuracy.text = playResult2data.Accuracy.ToString();
-        combo.text = playResult2data.Combo.ToString();
-
-        CheckRank(playResult2data.Rank, playResult2data.FullCombo);
-    }
-
-    void InitHost() {
-        playResult1data = new PlayResultData
-        {
-            Score = (int)GameManagerProvider.Instance.TotalScore,
-            Great = GameManagerProvider.Instance.GreatCount,
-            Good = GameManagerProvider.Instance.GoodCount,
-            Bad = GameManagerProvider.Instance.BadCount,
-            Miss = GameManagerProvider.Instance.MissCount,
-            Accuracy = GameManagerProvider.Instance.Accuracy,
-            Combo = GameManagerProvider.Instance.MaxCombo,
-            Rank = (float)GameManagerProvider.Instance.TotalScore / 1000000f * 100f,
-            FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)
-
-            /*
-            //Notice: 임시
-            Score = 1,
-            Great = 1,
-            Good = 1,
-            Bad = 1,
-            Miss = 1,
-            Accuracy = 1,
-            Combo = 1,
-            Rank = 1.1f,
-            FullCombo = true*/
-        };
-        //TODO: P2 정보 가져오기
-        playResult2data = new PlayResultData
-        {
-            Score = 0,
-            Great = 0,
-            Good = 0,
-            Bad = 0,
-            Miss = 0,
-            Accuracy = 0,
-            Combo = 0,
-            Rank = 0.0f,
-            FullCombo = false
-        };
-
-        CheckWinner();
-        ShowP1ResulltButton();
-    }
-
-    void InitClient() {
-        playResult2data = new PlayResultData
-        {
-            Score = (int)GameManagerProvider.Instance.TotalScore,
-            Great = GameManagerProvider.Instance.GreatCount,
-            Good = GameManagerProvider.Instance.GoodCount,
-            Bad = GameManagerProvider.Instance.BadCount,
-            Miss = GameManagerProvider.Instance.MissCount,
-            Accuracy = GameManagerProvider.Instance.Accuracy,
-            Combo = GameManagerProvider.Instance.MaxCombo,
-            Rank = (float)GameManagerProvider.Instance.TotalScore / 1000000f * 100f,
-            FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)
-
-
-            /*
-            //Notice: 임시
-            Score = 1,
-            Great = 1,
-            Good = 1,
-            Bad = 1,
-            Miss = 1,
-            Accuracy = 1,
-            Combo = 1,
-            Rank = 1.1f,
-            FullCombo = true
-            */
-        };
-        //TODO: P1 정보 가져오기
-        playResult1data = new PlayResultData
-        {
-            Score = (int)0,
-            Great = 0,
-            Good = 0,
-            Bad = 0,
-            Miss = 0,
-            Accuracy = 0,
-            Combo = 0,
-            Rank = 0.0f,
-            FullCombo = false
-        };
-
-        CheckWinner();
-        ShowP2ResulltButton();
-    }
-
-    void CheckWinner()
-    {
-        if (playResult1data.Score >= playResult2data.Score)
-        {
-            pResult.SetP1Win();
+        if (GameManager_PSH.PlayerRole) {
+            score.text = otherResult.Score.ToString();
+            great.text = otherResult.Great.ToString();
+            good.text = otherResult.Good.ToString();
+            bad.text = otherResult.Bad.ToString();
+            miss.text = otherResult.Miss.ToString();
+            accuracy.text = otherResult.Accuracy.ToString();
+            combo.text = otherResult.Combo.ToString();
+            CheckRank(otherResult.Rank, otherResult.FullCombo);
         }
         else
         {
-            pResult.SetP2Win();
+            score.text = myResult.Score.ToString();
+            great.text = myResult.Great.ToString();
+            good.text = myResult.Good.ToString();
+            bad.text = myResult.Bad.ToString();
+            miss.text = myResult.Miss.ToString();
+            accuracy.text = myResult.Accuracy.ToString();
+            combo.text = myResult.Combo.ToString();
+            CheckRank(myResult.Rank, myResult.FullCombo);
+        }
+    }
+    void CheckWinner()
+    {
+        if (GameManager_PSH.PlayerRole)
+        {
+            if (myResult.Score >= otherResult.Score)
+            {
+                pResult.SetP1Win();
+            }
+            else
+            {
+                pResult.SetP2Win();
+            }
+        }
+        else
+        {
+            if (myResult.Score >= otherResult.Score)
+            {
+                pResult.SetP2Win();
+            }
+            else
+            {
+                pResult.SetP1Win();
+            }
         }
     }
 
@@ -208,4 +168,39 @@ public class MultiPlay_Result_UI : MonoBehaviour
         }
         return;
     }
+
+    void InintMyResult() {
+        myResult = new PlayResultData
+        {
+            Score = (int)GameManagerProvider.Instance.TotalScore,
+            Great = GameManagerProvider.Instance.GreatCount,
+            Good = GameManagerProvider.Instance.GoodCount,
+            Bad = GameManagerProvider.Instance.BadCount,
+            Miss = GameManagerProvider.Instance.MissCount,
+            Accuracy = GameManagerProvider.Instance.Accuracy,
+            Combo = GameManagerProvider.Instance.MaxCombo,
+            Rank = (float)GameManagerProvider.Instance.TotalScore / 1000000f * 100f,
+            FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)
+        };
+        Debug.Log("본인 결과 설정 완료");
+        //결과 전달
+        StartCoroutine(Ready());
+
+        //결과 확인
+        if (GameManager_PSH.PlayerRole) {
+            ShowP1ResulltButton();
+        }
+        else
+        {
+            ShowP2ResulltButton();
+        }
+    }
+    public IEnumerator Ready()
+    {
+        Debug.Log("레디 기다리는중");
+        yield return new WaitUntil(() => ResultRCPManager.Instance != null);
+        ResultRCPManager.Instance.RPC_SendMyReult(myResult.Score, myResult.Great, myResult.Good, myResult.Bad, myResult.Miss,
+                                                                          myResult.Accuracy, myResult.Combo, myResult.Rank, myResult.FullCombo);
+    }
+
 }
