@@ -8,6 +8,7 @@ using System.Collections;
 /// </summary>
 public class MultiPlay_Result_UI : MonoBehaviour
 {
+    [Header("결과창 UI 요소")]
     [SerializeField] private TextMeshProUGUI score;
     [SerializeField] private TextMeshProUGUI great;
     [SerializeField] private TextMeshProUGUI good;
@@ -21,7 +22,7 @@ public class MultiPlay_Result_UI : MonoBehaviour
     [SerializeField] TMP_ColorGradient fullComboColor;
     [SerializeField] TMP_ColorGradient rateColor;
 
-    [SerializeField] Player_Result pResult;
+    [SerializeField] Player_Result pResultUI;
 
     [Header("플레이 결과")]
     [SerializeField] PlayResultData myResult;
@@ -32,31 +33,41 @@ public class MultiPlay_Result_UI : MonoBehaviour
     {
         fullCombo.SetActive(false);
         InintMyResult();
+        pResultUI.SetP1Name(GameManager_PSH.Data.P1Name);
+        pResultUI.SetP2Name(GameManager_PSH.Data.P2Name);
     }
 
-    public void SetOtherPlayerResult(int score, int great, int good, int bad, int miss, float acc, int combo, float rank, bool fullcom) {
-        Debug.Log($"{score} {great} {good} {bad} {miss} {acc}");
-        otherResult = new PlayResultData
+    #region Buttons
+    public void ShowP1ResulltButton() {
+        pResultUI.SelectP1();
+        //P1 결과 보여주기
+        if (GameManager_PSH.PlayerRole)
         {
-            Score = score,
-            Great = great,
-            Good = good,
-            Bad = bad,
-            Miss = miss,
-            Accuracy = acc,
-            Combo = combo,
-            Rank = rank,
-            FullCombo = fullcom
-        };
-        Debug.Log("상대방 정보 입력 완료");
-        CheckWinner();
+            SetResultToUI(myResult);
+        }
+        else
+        {
+            SetResultToUI(otherResult);
+        }
+    }
+
+    public void ShowP2ResulltButton() {
+        pResultUI.SelectP2();
+        if (GameManager_PSH.PlayerRole) {
+            SetResultToUI(otherResult);
+        }
+        else
+        {
+            SetResultToUI(myResult);
+        }
     }
     public void NextButton()
     {
         //결과 저장
         string musicID = GameManager_PSH.Instance.GetComponent<MusicData>().MusicID;
         string userID = GameManager_PSH.Data.GetPlayerID();
-        if (GameManager_PSH.PlayerRole) {
+        if (GameManager_PSH.PlayerRole)
+        {
             DBManager.Instance.StartCheckHighScore(userID, musicID, myResult.Score, myResult.Combo, myResult.Accuracy, rate.text);
         }
         else
@@ -64,88 +75,30 @@ public class MultiPlay_Result_UI : MonoBehaviour
             DBManager.Instance.StartCheckHighScore(userID, musicID, myResult.Score, myResult.Combo, myResult.Accuracy, rate.text);
         }
 
-        //세션 종료 및 방 목록 로비로 이동
+        //세션 종료 후목록 로비로 이동
         NetworkManager.runnerInstance.Shutdown();
         GameManager_PSH.PlayerRole = false;
+        GameManager_PSH.Data.P1Name = "P1";
+        GameManager_PSH.Data.P2Name = "P2";
         LoadingScreen.Instance.LoadScene("KGB_Multi_Lobby");
     }
 
-    public void ShowP1ResulltButton() {
-        pResult.SelectP1();
-        //P1 결과 보여주기
-        if (GameManager_PSH.PlayerRole)
-        {
-            score.text = myResult.Score.ToString();
-            great.text = myResult.Great.ToString();
-            good.text = myResult.Good.ToString();
-            bad.text = myResult.Bad.ToString();
-            miss.text = myResult.Miss.ToString();
-            accuracy.text = myResult.Accuracy.ToString();
-            combo.text = myResult.Combo.ToString();
-            CheckRank(myResult.Rank, myResult.FullCombo);
-        }
-        else
-        {
-            
-            score.text = otherResult.Score.ToString();
-            great.text = otherResult.Great.ToString();
-            good.text = otherResult.Good.ToString();
-            bad.text = otherResult.Bad.ToString();
-            miss.text = otherResult.Miss.ToString();
-            accuracy.text = otherResult.Accuracy.ToString();
-            combo.text = otherResult.Combo.ToString();
-            CheckRank(otherResult.Rank, otherResult.FullCombo);
-        }
-    }
+    #endregion
 
-    public void ShowP2ResulltButton() {
-        pResult.SelectP2();
-        if (GameManager_PSH.PlayerRole) {
-            score.text = otherResult.Score.ToString();
-            great.text = otherResult.Great.ToString();
-            good.text = otherResult.Good.ToString();
-            bad.text = otherResult.Bad.ToString();
-            miss.text = otherResult.Miss.ToString();
-            accuracy.text = otherResult.Accuracy.ToString();
-            combo.text = otherResult.Combo.ToString();
-            CheckRank(otherResult.Rank, otherResult.FullCombo);
-        }
-        else
-        {
-            score.text = myResult.Score.ToString();
-            great.text = myResult.Great.ToString();
-            good.text = myResult.Good.ToString();
-            bad.text = myResult.Bad.ToString();
-            miss.text = myResult.Miss.ToString();
-            accuracy.text = myResult.Accuracy.ToString();
-            combo.text = myResult.Combo.ToString();
-            CheckRank(myResult.Rank, myResult.FullCombo);
-        }
-    }
-    void CheckWinner()
+    /// <summary>
+    /// PlayResultData 값을 UI에 할당
+    /// </summary>
+    /// <param name="target"></param>
+    void SetResultToUI(PlayResultData target)
     {
-        if (GameManager_PSH.PlayerRole)
-        {
-            if (myResult.Score >= otherResult.Score)
-            {
-                pResult.SetP1Win();
-            }
-            else
-            {
-                pResult.SetP2Win();
-            }
-        }
-        else
-        {
-            if (myResult.Score >= otherResult.Score)
-            {
-                pResult.SetP2Win();
-            }
-            else
-            {
-                pResult.SetP1Win();
-            }
-        }
+        score.text = target.Score.ToString();
+        great.text = target.Great.ToString();
+        good.text = target.Good.ToString();
+        bad.text = target.Bad.ToString();
+        miss.text = target.Miss.ToString();
+        accuracy.text = target.Accuracy.ToString();
+        combo.text = target.Combo.ToString();
+        CheckRank(target.Rank, myResult.FullCombo);
     }
 
     void CheckRank(float rank, bool isFullCombo)
@@ -168,6 +121,34 @@ public class MultiPlay_Result_UI : MonoBehaviour
         }
         return;
     }
+
+    void CheckWinner()
+    {
+        if (GameManager_PSH.PlayerRole)
+        {
+            if (myResult.Score >= otherResult.Score)
+            {
+                pResultUI.SetP1Win();
+            }
+            else
+            {
+                pResultUI.SetP2Win();
+            }
+        }
+        else
+        {
+            if (myResult.Score >= otherResult.Score)
+            {
+                pResultUI.SetP2Win();
+            }
+            else
+            {
+                pResultUI.SetP1Win();
+            }
+        }
+    }
+
+    #region SetResultData
 
     void InintMyResult() {
         myResult = new PlayResultData
@@ -195,6 +176,25 @@ public class MultiPlay_Result_UI : MonoBehaviour
             ShowP2ResulltButton();
         }
     }
+
+    public void SetOtherPlayerResult(int score, int great, int good, int bad, int miss, float acc, int combo, float rank, bool fullcom)
+    {
+        Debug.Log($"{score} {great} {good} {bad} {miss} {acc}");
+        otherResult = new PlayResultData
+        {
+            Score = score,
+            Great = great,
+            Good = good,
+            Bad = bad,
+            Miss = miss,
+            Accuracy = acc,
+            Combo = combo,
+            Rank = rank,
+            FullCombo = fullcom
+        };
+        Debug.Log("상대방 정보 입력 완료");
+        CheckWinner();
+    }
     public IEnumerator Ready()
     {
         Debug.Log("레디 기다리는중");
@@ -203,4 +203,5 @@ public class MultiPlay_Result_UI : MonoBehaviour
                                                                           myResult.Accuracy, myResult.Combo, myResult.Rank, myResult.FullCombo);
     }
 
+    #endregion
 }
