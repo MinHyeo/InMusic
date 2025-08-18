@@ -214,8 +214,8 @@ public class KGB_GameManager_Multi : MonoBehaviour, IGameManager
     private async void EndingGame()
     {
         await Task.Delay(3000);
-        //°á°úÃ¢ ¶ç¿ì±â
-
+        //°á°úÃ¢ ¶ç¿ì±â (¾À ÀÌµ¿)
+        SceneManager.LoadScene("MultiPlay_Result");
     }
 
     public ScoreData GetScoreData()

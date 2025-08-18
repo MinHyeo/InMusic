@@ -41,6 +41,39 @@ public class MultiPlay_Result_UI : MonoBehaviour
         pResult.SetP2Name("p2");
     }
 
+    public void SetOtherPlayerResult(int score, int great, int good, int bad, int miss, float acc, int combo, float rank, bool fullcom) {
+        if (GameManager_PSH.PlayerRole) {
+            playResult2data = new PlayResultData
+            {
+                Score = score,
+                Great = great,
+                Good = good,
+                Bad = bad,
+                Miss = miss,
+                Accuracy = acc,
+                Combo = combo,
+                Rank = rank,
+                FullCombo = fullcom
+            };
+        }
+        else
+        {
+            playResult1data = new PlayResultData
+            {
+                Score = score,
+                Great = great,
+                Good = good,
+                Bad = bad,
+                Miss = miss,
+                Accuracy = acc,
+                Combo = combo,
+                Rank = rank,
+                FullCombo = fullcom
+            };
+        }
+        Debug.Log("상대방 정보 입력 완료");
+        CheckWinner();
+    }
     public void NextButton()
     {
         //결과 저장
@@ -100,35 +133,10 @@ public class MultiPlay_Result_UI : MonoBehaviour
             Combo = GameManagerProvider.Instance.MaxCombo,
             Rank = (float)GameManagerProvider.Instance.TotalScore / 1000000f * 100f,
             FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)
-
-            /*
-            //Notice: 임시
-            Score = 1,
-            Great = 1,
-            Good = 1,
-            Bad = 1,
-            Miss = 1,
-            Accuracy = 1,
-            Combo = 1,
-            Rank = 1.1f,
-            FullCombo = true*/
         };
-        //TODO: P2 정보 가져오기
-        playResult2data = new PlayResultData
-        {
-            Score = 0,
-            Great = 0,
-            Good = 0,
-            Bad = 0,
-            Miss = 0,
-            Accuracy = 0,
-            Combo = 0,
-            Rank = 0.0f,
-            FullCombo = false
-        };
-
-        CheckWinner();
         ShowP1ResulltButton();
+        ResultRCPManager.Instance.RPC_SendMyReult(playResult1data.Score, playResult1data.Great, playResult1data.Good, playResult1data.Bad, playResult1data.Miss,
+                                                                                    playResult1data.Accuracy, playResult1data.Combo, playResult1data.Rank, playResult1data.FullCombo);
     }
 
     void InitClient() {
@@ -143,37 +151,10 @@ public class MultiPlay_Result_UI : MonoBehaviour
             Combo = GameManagerProvider.Instance.MaxCombo,
             Rank = (float)GameManagerProvider.Instance.TotalScore / 1000000f * 100f,
             FullCombo = (GameManagerProvider.Instance.Combo == GameManagerProvider.Instance.TotalNotes)
-
-
-            /*
-            //Notice: 임시
-            Score = 1,
-            Great = 1,
-            Good = 1,
-            Bad = 1,
-            Miss = 1,
-            Accuracy = 1,
-            Combo = 1,
-            Rank = 1.1f,
-            FullCombo = true
-            */
         };
-        //TODO: P1 정보 가져오기
-        playResult1data = new PlayResultData
-        {
-            Score = (int)0,
-            Great = 0,
-            Good = 0,
-            Bad = 0,
-            Miss = 0,
-            Accuracy = 0,
-            Combo = 0,
-            Rank = 0.0f,
-            FullCombo = false
-        };
-
-        CheckWinner();
         ShowP2ResulltButton();
+        ResultRCPManager.Instance.RPC_SendMyReult(playResult2data.Score, playResult2data.Great, playResult2data.Good, playResult2data.Bad, playResult2data.Miss,
+                                                                                   playResult2data.Accuracy, playResult2data.Combo, playResult2data.Rank, playResult2data.FullCombo);
     }
 
     void CheckWinner()
