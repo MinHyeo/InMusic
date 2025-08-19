@@ -124,10 +124,10 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM
-  lastModified: 638900380616796465
+  lastModified: 638887918296234732
   FileSizes:
   - Name: Desktop
-    Value: 25110048
+    Value: 25110208
   Exists: 1
 --- !u!114 &-973457262210440787
 MonoBehaviour:
@@ -144,10 +144,10 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638900380616851662
+  lastModified: 638759861905905495
   FileSizes:
   - Name: Desktop
-    Value: 1360
+    Value: 1348
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -183,7 +183,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: -973457262210440787}
   cacheVersion: 131849
-  cacheTime: 638900380616891680
+  cacheTime: 638887918296234732
   SerializableEventsDict:
   - key: event:/BGM/Armageddon
     index: 0
@@ -379,10 +379,10 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638900380616826529
+  lastModified: 638759861905885264
   FileSizes:
   - Name: Desktop
-    Value: 1298
+    Value: 1260
   Exists: 1
 --- !u!114 &7168812128880830652
 MonoBehaviour:
@@ -399,10 +399,10 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638900380616891680
+  lastModified: 638759326271270664
   FileSizes:
   - Name: Desktop
-    Value: 506
+    Value: 494
   Exists: 1
 --- !u!114 &8769999848961162749
 MonoBehaviour:
