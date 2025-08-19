@@ -198,7 +198,7 @@ namespace SSW.DB
             form.AddField("music_score", scoreData.score);
             form.AddField("music_combo", scoreData.maxCombo);
             form.AddField("music_accuracy", scoreData.accuracy.ToString("F2"));
-            form.AddField("music_rate", scoreData.rank);
+            form.AddField("music_rank", scoreData.rank);
 
             //서버에 데이터 전송
             using (UnityWebRequest webRequest = UnityWebRequest.Post(_saveMusicLogURL, form))
