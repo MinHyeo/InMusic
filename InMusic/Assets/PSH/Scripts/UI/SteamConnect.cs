@@ -51,6 +51,7 @@ public class SteamConnect : MonoBehaviour
         }
 
         GameManager_PSH.Data.SetPlayerData(userID, userName);
+        GameManager_PSH.Data.MyName = userName;
         return true;
     }
 

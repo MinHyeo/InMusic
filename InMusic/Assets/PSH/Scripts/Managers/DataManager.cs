@@ -8,8 +8,10 @@ public class DataManager
     PlayerData pData;
     public bool isLogReady = false;
 
-    public string P1Name { get; set; } = "P1";
-    public string P2Name { get; set; } = "P2";
+    #region MultiPlay
+    public string MyName { get; set; } = "Me";
+    public string OtherName { get; set; } = "Who?";
+    #endregion
 
     public void Init() {
         executeData = GameManager_PSH.Instance.GetComponent<MusicData>();

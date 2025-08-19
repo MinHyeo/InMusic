@@ -33,8 +33,15 @@ public class MultiPlay_Result_UI : MonoBehaviour
     {
         fullCombo.SetActive(false);
         InintMyResult();
-        pResultUI.SetP1Name(GameManager_PSH.Data.P1Name);
-        pResultUI.SetP2Name(GameManager_PSH.Data.P2Name);
+        if (GameManager_PSH.PlayerRole) {
+            pResultUI.SetP1Name(GameManager_PSH.Data.MyName);
+            pResultUI.SetP2Name(GameManager_PSH.Data.OtherName);
+        }
+        else
+        {
+            pResultUI.SetP1Name(GameManager_PSH.Data.OtherName);
+            pResultUI.SetP2Name(GameManager_PSH.Data.MyName);
+        }
     }
 
     #region Buttons
@@ -78,8 +85,7 @@ public class MultiPlay_Result_UI : MonoBehaviour
         //세션 종료 후목록 로비로 이동
         NetworkManager.runnerInstance.Shutdown();
         GameManager_PSH.PlayerRole = false;
-        GameManager_PSH.Data.P1Name = "P1";
-        GameManager_PSH.Data.P2Name = "P2";
+        GameManager_PSH.Data.OtherName = "Who?";
         LoadingScreen.Instance.LoadScene("KGB_Multi_Lobby");
     }
 
