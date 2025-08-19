@@ -60,8 +60,6 @@ public class PlayerStateController : NetworkBehaviour
 
     public override void Spawned()
     {
-        // DontDestroyOnLoad 테스트
-        DontDestroyOnLoad(gameObject);
         Debug.Log($"[PlayerState] Spawned - Object.HasInputAuthority: {Object.HasInputAuthority}");
         Debug.Log($"[PlayerState] Spawned - Object.InputAuthority: {Object.InputAuthority}");
         Debug.Log($"[PlayerState] Spawned - Runner.LocalPlayer: {Runner.LocalPlayer}");
