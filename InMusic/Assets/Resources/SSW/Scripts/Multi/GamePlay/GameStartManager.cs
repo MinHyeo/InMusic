@@ -15,7 +15,7 @@ public class GameStartManager : NetworkBehaviour
         
         // 스프라이트는 로컬에서 로드 (네트워크 전송 비용 절약)
         Sprite songSprite = Resources.Load<Sprite>($"Song/{songTitle}/{songTitle}");
-        
+        MultiRoomManager.Instance.SetSongInfo(songTitle, songArtist);
         // 모든 클라이언트가 로딩 UI 표시 - 네트워크로 전달받은 정확한 데이터 사용
         MultiLoadingSong loadingSong = MultiLoadingSong.Instance;
         if (loadingSong != null)
@@ -72,10 +72,7 @@ public class GameStartManager : NetworkBehaviour
             if (highlightSong != null)
             {
                 var (title, artist, duration, sprite) = highlightSong.GetSelectedSongInfo();
-                
-                // 🔥 중요: 세션 프로퍼티를 RPC 호출 전에 미리 업데이트
-                UpdateSessionProperties(title, artist);
-                
+
                 // 그 다음에 RPC 호출하여 씬 로딩 시작
                 RPC_StartGame(title, artist, duration);
             }
@@ -84,9 +81,6 @@ public class GameStartManager : NetworkBehaviour
                 Debug.LogError("[GameStartManager] MultiHighlightSong not found!");
                 // 폴백으로 MultiSongListController에서 정보 가져오기
                 string selectedSongName = GetSelectedSongName();
-                
-                // 🔥 폴백의 경우에도 세션 프로퍼티 먼저 업데이트
-                UpdateSessionProperties(selectedSongName, "Unknown Artist");
                 
                 RPC_StartGame(selectedSongName, "Unknown Artist", "00:00");
             }
@@ -100,26 +94,26 @@ public class GameStartManager : NetworkBehaviour
     /// <summary>
     /// 세션 프로퍼티 업데이트 (씬 로딩 전에 호출)
     /// </summary>
-    private void UpdateSessionProperties(string selectedSongName, string selectedSongArtist)
-    {
-        Debug.Log($"[GameStartManager] Updating session properties BEFORE scene loading - Song: {selectedSongName}");
+    // private void UpdateSessionProperties(string selectedSongName, string selectedSongArtist)
+    // {
+    //     Debug.Log($"[GameStartManager] Updating session properties BEFORE scene loading - Song: {selectedSongName}");
         
-        MultiRoomManager.Instance.SetSongInfo(selectedSongName, selectedSongArtist);
-        // try
-        // {
-        //     Dictionary<string, SessionProperty> newProps = new()
-        //     {
-        //         { "songName", selectedSongName },
-        //         { "gameStarted", true }
-        //     };
+    //     // MultiRoomManager.Instance.SetSongInfo(selectedSongName, selectedSongArtist);
+    //     // try
+    //     // {
+    //     //     Dictionary<string, SessionProperty> newProps = new()
+    //     //     {
+    //     //         { "songName", selectedSongName },
+    //     //         { "gameStarted", true }
+    //     //     };
 
-        //     NetworkManager.runnerInstance.SessionInfo.UpdateCustomProperties(newProps);
+    //     //     NetworkManager.runnerInstance.SessionInfo.UpdateCustomProperties(newProps);
 
-        //     Debug.Log($"[GameStartManager] Session properties updated successfully - gameStarted: true, songName: {selectedSongName}");
-        // }
-        // catch (System.Exception ex)
-        // {
-        //     Debug.LogError($"[GameStartManager] Failed to update session properties: {ex.Message}");
-        // }
-    }
+    //     //     Debug.Log($"[GameStartManager] Session properties updated successfully - gameStarted: true, songName: {selectedSongName}");
+    //     // }
+    //     // catch (System.Exception ex)
+    //     // {
+    //     //     Debug.LogError($"[GameStartManager] Failed to update session properties: {ex.Message}");
+    //     // }
+    // }
 }
