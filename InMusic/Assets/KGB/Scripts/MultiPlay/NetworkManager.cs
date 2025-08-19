@@ -89,6 +89,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             Scene = SceneRef.FromIndex(GetSceneIndex(waitngScene)),
             SessionName = newSessionName,
             GameMode = GameMode.Shared,
+            PlayerCount = 2,
         });
 
         GameManager_PSH.PlayerRole = true;
@@ -101,6 +102,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             Scene = SceneRef.FromIndex(GetSceneIndex(waitngScene)), //юс╫ц
             SessionName = newSessionName,
             GameMode = GameMode.Shared,
+            PlayerCount = 2,
             SessionProperties = new Dictionary<string, SessionProperty>
             {
                 {"pw", password}
