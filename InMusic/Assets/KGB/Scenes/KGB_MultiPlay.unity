@@ -9638,7 +9638,7 @@ MonoBehaviour:
   fullCombo: {fileID: 1948521735}
   fullComboColor: {fileID: 0}
   rateColor: {fileID: 0}
-  pResult: {fileID: 1425903744}
+  pResultUI: {fileID: 1425903744}
 --- !u!114 &1550329173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10440,7 +10440,7 @@ GameObject:
   - component: {fileID: 1690676913}
   - component: {fileID: 1690676912}
   m_Layer: 5
-  m_Name: StartButton
+  m_Name: Next
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -51,7 +51,6 @@ public class Waiting_Room_UI : UI_Base_PSH
         if (musicList == null || mList == null)
             musicList = transform.Find("MusicList").gameObject;
         mList = musicList.GetComponent<MusicList>();
-
     }
 
     void Start()
@@ -70,6 +69,8 @@ public class Waiting_Room_UI : UI_Base_PSH
         playerStatusController.SetP2Object(networkObject.gameObject);
         playerStatusController.SetPlayerName(1, playerInfo.PlayerName.ToString());
         playerStatusController.SetPlayerStatus(1, false, false);
+
+        GameManager_PSH.Data.OtherName = otherPlayerObject.GetComponent<PlayerInfo>().PlayerName.ToString();
     }
 
     void PlayerLeft(PlayerRef playerRef)
@@ -85,6 +86,8 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
         otherPlayerObject = null;
         playerStatusController.InitP2Status();
+
+        GameManager_PSH.Data.OtherName = "Who??";
 
         //방장 권한 가져오기
         localPlayerObject.GetComponent<PlayerInfo>().Rpc_SetOwner(true);
@@ -143,7 +146,7 @@ public class Waiting_Room_UI : UI_Base_PSH
                 ChangeRoomOwner(true);
                 playerStatusController.SetPlayerMark(false);
                 playerStatusController.SetPlayerStatus(1, false, false);
-                playerStatusController.SetPlayerName(1, pObject.GetComponent<PlayerInfo>().PlayerName.ToString());
+                playerStatusController.SetPlayerName(1, GameManager_PSH.Data.MyName);
                 playerStatusController.SetP2Object(localPlayerObject.gameObject);
             }
             else
@@ -153,6 +156,7 @@ public class Waiting_Room_UI : UI_Base_PSH
                 playerStatusController.SetPlayerStatus(0, false, true);
                 playerStatusController.SetPlayerName(0, pObject.GetComponent<PlayerInfo>().PlayerName.ToString());
                 playerStatusController.SetP1Object(otherPlayerObject.gameObject);
+                GameManager_PSH.Data.OtherName = otherPlayerObject.GetComponent<PlayerInfo>().PlayerName.ToString();
             }
         }
     }

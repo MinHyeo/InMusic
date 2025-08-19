@@ -62,7 +62,7 @@ public class PlayerInfo : NetworkBehaviour
     {
         if (Object.HasInputAuthority)
         {
-            //PlayerName = GameManager_PSH.Data.GetPlayerName();
+            PlayerName = GameManager_PSH.Data.MyName;
             Debug.Log($"로컬 플레이어({Object.InputAuthority.PlayerId}) 이름 설정: {PlayerName}");
             //초기 준비 상태 설정
             IsReady = false;

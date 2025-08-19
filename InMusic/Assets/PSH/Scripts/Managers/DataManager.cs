@@ -7,6 +7,12 @@ public class DataManager
     List<MusicLog> logList;
     PlayerData pData;
     public bool isLogReady = false;
+
+    #region MultiPlay
+    public string MyName { get; set; } = "Me";
+    public string OtherName { get; set; } = "Who?";
+    #endregion
+
     public void Init() {
         executeData = GameManager_PSH.Instance.GetComponent<MusicData>();
         pData = GameManager_PSH.Instance.GetComponent<PlayerData>();
