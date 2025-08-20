@@ -31,6 +31,9 @@
 		<relationship name="parameters">
 			<destination>{bf2a0f55-8a1e-40e6-afd7-95728ec09d87}</destination>
 		</relationship>
+		<relationship name="userProperties">
+			<destination>{ebbe7abe-b618-4316-8337-490050c7b905}</destination>
+		</relationship>
 		<relationship name="banks">
 			<destination>{4544f59e-da30-4ce8-abe7-56044b23a0e4}</destination>
 		</relationship>
@@ -70,6 +73,14 @@
 		<relationship name="modules">
 			<destination>{9d322c45-5295-4219-b12f-7e5f12689605}</destination>
 		</relationship>
+	</object>
+	<object class="UserProperty" id="{ebbe7abe-b618-4316-8337-490050c7b905}">
+		<property name="key">
+			<value>Duration</value>
+		</property>
+		<property name="value">
+			<value>29.413</value>
+		</property>
 	</object>
 	<object class="EventMixerMaster" id="{d0d7c06c-27b4-4b60-9dac-010d725fe69a}">
 		<property name="volume">

@@ -91,62 +91,6 @@ public class PlayerStateController : NetworkBehaviour
         // SharedModeMasterClient는 Fusion이 자동으로 승계
     }
 
-    #region Fusion Callbacks
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void RPC_RequestInitialization(string nickname)
-    {
-        Debug.Log($"[RPC_RequestInitialization] Initializing: {nickname}");
-
-        // 닉네임만 설정 (SharedModeMasterClient는 Fusion이 자동 관리)
-        Nickname = nickname;
-
-        // 초기화 완료 후 UI 업데이트 강제 실행
-        Invoke(nameof(ForceUIUpdateAfterInit), 0.2f);
-
-        Debug.Log($"[RPC_RequestInitialization] Player {nickname} initialized");
-    }
-
-    private void ForceUIUpdateAfterInit()
-    {
-        Debug.Log($"[PlayerState] Force UI update after initialization for {Nickname}");
-
-        // 모든 클라이언트에서 UI 업데이트
-        PlayerUIController uiController = FindFirstObjectByType<PlayerUIController>();
-        if (uiController != null)
-        {
-            uiController.ForceRefreshAllSlots();
-        }
-    }
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void RPC_SetNickname(string name)
-    {
-        Debug.Log($"[RPC_SetNickname] Received: {name}");
-        Nickname = name;
-        Debug.Log($"[RPC_SetNickname] Set Nickname to: {Nickname}");
-    }
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void RPC_ToggleReady()
-    {
-        bool oldReady = IsReady;
-        IsReady = !IsReady;
-        Debug.Log($"[PlayerState] {Nickname} Ready toggled: {oldReady} → {IsReady}");
-
-        // Ready 상태 변경 후 모든 클라이언트에 강제 UI 업데이트 알림
-        RPC_NotifyReadyStateChanged(Nickname, IsReady);
-    }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void RPC_NotifyReadyStateChanged(string playerName, bool readyState)
-    {
-        Debug.Log($"[PlayerState] Ready state changed notification: {playerName} → {readyState}");
-
-        // 약간의 지연 후 UI 업데이트 (네트워크 동기화 완료 대기)
-        Invoke(nameof(ForceUIUpdateAfterReady), 0.1f);
-    }
-
     private void ForceUIUpdateAfterReady()
     {
         Debug.Log("[PlayerState] Force UI update after Ready state change");
@@ -179,6 +123,72 @@ public class PlayerStateController : NetworkBehaviour
                 controller.ForceCenterAtIndex(currentIndex);
             }
         }
+    }
+
+    private void ForceUIUpdateAfterInit()
+    {
+        Debug.Log($"[PlayerState] Force UI update after initialization for {Nickname}");
+
+        // 모든 클라이언트에서 UI 업데이트
+        PlayerUIController uiController = FindFirstObjectByType<PlayerUIController>();
+        if (uiController != null)
+        {
+            uiController.ForceRefreshAllSlots();
+        }
+    }
+
+    #region Fusion Callbacks
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_RequestInitialization(string nickname)
+    {
+        Debug.Log($"[RPC_RequestInitialization] Initializing: {nickname}");
+
+        // 닉네임만 설정 (SharedModeMasterClient는 Fusion이 자동 관리)
+        Nickname = nickname;
+
+        // 초기화 완료 후 UI 업데이트 강제 실행
+        Invoke(nameof(ForceUIUpdateAfterInit), 0.2f);
+
+        Debug.Log($"[RPC_RequestInitialization] Player {nickname} initialized");
+    }
+
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_SetNickname(string name)
+    {
+        Debug.Log($"[RPC_SetNickname] Received: {name}");
+        Nickname = name;
+        Debug.Log($"[RPC_SetNickname] Set Nickname to: {Nickname}");
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_ToggleReady()
+    {
+        bool oldReady = IsReady;
+        IsReady = !IsReady;
+        Debug.Log($"[PlayerState] {Nickname} Ready toggled: {oldReady} → {IsReady}");
+
+        // Ready 상태 변경 후 모든 클라이언트에 강제 UI 업데이트 알림
+        RPC_NotifyReadyStateChanged(Nickname, IsReady);
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_NotifyReadyStateChanged(string playerName, bool readyState)
+    {
+        Debug.Log($"[PlayerState] Ready state changed notification: {playerName} → {readyState}");
+
+        // 약간의 지연 후 UI 업데이트 (네트워크 동기화 완료 대기)
+        Invoke(nameof(ForceUIUpdateAfterReady), 0.1f);
+    }
+
+
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_SetReadyState(bool ready)
+    {
+        Debug.Log($"[PlayerState] RPC_SetReadyState: {Nickname} → {ready}");
+        IsReady = ready;
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]

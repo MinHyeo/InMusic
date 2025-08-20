@@ -58,13 +58,13 @@ public class BmsLoader : SingleTon<BmsLoader>
 
     private FileInfo fileName = null;
     private StreamReader reader = null;
-    private string path;            // ?? ???? path
-    private string StrText;         // ???? ?? ??? ?¬à??? ?? ????? ????
-    private string songName;        // ?? ????
-    private int noteCount;           // ??? ????
+    private string path;            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ path
+    private string StrText;         // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ù¾ï¿½ ï¿½Ğ¾ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    private string songName;        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    private int noteCount;           // ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 
-    private char[] seps;            // ?????? ?????? ?ò÷
-    private string tempStr;         // ??????? ???? ??????? ?????? ????
+    private char[] seps;            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­
+    private string tempStr;         // ï¿½ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     private void Start()
     {
@@ -83,7 +83,7 @@ public class BmsLoader : SingleTon<BmsLoader>
         //path += songName + "/";
         fileName = new FileInfo(Path.Combine(path, song.ToString() + ".bms"));
 
-        if (!fileName.Exists) // µğ·ºÅä¸®³ª ÆÄÀÏÀÌ ¾ø´Â °æ¿ì Ã³¸®
+        if (!fileName.Exists) // ë””ë ‰í† ë¦¬ë‚˜ íŒŒì¼ì´ ì—†ëŠ” ê²½ìš° ì²˜ë¦¬
         {
             Debug.LogWarning($"File not found: {fileName.FullName}. Returning dummy data for testing.");
             return GenerateDummyData(songName);
@@ -97,39 +97,47 @@ public class BmsLoader : SingleTon<BmsLoader>
     }
 
     /// <summary>
-    /// FMOD¿¡¼­ °îÀÇ Àç»ı½Ã°£À» °¡Á®¿É´Ï´Ù. ½ÇÆĞÇÏ¸é 0À» ¹İÈ¯ÇÕ´Ï´Ù.
+    /// FMODì—ì„œ User Propertyë¡œ ê³¡ì˜ ì¬ìƒì‹œê°„ì„ ê°€ì ¸ì˜µë‹ˆë‹¤.
     /// </summary>
     private float GetSongDurationFromFMOD(string songTitle)
     {
         string bgmEventPath = "event:/BGM/" + songTitle;
-        Debug.Log($"[BmsLoader] Trying FMOD path: {bgmEventPath}");
         
         EventDescription eventDescription;
         var result = RuntimeManager.StudioSystem.getEvent(bgmEventPath, out eventDescription);
         
-        Debug.Log($"[BmsLoader] FMOD getEvent result: {result}");
-        
         if (result == FMOD.RESULT.OK && eventDescription.isValid())
         {
-            int lengthMs;
-            var lengthResult = eventDescription.getLength(out lengthMs);
-            Debug.Log($"[BmsLoader] getLength result: {lengthResult}, length: {lengthMs}ms");
+            USER_PROPERTY userProperty;
+            var propertyResult = eventDescription.getUserProperty("Duration", out userProperty);
             
-            float durationSeconds = lengthMs / 1000f;
-            Debug.Log($"[BmsLoader] Final duration: {durationSeconds}s for {songTitle}");
-            return durationSeconds;
-        }
-        else
-        {
-            Debug.LogWarning($"[BmsLoader] Failed to get FMOD event: {bgmEventPath}, result: {result}");
+            if (propertyResult == FMOD.RESULT.OK)
+            {
+                if (userProperty.type == USER_PROPERTY_TYPE.FLOAT)
+                {
+                    float duration = userProperty.floatValue();
+                    Debug.Log($"[BmsLoader] Duration: {duration}s for {songTitle}");
+                    return duration;
+                }
+                else if (userProperty.type == USER_PROPERTY_TYPE.STRING)
+                {
+                    string value = userProperty.stringValue();
+                    if (float.TryParse(value, out float duration))
+                    {
+                        Debug.Log($"[BmsLoader] Duration: {duration}s for {songTitle}");
+                        return duration;
+                    }
+                }
+            }
         }
         
-        return 0f; // ½ÇÆĞÇÏ¸é 0 ¹İÈ¯
+        Debug.LogWarning($"[BmsLoader] Failed to get duration for {songTitle}");
+        return 0f;
     }
 
     private SongInfo GenerateDummyData(string songName)
     {
-        // Å×½ºÆ®¿ë ±âº» SongInfo µ¥ÀÌÅÍ¸¦ »ı¼º
+        // í…ŒìŠ¤íŠ¸ìš© ê¸°ë³¸ SongInfo ë°ì´í„°ë¥¼ ìƒì„±
         SongInfo dummyData = new SongInfo
         {
             Title = songName,
@@ -163,13 +171,13 @@ public class BmsLoader : SingleTon<BmsLoader>
             {
                 string[] data = trimmedLine.Split(' ');
 
-                // ?????? ?????? ???? ??? ??????? ???? ??Äî?? ??? ??.
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï¸é¼­ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½Ç³ï¿½ ï¿½ï¿½.
                 if (data[0].IndexOf(":") == -1 && data.Length == 1)
                 {
                     continue;
                 }
 
-                // BMS ?????? ??? ???
+                // BMS ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
                 if (data[0].Equals("#TITLE"))
                 {
                     bmsData.Title = data[1];
@@ -232,7 +240,7 @@ public class BmsLoader : SingleTon<BmsLoader>
                 }
                 else
                 {
-                    // ???? ??Äî ??? ??????? ???? ???, ?????? ????
+                    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     int bar = 0;
                     Int32.TryParse(data[0].Substring(1, 3), out bar);
 

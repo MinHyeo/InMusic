@@ -327,7 +327,8 @@ public class ReadyStartController : MonoBehaviour
             if (localPlayer != null && localPlayer.IsReady)
             {
                 Debug.Log($"[ReadyStartController] Clearing ready state for local non-master client: {localPlayer.Nickname}");
-                localPlayer.IsReady = false;
+                // RPC를 통해 레디 상태 해제
+                localPlayer.RPC_SetReadyState(false);
                 
                 // UI 업데이트
                 UpdateButtonStates();

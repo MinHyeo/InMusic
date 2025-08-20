@@ -126,23 +126,4 @@ public class PlayerSlotUI : MonoBehaviour
         // 방장 이전/킥 기능은 별도 UI에서 통합 관리
         _transferHostButton.gameObject.SetActive(false);
     }
-    
-    /// <summary>
-    /// 로컬 플레이어 찾기
-    /// </summary>
-    private PlayerStateController GetLocalPlayer()
-    {
-        var allPlayers = MultiRoomManager.Instance?.GetAllPlayers();
-        if (allPlayers != null)
-        {
-            foreach (var player in allPlayers)
-            {
-                if (player.Object.HasInputAuthority)
-                {
-                    return player;
-                }
-            }
-        }
-        return null;
-    }
 }

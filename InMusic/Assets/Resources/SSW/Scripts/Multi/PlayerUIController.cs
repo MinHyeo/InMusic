@@ -8,6 +8,7 @@ public class PlayerUIController : MonoBehaviour
     private void Start()
     {
         RefreshAllSlots();
+        ClearAllPlayersReady(); // 즉시 호출
         
         // 씬 전환 후 NetworkObject 준비 대기용 재시도
         Invoke(nameof(RefreshAllSlots), 0.1f);
@@ -21,6 +22,24 @@ public class PlayerUIController : MonoBehaviour
             RefreshAllSlots();
         }
         
+    }
+    
+    private void ClearAllPlayersReady()
+    {
+        Debug.Log("[PlayerUIController] Clearing all players ready state on room enter");
+        
+        var players = MultiRoomManager.Instance?.GetAllPlayers();
+        if (players != null)
+        {
+            foreach (var player in players)
+            {
+                if (player.Object.HasInputAuthority && player.IsReady)
+                {
+                    Debug.Log($"[PlayerUIController] Clearing ready state for {player.Nickname}");
+                    player.RPC_SetReadyState(false);
+                }
+            }
+        }
     }
     
     private bool HasPlayerListChanged()
