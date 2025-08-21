@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Play.Result
@@ -67,7 +68,7 @@ namespace Play.Result
             currentIndex = index;
             userResult.Select(currentIndex);
 
-            resultText.SetSongInfoText(scoreData[currentIndex].songName, scoreData[currentIndex].artist);
+            //resultText.SetSongInfoText(scoreData[currentIndex].songName, scoreData[currentIndex].artist);
             resultText.SetResultText(scoreData[currentIndex].score, new int[] { scoreData[currentIndex].great, scoreData[currentIndex].good, scoreData[currentIndex].bad, scoreData[currentIndex].miss }, scoreData[currentIndex].accuracy, scoreData[currentIndex].maxCombo);
             resultText.SetRank(scoreData[currentIndex].rank, scoreData[currentIndex].isFullCombo);
         }
@@ -75,6 +76,7 @@ namespace Play.Result
         public void OnClickNextButton()
         {
             NetworkManager.runnerInstance.LoadScene("MultiRoom");
+            //await SceneManager.LoadSceneAsync("MultiRoom");
         }
     }
 }

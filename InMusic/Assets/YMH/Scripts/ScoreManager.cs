@@ -7,8 +7,6 @@ namespace Play
 {
     public class ScoreManager : MonoBehaviour
     {
-        private int userIndex = 0;
-
         [Header("Score and Accuracy Scripts")]
         [SerializeField]
         private Accuracy accuracyScript;

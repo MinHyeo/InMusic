@@ -52,10 +52,18 @@ namespace Play.Result
         /// <param name="songArtist"></param>
         public void SetSongInfoText(string songName, string songArtist)
         {
-            songImage = Resources.Load<Image>("Song/" + songName + "/" + songName);
+            string path = "Song/" + songName + "/" + songName;
+            var image = Resources.Load<Sprite>(path);
+            if(image == null)
+            {
+                Debug.LogError($"Image not found at path: {path}");
+                return;
+            }
+
+            songImage.sprite = image;
             songNameText.text = songName;
             songArtistText.text = songArtist;
-            backgroundImage = songImage;
+            backgroundImage.sprite = image;
         }
 
         /// <summary>

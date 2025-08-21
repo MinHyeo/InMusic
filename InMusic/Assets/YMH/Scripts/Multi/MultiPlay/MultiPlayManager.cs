@@ -1,10 +1,6 @@
-using Play;
 using Fusion;
 using UnityEngine;
 using System.Collections;
-using TMPro;
-using ExitGames.Client.Photon.StructWrapping;
-using Unity.Mathematics;
 
 namespace Play
 {
@@ -305,7 +301,7 @@ namespace Play
             GameManager.Instance.SetGameState(GameState.MultiRoom);
 
             // 결과 처리
-            ScoreData[] scoreDatas = MultiScoreComparison.Instance.SetScore(songName.ToString(), artist);
+            ScoreData[] scoreDatas = MultiScoreComparison.Instance.SetScore(songName, artist);
             Result.MultiResultManager.Instance.ReceiveResult(scoreDatas);
         }
         #endregion
