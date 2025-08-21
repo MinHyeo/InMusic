@@ -19,6 +19,7 @@ namespace Play.Result
         private WaitForSeconds delayTime = new WaitForSeconds(3f); // 3 seconds
 
         private int currentIndex = 0;
+        private int winnerIndex = 0;
 
         private void Start()
         {
@@ -32,13 +33,17 @@ namespace Play.Result
                 ScoreData temp = scoreData[0];
                 scoreData[0] = scoreData[1];
                 scoreData[1] = temp;
+                winnerIndex = 1 - winnerIndex;
             }
         }
 
         public void ReceiveResult(ScoreData[] scoreData)
         {
             this.scoreData = scoreData;
+            winnerIndex = 0;
             SetWinner();
+            MultiPlayUserSetting.Instance.SetResultUserSetting(winnerIndex, 0);
+            MultiPlayUserSetting.Instance.SetResultUserSetting(1 - winnerIndex, 1);
             StartCoroutine(ShowResults());
         }
 
@@ -48,6 +53,7 @@ namespace Play.Result
 
             resultCanvas.SetActive(true);
             userResult.SetUserResult("Player");
+            
 
             resultText.SetSongInfoText(scoreData[currentIndex].songName, scoreData[currentIndex].artist);
             resultText.SetResultText(scoreData[currentIndex].score, new int[] { scoreData[currentIndex].great, scoreData[currentIndex].good, scoreData[currentIndex].bad, scoreData[currentIndex].miss }, scoreData[currentIndex].accuracy, scoreData[currentIndex].maxCombo);

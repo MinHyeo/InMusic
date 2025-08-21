@@ -15,11 +15,7 @@ public class UserResult : MonoBehaviour
         userSelectImage[1].SetActive(false);
         userSelectImage[0].SetActive(true);
 
-        //이름
-        // userNameText[0].text = userName;
-        // serNameText[1].text = userName;
-
-
+        
     }
 
     public void Select(int index)

@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using TMPro;
 using ExitGames.Client.Photon.StructWrapping;
+using Unity.Mathematics;
 
 namespace Play
 {
@@ -66,6 +67,20 @@ namespace Play
             // 노래 제목, 가수 불러오기
             songName = MultiRoomManager.Instance.songName;
             artist = MultiRoomManager.Instance.artist;
+
+            // User UI 설정
+            foreach (var pRef in runner.ActivePlayers)
+            {
+                var obj = runner.GetPlayerObject(pRef);
+                if (obj == null)
+                    continue;
+
+                bool isMy = pRef == runner.LocalPlayer;
+                var playerInfo = obj.GetComponent<PlayerStateController>();
+                string otherName = playerInfo.Nickname;
+                bool isRed = playerInfo.IsRed;
+                MultiPlayUserSetting.Instance.SetUserSetting(otherName, isRed, isMy);
+            }
 
             // 시작 시간 계산
             double delay = 3.0f;
