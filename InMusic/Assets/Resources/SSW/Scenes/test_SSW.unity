@@ -1614,6 +1614,7 @@ MonoBehaviour:
   _songListController: {fileID: 45358250}
   _detailTitleText: {fileID: 1174743300}
   _detailArtistText: {fileID: 1716697188}
+  _detailPlayTimeText: {fileID: 36472720}
   _detailPlayTime: 
   _detailImage: {fileID: 1868857856}
   loadingSongObj: {fileID: 0}

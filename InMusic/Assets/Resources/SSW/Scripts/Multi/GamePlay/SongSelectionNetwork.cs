@@ -108,6 +108,16 @@ public class SongSelectionNetwork : NetworkBehaviour
     /// </summary>
     private void ClearNonMasterPlayersReady()
     {
+        // RPC를 통해 모든 클라이언트에서 레디 해제 처리
+        RPC_ClearNonMasterPlayersReady();
+    }
+
+    /// <summary>
+    /// 모든 클라이언트에서 실행되는 레디 해제 RPC
+    /// </summary>
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_ClearNonMasterPlayersReady()
+    {
         // ReadyStartController에 레디 해제 요청
         var readyController = FindFirstObjectByType<ReadyStartController>();
         if (readyController != null)

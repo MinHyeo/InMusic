@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using Play;
 using System.Collections.Generic;
 using SSW.DB;
+using SSW;
 
 namespace SongList{
     public class HighlightSong : MonoBehaviour
@@ -15,6 +16,7 @@ namespace SongList{
         [Header("Detail UI")]
         [SerializeField] private Text _detailTitleText; // 좌측에 표시할 제목 Text
         [SerializeField] private Text _detailArtistText; // 좌측에 표시할 아티스트 Text
+        [SerializeField] private Text _detailPlayTimeText; // 플레이 시간 표시 Text
         [SerializeField] private string _detailPlayTime; // 플레이 시간
         [SerializeField] private Image _detailImage; // 좌측에 표시할 이미지
         [SerializeField] private LoadingSong loadingSongObj;
@@ -60,11 +62,15 @@ namespace SongList{
             if (_detailTitleText != null)  _detailTitleText.text  = songInfo.Title;
             if (_detailArtistText != null) _detailArtistText.text = songInfo.Artist;
             
-            // Duration을 MM:SS 형태로 포맷팅해서 저장
+            // Duration을 MM:SS 형태로 포맷팅해서 저장 (멀티와 동일한 방식)
             int totalSeconds = Mathf.RoundToInt(songInfo.Duration);
             int minutes = totalSeconds / 60;
             int seconds = totalSeconds % 60;
             _detailPlayTime = $"{minutes:00}:{seconds:00}";
+            
+            // UI에 표시
+            if (_detailPlayTimeText != null)
+                _detailPlayTimeText.text = _detailPlayTime;
 
             // 이미지 로드
             if (_detailImage != null)

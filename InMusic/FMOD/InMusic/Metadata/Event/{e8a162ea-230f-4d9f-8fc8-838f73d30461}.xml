@@ -32,7 +32,7 @@
 			<destination>{bf2a0f55-8a1e-40e6-afd7-95728ec09d87}</destination>
 		</relationship>
 		<relationship name="userProperties">
-			<destination>{ebbe7abe-b618-4316-8337-490050c7b905}</destination>
+			<destination>{46ead09a-0571-4fa1-b49b-c0d3531051d1}</destination>
 		</relationship>
 		<relationship name="banks">
 			<destination>{4544f59e-da30-4ce8-abe7-56044b23a0e4}</destination>
@@ -74,7 +74,7 @@
 			<destination>{9d322c45-5295-4219-b12f-7e5f12689605}</destination>
 		</relationship>
 	</object>
-	<object class="UserProperty" id="{ebbe7abe-b618-4316-8337-490050c7b905}">
+	<object class="UserProperty" id="{46ead09a-0571-4fa1-b49b-c0d3531051d1}">
 		<property name="key">
 			<value>Duration</value>
 		</property>

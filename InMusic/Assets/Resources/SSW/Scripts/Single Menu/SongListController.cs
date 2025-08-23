@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System;
 using System.Linq;
 using SSW.DB;
+using SSW;
 
 namespace SongList
 {
@@ -94,6 +95,14 @@ namespace SongList
                         Artist = md.musicArtist
                         // 나머지 필드는 필요 시 기본값 설정
                     };
+                    
+                    // BmsLoader로 Duration 설정 (멀티와 동일한 방식)
+                    if (Enum.TryParse(md.musicName, out Song song))
+                    {
+                        SongInfo bmsInfo = BmsLoader.Instance.SelectSong(song);
+                        info.Duration = bmsInfo.Duration;
+                    }
+                    
                     _songs.Add(info);
                 }
             }

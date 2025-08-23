@@ -72,6 +72,9 @@ public class PlayerStateController : NetworkBehaviour
 
             // 간단한 초기화 요청
             RPC_RequestInitialization(nickname);
+            
+            // 씬 로드 완료 이벤트 구독
+            NetworkManager.OnGamePlayLoadingCompleted += OnSceneLoadCompleted;
         }
         else
         {
@@ -88,7 +91,25 @@ public class PlayerStateController : NetworkBehaviour
         Debug.Log($"[Despawned] Authority Info - HasStateAuthority: {Object.HasStateAuthority}, InputAuthority: {Object.InputAuthority}");
         Debug.Log($"[Despawned] DontDestroyOnLoad 적용되어 있지만 Despawned 호출");
 
+        // 이벤트 구독 해제
+        if (Object.HasInputAuthority)
+        {
+            NetworkManager.OnGamePlayLoadingCompleted -= OnSceneLoadCompleted;
+        }
+
         // SharedModeMasterClient는 Fusion이 자동으로 승계
+    }
+
+    /// <summary>
+    /// 씬 로드 완료 시 레디 상태 해제
+    /// </summary>
+    private void OnSceneLoadCompleted()
+    {
+        if (Object.HasInputAuthority && IsReady)
+        {
+            Debug.Log($"[PlayerState] Scene load completed, clearing ready state for {Nickname}");
+            RPC_SetReadyState(false);
+        }
     }
 
     private void ForceUIUpdateAfterReady()
@@ -189,6 +210,9 @@ public class PlayerStateController : NetworkBehaviour
     {
         Debug.Log($"[PlayerState] RPC_SetReadyState: {Nickname} → {ready}");
         IsReady = ready;
+        
+        // Ready 상태 변경 후 모든 클라이언트에 강제 UI 업데이트 알림
+        RPC_NotifyReadyStateChanged(Nickname, IsReady);
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
