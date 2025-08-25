@@ -13,6 +13,9 @@ namespace SongList {
         [SerializeField] private CanvasGroup fmodCanvasGroup;
         [SerializeField] private float fadeDuration = 1f;
         [SerializeField] private float logoDisplayDuration = 1.5f;
+
+        //ddd
+
         public List<SongInfo> Songs { get; private set; }
         protected override void Awake() {
             base.Awake();

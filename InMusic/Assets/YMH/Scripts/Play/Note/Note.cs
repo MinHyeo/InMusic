@@ -70,7 +70,6 @@ namespace Play
                         break;
                     case GameState.MultiGamePlay:
                         MultiPlayManager.Instance.HandleNoteHit(-1, this, AccuracyType.Miss, 0, noteId);
-                        Debug.Log("___Miss___");
                         break;
                     default:
                         break;

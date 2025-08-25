@@ -480,7 +480,7 @@ MonoBehaviour:
   - Master
   Banks:
   - BGM
-  - SFX
+  - Music
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0

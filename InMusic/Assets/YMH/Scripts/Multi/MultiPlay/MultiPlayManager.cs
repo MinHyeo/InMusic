@@ -78,6 +78,12 @@ namespace Play
                 MultiPlayUserSetting.Instance.SetUserSetting(otherName, isRed, isMy);
             }
 
+            // 키 입력 이펙트 초기화
+            foreach (var objs in keyObjects)
+            {
+                objs.SetActive(false);
+            }
+
             // 시작 시간 계산
             double delay = 3.0f;
             double startTime = NetworkManager.runnerInstance.SimulationTime + delay;

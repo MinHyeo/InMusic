@@ -150,6 +150,7 @@ namespace Play
 
         public Note GetClosestNote(int channel, float pressTime)
         {
+            Debug.Log($"noteSpawner[0] : {noteSpawners[0]}, GetClosestNote called with channel: {channel}, pressTime: {pressTime}");
             return noteSpawners[0].GetClosestNote(channel, pressTime);
         }
 

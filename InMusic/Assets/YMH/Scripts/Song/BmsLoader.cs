@@ -8,27 +8,16 @@ using FMODUnity;
 
 public enum Song
 {
-    sksmsdkvmsRJsEkrwlftordlslRk = 0,
-    cjtaksskadmsrPghlreofhehlwldksgdk = 1,
-    Klaxon = 2,
-    Heya = 3,
-    Armageddon = 4,
-    BubbleGum = 5,
-    HotSweet = 6,
-    Magnetic = 7,
-    Sticky = 8,
-    Supernova = 9,
-    // dummy10 = 10,
-    // dummy11 = 11,
-    // dummy12 = 12,
-    // dummy13 = 13,
-    // dummy14 = 14,
-    // dummy15 = 15,
-    // dummy16 = 16,
-    // dummy17 = 17,
-    // dummy18 = 18,
-    // dummy19 = 19,
-    // dummy20 = 20,
+    // sksmsdkvmsRJsEkrwlftordlslRk = 0,
+    // cjtaksskadmsrPghlreofhehlwldksgdk = 1,
+    // Klaxon = 2,
+    // Heya = 3,
+    // Armageddon = 4,
+    // BubbleGum = 5,
+    // HotSweet = 6,
+    // Magnetic = 7,
+    // Sticky = 8,
+    // Supernova = 9,
 }
 
 [System.Serializable]
@@ -65,11 +54,6 @@ public class BmsLoader : SingleTon<BmsLoader>
 
     private char[] seps;            // ������ ������ �迭
     private string tempStr;         // �����ڷ� ���� ���ڿ��� ������ ����
-
-    private void Start()
-    {
-        SelectSong(Song.Heya);
-    }
 
     public SongInfo SelectSong(Song song)
     {

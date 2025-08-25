@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{60dda3ab-8c4f-4f47-bae5-a9d4bc76e6e3}">
+		<property name="assetPath">
+			<value>Music/Disfigure - Blank [NCS Release].mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>209.05795918367346</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b0e0f0f2-d163-4692-8a81-a63e7ae6a598}</destination>
+		</relationship>
+	</object>
+</objects>
