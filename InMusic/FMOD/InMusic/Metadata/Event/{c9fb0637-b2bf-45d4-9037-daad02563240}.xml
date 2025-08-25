@@ -31,6 +31,9 @@
 		<relationship name="timeline">
 			<destination>{d076b472-36f6-4c76-a3c9-d29c53528cad}</destination>
 		</relationship>
+		<relationship name="userProperties">
+			<destination>{2b028802-342b-4254-a64a-d89fdc0f55ed}</destination>
+		</relationship>
 		<relationship name="banks">
 			<destination>{41875995-a25a-4cd8-865f-609b0eeb24aa}</destination>
 		</relationship>
@@ -70,6 +73,14 @@
 		<relationship name="modules">
 			<destination>{eae7e173-28d7-4d80-a593-9e01611f594d}</destination>
 		</relationship>
+	</object>
+	<object class="UserProperty" id="{2b028802-342b-4254-a64a-d89fdc0f55ed}">
+		<property name="key">
+			<value>Duration</value>
+		</property>
+		<property name="value">
+			<value>291.108</value>
+		</property>
 	</object>
 	<object class="EventMixerMaster" id="{3a7f9e2b-17d3-477f-9775-bf5da232a569}">
 		<relationship name="effectChain">
