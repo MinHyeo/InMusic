@@ -23,7 +23,7 @@ namespace Play
     }
     #endregion
 
-    public class SoundManager : SingleTon<SoundManager>
+    public class SoundManager : Singleton<SoundManager>
     {
         private FMOD.Studio.EventInstance bgmInstance;
         private FMOD.ChannelGroup masterChannelGroup;

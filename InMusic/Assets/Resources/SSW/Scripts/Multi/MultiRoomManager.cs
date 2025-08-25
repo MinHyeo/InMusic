@@ -91,29 +91,6 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
         }
     }
 
-    /// <summary>
-    /// 방장 권한 양도 처리 (SharedModeMasterClient 활용)
-    /// </summary>
-    public void TransferHostTo(PlayerStateController targetPlayer)
-    {
-        if (targetPlayer != null)
-        {
-            Debug.Log($"[MultiRoomManager] Transferring master client to: {targetPlayer.Nickname}");
-
-            // Fusion의 내장 Master Client 시스템 사용
-            var runner = NetworkManager.runnerInstance;
-            if (runner != null && runner.IsSharedModeMasterClient)
-            {
-                runner.SetMasterClient(targetPlayer.Object.InputAuthority);
-                Debug.Log($"[MultiRoomManager] Master client transferred to {targetPlayer.Nickname}");
-            }
-            else
-            {
-                Debug.LogWarning("[MultiRoomManager] Cannot transfer - not current master client or runner not found");
-            }
-        }
-    }
-
     public void DestroyRoomManager()
     {
         Debug.Log("[MultiRoom Manager] Destroying Room Manager instance.");
@@ -150,27 +127,32 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
         runner.LoadScene(sceneName);
     }
 
+
     /// <summary>
-    /// 방 설정 변경 (오직 MasterClient만 가능)
+    /// 방장 권한 양도 처리 (SharedModeMasterClient 활용)
     /// </summary>
-    public void ChangeRoomSettings(int maxPlayers, bool isPrivate)
+    public void TransferHostTo(PlayerStateController targetPlayer)
     {
-        // MasterClient 권한 확인
-        var runner = NetworkManager.runnerInstance;
-        if (runner == null || !runner.IsSharedModeMasterClient)
+        if (targetPlayer != null)
         {
-            Debug.LogWarning("[MultiRoomManager] Only MasterClient can change room settings!");
-            return;
+            Debug.Log($"[MultiRoomManager] Transferring master client to: {targetPlayer.Nickname}");
+
+            // Fusion의 내장 Master Client 시스템 사용
+            var runner = NetworkManager.runnerInstance;
+            if (runner != null && runner.IsSharedModeMasterClient)
+            {
+                runner.SetMasterClient(targetPlayer.Object.InputAuthority);
+                Debug.Log($"[MultiRoomManager] Master client transferred to {targetPlayer.Nickname}");
+            }
+            else
+            {
+                Debug.LogWarning("[MultiRoomManager] Cannot transfer - not current master client or runner not found");
+            }
         }
-
-        Debug.Log($"[MultiRoomManager] Changing room settings - MaxPlayers: {maxPlayers}, Private: {isPrivate}");
-
-        // TODO: 실제 방 설정 변경 로직
-        // NetworkRunner의 방 설정 API 사용
     }
 
     /// <summary>
-    /// 플레이어 강제 퇴장 (오직 MasterClient만 가능)
+    /// 플레이어 강제 퇴장 (SharedModeMasterClient 활용)
     /// </summary>
     public void KickPlayer(PlayerStateController targetPlayer)
     {
@@ -182,12 +164,30 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
             return;
         }
 
+        if (targetPlayer == null)
+        {
+            Debug.LogError("[MultiRoomManager] Target player is null");
+            return;
+        }
+
+        // 자기 자신은 강퇴할 수 없음
+        if (targetPlayer.Object.InputAuthority == runner.LocalPlayer)
+        {
+            Debug.LogWarning("[MultiRoomManager] Cannot kick yourself!");
+            return;
+        }
+
         Debug.Log($"[MultiRoomManager] Kicking player: {targetPlayer.Nickname}");
 
-        if (runner != null)
+        // Fusion에서 플레이어 연결 해제
+        try
         {
-            // TODO: 플레이어 강제 퇴장 로직
-            // runner.Disconnect(targetPlayer.Object.InputAuthority);
+            runner.Disconnect(targetPlayer.Object.InputAuthority);
+            Debug.Log($"[MultiRoomManager] Successfully kicked player: {targetPlayer.Nickname}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[MultiRoomManager] Failed to kick player {targetPlayer.Nickname}: {e.Message}");
         }
     }
 

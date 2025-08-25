@@ -1,15 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class PlayerSlotUI : MonoBehaviour
+public class PlayerSlotUI : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private Text _nicknameText;
     [SerializeField] private GameObject _readyIcon;
     [SerializeField] private GameObject _hostIcon;  // 호스트 아이콘
     [SerializeField] private GameObject _meIcon;    // 본인 표시 아이콘 (ME)
     [SerializeField] private ReadyStartController _readyStartController;  // 레디/스타트 관리자
-    [SerializeField] private Button _transferHostButton;  // 방장 이전 버튼 (옵션)
-
+    [SerializeField] private GameObject _contextMenuPanel;  // 우클릭 시 뜰 팝업 패널
+    [SerializeField] private Image _slotImage;  // 실제 클릭을 감지할 슬롯 이미지
     private PlayerStateController _boundPlayer;
     
     private string _lastNickname;
@@ -19,6 +20,15 @@ public class PlayerSlotUI : MonoBehaviour
 
     public bool IsAvailable => _boundPlayer == null;
     public PlayerStateController BoundPlayer => _boundPlayer;
+
+    private void Start()
+    {
+        // 슬롯 이미지가 설정되어 있으면 Raycast Target 확인
+        if (_slotImage != null)
+        {
+            _slotImage.raycastTarget = true;
+        }
+    }
 
     public void Bind(PlayerStateController player)
     {
@@ -30,9 +40,6 @@ public class PlayerSlotUI : MonoBehaviour
         {
             _readyStartController.Initialize(player);
         }
-        
-        // 방장 이전 버튼 설정
-        SetupTransferHostButton();
         
         ChangeDisplay();
     }
@@ -113,17 +120,76 @@ public class PlayerSlotUI : MonoBehaviour
         string meStatus = isMe ? " (ME)" : "";
         Debug.Log($"[PlayerSlotUI] Updated: {_boundPlayer.Nickname}{meStatus} (Ready: {_boundPlayer.IsReady}, Role: {hostStatus})");
     }
-    
+
     /// <summary>
-    /// 방장 이전 버튼 설정 (다른 곳에서 통합 관리 예정)
+    /// 우클릭 감지 - Unity EventSystem 사용
     /// </summary>
-    private void SetupTransferHostButton()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (_transferHostButton == null) return;
+        // 우클릭 감지
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            // 실제로 슬롯 이미지가 클릭되었는지 확인
+            if (_slotImage != null && eventData.pointerCurrentRaycast.gameObject == _slotImage.gameObject)
+            {
+                OnRightClick();
+            }
+        }
+        // 좌클릭으로 팝업 패널 닫기
+        else if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            if (_contextMenuPanel != null && _contextMenuPanel.activeSelf)
+            {
+                // 패널 밖을 클릭했으면 패널 닫기
+                if (!IsMouseOverPanel())
+                {
+                    _contextMenuPanel.SetActive(false);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 우클릭 처리 로직
+    /// </summary>
+    private void OnRightClick()
+    {
+        Debug.Log($"[PlayerSlotUI] Right click detected on slot: {_boundPlayer?.Nickname ?? "NULL"}");
         
-        _transferHostButton.onClick.RemoveAllListeners();
+        // 바인딩된 플레이어가 없으면 무시
+        if (_boundPlayer == null) 
+        {
+            Debug.Log("[PlayerSlotUI] No bound player - ignoring right click");
+            return;
+        }
+
+        // 마스터 클라이언트만 가능
+        if (!SharedModeMasterClientTracker.IsLocalPlayerSharedModeMasterClient()) return;
         
-        // 방장 이전/킥 기능은 별도 UI에서 통합 관리
-        _transferHostButton.gameObject.SetActive(false);
+        // 자기 자신 제외
+        if (_boundPlayer.Object.HasInputAuthority) return;
+
+        // 팝업 패널 활성화
+        if (_contextMenuPanel != null)
+        {
+            _contextMenuPanel.SetActive(true);
+        }
+    }
+
+    /// <summary>
+    /// 마우스가 팝업 패널 위에 있는지 확인
+    /// </summary>
+    private bool IsMouseOverPanel()
+    {
+        if (_contextMenuPanel == null || !_contextMenuPanel.activeSelf)
+            return false;
+
+        // 팝업 패널의 RectTransform 가져오기
+        RectTransform panelRect = _contextMenuPanel.GetComponent<RectTransform>();
+        if (panelRect == null) return false;
+
+        // 마우스 위치가 패널 영역 안에 있는지 확인
+        Vector2 mousePosition = Input.mousePosition;
+        return RectTransformUtility.RectangleContainsScreenPoint(panelRect, mousePosition, Camera.main);
     }
 }

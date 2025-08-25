@@ -19,7 +19,7 @@ namespace Play
     //    }
     //}
 
-    public class NoteManager : SingleTon<NoteManager>
+    public class NoteManager : Singleton<NoteManager>
     {
         [Header("Prefabs")]
         [SerializeField]

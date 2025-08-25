@@ -6,7 +6,7 @@ using System;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 
-public class NetworkManager : SingleTon<NetworkManager>, INetworkRunnerCallbacks
+public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
 {
     public static NetworkRunner runnerInstance;
     public static bool _isSessionLobbyReady = false; // 세션 로비 연결 상태 추적

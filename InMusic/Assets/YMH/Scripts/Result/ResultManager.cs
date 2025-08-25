@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Play.Result 
 {
-    public class ResultManager : SingleTon<ResultManager>
+    public class ResultManager : Singleton<ResultManager>
     {
         [Header("Scripts")]
         [SerializeField]

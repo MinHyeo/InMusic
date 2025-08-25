@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Play 
 {
-    public class Metronome : SingleTon<Metronome>
+    public class Metronome : Singleton<Metronome>
     {
         [SerializeField]
         private AudioSource hitSource;
@@ -35,7 +35,7 @@ namespace Play
         private float travelTime;
         public readonly float preStartDelay = 2.0f;
 
-        //¼ÒÈ¯µÇ¾î ÀÖ´Â ¹ÚÀÚ¼± ÀúÀåÇÒ ¸®½ºÆ®
+        //ï¿½ï¿½È¯ï¿½Ç¾ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Ú¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
         private List<GameObject> linesObject = new List<GameObject>();
 
         private void Update()
@@ -43,7 +43,7 @@ namespace Play
             if (!isStart)
                 return;
 
-            // °î ÁøÇà½Ã°£ * ÁÖÆÄ¼ö°¡ ´ÙÀ½ ¶óÀÎº¸´Ù Å©°Å³ª °°À¸¸é ÀÛµ¿.
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ * ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ Å©ï¿½Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ûµï¿½.
             if (SoundManager.Instance.GetTimelinePosition() >= nextSample)
             {
                 StartCoroutine(PlayTicks());
@@ -56,22 +56,22 @@ namespace Play
         }
         public void CalculateSync()
         {
-            //¿ÀºêÁ§Æ® Ç®·Î ¿ÀºêÁ§Æ® ¹Ì¸® »ý¼º
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Ç®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½
             ObjectPoolManager.Instance.CreatePool(linePrefab);
 
-            // ÇÑ ¹ÚÀÚÀÇ »ùÇÃ °£°Ý °è»ê
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             //frequency = SoundManager.Instance.frequency;
             //samplesPerBeat = (stdBpm / songBpm) * frequency;
             //beatIntervalMs = (samplesPerBeat / frequency) * 1000.0f;
 
-            // ÇÑ ¸¶µð °£°Ý (4/4¹ÚÀÚ ±âÁØ)
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (4/4ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
             //measureInterval = samplesPerBeat * 4.0f / frequency;
 
-            // ½Ã°£ ±â¹Ý ¹æ½Ä
+            // ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             beatIntervalMs = 60000f / songBpm;
             measureInterval = beatIntervalMs * 4;
 
-            // ¸¶µð ¼±ÀÌ ÆÇÁ¤¼±±îÁö µµ´ÞÇÏ´Â µ¥ °É¸®´Â ½Ã°£ °è»ê
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ ï¿½É¸ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½
             float distanceToJudgementLine = lineSpawnPoint.position.y - judgementLine.position.y;
             travelTime = distanceToJudgementLine / lineSpeed;
 
@@ -95,7 +95,7 @@ namespace Play
             {
                 yield return new WaitForSeconds(initialSpawnTime);
 
-                // ¸¶µð ¼± »ý¼º
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 //GameObject newLine = Instantiate(linePrefab, lineSpawnPoint.position, Quaternion.identity);
                 GameObject newLine = ObjectPoolManager.Instance.GetFromPool("Line");
                 newLine.transform.position = lineSpawnPoint.position;
@@ -127,11 +127,11 @@ namespace Play
 
         private IEnumerator SpawnMeasureLine(float delaySeconds)
         {
-            // spawnTime±îÁö ´ë±â
+            // spawnTimeï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             yield return new WaitForSeconds(delaySeconds);
 
-            // ¸¶µð ¼± »ý¼º
-            Debug.Log("³ëÆ® »ý¼º");
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            Debug.Log("ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½");
             GameObject newLine = ObjectPoolManager.Instance.GetFromPool("Line");
             newLine.transform.position = lineSpawnPoint.position;
             newLine.GetComponent<Line>().Initialize(lineSpeed, judgementLine.position.y);
@@ -147,7 +147,7 @@ namespace Play
         {
             isStart = false;
 
-            //È­¸é¿¡ ÀÖ´Â ¸¶µð ¼± »èÁ¦
+            //È­ï¿½é¿¡ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             foreach (GameObject line in linesObject.ToList())
             {
                 RemoveLine(line);

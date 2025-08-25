@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RoomManager : SingleTon<RoomManager>
+public class RoomManager : Singleton<RoomManager>
 {
     private string songName = "Heya";
     private string _roomName;

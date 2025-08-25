@@ -41,7 +41,7 @@ public class SongInfo
     }
 }
 
-public class BmsLoader : SingleTon<BmsLoader>
+public class BmsLoader : Singleton<BmsLoader>
 {
     private SongInfo songInfo;
 

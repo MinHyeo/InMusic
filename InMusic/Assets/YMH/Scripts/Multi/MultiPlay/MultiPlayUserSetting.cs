@@ -2,7 +2,7 @@ using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MultiPlayUserSetting : SingleTon<MultiPlayUserSetting>
+public class MultiPlayUserSetting : Singleton<MultiPlayUserSetting>
 {
     [Header("User Color")]
     [SerializeField]

@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class ObjectPoolManager : SingleTon<ObjectPoolManager>
+public class ObjectPoolManager : Singleton<ObjectPoolManager>
 {
     private int defaultCapacity = 10;
     private int maxPoolSize = 20;
 
-    // Ç®À» ÀúÀåÇÏ´Â µñ¼Å³Ê¸® (key: prefab ÀÌ¸§, value: IObjectPool<GameObject>)
+    // Ç®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Å³Ê¸ï¿½ (key: prefab ï¿½Ì¸ï¿½, value: IObjectPool<GameObject>)
     private Dictionary<string, IObjectPool<GameObject>> pools = new Dictionary<string, IObjectPool<GameObject>>();
 
     /// <summary>
-    /// Æ¯Á¤ ÇÁ¸®ÆÕ¿¡ ´ëÇÑ ¿ÀºêÁ§Æ® Ç® »ý¼º ¹× ÃÊ±âÈ­
+    /// Æ¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Ç® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ê±ï¿½È­
     /// </summary>
-    /// <param name="prefab">Ç®¸µÇÒ ÇÁ¸®ÆÕ</param>
+    /// <param name="prefab">Ç®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</param>
     public void CreatePool(GameObject prefab)
     {
         string key = prefab.name;
@@ -25,18 +25,18 @@ public class ObjectPoolManager : SingleTon<ObjectPoolManager>
             return;
         }
 
-        // »õ·Î¿î Ç® »ý¼º
+        // ï¿½ï¿½ï¿½Î¿ï¿½ Ç® ï¿½ï¿½ï¿½ï¿½
         pools[key] = new ObjectPool<GameObject>(
-            () => CreatePooledItem(prefab), // ¿ÀºêÁ§Æ® »ý¼º ·ÎÁ÷
-            OnTakeFromPool, // Ç®¿¡¼­ °¡Á®¿Ã ¶§ È£Ãâ
-            OnReturnedToPool, // Ç®·Î ¹ÝÈ¯µÉ ¶§ È£Ãâ
-            OnDestroyPoolObject, // ¿ÀºêÁ§Æ® Á¦°Å ·ÎÁ÷
-            true, // ÄÝ¹é È£Ãâ ¿©ºÎ
-            defaultCapacity, // ÃÊ±â »ý¼º °³¼ö
-            maxPoolSize // ÃÖ´ë Ç® Å©±â
+            () => CreatePooledItem(prefab), // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            OnTakeFromPool, // Ç®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½
+            OnReturnedToPool, // Ç®ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½
+            OnDestroyPoolObject, // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            true, // ï¿½Ý¹ï¿½ È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            defaultCapacity, // ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            maxPoolSize // ï¿½Ö´ï¿½ Ç® Å©ï¿½ï¿½
         );
 
-        // ¹Ì¸® ¿ÀºêÁ§Æ® »ý¼º
+        // ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         for (int i = 0; i < defaultCapacity; i++)
         {
             GameObject pooledItem = CreatePooledItem(prefab);
@@ -45,9 +45,9 @@ public class ObjectPoolManager : SingleTon<ObjectPoolManager>
     }
 
     /// <summary>
-    /// Ç®¿¡¼­ ¿ÀºêÁ§Æ® °¡Á®¿À±â
+    /// Ç®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
-    /// <param name="prefabName">ÇÁ¸®ÆÕ ÀÌ¸§</param>
+    /// <param name="prefabName">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½</param>
     /// <returns>GameObject</returns>
     public GameObject GetFromPool(string prefabName)
     {
@@ -61,10 +61,10 @@ public class ObjectPoolManager : SingleTon<ObjectPoolManager>
     }
 
     /// <summary>
-    /// ¿ÀºêÁ§Æ®¸¦ Ç®·Î ¹ÝÈ¯
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Ç®ï¿½ï¿½ ï¿½ï¿½È¯
     /// </summary>
-    /// <param name="prefabName">ÇÁ¸®ÆÕ ÀÌ¸§</param>
-    /// <param name="objectToRelease">¹ÝÈ¯ÇÒ ¿ÀºêÁ§Æ®</param>
+    /// <param name="prefabName">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½</param>
+    /// <param name="objectToRelease">ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®</param>
     public void ReleaseToPool(string prefabName, GameObject objectToRelease)
     {
         if (pools.ContainsKey(prefabName))
@@ -78,12 +78,12 @@ public class ObjectPoolManager : SingleTon<ObjectPoolManager>
     }
 
     /// <summary>
-    /// ¿ÀºêÁ§Æ® »ý¼º ·ÎÁ÷
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private GameObject CreatePooledItem(GameObject prefab)
     {
         GameObject poolGo = Instantiate(prefab);
-        poolGo.name = prefab.name; // ÀÌ¸§À» µ¿ÀÏÇÏ°Ô ¼³Á¤
+        poolGo.name = prefab.name; // ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½
         return poolGo;
     }
 

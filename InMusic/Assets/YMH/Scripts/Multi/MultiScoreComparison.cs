@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Play
 {
-    public class MultiScoreComparison : SingleTon<MultiScoreComparison>
+    public class MultiScoreComparison : Singleton<MultiScoreComparison>
     {
         public ScoreManager MyScoreManager;
         public ScoreManager MatchScoreManager;

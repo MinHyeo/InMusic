@@ -5,7 +5,7 @@ using TMPro;
 
 namespace Play
 {
-    public class PauseManager : SingleTon<PauseManager>
+    public class PauseManager : Singleton<PauseManager>
     {
         [SerializeField]
         private GameObject pauseObject;
@@ -13,15 +13,15 @@ namespace Play
         private List<Animator> buttonsAnim = new List<Animator>();
         private List<Slider> buttonsSlider = new List<Slider>();
 
-        //ÇöÀç ¼±ÅÃµÈ ¹öÆ° ÀÎµ¦½º
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½Æ° ï¿½Îµï¿½ï¿½ï¿½
         private int buttonIndex = 0;
 
-        //ÀÏ½ÃÁ¤Áö ¿©ºÎ
+        //ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         private bool isPause = false;
-        //°è¼ÓÇÏ±â ¿©ºÎ
+        //ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½
         private bool isContinue = false;
 
-        //ÀÏ½ÃÁ¤Áö¿¡¼­ °ÔÀÓ ½ÃÀÛ±îÁö ½Ã°£ °è»ê º¯¼ö
+        //ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û±ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         [SerializeField]
         private TextMeshProUGUI pauseCount;
         private float currentTime = 0;
@@ -29,12 +29,12 @@ namespace Play
 
         private void Start()
         {
-            //ÃÊ±âÈ­
+            //ï¿½Ê±ï¿½È­
             buttons.AddRange(pauseObject.gameObject.GetComponentsInChildren<Button>());
             buttonsAnim.AddRange(pauseObject.gameObject.GetComponentsInChildren<Animator>());
             buttonsSlider.AddRange(pauseObject.gameObject.GetComponentsInChildren<Slider>());
 
-            //Å¸ÀÓ½ºÄÉÀÏ ¹«½Ã
+            //Å¸ï¿½Ó½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             foreach (Animator anim in buttonsAnim)
             {
                 anim.updateMode = AnimatorUpdateMode.UnscaledTime;
@@ -48,20 +48,20 @@ namespace Play
         {
             if (isPause && isContinue)
             {
-                //½Ã°£ ÃøÁ¤
+                //ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
                 currentTime += Time.unscaledDeltaTime;
 
-                //³²Àº ½Ã°£ ÅØ½ºÆ® Ç¥½Ã
+                //ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½Ø½ï¿½Æ® Ç¥ï¿½ï¿½
                 pauseCount.text = ((int)(maxTime - currentTime + 1)).ToString();
 
-                //ÀÏ½ÃÁ¤Áö ÇØÃ¼
+                //ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼
                 if (currentTime >= maxTime)
                 {
                     isPause = false;
                     isContinue = false;
                     pauseCount.gameObject.SetActive(false);
 
-                    //°ÔÀÓ ÁøÇà
+                    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     PlayManager.Instance.Continue();
                 }
             }
@@ -72,17 +72,17 @@ namespace Play
             isPause = true;
             buttonIndex = 0;
 
-            //³ë·¡ Á¤Áö
+            //ï¿½ë·¡ ï¿½ï¿½ï¿½ï¿½
             SoundManager.Instance.SetPause(isPause);
 
-            //ÀÏ½ÃÁ¤Áö
+            //ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½
             pauseObject.gameObject.SetActive(isPause);
             Time.timeScale = 0;
 
-            //Ã¹¹øÂ° ¹öÆ° ¼±ÅÃ È¿°ú
+            //Ã¹ï¿½ï¿½Â° ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½
             buttonsAnim[buttonIndex].SetTrigger("Select");
 
-            //Å° ÀÔ·Â ¼³Á¤
+            //Å° ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½
             GameManager.Input.SetUIKeyEvent(OnKeyPress);
         }
 
@@ -115,7 +115,7 @@ namespace Play
                     break;
             }
 
-            //³ªÁß¿¡ enterÅ°¿¡ ´ëÇÑ Ã³¸®µµ Ãß°¡ÇØ¾ßÇÔ
+            //ï¿½ï¿½ï¿½ß¿ï¿½ enterÅ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½
         }
 
         public void DestroyKeyEvent()
@@ -125,16 +125,16 @@ namespace Play
 
         private void InputKeyArrow(int keyNum)
         {
-            //Àü ¹öÆ° ¼±ÅÃ È¿°ú Á¦°Å
+            //ï¿½ï¿½ ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             buttonsAnim[buttonIndex].SetTrigger("Deselect");
             buttonsSlider[buttonIndex].value = 0;
             Canvas.ForceUpdateCanvases();
 
-            //¹öÆ° ÀÎµ¦½º º¯°æ
+            //ï¿½ï¿½Æ° ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             int buttonLength = buttonsSlider.Count;
             buttonIndex = buttonIndex + keyNum < 0 ? buttonIndex = buttonLength - 1 : (buttonIndex + keyNum) % buttonLength;
 
-            //¹öÆ° ¼±ÅÃ È¿°ú
+            //ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½
             buttonsAnim[buttonIndex].SetTrigger("Select");
         }
 

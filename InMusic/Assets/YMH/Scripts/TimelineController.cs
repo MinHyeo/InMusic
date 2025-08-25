@@ -15,7 +15,7 @@ namespace Play
         public List<int> noteData;
     }
 
-    public class TimelineController : SingleTon<TimelineController>
+    public class TimelineController : Singleton<TimelineController>
     {
         private INoteSpawn[] noteSpawners;
         private IMeasureLineSpawn[] measureLineSpawners;

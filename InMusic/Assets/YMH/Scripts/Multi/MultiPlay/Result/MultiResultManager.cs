@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Play.Result
 {
-    public class MultiResultManager : SingleTon<MultiResultManager>
+    public class MultiResultManager : Singleton<MultiResultManager>
     {
         [Header("결과창 UI")]
         [SerializeField]

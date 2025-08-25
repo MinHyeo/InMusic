@@ -2,7 +2,7 @@ using Fusion;
 using UnityEngine;
 using System.Threading.Tasks;
 
-public class LobbyManager : SingleTon<LobbyManager>
+public class LobbyManager : Singleton<LobbyManager>
 {
     // crate room
     [SerializeField]
