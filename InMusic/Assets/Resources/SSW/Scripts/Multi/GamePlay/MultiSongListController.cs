@@ -61,60 +61,36 @@ public class MultiSongListController : MonoBehaviour
     {
         yield return null;
 
+        // LoadManager에서 이미 모든 곡을 로드했으므로 바로 사용
+        _songs = LoadManager.Instance.Songs;
+        _totalSongCount = _songs.Count;
+        Debug.Log($"[MultiSongListController] Total Songs Count: {_totalSongCount}");
+
+        // 플레이 기록은 별도로 로드 (DB가 있을 때만)
         DBService db = FindFirstObjectByType<DBService>();
-        if (db == null)
+        if (db != null)
         {
-            Debug.LogError("DBService not found in scene. Cannot load songs from DB.");
-            yield break;
-        }
-
-        List<MusicData> allSongsFromDB = null;
-        bool songsLoaded = false;
-        db.LoadAllSongsFromDB(result =>
-        {
-            allSongsFromDB = result;
-            songsLoaded = true;
-        });
-        while (!songsLoaded)
-            yield return null;
-
-        if (allSongsFromDB == null)
-        {
-            Debug.LogWarning("[SongListController] Failed to load songs from DB. Using local fallback.");
-            _songs = LoadManager.Instance.Songs;
-        }
-        else
-        {
-            _songs = new List<SongInfo>();
-            foreach (var md in allSongsFromDB)
+            string userId = Steamworks.SteamUser.GetSteamID().m_SteamID.ToString();
+            bool logsLoaded = false;
+            db.LoadAllMusicLogs(userId, (dict) =>
             {
-                SongInfo info = new SongInfo
-                {
-                    Title = md.musicName,
-                    Artist = md.musicArtist
-                };
-                _songs.Add(info);
+                _musicLogRecords = dict;
+                logsLoaded = true;
+            });
+            while (!logsLoaded)
+                yield return null;
+            if (_musicLogRecords != null)
+            {
+                Debug.Log($"[MultiSongListController] Loaded {_musicLogRecords.Count} music log records.");
+            }
+            else
+            {
+                Debug.LogWarning("[MultiSongListController] Failed to load music log records.");
             }
         }
-        _totalSongCount = _songs.Count;
-        Debug.Log($"[SongListController] Total Songs Count: {_totalSongCount}");
-
-        string userId = Steamworks.SteamUser.GetSteamID().m_SteamID.ToString();
-        bool logsLoaded = false;
-        db.LoadAllMusicLogs(userId, (dict) =>
-        {
-            _musicLogRecords = dict;
-            logsLoaded = true;
-        });
-        while (!logsLoaded)
-            yield return null;
-        if (_musicLogRecords != null)
-        {
-            Debug.Log($"[SongListController] Loaded {_musicLogRecords.Count} music log records.");
-        }
         else
         {
-            Debug.LogWarning("[SongListController] No music log records loaded.");
+            Debug.LogWarning("[MultiSongListController] DBService not found. Play records will be unavailable.");
             _musicLogRecords = new Dictionary<string, MusicLogRecord>();
         }
 

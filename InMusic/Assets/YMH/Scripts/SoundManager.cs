@@ -50,12 +50,12 @@ namespace Play
         private void Init()
         {
             RuntimeManager.LoadBank("Master");
-            RuntimeManager.LoadBank("BGM");
+            RuntimeManager.LoadBank("Musics");
             RuntimeManager.LoadBank("SFX");
 
-            // FMOD���� Bus ��������
+            // FMOD에서 Bus 가져오기
             masterBus = RuntimeManager.GetBus("bus:/");
-            bgmBus = RuntimeManager.GetBus("bus:/BGM");
+            bgmBus = RuntimeManager.GetBus("bus:/Musics");
             sfxBus = RuntimeManager.GetBus("bus:/SFX");
 
             DontDestroyOnLoad(this.gameObject);
@@ -90,24 +90,21 @@ namespace Play
 
         #region Play Music
         /// <summary>
-        /// SoundManager �뷡 �ʱ⼳��
+        /// SoundManager 음악 초기설정
         /// </summary>
         /// <param name="songName"></param>
-        public void SongInit(Song songName, PlayStyle style)
+        public void SongInit(string songTitle, PlayStyle style)
         {
-            //�뷡 ���� ���ڿ� ��ȯ
-            string songTitle = songName.ToString();
-
-            //�뷡 �ҷ�����
-            //FMOD ���� üũ �� �ʱ�ȭ
+            //음악 로드하기
+            //FMOD 정상 체크 및 초기화
             if (bgmInstance.isValid())
             {
                 bgmInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 bgmInstance.release();
             }
 
-            //�뷡 �̺�Ʈ �ҷ�����
-            string bgmEventPart = "event:/BGM/" + songTitle;
+            //음악 이벤트 불러오기
+            string bgmEventPart = "event:/Musics/" + songTitle;
             bgmInstance = RuntimeManager.CreateInstance(bgmEventPart);
 
             //�뷡 ���̶���Ʈ ����
@@ -149,7 +146,7 @@ namespace Play
         {
             if (!bgmInstance.isValid())
             {
-                UnityEngine.Debug.LogError("BGM �ν��Ͻ��� ��ȿ���� �ʽ��ϴ�.");
+                UnityEngine.Debug.LogError("Music instance is not valid.");
                 yield break;
             }
 

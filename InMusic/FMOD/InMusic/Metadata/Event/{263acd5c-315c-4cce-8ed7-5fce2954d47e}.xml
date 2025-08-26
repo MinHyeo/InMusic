@@ -76,9 +76,11 @@
 	</object>
 	<object class="UserProperty" id="{4379f0f2-ad51-4114-a8be-bbcbc75547d7}">
 		<property name="key">
+			<value>Duration</value>
+		</property>
+		<property name="value">
 			<value>259.082</value>
 		</property>
-		<property name="value" />
 	</object>
 	<object class="EventMixerMaster" id="{09480fc1-71f3-4f92-9a70-e287d0b57b34}">
 		<relationship name="effectChain">

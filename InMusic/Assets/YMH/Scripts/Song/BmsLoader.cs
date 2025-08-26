@@ -6,20 +6,6 @@ using Play;
 using FMOD.Studio;
 using FMODUnity;
 
-public enum Song
-{
-    // sksmsdkvmsRJsEkrwlftordlslRk = 0,
-    // cjtaksskadmsrPghlreofhehlwldksgdk = 1,
-    // Klaxon = 2,
-    // Heya = 3,
-    // Armageddon = 4,
-    // BubbleGum = 5,
-    // HotSweet = 6,
-    // Magnetic = 7,
-    // Sticky = 8,
-    // Supernova = 9,
-}
-
 [System.Serializable]
 public class SongInfo
 {
@@ -55,27 +41,25 @@ public class BmsLoader : Singleton<BmsLoader>
     private char[] seps;            // ������ ������ �迭
     private string tempStr;         // �����ڷ� ���� ���ڿ��� ������ ����
 
-    public SongInfo SelectSong(Song song)
+    public SongInfo SelectSongByTitle(string songTitle)
     {
         tempStr = "";
         StrText = "";
-        songName = "";
-        path = Path.Combine(Application.streamingAssetsPath, "Song", song.ToString());
+        songName = songTitle;
+        path = Path.Combine(Application.streamingAssetsPath, "Song", songTitle);
         seps = new char[] { ' ', ':' };
 
-        songName = song.ToString();
-        //path += songName + "/";
-        fileName = new FileInfo(Path.Combine(path, song.ToString() + ".bms"));
+        fileName = new FileInfo(Path.Combine(path, songTitle + ".bms"));
 
         if (!fileName.Exists) // 디렉토리나 파일이 없는 경우 처리
         {
             Debug.LogWarning($"File not found: {fileName.FullName}. Returning dummy data for testing.");
-            return GenerateDummyData(songName);
+            return GenerateDummyData(songTitle);
         }
 
         reader = fileName.OpenText();
         songInfo = ParseBMS();
-        songInfo.Duration = GetSongDurationFromFMOD(song.ToString());
+        songInfo.Duration = GetSongDurationFromFMOD(songTitle);
 
         return songInfo;
     }
@@ -85,10 +69,10 @@ public class BmsLoader : Singleton<BmsLoader>
     /// </summary>
     private float GetSongDurationFromFMOD(string songTitle)
     {
-        string bgmEventPath = "event:/BGM/" + songTitle;
+        string musicEventPath = "event:/Musics/" + songTitle;
         
         EventDescription eventDescription;
-        var result = RuntimeManager.StudioSystem.getEvent(bgmEventPath, out eventDescription);
+        var result = RuntimeManager.StudioSystem.getEvent(musicEventPath, out eventDescription);
         
         if (result == FMOD.RESULT.OK && eventDescription.isValid())
         {
@@ -130,6 +114,7 @@ public class BmsLoader : Singleton<BmsLoader>
             BPM = 120,
             PlayLevel = 5,
             Rank = 1,
+            Duration = 754.0f,
             NoteList = new List<NoteData>
             {
                 new NoteData { bar = 1, channel = 1, noteData = new List<int> { 1, 2, 3 } },
@@ -263,7 +248,7 @@ public class BmsLoader : Singleton<BmsLoader>
             if (tempStr.Length >= 2)
             {
                 int data = 0;
-                Int32.TryParse(tempStr.Substring(0, 2), out data);
+                int.TryParse(tempStr.Substring(0, 2), out data);
 
                 if (data != 0)
                     noteCount++;
@@ -274,7 +259,7 @@ public class BmsLoader : Singleton<BmsLoader>
             else
             {
                 int data = 0;
-                Int32.TryParse(tempStr, out data);
+                int.TryParse(tempStr, out data);
                 break;
             }
         }

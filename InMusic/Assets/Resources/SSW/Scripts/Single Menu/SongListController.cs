@@ -63,53 +63,13 @@ namespace SongList
         private IEnumerator Start() {
             yield return null; // 1프레임 대기
 
-            DBService db = FindFirstObjectByType<DBService>();
-            if (db == null)
-            {
-                Debug.LogError("DBService not found in scene. Cannot load songs from DB.");
-                yield break;
-            }
-
-            List<MusicData> allSongsFromDB = null;
-            bool songsLoaded = false;
-            db.LoadAllSongsFromDB(result => {
-                allSongsFromDB = result;
-                songsLoaded = true;
-            });
-            while (!songsLoaded)
-                yield return null;
-
-            if (allSongsFromDB == null)
-            {
-                Debug.LogWarning("[SongListController] Failed to load songs from DB. Using local fallback.");
-                _songs = LoadManager.Instance.Songs; // fallback
-            }
-            else
-            {
-                _songs = new List<SongInfo>();
-                foreach (var md in allSongsFromDB)
-                {
-                    SongInfo info = new SongInfo
-                    {
-                        Title  = md.musicName,
-                        Artist = md.musicArtist
-                        // 나머지 필드는 필요 시 기본값 설정
-                    };
-                    
-                    // BmsLoader로 Duration 설정 (멀티와 동일한 방식)
-                    if (Enum.TryParse(md.musicName, out Song song))
-                    {
-                        SongInfo bmsInfo = BmsLoader.Instance.SelectSong(song);
-                        info.Duration = bmsInfo.Duration;
-                    }
-                    
-                    _songs.Add(info);
-                }
-            }
+            // LoadManager에서 이미 모든 곡을 로드했으므로 바로 사용
+            _songs = LoadManager.Instance.Songs;
             _totalSongCount = _songs.Count;
             Debug.Log($"[SongListController] Total Songs Count: {_totalSongCount}");
 
             // 2. DB에서 해당 유저의 모든 플레이 기록(음원 최고 기록) 불러오기
+            DBService db = FindFirstObjectByType<DBService>();
             string userId = Steamworks.SteamUser.GetSteamID().m_SteamID.ToString();
             bool logsLoaded = false;
             db.LoadAllMusicLogs(userId, (dict) => {

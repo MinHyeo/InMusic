@@ -2,8 +2,10 @@
 using UnityEngine;
 using TMPro;
 using System;
+using System.Linq;
 using Play.Result;
 using SSW.DB;
+using SongList;
 
 namespace Play
 {
@@ -63,9 +65,9 @@ namespace Play
         private GameObject[] keyObjects;
 
         //노래 정보
-        private Song songName;
+        private string songName;
         private string artist;
-        public Song SongTitle { get { return songName; } private set { } }
+        public string SongTitle { get { return songName; } private set { } }
         private const float preStartDelay = 2.0f;
 
         // 판정 기준
@@ -117,7 +119,7 @@ namespace Play
 
 
         #region Play Init
-        public void Init(Song songName, string artist)
+        public void Init(string songName, string artist)
         {
             //노래 정보 저장
             this.songName = songName;
@@ -142,7 +144,20 @@ namespace Play
         {
             //박자선 계산
             //metronome.CalculateSync();
-            TimelineController.Instance.Initialize(BmsLoader.Instance.SelectSong(songName));
+            
+            // LoadManager에서 이미 로드된 곡 정보 찾기
+            SongInfo loadedSong = LoadManager.Instance.Songs.FirstOrDefault(s => s.Title == songName);
+            if (loadedSong != null)
+            {
+                TimelineController.Instance.Initialize(loadedSong);
+                Debug.Log($"[PlayManager] Using pre-loaded song data for: {songName}");
+            }
+            else
+            {
+                Debug.LogError($"[PlayManager] Song not found in LoadManager: {songName}");
+                // fallback: 기존 방식 사용
+                TimelineController.Instance.Initialize(BmsLoader.Instance.SelectSongByTitle(songName));
+            }
 
             //점수 초기화
             scoreManager.Init();

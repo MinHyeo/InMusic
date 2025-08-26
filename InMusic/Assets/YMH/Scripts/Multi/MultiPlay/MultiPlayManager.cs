@@ -1,6 +1,8 @@
 using Fusion;
 using UnityEngine;
 using System.Collections;
+using System.Linq;
+using SongList;
 
 namespace Play
 {
@@ -135,26 +137,37 @@ namespace Play
                 yield return null; // Wait until the specified start time
             }
 
-            Song song = (Song)System.Enum.Parse(typeof(Song), songName);
-            TimelineController.Instance.Initialize(BmsLoader.Instance.SelectSong(song));
+            // LoadManager에서 이미 로드된 곡 정보 찾기  
+            SongInfo loadedSong = LoadManager.Instance.Songs.FirstOrDefault(s => s.Title == songName);
+            if (loadedSong != null)
+            {
+                TimelineController.Instance.Initialize(loadedSong);
+                Debug.Log($"[MultiPlayManager] Using pre-loaded song data for: {songName}");
+            }
+            else
+            {
+                Debug.LogError($"[MultiPlayManager] Song not found in LoadManager: {songName}");
+                // fallback: 기존 방식 사용
+                TimelineController.Instance.Initialize(BmsLoader.Instance.SelectSongByTitle(songName));
+            }
 
             GameManager.Input.SetNoteKeyPressEvent(OnKeyPress);
             GameManager.Input.SetNoteKeyReleaseEvent(OnKeyRelase);
 
-            StartCoroutine(StartGameCoroutine(song));
+            StartCoroutine(StartGameCoroutine(songName));
         }
 
-        private IEnumerator StartGameCoroutine(Song song)
+        private IEnumerator StartGameCoroutine(string songTitle)
         {
             yield return new WaitForSeconds(TimelineController.Instance.BeatDelayTime);
 
             // Play the soung
-            Play.SoundManager.Instance.SongInit(song, PlayStyle.Normal);
+            Play.SoundManager.Instance.SongInit(songTitle, PlayStyle.Normal);
             Play.SoundManager.Instance.Play();
             StartCoroutine(Play.SoundManager.Instance.WaitForMusicEnd(() => End()));
 
             // Play the video associated with the song
-            videoPlay.GetVideoClip((Song)System.Enum.Parse(typeof(Song), songName));
+            videoPlay.GetVideoClip(songTitle);
             videoPlay.Play();
         }
         #endregion

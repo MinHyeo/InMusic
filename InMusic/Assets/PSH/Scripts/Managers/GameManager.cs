@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     public static UIInputManager UIInput { get { return Instance._uiInput; } }
     #endregion
 
-    private Song songTitle;
+    private string songTitle;
     
     private GameState _gameState = GameState.Loading;
     public GameState CurrentGameState { get { return _gameState; } private set {} }
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         _uiInput.OnUpdate();
     }
 
-    public void SelectSong(Song songTitle)
+    public void SelectSong(string songTitle)
     {
         Debug.Log("Try Scene Load");
         SceneManager.LoadScene("test_SSW");

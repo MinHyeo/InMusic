@@ -841,6 +841,37 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!1 &912697230
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 912697231}
+  m_Layer: 0
+  m_Name: SongTitle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &912697231
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912697230}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.960156, y: 0.7788481, z: 6.642836}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1163499542
 GameObject:
   m_ObjectHideFlags: 0
@@ -1104,10 +1135,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501f862a1a9b9a04dae4788a9799bd44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  songTitleList: {fileID: 11400000, guid: e0e0384abf2a33f48a8880772b46fe27, type: 2}
   logoCanvasGroup: {fileID: 859864672}
   fmodCanvasGroup: {fileID: 2147335945}
   fadeDuration: 1
   logoDisplayDuration: 2
+  isLoaded: 0
+  totalSongsCount: 0
 --- !u!1 &1586208966
 GameObject:
   m_ObjectHideFlags: 0
@@ -1504,3 +1538,4 @@ SceneRoots:
   - {fileID: 1262769231}
   - {fileID: 755326057}
   - {fileID: 444879741}
+  - {fileID: 912697231}

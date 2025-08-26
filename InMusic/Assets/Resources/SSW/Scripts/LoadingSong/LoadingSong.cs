@@ -29,7 +29,7 @@ public class LoadingSong : MonoBehaviour
     private string loadSceneName;
     private Coroutine dotCoroutine;
     private float _defaultLoadingText;
-    private Song songTitle;
+    private string songTitle;
     private string artist;
     private static LoadingSong _instance;
 
@@ -74,7 +74,7 @@ public class LoadingSong : MonoBehaviour
     /// </summary>
     public void LoadPlay(string sceneName, string SongTitle, string Artist, string SongDuration, Sprite songSprite) {
         gameObject.SetActive(true);
-        Enum.TryParse(SongTitle, out songTitle);
+        songTitle = SongTitle;
         artist = Artist;
 
         if (dotCoroutine != null) {
@@ -101,7 +101,7 @@ public class LoadingSong : MonoBehaviour
         StartCoroutine(LoadSceneProcess(songTitle));
     }
 
-    private IEnumerator LoadSceneProcess(Song songTitle)
+    private IEnumerator LoadSceneProcess(string songTitle)
     {
         yield return StartCoroutine(Fade(true));
 

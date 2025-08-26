@@ -12,11 +12,11 @@ namespace Play
         [SerializeField]
         private RenderTexture renderTexture;
 
-        public void GetVideoClip(Song songName)
+        public void GetVideoClip(string songTitle)
         {
             videoPlayer = GetComponent<VideoPlayer>();
 
-            string part = "Song/" + songName + "/" + songName;
+            string part = "Song/" + songTitle + "/" + songTitle;
             //string part = Path.Combine(Application.streamingAssetsPath, "Songs", songName.ToString(), songName.ToString());
             videoClip = Resources.Load<VideoClip>(part);
             videoPlayer.clip = videoClip;

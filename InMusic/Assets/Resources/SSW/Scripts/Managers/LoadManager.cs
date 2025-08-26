@@ -8,11 +8,18 @@ using SSW.DB;
 
 namespace SongList {
     public class LoadManager : Managers.Singleton<LoadManager> {
+        [Header("Song Management")]
+        [SerializeField] private SongTitleList songTitleList;
+        
         [Header("UI for Splash/Fade")]
         [SerializeField] private CanvasGroup logoCanvasGroup;
         [SerializeField] private CanvasGroup fmodCanvasGroup;
         [SerializeField] private float fadeDuration = 1f;
         [SerializeField] private float logoDisplayDuration = 1.5f;
+
+        [Header("Debug Info (Read Only)")]
+        [SerializeField] private bool isLoaded = false;
+        [SerializeField] private int totalSongsCount = 0;
 
         //ddd
 
@@ -63,32 +70,41 @@ namespace SongList {
         private IEnumerator LoadAllSongs() {
             Songs = new List<SongInfo>();
             DBService db = FindFirstObjectByType<DBService>();
+            
+            if (songTitleList == null) {
+                Debug.LogError("SongTitleList is not assigned!");
+                yield break;
+            }
+
             if (db == null) {
                 Debug.LogError("DBService not found in the scene.");
                 yield break;
             }
 
+            Debug.Log($"[LoadManager] Starting to load {songTitleList.GetSongCount()} songs...");
 
-            foreach(Song song in Enum.GetValues(typeof(Song))) {
-                SongInfo info = BmsLoader.Instance.SelectSong(song);
+            foreach(string songTitle in songTitleList.GetAllSongTitles()) {
+                SongInfo info = BmsLoader.Instance.SelectSongByTitle(songTitle);
                 if (info != null) {
                     Songs.Add(info);
-                    Debug.Log("Load Song: " + song);
+                    Debug.Log($"[LoadManager] Loaded: {songTitle} - {info.Title} by {info.Artist} ({info.Duration:F1}s)");
 
                     // DBService에 곡 정보를 저장하는 부분
                     if (db != null) {
                         string musicId = info.Title + "_" + info.Artist;
                         db.SaveSongToDB(musicId, info.Title, info.Artist);
                     }
-                    else
-                    {
-                        Debug.LogError("Failed to load Song: " + song);
-                    }
                 } else {
-                    Debug.Log("Failed to load song: " + song);
+                    Debug.LogError($"[LoadManager] Failed to load song: {songTitle}");
                 }
                 yield return null;
             }
+            
+            Debug.Log($"[LoadManager] Total songs loaded: {Songs.Count}/{songTitleList.GetSongCount()}");
+            
+            // 에디터에서 확인할 수 있도록 상태 업데이트
+            isLoaded = true;
+            totalSongsCount = Songs.Count;
         }
     }
 }
