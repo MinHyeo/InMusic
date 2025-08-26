@@ -79,9 +79,9 @@ namespace Play
             }
 
             // 키 입력 이펙트 초기화
-            foreach (var objs in keyObjects)
+            foreach (var obj in keyObjects)
             {
-                objs.SetActive(false);
+                obj.SetActive(false);
             }
 
             // 시작 시간 계산
@@ -95,6 +95,15 @@ namespace Play
             deathText.SetActive(false);
             // 게임 시작 코루틴
             StartCoroutine(CallStartGameRpcWhenReady((float)startTime));
+        }
+        #endregion
+
+        #region Destroy Object
+        private void OnDestroy()
+        {
+            GameManager.Input.RemoveUIKeyEvent(LeaveMultiPlay);
+            GameManager.Input.RemoveNoteKeyEvent(OnKeyPress);
+            GameManager.Input.RemoveNoteKeyReleaseEvent(OnKeyRelase);
         }
         #endregion
 
