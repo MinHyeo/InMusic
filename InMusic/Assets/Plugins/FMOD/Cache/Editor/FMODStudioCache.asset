@@ -1,5 +1,32 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8769547168478191466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Musics/Mortals (feat. Laura Brehm)
+  m_EditorClassIdentifier: 
+  Path: event:/Musics/Mortals (feat. Laura Brehm)
+  Guid:
+    Data1: -1248464444
+    Data2: 1262337574
+    Data3: -1752446071
+    Data4: -637796230
+  Banks:
+  - {fileID: -4724891692830469365}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 228414
 --- !u!114 &-8021027965930559793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28,7 +55,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 189846
---- !u!114 &-6688719790275130379
+--- !u!114 &-5929687420185877110
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -38,23 +65,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Musics/Invincible
+  m_Name: event:/Musics/Symbolism
   m_EditorClassIdentifier: 
-  Path: event:/Musics/Invincible
+  Path: event:/Musics/Symbolism
   Guid:
-    Data1: -470054395
-    Data2: 1108716981
-    Data3: -360446274
-    Data4: 1537022578
+    Data1: -906295753
+    Data2: 1171567295
+    Data3: -1378207856
+    Data4: 1077040642
   Banks:
-  - {fileID: -679566645767064266}
+  - {fileID: -4724891692830469365}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 273084
+  Length: 291108
 --- !u!114 &-5845645022740480420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,7 +109,27 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &-5491898579867184082
+--- !u!114 &-4724891692830469365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Musics.bank
+  m_EditorClassIdentifier: 
+  Path: FMOD/InMusic/Build/Desktop/Musics.bank
+  Name: Musics
+  StudioPath: bank:/Musics
+  lastModified: 638918678239328010
+  FileSizes:
+  - Name: Desktop
+    Value: 34014432
+  Exists: 1
+--- !u!114 &-4273902639201580047
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,23 +139,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Musics/Symbolism
+  m_Name: event:/Musics/Blank
   m_EditorClassIdentifier: 
-  Path: event:/Musics/Symbolism
+  Path: event:/Musics/Blank
   Guid:
-    Data1: -906295753
-    Data2: 1171567295
-    Data3: -1378207856
-    Data4: 1077040642
+    Data1: 748202182
+    Data2: 1191932814
+    Data3: -863566705
+    Data4: -1039499437
   Banks:
-  - {fileID: -679566645767064266}
+  - {fileID: -4724891692830469365}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 291108
+  Length: 209057
 --- !u!114 &-4141936480949776611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,7 +183,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &-3097169516486348466
+--- !u!114 &-3606173716874592984
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,24 +193,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Musics/Heroes Tonight
+  m_Name: event:/Musics/Invincible
   m_EditorClassIdentifier: 
-  Path: event:/Musics/Heroes Tonight
+  Path: event:/Musics/Invincible
   Guid:
-    Data1: 924832302
-    Data2: 1314388373
-    Data3: 1407557517
-    Data4: -563262571
+    Data1: -470054395
+    Data2: 1108716981
+    Data3: -360446274
+    Data4: 1537022578
   Banks:
-  - {fileID: -679566645767064266}
+  - {fileID: -4724891692830469365}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 208091
---- !u!114 &-2578244780558167706
+  Length: 273084
+--- !u!114 &-3260989824428319957
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -182,7 +229,7 @@ MonoBehaviour:
     Data3: -1563414400
     Data4: -82998049
   Banks:
-  - {fileID: -679566645767064266}
+  - {fileID: -4724891692830469365}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
@@ -232,11 +279,38 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM
-  lastModified: 638917389404105780
+  lastModified: 638918678235453978
   FileSizes:
   - Name: Desktop
-    Value: 25110080
+    Value: 25110240
   Exists: 1
+--- !u!114 &-1677214676805934910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Musics/My Heart
+  m_EditorClassIdentifier: 
+  Path: event:/Musics/My Heart
+  Guid:
+    Data1: -1455748174
+    Data2: 1257139087
+    Data3: 1889892505
+    Data4: 1770240103
+  Banks:
+  - {fileID: -4724891692830469365}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 267102
 --- !u!114 &-973457262210440787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,85 +326,11 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638918265953587922
+  lastModified: 638918678925954935
   FileSizes:
   - Name: Desktop
-    Value: 1860
+    Value: 1894
   Exists: 1
---- !u!114 &-679566645767064266
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Musics.bank
-  m_EditorClassIdentifier: 
-  Path: FMOD/InMusic/Build/Desktop/Musics.bank
-  Name: Musics
-  StudioPath: bank:/Musics
-  lastModified: 638918265954928100
-  FileSizes:
-  - Name: Desktop
-    Value: 34014656
-  Exists: 1
---- !u!114 &-27442925536101854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Musics/On&On
-  m_EditorClassIdentifier: 
-  Path: event:/Musics/On&On
-  Guid:
-    Data1: -1220046678
-    Data2: 1266641373
-    Data3: 74561451
-    Data4: -1240349916
-  Banks:
-  - {fileID: -679566645767064266}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 208013
---- !u!114 &-10431881538794073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Musics/Shine
-  m_EditorClassIdentifier: 
-  Path: event:/Musics/Shine
-  Guid:
-    Data1: 641387868
-    Data2: 1288581468
-    Data3: -832579698
-    Data4: 2127844393
-  Banks:
-  - {fileID: -679566645767064266}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 259082
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,7 +347,8 @@ MonoBehaviour:
   - {fileID: -973457262210440787}
   - {fileID: -1793632156551993023}
   - {fileID: 6930437500590990105}
-  - {fileID: -679566645767064266}
+  - {fileID: -4724891692830469365}
+  - {fileID: 5080218007198159447}
   EditorEvents:
   - {fileID: 5002624731780801831}
   - {fileID: -2026385379951559830}
@@ -359,23 +360,23 @@ MonoBehaviour:
   - {fileID: 6087317005332956555}
   - {fileID: 3449742824335871340}
   - {fileID: -4141936480949776611}
-  - {fileID: -6688719790275130379}
-  - {fileID: -3097169516486348466}
-  - {fileID: -5491898579867184082}
-  - {fileID: -10431881538794073}
-  - {fileID: -27442925536101854}
-  - {fileID: 1609444265226668900}
-  - {fileID: 8844124626867630889}
-  - {fileID: 600853744486814086}
-  - {fileID: 4593569598545847745}
-  - {fileID: -2578244780558167706}
+  - {fileID: -3606173716874592984}
+  - {fileID: 6704767196421392641}
+  - {fileID: -5929687420185877110}
+  - {fileID: 7764459303406690587}
+  - {fileID: 4297739789880859693}
+  - {fileID: -1677214676805934910}
+  - {fileID: -8769547168478191466}
+  - {fileID: -4273902639201580047}
+  - {fileID: 5685118048777584870}
+  - {fileID: -3260989824428319957}
   EditorParameters: []
   MasterBanks:
   - {fileID: 6930437500590990105}
   StringsBanks:
   - {fileID: -973457262210440787}
   cacheVersion: 131849
-  cacheTime: 638918265954928100
+  cacheTime: 638918678926081199
   SerializableEventsDict:
   - key: event:/BGM/Armageddon
     index: 0
@@ -444,60 +445,6 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &600853744486814086
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Musics/Blank
-  m_EditorClassIdentifier: 
-  Path: event:/Musics/Blank
-  Guid:
-    Data1: 748202182
-    Data2: 1191932814
-    Data3: -863566705
-    Data4: -1039499437
-  Banks:
-  - {fileID: -679566645767064266}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 209057
---- !u!114 &1609444265226668900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Musics/My Heart
-  m_EditorClassIdentifier: 
-  Path: event:/Musics/My Heart
-  Guid:
-    Data1: -1455748174
-    Data2: 1257139087
-    Data3: 1889892505
-    Data4: 1770240103
-  Banks:
-  - {fileID: -679566645767064266}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 267102
 --- !u!114 &3449742824335871340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,7 +472,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &4593569598545847745
+--- !u!114 &4297739789880859693
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -535,23 +482,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Musics/Why We Lose (feat. Coleman Trapp)
+  m_Name: event:/Musics/On&On
   m_EditorClassIdentifier: 
-  Path: event:/Musics/Why We Lose (feat. Coleman Trapp)
+  Path: event:/Musics/On&On
   Guid:
-    Data1: -603133490
-    Data2: 1232583014
-    Data3: -1556210021
-    Data4: -1860450042
+    Data1: -1220046678
+    Data2: 1266641373
+    Data3: 74561451
+    Data4: -1240349916
   Banks:
-  - {fileID: -679566645767064266}
+  - {fileID: -4724891692830469365}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 213054
+  Length: 208013
 --- !u!114 &5002624731780801831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -579,6 +526,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &5080218007198159447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/SFX.bank
+  m_EditorClassIdentifier: 
+  Path: FMOD/InMusic/Build/Desktop/SFX.bank
+  Name: SFX
+  StudioPath: bank:/SFX
+  lastModified: 638918678926081199
+  FileSizes:
+  - Name: Desktop
+    Value: 506
+  Exists: 1
 --- !u!114 &5347593727367080931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,6 +570,33 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
+--- !u!114 &5685118048777584870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Musics/Why We Lose (feat. Coleman Trapp)
+  m_EditorClassIdentifier: 
+  Path: event:/Musics/Why We Lose (feat. Coleman Trapp)
+  Guid:
+    Data1: -603133490
+    Data2: 1232583014
+    Data3: -1556210021
+    Data4: -1860450042
+  Banks:
+  - {fileID: -4724891692830469365}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 213054
 --- !u!114 &6087317005332956555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -657,6 +651,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &6704767196421392641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Musics/Heroes Tonight
+  m_EditorClassIdentifier: 
+  Path: event:/Musics/Heroes Tonight
+  Guid:
+    Data1: 924832302
+    Data2: 1314388373
+    Data3: 1407557517
+    Data4: -563262571
+  Banks:
+  - {fileID: -4724891692830469365}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 208091
 --- !u!114 &6930437500590990105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -672,11 +693,38 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638918265953547512
+  lastModified: 638918678925919887
   FileSizes:
   - Name: Desktop
     Value: 1298
   Exists: 1
+--- !u!114 &7764459303406690587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Musics/Shine
+  m_EditorClassIdentifier: 
+  Path: event:/Musics/Shine
+  Guid:
+    Data1: 641387868
+    Data2: 1288581468
+    Data3: -832579698
+    Data4: 2127844393
+  Banks:
+  - {fileID: -4724891692830469365}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 259082
 --- !u!114 &8769999848961162749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -704,30 +752,3 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &8844124626867630889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Musics/Mortals (feat. Laura Brehm)
-  m_EditorClassIdentifier: 
-  Path: event:/Musics/Mortals (feat. Laura Brehm)
-  Guid:
-    Data1: -1248464444
-    Data2: 1262337574
-    Data3: -1752446071
-    Data4: -637796230
-  Banks:
-  - {fileID: -679566645767064266}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 228414
