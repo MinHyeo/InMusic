@@ -47,7 +47,7 @@ public class BmsLoader : Singleton<BmsLoader>
         tempStr = "";
         StrText = "";
         songName = songTitle;
-        path = path = Path.Combine(Application.streamingAssetsPath, "Song", songTitle);
+        path = Path.Combine(Application.streamingAssetsPath, "Song", songTitle);
         seps = new char[] { ' ', ':' };
 
         fileName = new FileInfo(Path.Combine(path, songTitle + ".bms"));
@@ -59,7 +59,7 @@ public class BmsLoader : Singleton<BmsLoader>
         }
 
         reader = fileName.OpenText();
-        songInfo = ParseBMS();
+        songInfo = ParseBMS(songTitle);
         songInfo.Duration = GetSongDurationFromFMOD(songTitle);
 
         return songInfo;
@@ -128,7 +128,7 @@ public class BmsLoader : Singleton<BmsLoader>
     }
 
 
-    private SongInfo ParseBMS()
+    private SongInfo ParseBMS(string songTitle)
     {
         SongInfo bmsData = new SongInfo();
         bmsData.NoteList = new List<NoteData>();
@@ -150,7 +150,7 @@ public class BmsLoader : Singleton<BmsLoader>
                 // BMS ������ ��� ó��
                 if (data[0].Equals("#TITLE"))
                 {
-                    bmsData.Title = data[1];
+                    bmsData.Title = songTitle;
                 }
                 else if (data[0].Equals("#GENRE"))
                 {
@@ -216,7 +216,6 @@ public class BmsLoader : Singleton<BmsLoader>
 
                     int channel = 0;
                     Int32.TryParse(data[0].Substring(4, 2), out channel);
-                    Debug.Log($"Bar: {bar}, Channel: {channel}");
 
                     string noteStr = data[0].Substring(7);
                     List<int> noteData = getNoteDataOfStr(noteStr);
