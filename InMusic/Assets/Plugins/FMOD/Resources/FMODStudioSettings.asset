@@ -479,6 +479,7 @@ MonoBehaviour:
   MasterBanks:
   - Master
   Banks:
+  - BGM
   - Musics
   - SFX
   BanksToLoad: []
