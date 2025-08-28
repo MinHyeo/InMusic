@@ -59,6 +59,7 @@ namespace Play
             noteCount = songInfo.NoteCount;
 
             // 비트 및 마디 계산
+            bpm = songInfo.BPM;
             beatIntervalMs = 60000f / bpm;
             measureInterval = beatIntervalMs * 4f;
 

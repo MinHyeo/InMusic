@@ -49,11 +49,7 @@ namespace Play
                 StartCoroutine(PlayTicks());
             }
         }
-
-        public void OnClickButton()
-        {
-            CalculateSync();
-        }
+        
         public void CalculateSync()
         {
             //������Ʈ Ǯ�� ������Ʈ �̸� ����

@@ -5,6 +5,7 @@ using UnityEngine;
 using Play;
 using FMOD.Studio;
 using FMODUnity;
+using UnityEditor;
 
 [System.Serializable]
 public class SongInfo
@@ -46,7 +47,7 @@ public class BmsLoader : Singleton<BmsLoader>
         tempStr = "";
         StrText = "";
         songName = songTitle;
-        path = Path.Combine(Application.streamingAssetsPath, "Song", songTitle);
+        path = path = Path.Combine(Application.streamingAssetsPath, "Song", songTitle);
         seps = new char[] { ' ', ':' };
 
         fileName = new FileInfo(Path.Combine(path, songTitle + ".bms"));
@@ -215,6 +216,7 @@ public class BmsLoader : Singleton<BmsLoader>
 
                     int channel = 0;
                     Int32.TryParse(data[0].Substring(4, 2), out channel);
+                    Debug.Log($"Bar: {bar}, Channel: {channel}");
 
                     string noteStr = data[0].Substring(7);
                     List<int> noteData = getNoteDataOfStr(noteStr);

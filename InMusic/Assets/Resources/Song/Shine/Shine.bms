@@ -1,0 +1,23 @@
+﻿
+*---------------------- HEADER FIELD
+
+#PLAYER 1
+#GENRE EDM
+#TITLE Shine
+#ARTIST Spektrem
+#BPM 128
+#PLAYLEVEL 
+#RANK 2
+
+
+#LNTYPE 1
+
+
+
+*---------------------- MAIN DATA FIELD
+
+
+#00011:01010100
+#00014:01010100
+
+
