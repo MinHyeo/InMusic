@@ -47,10 +47,11 @@ public class BmsLoader : Singleton<BmsLoader>
         tempStr = "";
         StrText = "";
         songName = songTitle;
-        path = path = Path.Combine(Application.streamingAssetsPath, "Song", songTitle);
+        path = Path.Combine(Application.streamingAssetsPath, "Song", songTitle);
         seps = new char[] { ' ', ':' };
 
         fileName = new FileInfo(Path.Combine(path, songTitle + ".bms"));
+        Debug.Log($"File Path: {fileName.FullName}.");
 
         if (!fileName.Exists) // 디렉토리나 파일이 없는 경우 처리
         {
