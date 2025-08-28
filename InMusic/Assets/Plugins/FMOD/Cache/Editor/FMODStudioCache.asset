@@ -124,10 +124,10 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Musics.bank
   Name: Musics
   StudioPath: bank:/Musics
-  lastModified: 638918678239328010
+  lastModified: 638918265954928100
   FileSizes:
   - Name: Desktop
-    Value: 34014432
+    Value: 34014656
   Exists: 1
 --- !u!114 &-4273902639201580047
 MonoBehaviour:
@@ -279,10 +279,10 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM
-  lastModified: 638918678235453978
+  lastModified: 638917389404105780
   FileSizes:
   - Name: Desktop
-    Value: 25110240
+    Value: 25110080
   Exists: 1
 --- !u!114 &-1677214676805934910
 MonoBehaviour:
@@ -326,10 +326,10 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638918678925954935
+  lastModified: 638918265953587922
   FileSizes:
   - Name: Desktop
-    Value: 1894
+    Value: 1860
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -348,7 +348,6 @@ MonoBehaviour:
   - {fileID: -1793632156551993023}
   - {fileID: 6930437500590990105}
   - {fileID: -4724891692830469365}
-  - {fileID: 5080218007198159447}
   EditorEvents:
   - {fileID: 5002624731780801831}
   - {fileID: -2026385379951559830}
@@ -376,7 +375,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: -973457262210440787}
   cacheVersion: 131849
-  cacheTime: 638918678926081199
+  cacheTime: 638918265954928100
   SerializableEventsDict:
   - key: event:/BGM/Armageddon
     index: 0
@@ -526,26 +525,6 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &5080218007198159447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/SFX.bank
-  m_EditorClassIdentifier: 
-  Path: FMOD/InMusic/Build/Desktop/SFX.bank
-  Name: SFX
-  StudioPath: bank:/SFX
-  lastModified: 638918678926081199
-  FileSizes:
-  - Name: Desktop
-    Value: 506
-  Exists: 1
 --- !u!114 &5347593727367080931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,7 +672,7 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638918678925919887
+  lastModified: 638918265953547512
   FileSizes:
   - Name: Desktop
     Value: 1298
