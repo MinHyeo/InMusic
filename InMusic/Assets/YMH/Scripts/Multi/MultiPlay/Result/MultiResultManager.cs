@@ -75,7 +75,7 @@ namespace Play.Result
 
         public void OnClickNextButton()
         {
-            NetworkManager.runnerInstance.LoadScene("MultiRoom");
+            NetworkManager.runnerInstance.LoadScene("MultiLobbyScene_InMusic");
             //await SceneManager.LoadSceneAsync("MultiRoom");
         }
     }

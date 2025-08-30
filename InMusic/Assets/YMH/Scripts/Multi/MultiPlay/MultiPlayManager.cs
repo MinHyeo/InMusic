@@ -301,7 +301,7 @@ namespace Play
             RPC_LeaveMultiPlay();
             
             // 로비로 이동
-            NetworkManager.runnerInstance.LoadScene("MultiLobby");
+            NetworkManager.runnerInstance.LoadScene("MultiLobbyScene_InMusic");
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]

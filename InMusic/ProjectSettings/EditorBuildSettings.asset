@@ -6,13 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Resources/SSW/Scenes/MainLoadScene.unity
+    path: Assets/_InMusic/SSW/Scenes/MainLoadScene.unity
     guid: 2c49950c51068614e9c68ded057f381f
   - enabled: 1
-    path: Assets/PSH/Scene/Main_Lobby_PSH.unity
+    path: Assets/_InMusic/PSH/Scene/Main_Lobby_PSH.unity
     guid: d0551487d6bb03640bc45f254fa6eabd
   - enabled: 1
-    path: Assets/Resources/SSW/Scenes/test_SSW.unity
+    path: Assets/_InMusic/SSW/Scenes/test_SSW.unity
     guid: 76814152083bb554e913addef99efc6d
   - enabled: 1
     path: Assets/YMH/Scene/SinglePlay.unity
@@ -24,17 +24,35 @@ EditorBuildSettings:
     path: Assets/YMH/Scene/MultiRoomTest.unity
     guid: 1260cefe5e9e52e4e8ad0482e0dc0ff1
   - enabled: 1
-    path: Assets/Resources/SSW/Scenes/LoadingScene.unity
+    path: Assets/_InMusic/SSW/Scenes/LoadingScene.unity
     guid: ffa28e3a15f3f1947850a9daf9cb504e
   - enabled: 1
     path: Assets/YMH/Scene/MultiPlay.unity
     guid: de0b9463a9fc32948a24856487e134c5
   - enabled: 1
-    path: Assets/Resources/SSW/Scenes/MultiRoom.unity
+    path: Assets/_InMusic/SSW/Scenes/MultiRoom.unity
     guid: 39528fbc13f714d44b6bd5ac245c2550
   - enabled: 1
-    path: Assets/Resources/SSW/Scenes/MultiLobbyScene.unity
+    path: Assets/_InMusic/SSW/Scenes/MultiLobbyScene.unity
     guid: a14a346efad818747b4d49ad909edb5c
+  - enabled: 1
+    path: Assets/_InMusic/Scenes/LoadingScene_InMusic.unity
+    guid: a19772c84f3c0db4ba28e7499adb94ef
+  - enabled: 1
+    path: Assets/_InMusic/Scenes/MainLoadScene_InMusic.unity
+    guid: 4ed4d0a7ff75f9346b1b93bc41b53b16
+  - enabled: 1
+    path: Assets/_InMusic/Scenes/MainLobbyScene_InMusic.unity
+    guid: 7c5451a496f801c408759073decb3a0b
+  - enabled: 1
+    path: Assets/_InMusic/Scenes/MultiLobbyScene_InMusic.unity
+    guid: 8b35a7832c537a04492d860998a90a8a
+  - enabled: 1
+    path: Assets/_InMusic/Scenes/MultiRoomScene_InMusic.unity
+    guid: 16e2b173528e1bd41b1a8d2df6347913
+  - enabled: 1
+    path: Assets/_InMusic/Scenes/SingleLobbyScene_InMusic.unity
+    guid: b3790d273f407f14cba0b04d9ac8cda0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

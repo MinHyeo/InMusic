@@ -12,7 +12,7 @@ namespace Play
     public enum SoundType 
     {
         Master = 0,
-        SFX,
+        UI,
         BGM,
     }
 
@@ -51,26 +51,26 @@ namespace Play
         {
             RuntimeManager.LoadBank("Master");
             RuntimeManager.LoadBank("Musics");
-            RuntimeManager.LoadBank("SFX");
+            RuntimeManager.LoadBank("UI");
 
             // FMOD에서 Bus 가져오기
             masterBus = RuntimeManager.GetBus("bus:/");
             bgmBus = RuntimeManager.GetBus("bus:/Musics");
-            sfxBus = RuntimeManager.GetBus("bus:/SFX");
+            sfxBus = RuntimeManager.GetBus("bus:/UI");
 
             DontDestroyOnLoad(this.gameObject);
         }
         #endregion
 
         #region Set Sound Volume
-        public void SetVolume(int soundType, float volume) 
+        public void SetVolume(int soundType, float volume)
         {
             switch (soundType)
             {
                 case (int)SoundType.Master:
                     masterBus.setVolume(volume);
                     break;
-                case (int)SoundType.SFX:
+                case (int)SoundType.UI:
                     sfxBus.setVolume(volume);
                     break;
                 case (int)SoundType.BGM:
@@ -108,7 +108,7 @@ namespace Play
             bgmInstance = RuntimeManager.CreateInstance(bgmEventPart);
 
             //�뷡 ���̶���Ʈ ����
-            if(style == PlayStyle.Highlight)
+            if (style == PlayStyle.Highlight)
             {
                 int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000);
                 bgmInstance.setTimelinePosition(startTimeMilliseconds);
@@ -129,7 +129,7 @@ namespace Play
         /// <param name="isPause">���߰� ������ true</param>
         public void SetPause(bool isPause)
         {
-            if(isPlaying == isPause)
+            if (isPlaying == isPause)
             {
                 isPlaying = !isPause;
                 bgmInstance.setPaused(isPause);
@@ -169,12 +169,21 @@ namespace Play
 
             return currentPositionMs;
         }
-        
+
         public void End()
         {
             bgmInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
 
             isPlaying = false;
+        }
+
+        public void PlayUISound(string soundName)
+        {
+            // UI 사운드 재생
+            string uiEventPath = "event:/UI/" + soundName;
+            EventInstance uiEventInstance = RuntimeManager.CreateInstance(uiEventPath);
+            uiEventInstance.start();
+            uiEventInstance.release();
         }
     }
 }
