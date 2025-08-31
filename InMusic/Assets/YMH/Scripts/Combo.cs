@@ -66,7 +66,6 @@ namespace Play
             if (accuracy != AccuracyType.Miss)
             {
                 combo += 1;
-                Debug.Log($"AccuracyType : {accuracy.ToString()}, Combo: {combo}");
                 if (combo > maxCombo)
                 {
                     maxCombo = combo;

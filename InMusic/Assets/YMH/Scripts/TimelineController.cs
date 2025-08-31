@@ -169,6 +169,19 @@ namespace Play
             measureLineSpawners[isMatch].RemoveLine(line);
         }
 
+        public void StopAllSpawnCoroutines()
+        {
+            foreach (Coroutine coroutine in coroutines)
+            {
+                if (coroutine != null)
+                {
+                    StopCoroutine(coroutine);
+                }
+            }
+            coroutines.Clear();
+            isStart = false;
+        }
+
         public void ClearAll()
         {
             foreach (IMeasureLineSpawn measureLineSpawner in measureLineSpawners)

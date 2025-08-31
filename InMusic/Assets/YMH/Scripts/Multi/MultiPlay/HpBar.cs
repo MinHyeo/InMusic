@@ -10,6 +10,11 @@ public class HpBar : MonoBehaviour
         hpSlider = GetComponent<Slider>();
     }
 
+    public void InitHp()
+    {
+        hpSlider.value = 1f;
+    }
+
     public bool SetHp(float addValue)
     {
         float hpValue = Mathf.Clamp(hpSlider.value + (addValue / 100f), 0f, 1f);

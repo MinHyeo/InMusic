@@ -41,18 +41,14 @@ namespace Play
         //점수 관련
         [SerializeField]
         private ScoreManager scoreManager;
-        //정확도 관련
-        [SerializeField]
-        private Accuracy accuracyScript;
         //콤보 관련
         [SerializeField]
         private Combo comboScript;
         //비디오 관련
         [SerializeField]
         private VideoPlay videoPlayScript;
-        //박자선 관련
         [SerializeField]
-        private Metronome metronome;
+        private HpBar myHpBar;
 
         [Header("점수 관련")]
         [SerializeField]
@@ -63,12 +59,16 @@ namespace Play
         [Header("Key Objects")]
         [SerializeField]
         private GameObject[] keyObjects;
+        [Header("키 입력 Effect")]
+        [SerializeField]
+        private GameObject[] keyEffectObjects;
 
         //노래 정보
         private string songName;
         private string artist;
         public string SongTitle { get { return songName; } private set { } }
         private const float preStartDelay = 2.0f;
+        private Coroutine musicEndCoroutine;
 
         // 판정 기준
         private const float greateThreshold = 0.0533f;
@@ -85,6 +85,7 @@ namespace Play
             Ready,
             Playing,
             Pause,
+            GameOver,
             End
         }
         private States state = States.Ready;
@@ -104,11 +105,6 @@ namespace Play
         private void Start()
         {
             GameManager.Instance.SetGameState(GameState.GamePlay);
-        }
-
-        public void OnClickButton()
-        {
-            //StartGame(Song.Heya, "artist");
         }
 
         private void OnApplicationQuit()
@@ -144,7 +140,7 @@ namespace Play
         {
             //박자선 계산
             //metronome.CalculateSync();
-            
+
             // LoadManager에서 이미 로드된 곡 정보 찾기
             SongInfo loadedSong = LoadManager.Instance.Songs.FirstOrDefault(s => s.Title == songName);
             if (loadedSong != null)
@@ -161,6 +157,9 @@ namespace Play
 
             //점수 초기화
             scoreManager.Init();
+            comboScript.Init();
+            // HP 초기화
+            myHpBar.InitHp();
 
             //키보드 설정
             GameManager.Input.SetNoteKeyPressEvent(OnKeyPress);
@@ -188,11 +187,11 @@ namespace Play
             //노래 재생
             SoundManager.Instance.Play();
             //노래 끝나는지 체크
-            StartCoroutine(SoundManager.Instance.WaitForMusicEnd(() => End()));
+            musicEndCoroutine = StartCoroutine(SoundManager.Instance.WaitForMusicEnd(() => End()));
             //비디오 재생
             videoPlayScript.Play();
 
-        } 
+        }
         #endregion
 
         private void OnKeyPress(Define.NoteControl keyEvent)
@@ -211,18 +210,22 @@ namespace Play
                 if (timeDifference <= greateThreshold)
                 {
                     HandleNoteHit(closestNote, AccuracyType.Great, 100);
+                    keyEffectObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(true);
                 }
                 else if ((timeDifference -= greateThreshold) <= goodThreshold)
                 {
                     HandleNoteHit(closestNote, AccuracyType.Good, 70);
+                    keyEffectObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(true);
                 }
                 else if ((timeDifference -= goodThreshold) <= badThreshold)
                 {
                     HandleNoteHit(closestNote, AccuracyType.Bad, 40);
+                    keyEffectObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(true);
                 }
                 else if ((timeDifference -= badThreshold) <= missThreshold)
                 {
                     HandleNoteHit(closestNote, AccuracyType.Miss, 0);
+                    keyEffectObjects[(int)keyEvent - (int)Define.NoteControl.Key1].SetActive(true);
                 }
             }
         }
@@ -241,7 +244,6 @@ namespace Play
             // 개별 요소 null 체크
             if (keyObjects[index] == null)
             {
-                Debug.Log(keyObjects[0]);
                 Debug.LogError($"keyObjects[{index}]가 null입니다.");
                 return;
             }
@@ -291,10 +293,22 @@ namespace Play
         {
             float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
 
+            switch (accuracyResult)
+            {
+                case AccuracyType.Miss:
+                    if (myHpBar.SetHp(-10))
+                        GameOver();
+                    break;
+                default:
+                    myHpBar.SetHp(5);
+                    break;
+            }
+
             //점수 계산 및 표시
             scoreManager.AddScore(noteScore, percent, accuracyResult);
         }
 
+        #region Pause
         //일시정지
         public void Pause()
         {
@@ -334,17 +348,28 @@ namespace Play
             //영상 초기화
             videoPlayScript.End();
             //노래 초기화
+            StopCoroutine(musicEndCoroutine);
             SoundManager.Instance.End();
-            //노트 초기화
-            //NoteManager.Instance.Restart();
-            //박자선  초기화
-            //metronome.Restart();
+            // 노트 및 박자선 삭제
             TimelineController.Instance.ClearAll();
 
             //재시작
+            Init(songName, artist);
             StartGame();
         }
+        #endregion
 
+        #region GameOver
+        private void GameOver()
+        {
+            state = States.GameOver;
+            GameOverManager.Instance.GameOver();
+            TimelineController.Instance.StopAllSpawnCoroutines();
+            TimelineController.Instance.ClearAll();
+        }
+        #endregion
+
+        #region End
         //노래 종료
         public void End()
         {
@@ -391,5 +416,6 @@ namespace Play
 
             return scoreData;
         }
+        #endregion
     }
 }

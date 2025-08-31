@@ -48,6 +48,7 @@ namespace Play.Result
 
         public void OnClickNextButton()
         {
+            GameManager.Instance.SetGameState(GameState.MusicSelect);
             GameManager.Instance.ReturnMusicSelectScene(scoreData);
         }
     }
