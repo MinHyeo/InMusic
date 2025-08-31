@@ -35,6 +35,7 @@ namespace Play
             currentTime = 0;
             combo = 0;
             maxCombo = 0;
+            comboText.text = $"{combo}";
         }
 
         //�ʱ�ȭ

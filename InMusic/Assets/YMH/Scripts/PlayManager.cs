@@ -351,6 +351,7 @@ namespace Play
             StopCoroutine(musicEndCoroutine);
             SoundManager.Instance.End();
             // 노트 및 박자선 삭제
+            TimelineController.Instance.StopAllSpawnCoroutines();
             TimelineController.Instance.ClearAll();
 
             //재시작

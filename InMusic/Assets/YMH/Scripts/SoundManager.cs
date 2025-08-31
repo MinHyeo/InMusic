@@ -158,6 +158,7 @@ namespace Play
                 yield return null; // �� �����Ӹ��� Ȯ��
             } while (state != FMOD.Studio.PLAYBACK_STATE.STOPPED);
 
+            UnityEngine.Debug.Log("�뷡�� �������ϴ�!");
             onComplete?.Invoke(); // �ݹ� ����
         }
         #endregion
