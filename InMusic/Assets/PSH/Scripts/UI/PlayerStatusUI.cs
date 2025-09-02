@@ -37,7 +37,9 @@ public class PlayerStatusUI : MonoBehaviour, IPointerClickHandler
     //마우스 감지
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (pNetworkObject.GetComponent<PlayerInfo>().IsOwner) {
+        //본인 선택 OR 방장 권한 없으면 무시
+        if ((uIID == 1 && GameManager_PSH.PlayerRole) || ((uIID == 2 && !GameManager_PSH.PlayerRole)) 
+            || pNetworkObject.GetComponent<PlayerInfo>().IsOwner) {
             return;
         }
         //우클릭 감지

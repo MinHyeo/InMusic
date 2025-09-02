@@ -202,9 +202,14 @@ public class Waiting_Room_UI : UI_Base_PSH
                 //키 입력 이벤트 제거
                 GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
                 NetworkManager.runnerInstance.Shutdown();
-                SceneManager.LoadScene(3); //추후 로비씬으로 바꾸기
+                SceneManager.LoadScene(3);
                 break;
             case "Enter":
+                if (curMusicItem.GetComponent<MusicItem>().HasBMS)
+                {
+                    Debug.Log("BMS 파일 없음");
+                    return;
+                }
                 OnReadyButton();
                 if (!canStart || !isOwner)
                     return;
@@ -274,7 +279,7 @@ public class Waiting_Room_UI : UI_Base_PSH
         else
         {
             //popupUI = GameManager_PSH.Resource.Instantiate("Notice_UI");
-            Debug.Log("BMS 파일이 없는 곡");
+            Debug.LogWarning("BMS 파일이 없는 곡");
         }
     }
 
@@ -300,7 +305,7 @@ public class Waiting_Room_UI : UI_Base_PSH
             playerStatusController.SetRoomOwner(you.IsOwner);
         }
 
-        if (you.IsReady && me.IsReady)
+        if (you.IsReady && me.IsReady && curMusicItem.GetComponent<MusicItem>().HasBMS)
         {
             canStart = true;
             Debug.Log("시작 가능");
@@ -352,7 +357,7 @@ public class Waiting_Room_UI : UI_Base_PSH
             yield return null;
         }
 
-        // 로컬 플레이어 NetworkObject가 스폰될 때까지 기다립니다.
+        //로컬 플레이어 NetworkObject가 스폰될 때까지 기다림
         while (localPlayerObject == null)
         {
             localPlayerObject = NetworkManager.runnerInstance.GetPlayerObject(NetworkManager.runnerInstance.LocalPlayer);
