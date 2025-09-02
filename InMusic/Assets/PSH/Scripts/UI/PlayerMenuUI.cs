@@ -22,8 +22,7 @@ public class PlayerMenuUI : MonoBehaviour
     }
 
     public void OnKickButton() {
-        Debug.Log("아직 미구현");
-
+        waitUI.KickOtherPlayer();
         gameObject.SetActive(false);
     }
 }

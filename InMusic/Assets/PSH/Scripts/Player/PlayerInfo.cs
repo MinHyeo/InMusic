@@ -58,6 +58,23 @@ public class PlayerInfo : NetworkBehaviour
         gamePlayeySceneRespawner.GetComponent<PlayerRespawner>().CheckPlayerLoad();
     }
 
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void Rpc_KickUser(RpcInfo info = default)
+    {
+        if (info.Source == NetworkManager.runnerInstance.LocalPlayer) {
+            return;
+        }
+        GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI");
+        if (waitingRoomUIManager != null)
+        {
+            waitingRoomUIManager.GetComponent<Waiting_Room_UI>().ButtonEvent("Exit");
+        }
+        else
+        {
+            Debug.LogWarning("Waiting_Room_UI GameObject를 찾을 수 없습니다.");
+        }
+    }
+
     public override void Spawned()
     {
         if (Object.HasInputAuthority)

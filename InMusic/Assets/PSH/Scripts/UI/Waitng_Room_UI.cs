@@ -324,6 +324,8 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
     }
 
+    #region Player Controll
+
     public void SetOwner(bool isP1) {
         if (localPlayerObject.GetComponent<PlayerInfo>().PlayerRole == PlayerInfo.PlayerType.Host) {
             localPlayerObject.GetComponent<PlayerInfo>().Rpc_SetOwner(isP1);
@@ -337,8 +339,14 @@ public class Waiting_Room_UI : UI_Base_PSH
         }
     }
 
-    #region Coroutine
-    IEnumerator SetLogData()
+    public void KickOtherPlayer()
+    {
+        localPlayerObject.GetComponent<PlayerInfo>().Rpc_KickUser();
+    }
+        #endregion
+
+        #region Coroutine
+        IEnumerator SetLogData()
     {
         if (!GameManager_PSH.Data.isLogReady)
             yield return null;
