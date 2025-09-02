@@ -223,7 +223,7 @@ namespace Play
         public void HandleNoteHit(int channel, Note note, AccuracyType accuracyResult, float percent, int noteId)
         {
             float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
-            if (channel != -1)  //채널이 -1이면 Miss 처리(이펙트 X)
+            if (accuracyResult != AccuracyType.Miss)  //Miss는 이펙트 X
                 keyEffectObjects[channel - 11].SetActive(true);
             MultiScoreComparison.Instance.UpdateMyScore(noteScore, percent, accuracyResult);
 
@@ -330,7 +330,11 @@ namespace Play
 
             // 결과 처리
             ScoreData[] scoreDatas = MultiScoreComparison.Instance.SetScore(songName, artist);
-            Result.MultiResultManager.Instance.ReceiveResult(scoreDatas);
+            MultiRoomManager.Instance.scoreDatas = scoreDatas;
+
+            // Room으로 이동
+            NetworkManager.runnerInstance.LoadScene("MultiRoomScene_InMusic");
+            //Result.MultiResultManager.Instance.ReceiveResult(scoreDatas);
         }
         #endregion
     }

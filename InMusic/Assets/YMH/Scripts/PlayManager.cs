@@ -6,6 +6,7 @@ using System.Linq;
 using Play.Result;
 using SSW.DB;
 using SongList;
+using Unity.VisualScripting;
 
 namespace Play
 {
@@ -17,6 +18,11 @@ namespace Play
         //노래 정보
         public string songName;
         public string artist;
+
+        // 플레이어 이름
+        public string userName;
+        public bool isRed;
+
         //점수
         public int score;
         public float accuracy;

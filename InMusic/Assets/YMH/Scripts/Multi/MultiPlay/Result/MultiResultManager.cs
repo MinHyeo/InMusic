@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 namespace Play.Result
@@ -17,14 +18,19 @@ namespace Play.Result
         private UserResult userResult;
         private ScoreData[] scoreData;
 
-        private WaitForSeconds delayTime = new WaitForSeconds(3f); // 3 seconds
-
         private int currentIndex = 0;
         private int winnerIndex = 0;
 
         private void Start()
         {
-            resultCanvas.SetActive(false);
+            if (MultiRoomManager.Instance.scoreDatas != null)
+            {
+                ReceiveResult(MultiRoomManager.Instance.scoreDatas);
+            }
+            else
+            {
+                resultCanvas.SetActive(false);
+            }
         }
 
         private void SetWinner()
@@ -43,18 +49,21 @@ namespace Play.Result
             this.scoreData = scoreData;
             winnerIndex = 0;
             SetWinner();
-            MultiPlayUserSetting.Instance.SetResultUserSetting(winnerIndex, 0);
-            MultiPlayUserSetting.Instance.SetResultUserSetting(1 - winnerIndex, 1);
+            Debug.Log($"ScoreData[0].userName: {scoreData[0].userName}, ScoreData[0].Score: {scoreData[0].score}");
+            Debug.Log($"ScoreData[1].userName: {scoreData[1].userName}, ScoreData[1].Score: {scoreData[1].score}");
+
+            userResult.SetUserResult(scoreData[0].userName, scoreData[0].isRed, 0);
+            userResult.SetUserResult(scoreData[1].userName, scoreData[1].isRed, 1);
+
             StartCoroutine(ShowResults());
         }
 
         private IEnumerator ShowResults()
         {
-            yield return delayTime;
+            yield return null;
 
             resultCanvas.SetActive(true);
-            userResult.SetUserResult("Player");
-            
+            userResult.Select(0);
 
             resultText.SetSongInfoText(scoreData[currentIndex].songName, scoreData[currentIndex].artist);
             resultText.SetResultText(scoreData[currentIndex].score, new int[] { scoreData[currentIndex].great, scoreData[currentIndex].good, scoreData[currentIndex].bad, scoreData[currentIndex].miss }, scoreData[currentIndex].accuracy, scoreData[currentIndex].maxCombo);
@@ -75,7 +84,7 @@ namespace Play.Result
 
         public void OnClickNextButton()
         {
-            NetworkManager.runnerInstance.LoadScene("MultiLobbyScene_InMusic");
+            NetworkManager.runnerInstance.LoadScene("MultiRoomScene_InMusic");
             //await SceneManager.LoadSceneAsync("MultiRoom");
         }
     }

@@ -1,4 +1,5 @@
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 
 
@@ -19,7 +20,7 @@ namespace Play.Result
 
         private void Start()
         {
-            resultCanvas.SetActive(false);
+            resultCanvas.SetActive(false); 
         }
 
         // �÷��� ��� �޾ƿ���

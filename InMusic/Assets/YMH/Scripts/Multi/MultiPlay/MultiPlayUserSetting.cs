@@ -11,14 +11,22 @@ public class MultiPlayUserSetting : Singleton<MultiPlayUserSetting>
     [Header("User Color Images")]
     [SerializeField]
     private Image[] userColorImages;
-    [SerializeField]
-    private Image[] resultUserColorImages;
 
     [Header("User Name Texts")]
     [SerializeField]
     private Text[] userNameTexts;
-    [SerializeField]
-    private Text[] resultUserNameTexts;
+
+    private bool[] isRed = new bool[2];
+
+    public string GetUserName(int index)
+    {
+        return userNameTexts[index].text;
+    }
+
+    public bool GetIsRed(int index)
+    {
+        return isRed[index];
+    }
 
     public void SetUserSetting(string userName, bool isRed, bool isMine)
     {
@@ -26,11 +34,6 @@ public class MultiPlayUserSetting : Singleton<MultiPlayUserSetting>
         int index = isMine ? 0 : 1;
         userNameTexts[index].text = userName;
         userColorImages[index].sprite = userColors[isRed ? 0 : 1];
-    }
-
-    public void SetResultUserSetting(int userIndex, int index)
-    {
-        resultUserNameTexts[index].text = userNameTexts[userIndex].text;
-        resultUserColorImages[index].sprite = userColorImages[userIndex].sprite;
+        this.isRed[index] = isRed;
     }
 }   

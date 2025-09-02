@@ -4,18 +4,20 @@ using UnityEngine.UI;
 public class UserResult : MonoBehaviour
 {
     [SerializeField]
+    private Sprite[] userBackgroundSprites;
+
+    [SerializeField]
     private Text[] userNameText;
     [SerializeField]
-    private Image[] userBackggroundImage;
+    private Image[] userBackgroundImage;
     [SerializeField]
     private GameObject[] userSelectImage;
 
-    public void SetUserResult(string userName)
+    public void SetUserResult(string userName, bool isRed, int index)
     {
-        userSelectImage[1].SetActive(false);
-        userSelectImage[0].SetActive(true);
-
-        
+        userNameText[index].text = userName;
+        Debug.Log(userName + " " + isRed);
+        userBackgroundImage[index].sprite = userBackgroundSprites[isRed ? 0 : 1];
     }
 
     public void Select(int index)

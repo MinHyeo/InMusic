@@ -65,7 +65,14 @@ namespace Play
 
             ScoreData[] scores = new ScoreData[2];
             scores[0] = MyScoreManager.SaveScore(songName, artist);
+            scores[0].userName = MultiPlayUserSetting.Instance.GetUserName(0);
+            scores[0].isRed = MultiPlayUserSetting.Instance.GetIsRed(0);
+            Debug.Log($"MyScore - userName: {scores[0].userName}, Score: {scores[0].score}");
+
             scores[1] = MatchScoreManager.SaveScore(songName, artist);
+            scores[1].userName = MultiPlayUserSetting.Instance.GetUserName(1);
+            scores[1].isRed = MultiPlayUserSetting.Instance.GetIsRed(1);
+            Debug.Log($"MatchScore - userName: {scores[1].userName}, Score: {scores[1].score}");
 
             return scores;
         }

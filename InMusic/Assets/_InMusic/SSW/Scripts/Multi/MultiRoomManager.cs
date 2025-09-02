@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using Play;
 
 public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
 {
@@ -11,6 +12,8 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
 
     public string songName;
     public string artist;
+
+    public ScoreData[] scoreDatas = null;
 
     // PlayerStateController들을 조회해서 정보 가져오기
     public List<PlayerStateController> GetAllPlayers()
@@ -121,6 +124,9 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
             Debug.LogWarning($"[MultiRoomManager] Cannot start - {notReadyPlayers.Count} players not ready");
             return;
         }
+
+        // 결과 데이터 초기화
+        scoreDatas = null;
 
         // 씬 로딩 (MasterClient만 가능)
         Debug.Log($"[MultiRoomManager] Loading scene: {sceneName}");
