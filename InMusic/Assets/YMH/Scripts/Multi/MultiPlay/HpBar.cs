@@ -17,6 +17,9 @@ public class HpBar : MonoBehaviour
 
     public bool SetHp(float addValue)
     {
+        if (hpSlider.value <= 0)
+            return true;
+            
         float hpValue = Mathf.Clamp(hpSlider.value + (addValue / 100f), 0f, 1f);
         hpSlider.value = hpValue;
 
