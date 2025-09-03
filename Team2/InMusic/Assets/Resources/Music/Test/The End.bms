@@ -1,0 +1,18 @@
+﻿
+*---------------------- HEADER FIELD
+
+#PLAYER 1
+#GENRE Cyberpunk  
+#TITLE The End
+#ARTIST Neal K
+#BPM 140  
+#PLAYLEVEL 
+#RANK 2
+
+*---------------------- MAIN DATA FIELD
+
+#00111:01010000
+#00112:0001
+#00113:00000001
+
+
