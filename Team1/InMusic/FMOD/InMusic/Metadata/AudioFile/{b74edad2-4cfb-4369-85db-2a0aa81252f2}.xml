@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{b74edad2-4cfb-4369-85db-2a0aa81252f2}">
+		<property name="assetPath">
+			<value>Music/Cartoon, Coleman Trapp, Jéja - Why We Lose (feat. Coleman Trapp) [NCS Release].mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>213.05469387755102</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b0e0f0f2-d163-4692-8a81-a63e7ae6a598}</destination>
+		</relationship>
+	</object>
+</objects>

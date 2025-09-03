@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{8cbee5c1-e79b-4604-916e-da9e019ef093}">
+		<property name="assetPath">
+			<value>Music/Cartoon, Daniel Levi, Jéja - On &amp; On (feat. Daniel Levi) [NCS Release].mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>208.0130612244898</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b0e0f0f2-d163-4692-8a81-a63e7ae6a598}</destination>
+		</relationship>
+	</object>
+</objects>

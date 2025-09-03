@@ -1,0 +1,402 @@
+using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
+using System;
+using System.Linq;
+using SSW.DB;
+using SSW;
+
+namespace SongList
+{
+    public class SongListController : MonoBehaviour
+    {
+        #region Variables
+        [Header("ScrollRect Settings")]
+        [SerializeField] private ScrollRect _scrollRect;
+        [SerializeField] private RectTransform _contentRect;
+
+        [Header("Slot Settings")]
+        [SerializeField] private GameObject _songItemPrefab;
+        [SerializeField] private int _bufferItems = 10;
+
+        [Header("Background Sprites")]
+        [SerializeField] private Sprite _selectedSprite;
+        [SerializeField] private Sprite _defaultSprite;
+
+        [Header("Scrolling Settings")]
+        [SerializeField] private float _scrollDebounceTime = 0.05f; // 스크롤 멈춤 판정 시간
+
+        private bool _isScrolling = false;
+        private float _lastScrollTime = 0f;
+
+        private int _totalSongCount;
+        private int _poolSize;
+        private float _itemHeight;
+        private int _visibleCount;
+        private int _firstVisibleIndexCached = -10;
+
+        private float upKeyTimer = 0f;
+        private float downKeyTimer = 0f;
+        private const float initialDelay = 0.3f; // 키를 누른 후 최초 반복까지의 지연 시간
+        private const float repeatRate = 0.1f;   // 반복 스크롤 간격
+
+        private List<GameObject> _songList = new List<GameObject>();
+        private List<SongInfo> _songs;
+        private GameObject _selectedSlot;
+        public event Action<SongInfo> OnHighlightedSongChanged;
+        private SingleMenuController _singleMenuController;
+
+        private Dictionary<string, MusicLogRecord> _musicLogRecords;
+        #endregion
+
+        #region Unity Methods
+        private void Awake() {
+            // _songs = LoadManager.Instance.Songs;
+            // _totalSongCount = _songs.Count;
+
+            _itemHeight = _songItemPrefab.GetComponent<RectTransform>().sizeDelta.y;
+            Debug.Log($"[SongListManager] Item Height: {_itemHeight}");
+            _scrollRect.onValueChanged.AddListener(OnScrolled);
+        }
+
+        private IEnumerator Start() {
+            yield return null; // 1프레임 대기
+
+            // LoadManager에서 이미 모든 곡을 로드했으므로 바로 사용
+            _songs = LoadManager.Instance.Songs;
+            _totalSongCount = _songs.Count;
+            Debug.Log($"[SongListController] Total Songs Count: {_totalSongCount}");
+
+            // 2. DB에서 해당 유저의 모든 플레이 기록(음원 최고 기록) 불러오기
+            DBService db = FindFirstObjectByType<DBService>();
+            string userId = Steamworks.SteamUser.GetSteamID().m_SteamID.ToString();
+            bool logsLoaded = false;
+            db.LoadAllMusicLogs(userId, (dict) => {
+                _musicLogRecords = dict;
+                logsLoaded = true;
+            });
+            while (!logsLoaded)
+                yield return null;
+            if (_musicLogRecords != null)
+            {
+                Debug.Log($"[SongListController] Loaded {_musicLogRecords.Count} music log records.");
+            }
+            else
+            {
+                Debug.LogWarning("[SongListController] No music log records loaded.");
+                _musicLogRecords = new Dictionary<string, MusicLogRecord>();
+            }
+
+            float viewportHeight = _scrollRect.viewport.rect.height;
+            _visibleCount = Mathf.CeilToInt(viewportHeight / _itemHeight);
+
+            _poolSize = _visibleCount + _bufferItems * 2;
+            Debug.Log($"[SongListManager] Pool Size: {_poolSize}");
+
+            float contentHeight = _visibleCount * _itemHeight;
+            _contentRect.sizeDelta = new Vector2(_contentRect.sizeDelta.x, contentHeight);
+            _contentRect.anchoredPosition = new Vector2(0, 0);
+
+            // 아이템 풀 생성
+            for (int i = 0; i < _poolSize; i++) {
+                GameObject slotSong = Instantiate(_songItemPrefab, _contentRect);
+                slotSong.name = $"SongItem_{i}";
+
+                RectTransform rt = slotSong.GetComponent<RectTransform>();
+                float yPos = -(i * _itemHeight);
+                rt.anchoredPosition = new Vector2(0, yPos + (_bufferItems * _itemHeight));
+
+                UpdateSlotData(slotSong, i);
+                _songList.Add(slotSong);
+            }
+
+            int rememberedIndex = IndexSaveTest.Instance.GetLastSelectedIndex();
+            Debug.Log($"[SongListManager] Remembered Index: {rememberedIndex}");
+
+            Canvas.ForceUpdateCanvases();
+
+            if (rememberedIndex >= 0) {
+                ForceCenterAtIndex(rememberedIndex);
+            } else {
+                // 초기 스냅 + 재배치
+                SnapToNearestSlot();
+                _firstVisibleIndexCached = Mathf.FloorToInt(_contentRect.anchoredPosition.y / _itemHeight);
+                OnScroll();
+
+                // 중앙 슬롯 즉시 하이라이트
+                HighlightCenterSlotByPosition(isImmediate: true);
+            }
+            _singleMenuController = FindFirstObjectByType<SingleMenuController>();
+        }
+
+        private void OnEnable() {
+            GameManager.SingleMenuInput.keyAction += OnKeyPress;
+            Debug.Log("SongList Input Enabled");
+        }
+
+        private void OnDisable() {
+            GameManager.SingleMenuInput.keyAction -= OnKeyPress;
+            Debug.Log("SongList Input Disabled");
+        }
+        
+        private void Update() {
+            if (_isScrolling) {
+                if (Time.time - _lastScrollTime > _scrollDebounceTime) {
+                    _isScrolling = false;
+                    SnapToNearestSlot();
+                    OnScroll();
+                    HighlightCenterSlotByPosition();
+                }
+            }
+        }
+        #endregion
+
+        #region Scroll Methods
+        private void OnScrolled(Vector2 pos) {
+            _isScrolling = true;
+            _lastScrollTime = Time.time;
+        }
+
+        private void SnapToNearestSlot() {
+            float topOffset = _bufferItems * _itemHeight; 
+            float contentY = _contentRect.anchoredPosition.y;
+            float tempOffset = contentY - topOffset;
+            Debug.Log($"[SongListManager] Snap to Nearest Slot: {tempOffset}");
+            int nearestIndex = Mathf.RoundToInt(tempOffset / _itemHeight);
+
+            float newY = nearestIndex * _itemHeight + topOffset;
+            Debug.Log($"[SongListManager] Snap to Index: {nearestIndex}");
+            _contentRect.anchoredPosition = new Vector2(0, newY);
+        }
+
+        private void OnScroll() {
+            float contentY = _contentRect.anchoredPosition.y;
+            int newFirstIndex = Mathf.FloorToInt(contentY / _itemHeight);
+            Debug.Log($"New First Index: {newFirstIndex}");
+            if (newFirstIndex != _firstVisibleIndexCached) {
+                int diffIndex = newFirstIndex - _firstVisibleIndexCached;
+                bool scrollDown = (diffIndex > 0);
+                int shiftCount = Mathf.Abs(diffIndex);
+
+                ShiftSlots(shiftCount, scrollDown);
+                _firstVisibleIndexCached = newFirstIndex;
+                Debug.Log($"[SongListManager] First Index: {_firstVisibleIndexCached}");
+            }
+        }
+
+        private void ShiftSlots(int shiftCount, bool scrollDown) {
+            for (int i = 0; i < shiftCount; i++) {
+                if (scrollDown) {
+                    // 맨 앞 슬롯 -> 맨 뒤
+                    GameObject slot = _songList[0];
+                    _songList.RemoveAt(0);
+                    _songList.Add(slot);
+                    Debug.Log("_songList.Length: " + _songList.Count);
+
+                    // === 수정: 무한 랩
+                    int newIndex = _firstVisibleIndexCached + _poolSize + i;
+
+                    int realIndex = ((newIndex % _totalSongCount) + _totalSongCount) % _totalSongCount;
+
+                    slot.SetActive(true);
+                    RectTransform rt = slot.GetComponent<RectTransform>();
+                    rt.anchoredPosition = CalculateSlotPosition(newIndex); 
+                    UpdateSlotData(slot, realIndex);
+
+                } else {
+                    // 맨 뒤 슬롯 -> 맨 앞으로
+                    GameObject slot = _songList[_poolSize - 1];
+                    _songList.RemoveAt(_poolSize - 1);
+                    _songList.Insert(0, slot);
+
+                    int newIndex = _firstVisibleIndexCached - 1 - i;
+
+                    int realIndex = ((newIndex % _totalSongCount) + _totalSongCount) % _totalSongCount;
+
+                    slot.SetActive(true);
+                    RectTransform rt = slot.GetComponent<RectTransform>();
+                    rt.anchoredPosition = CalculateSlotPosition(newIndex);
+                    UpdateSlotData(slot, realIndex);
+                }
+            }
+        }
+
+        private Vector2 CalculateSlotPosition(int dataIndex) {
+            // dataIndex = 논리 인덱스(계속 커질 수 있음), 실제 표시 위치는 - (dataIndex * slotHeight)
+            float topOffset = _bufferItems * _itemHeight;
+            float y = -(dataIndex * _itemHeight) + topOffset;
+            Debug.Log($"[SongListManager] Calculate Slot Position: {dataIndex} -> {y}");
+            return new Vector2(0, y);
+        }
+        #endregion
+
+        #region Keyboard Input
+        private void OnKeyPress() {
+            // 위쪽 화살표 처리
+            if (Input.GetKey(KeyCode.UpArrow)) {  
+                // 누른 순간 처리
+                if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                    ScrollUp();
+                    HighlightCenterSlotByPosition();
+                    upKeyTimer = 0f;
+                }
+                upKeyTimer += Time.deltaTime;
+                if (upKeyTimer >= initialDelay) {
+                    ScrollUp();
+                    HighlightCenterSlotByPosition();
+                    upKeyTimer -= repeatRate;
+                }
+            }
+            // 아래쪽 화살표 처리
+            else if (Input.GetKey(KeyCode.DownArrow)) {
+                if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                    ScrollDown();
+                    HighlightCenterSlotByPosition();
+                    downKeyTimer = 0f;
+                }
+                downKeyTimer += Time.deltaTime;
+                if (downKeyTimer >= initialDelay) {
+                    ScrollDown();
+                    HighlightCenterSlotByPosition();
+                    downKeyTimer -= repeatRate;
+                }
+            }
+            // 아무 키도 안 누르고 있을 때
+            else {
+                // 두 타이머 모두 리셋
+                upKeyTimer = 0f;
+                downKeyTimer = 0f;
+            }
+        }
+
+        // 키보드 입력에 따른 스크롤 이동 메서드
+        private void ScrollUp() {
+            Vector2 pos = _contentRect.anchoredPosition;
+            // 스크롤 한 칸 위로 이동
+            pos.y -= _itemHeight;
+            _contentRect.anchoredPosition = pos;
+            OnScroll();
+        }
+
+        private void ScrollDown() {
+            Vector2 pos = _contentRect.anchoredPosition;
+            // 스크롤 한 칸 아래로 이동
+            pos.y += _itemHeight;
+            _contentRect.anchoredPosition = pos;
+            OnScroll();
+        }
+        #endregion
+
+        #region Highlighting
+
+        private void HighlightCenterSlotByPosition(bool isImmediate = false) {
+            if (_selectedSlot != null) {
+                ScrollSlot oldSlotComp = _selectedSlot.GetComponent<ScrollSlot>();
+                if (oldSlotComp != null) {
+                    // 기존 슬롯에 대해 '게이지가 줄어드는' 애니메이션을 실행
+                    oldSlotComp.SetHighlight(false, isImmediate);
+                }
+                _selectedSlot = null;
+            }
+
+            float contentY = _contentRect.anchoredPosition.y;
+            float viewportH = _scrollRect.viewport.rect.height;
+            float viewportCenterY = -(viewportH / 2f);
+
+            GameObject closestSlot = null;
+            float closestDist = float.MaxValue;
+
+            foreach (var slotObj in _songList) {
+                if (!slotObj.activeSelf) continue;
+
+                RectTransform rt = slotObj.GetComponent<RectTransform>();
+                float slotY = rt.anchoredPosition.y + contentY;
+                float dist = Mathf.Abs(slotY - viewportCenterY);
+
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closestSlot = slotObj;
+                }
+            }
+
+            if (closestSlot != null) {
+                if(closestSlot == _selectedSlot) return;
+                _selectedSlot = closestSlot;
+
+                ScrollSlot slotComponent = closestSlot.GetComponent<ScrollSlot>();
+                if (slotComponent != null) {
+                    slotComponent.SetHighlight(true, isImmediate);
+
+                    SongInfo highlightSong = slotComponent.GetHighlightedSong();
+                    if (highlightSong != null) {
+                        Debug.Log($"[SongListManager] Highlighted Song Title: {highlightSong.Title}");
+                        OnHighlightedSongChanged?.Invoke(highlightSong);
+                    } else {
+                        Debug.LogWarning("[SongListManager] highlightSong is null");
+                    }
+                }
+                else {
+                    Debug.LogWarning("[SongListManager] closestSlot has no ScrollSlot component attached?");
+                }
+            }
+        }
+
+        public Dictionary<string, MusicLogRecord> MusicLogRecords {
+            get { return _musicLogRecords; }
+        }
+
+        #endregion
+
+        #region Slot Data Setting
+        private void UpdateSlotData(GameObject slotObj, int dataIndex) {
+            int songIndex = ((dataIndex % _totalSongCount) + _totalSongCount) % _totalSongCount;
+            
+            // 곡 데이터
+            SongInfo currentSong = _songs[songIndex];
+
+            // ScrollSlot 컴포넌트를 가져와서 데이터 세팅
+            ScrollSlot slot = slotObj.GetComponent<ScrollSlot>();
+            if (slot != null) {
+                slot.SetData(currentSong, songIndex, _musicLogRecords);
+            }
+        }
+
+        /// <summary>
+        /// 특정 곡 인덱스를 "가운데"에 오도록 contentRect 위치를 강제 세팅
+        /// 그리고 슬롯 재배치 + 하이라이트까지 연결
+        /// </summary>
+        private void ForceCenterAtIndex(int index) {
+            float topOffset = _bufferItems * _itemHeight;
+            int centerSlotIndex = _visibleCount / 2;
+            float targetContentY = (index - centerSlotIndex) * _itemHeight - topOffset;
+            _contentRect.anchoredPosition = new Vector2(0, targetContentY);
+
+            int newFirstIndex = Mathf.FloorToInt(targetContentY / _itemHeight);
+
+            ReLayoutAllSlots(newFirstIndex);
+
+            SnapToNearestSlot();
+            HighlightCenterSlotByPosition(isImmediate: true);
+        }
+
+        private void ReLayoutAllSlots(int startIndex)
+        {
+            for (int i = 0; i < _poolSize; i++)
+            {
+                GameObject slotObj = _songList[i];
+
+                int dataIndex = startIndex + i;
+                int realIndex = ((dataIndex % _totalSongCount) + _totalSongCount) % _totalSongCount;
+
+                RectTransform rt = slotObj.GetComponent<RectTransform>();
+                rt.anchoredPosition = CalculateSlotPosition(dataIndex);
+
+                UpdateSlotData(slotObj, realIndex);
+            }
+
+            _firstVisibleIndexCached = startIndex;
+        }
+        #endregion
+    }
+}
