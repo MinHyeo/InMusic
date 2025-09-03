@@ -47,6 +47,13 @@ public class ResourceManager
     /// </summary>
     public void CheckMusic()
     {
+        GameObject dataobject = GameObject.Find("MusicDataBox");
+        if (!(dataobject == null))
+        {
+            Debug.Log("이미 노래 데이터 Load함");
+            return;
+        }
+
         Debug.Log("음악 동기화 및 MusicData  생성");
         //경로 설정
         string fullPath = appPath + mDataPath.Replace("Assets", "");
@@ -75,7 +82,7 @@ public class ResourceManager
         for (int i = 0; i < result; i++)
         {
             //객체(MusicDataBox GameObject) 생성
-            GameObject dataobject = Instantiate("MusicDataBox", GameManager_PSH.Instance.DataRoot.transform);
+            dataobject = Instantiate("MusicDataBox", GameManager_PSH.Instance.DataRoot.transform);
              MusicData tmpMusic = dataobject.GetComponent<MusicData>();
 
             //최값보다 음악의 수가 적으면 파일 Load 안함

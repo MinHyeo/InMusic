@@ -11,6 +11,7 @@ public class Waiting_Room_UI : UI_Base_PSH
 
     [Header("현재 선택한 음악 항목 확인")]
     [SerializeField] private GameObject curMusicItem;
+    [SerializeField] private bool HasBMS;
 
     [Header("아이템 리스트 관련 확인")]
     [SerializeField] private GameObject musicList;
@@ -205,12 +206,12 @@ public class Waiting_Room_UI : UI_Base_PSH
                 SceneManager.LoadScene(3);
                 break;
             case "Enter":
-                if (curMusicItem.GetComponent<MusicItem>().HasBMS)
+                OnReadyButton();
+                if (!HasBMS)
                 {
                     Debug.Log("BMS 파일 없음");
                     return;
                 }
-                OnReadyButton();
                 if (!canStart || !isOwner)
                     return;
                 Debug.Log("게임 시작");
@@ -275,11 +276,13 @@ public class Waiting_Room_UI : UI_Base_PSH
             GameManager_PSH.Data.SetData(curMusicItem.GetComponent<MusicItem>());
             //게임 시작
             Debug.Log("BMS 할당 완료");
+            HasBMS = true;
         }
         else
         {
             //popupUI = GameManager_PSH.Resource.Instantiate("Notice_UI");
             Debug.LogWarning("BMS 파일이 없는 곡");
+            HasBMS = false;
         }
     }
 
