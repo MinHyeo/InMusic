@@ -136,11 +136,18 @@ namespace Play
                     float noteAppearTime = barTime + ((measureInterval / divisions) / 1000) * i;
                     float spawnTime = songStartTime + noteAppearTime - travelTime;
 
-                    foreach (INoteSpawn noteSpawner in noteSpawners)
+                    // foreach (INoteSpawn noteSpawner in noteSpawners)
+                    // {
+                    //     if (noteSpawner == null) continue;
+
+                    //     coroutines.Add(StartCoroutine(noteSpawner.SpawnNote(noteId, channel, spawnTime, speed, noteCount, travelTime)));
+                    // }
+                    for (int j = 0; j < noteSpawners.Length; j++)
                     {
+                        INoteSpawn noteSpawner = noteSpawners[j];
                         if (noteSpawner == null) continue;
 
-                        coroutines.Add(StartCoroutine(noteSpawner.SpawnNote(noteId, channel, spawnTime, speed, noteCount, travelTime)));
+                        coroutines.Add(StartCoroutine(noteSpawner.SpawnNote(noteId, channel, spawnTime, speed, noteCount, travelTime, j == 1)));
                     }
                     noteId++;
                 }

@@ -85,6 +85,9 @@ namespace Play
             {
                 obj.SetActive(false);
             }
+            // 키 입력 이벤트 등록
+            GameManager.Input.SetNoteKeyPressEvent(OnKeyPress);
+            GameManager.Input.SetNoteKeyReleaseEvent(OnKeyRelase);
 
             // 시작 시간 계산
             double delay = 3.0f;
@@ -160,9 +163,6 @@ namespace Play
                 TimelineController.Instance.Initialize(BmsLoader.Instance.SelectSongByTitle(songName));
             }
 
-            GameManager.Input.SetNoteKeyPressEvent(OnKeyPress);
-            GameManager.Input.SetNoteKeyReleaseEvent(OnKeyRelase);
-
             StartCoroutine(StartGameCoroutine(songName));
         }
 
@@ -223,8 +223,7 @@ namespace Play
         public void HandleNoteHit(int channel, Note note, AccuracyType accuracyResult, float percent, int noteId)
         {
             float noteScore = note.Hit();  // 노트를 맞췄을 때의 행동 (노트 삭제 또는 이펙트 생성 등)
-            if (accuracyResult != AccuracyType.Miss)  //Miss는 이펙트 X
-                keyEffectObjects[channel - 11].SetActive(true);
+                
             MultiScoreComparison.Instance.UpdateMyScore(noteScore, percent, accuracyResult);
 
             switch (accuracyResult)
@@ -235,19 +234,22 @@ namespace Play
                     break;
                 default:
                     myHpBar.SetHp(5);
+                    keyEffectObjects[channel - 11].SetActive(true);
+                    RPC_ReceiveKeyInput(channel, accuracyResult, percent, noteId);
                     break;
             }
-
-            RPC_ReceiveKeyInput(channel, accuracyResult, percent, noteId);
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
         public void RPC_ReceiveKeyInput(int channel, AccuracyType accuracyResult, float percent, int noteId, RpcInfo info = default)
         {
-            if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
-            {
+            // 이미 Destroy된 경우 방어
+            if (!Object || !Object.IsValid)
                 return;
-            }
+            if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
+                return;
+            if (matchController == null || !matchController.isActiveAndEnabled)
+                return;
 
             matchController.ShowKeyEffect(channel, accuracyResult, percent, noteId);
         }
