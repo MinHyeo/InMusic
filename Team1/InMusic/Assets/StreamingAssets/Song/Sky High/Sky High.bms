@@ -1,0 +1,23 @@
+﻿
+*---------------------- HEADER FIELD
+
+#PLAYER 1
+#GENRE EDM
+#TITLE Sky High
+#ARTIST Elektronomia
+#BPM 128
+#PLAYLEVEL 
+#RANK 2
+
+
+#LNTYPE 1
+
+
+
+*---------------------- MAIN DATA FIELD
+
+
+#00011:00000001
+#00013:01010101
+
+
