@@ -4,6 +4,7 @@ using System;
 using SongList;
 using UI_BASE_PSH;
 using SSW;
+using Play;
 
 
 public class SingleMenuController : MonoBehaviour
@@ -76,6 +77,7 @@ public class SingleMenuController : MonoBehaviour
             Debug.Log("[SingleMenuController] Cleaning up MultiRoomManager before exiting.");
             MultiRoomManager.Instance.DestroyRoomManager();
         }
+        SoundManager.Instance.End();
         SceneManager.LoadScene("MainLobbyScene_InMusic");
     }
 
