@@ -66,12 +66,6 @@ public class GameStartManager : NetworkBehaviour
         if (NetworkManager.runnerInstance.IsSharedModeMasterClient)
         {
             Debug.Log("[GameStartManager] Game start requested by SharedModeMasterClient");
-
-            if (Runner.SessionInfo.IsOpen)
-            {
-                Debug.Log("[GameStartManager] Closing session to new players");
-                Runner.SessionInfo.IsOpen = false;
-            }
             
             // 현재 선택된 곡 정보 가져오기
             MultiHighlightSong highlightSong = FindFirstObjectByType<MultiHighlightSong>();

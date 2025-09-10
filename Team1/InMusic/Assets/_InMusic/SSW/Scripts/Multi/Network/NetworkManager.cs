@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
-using Play;
 
 public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
 {
@@ -153,21 +152,11 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
         Debug.Log($"[Fusion] Player Left: {player}");
-
+        
         // MultiRoomManager에 플레이어 퇴장 알림
         if (MultiRoomManager.Instance != null)
         {
             MultiRoomManager.Instance.NotifyPlayerLeft(player);
-        }
-
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        if (currentSceneName == "MultiPlay_InMusic")
-        {
-            if (MatchController.Instance != null)
-            {
-                Debug.Log("[NetworkManager] Notifying MatchController that a player has left.");
-                MatchController.Instance.OnPlayerLeft();
-            }
         }
     }
 
@@ -183,18 +172,6 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        Scene loadedScene = SceneManager.GetActiveScene();
-        if (loadedScene.name == "MultiRoomScene_InMusic")
-        {
-            if (runner.IsSharedModeMasterClient)
-            {
-                if (!runner.SessionInfo.IsOpen)
-                {
-                    runner.SessionInfo.IsOpen = true;
-                    Debug.Log("[NetworkManager] Session is now OPEN again on scene load.");
-                }
-            }
-        }
         OnGamePlayLoadingCompleted?.Invoke();
         //throw new NotImplementedException();
     }
