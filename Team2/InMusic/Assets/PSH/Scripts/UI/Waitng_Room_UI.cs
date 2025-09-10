@@ -92,6 +92,7 @@ public class Waiting_Room_UI : UI_Base_PSH
 
         //방장 권한 가져오기
         localPlayerObject.GetComponent<PlayerInfo>().Rpc_SetOwner(true);
+        playerStatusController.SetRoomOwner(true);
         canStart = false;
     }
 
@@ -237,8 +238,7 @@ public class Waiting_Room_UI : UI_Base_PSH
         {
             //localPlayer 찾아서 상태 변경
             PlayerInfo localPlayerInfo = localPlayerObject.GetComponent<PlayerInfo>();
-            bool newReadyState = !localPlayerInfo.IsReady;
-            localPlayerInfo.Rpc_SetReady(newReadyState);
+            localPlayerInfo.IsReady = !localPlayerInfo.IsReady;
         }
     }
 
