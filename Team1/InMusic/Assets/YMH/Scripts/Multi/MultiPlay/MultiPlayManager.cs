@@ -58,7 +58,6 @@ namespace Play
         private void Start()
         {
             var runner = NetworkManager.runnerInstance;
-            runner.SetPlayerObject(runner.LocalPlayer, Object);
 
             // 멀티플레이 게임으로 상태 변경
             GameManager.Instance.SetGameState(GameState.MultiGamePlay);

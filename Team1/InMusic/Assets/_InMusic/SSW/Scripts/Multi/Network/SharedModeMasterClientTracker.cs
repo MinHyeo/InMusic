@@ -20,7 +20,7 @@ public class SharedModeMasterClientTracker : NetworkBehaviour
         // 로컬 플레이어가 SharedModeMasterClient인지 즉시 확인
         if (Runner.IsSharedModeMasterClient)
         {
-            Debug.Log($"[SharedModeMasterClientTracker] 🔴 LOCAL PLAYER IS SHARED MODE MASTER CLIENT!");
+            Debug.Log($"[SharedModeMasterClientTracker] LOCAL PLAYER IS SHARED MODE MASTER CLIENT!");
         }
     }
 
