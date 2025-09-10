@@ -20,7 +20,7 @@ public class GameStartManager : NetworkBehaviour
         MultiLoadingSong loadingSong = MultiLoadingSong.Instance;
         if (loadingSong != null)
         {
-            loadingSong.LoadPlay("MultiPlay", songTitle, songArtist, songDuration, songSprite);
+            loadingSong.LoadPlay("MultiPlay_InMusic", songTitle, songArtist, songDuration, songSprite);
         }
         else
         {

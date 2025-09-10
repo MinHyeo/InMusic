@@ -170,7 +170,7 @@ namespace SongList{
             //SoundManager.Instance.PlaySFX(SFXType.PlayStart);
             //Play.SoundManager.Instance.PlayBGMHighLight()
             loadingSongObj = LoadingSong.Instance;
-            loadingSongObj.LoadPlay("SinglePlay", _detailTitleText.text, _detailArtistText.text, _detailPlayTime, _detailImage.sprite);
+            loadingSongObj.LoadPlay("SinglePlay_InMusic", _detailTitleText.text, _detailArtistText.text, _detailPlayTime, _detailImage.sprite);
         }
 
         // /// <summary>
