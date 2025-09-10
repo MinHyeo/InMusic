@@ -144,7 +144,10 @@ public class MultiSongListController : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.SingleMenuInput.keyAction -= OnKeyPress;
+        if (GameManager.Instance != null)
+        {
+            GameManager.SingleMenuInput.keyAction -= OnKeyPress;
+        }
         Debug.Log("SongList Input Disabled");
     }
 

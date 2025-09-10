@@ -6503,19 +6503,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5504968305245239608, guid: fa489bb07eb1feb468a28682a26658c0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 648.99976
+      value: -0.00024414062
       objectReference: {fileID: 0}
     - target: {fileID: 7207642333570315514, guid: fa489bb07eb1feb468a28682a26658c0, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7207642333570315514, guid: fa489bb07eb1feb468a28682a26658c0, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.99999964
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7207642333570315514, guid: fa489bb07eb1feb468a28682a26658c0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00012207031
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7559814365013804441, guid: fa489bb07eb1feb468a28682a26658c0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -6614,7 +6614,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3888058136966935448, guid: fa489bb07eb1feb468a28682a26658c0, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8917671814376205368, guid: fa489bb07eb1feb468a28682a26658c0, type: 3}
       insertIndex: -1

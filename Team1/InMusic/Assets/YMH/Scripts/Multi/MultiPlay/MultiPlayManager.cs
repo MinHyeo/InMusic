@@ -45,6 +45,7 @@ namespace Play
 
         private string songName;
         private string artist;
+        private bool isOpponentLeft = false;
 
         // 판정 기준
         private const float greateThreshold = 0.0533f;
@@ -302,8 +303,18 @@ namespace Play
             // // 상대에게 나갔다는 신호 보내기
             // RPC_LeaveMultiPlay();
             
-            // 로비로 이동
-            NetworkManager.runnerInstance.LoadScene("MultiLobbyScene_InMusic");
+            NetworkManager.runnerInstance.Shutdown();
+        }
+
+        public void HandleOpponentLeft()
+        {
+            if (isOpponentLeft) return;
+            isOpponentLeft = true;
+
+            if (matchController != null)
+            {
+                matchController.OnPlayerLeft();
+            }
         }
 
         // [Rpc(RpcSources.All, RpcTargets.All)]
@@ -330,12 +341,19 @@ namespace Play
             TimelineController.Instance.RemoveJudgementLine();
             GameManager.Instance.SetGameState(GameState.MultiRoom);
 
-            // 결과 처리
-            ScoreData[] scoreDatas = MultiScoreComparison.Instance.SetScore(songName, artist);
-            MultiRoomManager.Instance.scoreDatas = scoreDatas;
 
             // Room으로 이동
-            NetworkManager.runnerInstance.LoadScene("MultiRoomScene_InMusic");
+            if (isOpponentLeft)
+            {
+                SceneLoading.Instance.LoadScene("MultiLobbyScene_InMusic");
+                return;
+            }
+            else
+            {
+                ScoreData[] scoreDatas = MultiScoreComparison.Instance.SetScore(songName, artist);
+                MultiRoomManager.Instance.scoreDatas = scoreDatas;
+                NetworkManager.runnerInstance.LoadScene("MultiRoomScene_InMusic");
+            }
             //Result.MultiResultManager.Instance.ReceiveResult(scoreDatas);
         }
         #endregion
