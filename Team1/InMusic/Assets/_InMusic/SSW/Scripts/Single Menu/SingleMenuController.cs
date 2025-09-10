@@ -66,6 +66,7 @@ public class SingleMenuController : MonoBehaviour
             Debug.Log("[SingleMenuController] No active network runner found.");
             LoadMainScene();
         }
+        SoundManager.Instance.End();
         Debug.Log("Back Button Clicked");
     }
     private void LoadMainScene()
@@ -77,7 +78,6 @@ public class SingleMenuController : MonoBehaviour
             Debug.Log("[SingleMenuController] Cleaning up MultiRoomManager before exiting.");
             MultiRoomManager.Instance.DestroyRoomManager();
         }
-        SoundManager.Instance.End();
         SceneManager.LoadScene("MainLobbyScene_InMusic");
     }
 
