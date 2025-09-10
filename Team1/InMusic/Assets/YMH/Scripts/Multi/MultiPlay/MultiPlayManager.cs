@@ -299,24 +299,24 @@ namespace Play
             // 게임 상태 변경
             GameManager.Instance.SetGameState(GameState.MultiLobby);
 
-            // 상대에게 나갔다는 신호 보내기
-            RPC_LeaveMultiPlay();
+            // // 상대에게 나갔다는 신호 보내기
+            // RPC_LeaveMultiPlay();
             
             // 로비로 이동
             NetworkManager.runnerInstance.LoadScene("MultiLobbyScene_InMusic");
         }
 
-        [Rpc(RpcSources.All, RpcTargets.All)]
-        private void RPC_LeaveMultiPlay(RpcInfo info = default)
-        {
-            if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
-            {
-                return;
-            }
+        // [Rpc(RpcSources.All, RpcTargets.All)]
+        // private void RPC_LeaveMultiPlay(RpcInfo info = default)
+        // {
+        //     if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
+        //     {
+        //         return;
+        //     }
 
-            // 상대에게 나갔다는 신호 보내기
-            matchController.OnPlayerLeft();
-        }
+        //     // 상대에게 나갔다는 신호 보내기
+        //     matchController.OnPlayerLeft();
+        // }
         #endregion
 
         #region End
