@@ -163,10 +163,10 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
         string currentSceneName = SceneManager.GetActiveScene().name;
         if (currentSceneName == "MultiPlay_InMusic")
         {
-            if (MultiPlayManager.Instance != null)
+            if (MatchController.Instance != null)
             {
-                Debug.Log("[NetworkManager] Notifying MultiPlayManager that a player has left.");
-                MultiPlayManager.Instance.HandleOpponentLeft();
+                Debug.Log("[NetworkManager] Notifying MatchController that a player has left.");
+                MatchController.Instance.OnPlayerLeft();
             }
         }
     }
@@ -271,7 +271,7 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
 
         entryScript.UpdateRoom(session);
 
-        newEntry.SetActive(session.IsVisible && session.IsOpen);
+        newEntry.SetActive(session.IsVisible);
     }
 
     private void CreateEntryUI(SessionInfo session)
@@ -293,12 +293,11 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
         sessionListUIDictionary.Add(session.Name, newEntry);
         entryScript.CreateRoom(session);
 
-        newEntry.SetActive(session.IsVisible && session.IsOpen);
+        newEntry.SetActive(session.IsVisible);
     }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
-        SceneLoading.Instance.LoadScene("MultiLobbyScene_InMusic");
         //throw new NotImplementedException();
 
     }

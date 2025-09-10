@@ -57,7 +57,6 @@ namespace Play
                 DeathPanel.SetActive(true);
             }
         }
-        
 
         public void OnPlayerLeft()
         {
