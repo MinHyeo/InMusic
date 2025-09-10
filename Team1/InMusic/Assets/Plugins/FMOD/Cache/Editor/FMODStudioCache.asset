@@ -67,6 +67,32 @@ MonoBehaviour:
   - Name: Desktop
     Value: 34014656
   Exists: 1
+--- !u!114 &-7072134678949919246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Blank/BGM_Loop
+  m_EditorClassIdentifier: 
+  Name: BGM_Loop
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2554854545
+    data2: 704839473
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - On
+  - Off
+  Exists: 1
 --- !u!114 &-6803855538270058174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,8 +115,9 @@ MonoBehaviour:
   - {fileID: 3219013225673679327}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
-  Parameters: []
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 2629654447546577114}
   MinDistance: 1
   MaxDistance: 20
   Length: 267102
@@ -121,6 +148,32 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 236303
+--- !u!114 &-6521225359072568466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Shine/BGM_Loop
+  m_EditorClassIdentifier: 
+  Name: BGM_Loop
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2554854545
+    data2: 704839473
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - On
+  - Off
+  Exists: 1
 --- !u!114 &-6432157649024714950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,8 +223,9 @@ MonoBehaviour:
   - {fileID: 3219013225673679327}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
-  Parameters: []
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -1583182110200305553}
   MinDistance: 1
   MaxDistance: 20
   Length: 291108
@@ -438,6 +492,32 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 209057
+--- !u!114 &-1583182110200305553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Symbolism/BGM_Loop
+  m_EditorClassIdentifier: 
+  Name: BGM_Loop
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2554854545
+    data2: 704839473
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - On
+  - Off
+  Exists: 1
 --- !u!114 &-1558534956413303254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507,8 +587,9 @@ MonoBehaviour:
   - {fileID: 3219013225673679327}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
-  Parameters: []
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 9030558975171403797}
   MinDistance: 1
   MaxDistance: 20
   Length: 213054
@@ -541,13 +622,14 @@ MonoBehaviour:
   - {fileID: -821529921618762613}
   - {fileID: 1421354053161111494}
   - {fileID: 6651359245361556874}
-  EditorParameters: []
+  EditorParameters:
+  - {fileID: 1371196932429103636}
   MasterBanks:
   - {fileID: 7307512769952945512}
   StringsBanks:
   - {fileID: 8266136176636543780}
   cacheVersion: 131849
-  cacheTime: 638925575527552825
+  cacheTime: 638931252326075804
   SerializableEventsDict:
   - key: event:/Musics/Invincible
     index: 0
@@ -593,11 +675,38 @@ MonoBehaviour:
   - {fileID: 3219013225673679327}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
-  Parameters: []
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 7976839304178440458}
   MinDistance: 1
   MaxDistance: 20
   Length: 228414
+--- !u!114 &356306145118092679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/On&On/BGM_Loop
+  m_EditorClassIdentifier: 
+  Name: BGM_Loop
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2554854545
+    data2: 704839473
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - On
+  - Off
+  Exists: 1
 --- !u!114 &691704395134760891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -613,7 +722,7 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/UI.bank
   Name: UI
   StudioPath: bank:/UI
-  lastModified: 638925575527552825
+  lastModified: 638931210559304755
   FileSizes:
   - Name: Desktop
     Value: 19232
@@ -667,11 +776,38 @@ MonoBehaviour:
   - {fileID: 3219013225673679327}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
-  Parameters: []
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -7072134678949919246}
   MinDistance: 1
   MaxDistance: 20
   Length: 209057
+--- !u!114 &1371196932429103636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/BGM_Loop
+  m_EditorClassIdentifier: 
+  Name: BGM_Loop
+  StudioPath: parameter:/BGM_Loop
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2554854545
+    data2: 704839473
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - On
+  - Off
+  Exists: 1
 --- !u!114 &1421354053161111494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,11 +830,38 @@ MonoBehaviour:
   - {fileID: 3219013225673679327}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
-  Parameters: []
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 7902738935030653138}
   MinDistance: 1
   MaxDistance: 20
   Length: 236303
+--- !u!114 &2065702349508999172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Heroes Tonight/BGM_Loop
+  m_EditorClassIdentifier: 
+  Name: BGM_Loop
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2554854545
+    data2: 704839473
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - On
+  - Off
+  Exists: 1
 --- !u!114 &2153590411212642979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -746,6 +909,32 @@ MonoBehaviour:
   - Name: Desktop
     Value: 19232
   Exists: 1
+--- !u!114 &2629654447546577114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/My Heart/BGM_Loop
+  m_EditorClassIdentifier: 
+  Name: BGM_Loop
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2554854545
+    data2: 704839473
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - On
+  - Off
+  Exists: 1
 --- !u!114 &2685261568332148505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -788,8 +977,9 @@ MonoBehaviour:
   - {fileID: 3219013225673679327}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
-  Parameters: []
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 356306145118092679}
   MinDistance: 1
   MaxDistance: 20
   Length: 208013
@@ -855,10 +1045,36 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Musics.bank
   Name: Musics
   StudioPath: bank:/Musics
-  lastModified: 638925575526795764
+  lastModified: 638931252326075804
   FileSizes:
   - Name: Desktop
-    Value: 34014432
+    Value: 34021952
+  Exists: 1
+--- !u!114 &3602355214298849588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Invincible/BGM_Loop
+  m_EditorClassIdentifier: 
+  Name: BGM_Loop
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2554854545
+    data2: 704839473
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - On
+  - Off
   Exists: 1
 --- !u!114 &3878065494926741006
 MonoBehaviour:
@@ -882,8 +1098,9 @@ MonoBehaviour:
   - {fileID: 3219013225673679327}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
-  Parameters: []
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 2065702349508999172}
   MinDistance: 1
   MaxDistance: 20
   Length: 208091
@@ -909,8 +1126,9 @@ MonoBehaviour:
   - {fileID: 3219013225673679327}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
-  Parameters: []
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -6521225359072568466}
   MinDistance: 1
   MaxDistance: 20
   Length: 259082
@@ -936,8 +1154,9 @@ MonoBehaviour:
   - {fileID: 3219013225673679327}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
-  Parameters: []
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 3602355214298849588}
   MinDistance: 1
   MaxDistance: 20
   Length: 273084
@@ -1064,10 +1283,62 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638925575424854426
+  lastModified: 638931210555301846
   FileSizes:
   - Name: Desktop
-    Value: 1590
+    Value: 1780
+  Exists: 1
+--- !u!114 &7902738935030653138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Sky High/BGM_Loop
+  m_EditorClassIdentifier: 
+  Name: BGM_Loop
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2554854545
+    data2: 704839473
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - On
+  - Off
+  Exists: 1
+--- !u!114 &7976839304178440458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Mortals (feat. Laura Brehm)/BGM_Loop
+  m_EditorClassIdentifier: 
+  Name: BGM_Loop
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2554854545
+    data2: 704839473
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - On
+  - Off
   Exists: 1
 --- !u!114 &8266136176636543780
 MonoBehaviour:
@@ -1084,10 +1355,10 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638925575424894603
+  lastModified: 638931210555334083
   FileSizes:
   - Name: Desktop
-    Value: 1450
+    Value: 1500
   Exists: 1
 --- !u!114 &8284858831244452667
 MonoBehaviour:
@@ -1162,6 +1433,32 @@ MonoBehaviour:
   FileSizes:
   - Name: Desktop
     Value: 1590
+  Exists: 1
+--- !u!114 &9030558975171403797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Why We Lose (feat. Coleman Trapp)/BGM_Loop
+  m_EditorClassIdentifier: 
+  Name: BGM_Loop
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2554854545
+    data2: 704839473
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - On
+  - Off
   Exists: 1
 --- !u!114 &9126415695133424083
 MonoBehaviour:

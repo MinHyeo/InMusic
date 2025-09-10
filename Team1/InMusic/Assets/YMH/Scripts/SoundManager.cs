@@ -110,8 +110,18 @@ namespace Play
             //�뷡 ���̶���Ʈ ����
             if (style == PlayStyle.Highlight)
             {
-                int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000);
-                bgmInstance.setTimelinePosition(startTimeMilliseconds);
+                bgmInstance.setTimelinePosition(startTimeSeconds * 1000);
+                //bgmInstance.setParameterByName("BGM_Loop", 0f);
+                RuntimeManager.StudioSystem.setParameterByName("BGM_Loop", 0f);
+                bgmInstance.getParameterByName("BGM_Loop", out float value);
+                UnityEngine.Debug.Log($"Highlight Play {value}");
+            }
+            else
+            {
+                //bgmInstance.setParameterByName("BGM_Loop", 1f);
+                RuntimeManager.StudioSystem.setParameterByName("BGM_Loop", 1f);
+                bgmInstance.getParameterByName("BGM_Loop", out float value);
+                UnityEngine.Debug.Log($"Highlight Play {value}");
             }
         }
 
