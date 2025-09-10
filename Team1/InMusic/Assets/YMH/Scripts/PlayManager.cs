@@ -168,9 +168,7 @@ namespace Play
             myHpBar.InitHp();
 
             //키보드 설정
-            GameManager.Input.SetNoteKeyPressEvent(OnKeyPress);
-            GameManager.Input.SetNoteKeyReleaseEvent(OnKeyRelase);
-            GameManager.Input.SetUIKeyEvent(OnUIKkeyPress);
+            AddKeyEvent();
 
             //게임 시작 딜레이 측정 및 시작
             StartCoroutine(StartGameWithIntroDelay());
@@ -278,7 +276,14 @@ namespace Play
             }
         }
 
-        public void DestroyKeyEvent()
+        private void AddKeyEvent()
+        {
+            GameManager.Input.SetNoteKeyPressEvent(OnKeyPress);
+            GameManager.Input.SetNoteKeyReleaseEvent(OnKeyRelase);
+            GameManager.Input.SetUIKeyEvent(OnUIKkeyPress);
+        }
+
+        private void DestroyKeyEvent()
         {
             GameManager.Input.RemoveNoteKeyEvent(OnKeyPress);
             GameManager.Input.RemoveNoteKeyEvent(OnKeyRelase);
@@ -321,6 +326,9 @@ namespace Play
             //상태 변환
             state = States.Pause;
 
+            // 키 반납
+            DestroyKeyEvent();
+
             //일시정지
             PauseManager.Instance.Pause();
             videoPlayScript.Pause();
@@ -333,6 +341,9 @@ namespace Play
         {
             //상태 변환
             state = States.Playing;
+
+            // 키 설정
+            AddKeyEvent();
 
             //계속하기
             Time.timeScale = 1;

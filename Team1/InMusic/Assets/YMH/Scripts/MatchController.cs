@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Play
 {
-    public class MatchController : MonoBehaviour
+    public class MatchController : Singleton<MatchController>
     {
         [SerializeField]
         private HpBar matchHpBar;
@@ -32,8 +32,7 @@ namespace Play
             {
                 // 노트에 대한 판정 처리
                 float score = targetNote.Hit(1);
-                keyEffectObjects[channel - 11].SetActive(true);
-
+                
                 switch (accuracyType)
                 {
                     case AccuracyType.Miss:
@@ -42,6 +41,7 @@ namespace Play
                         break;
                     default:
                         matchHpBar.SetHp(5);
+                        keyEffectObjects[channel - 11].SetActive(true);
                         break;
                 }
                 MultiScoreComparison.Instance.UpdateMatchScore(score, percent, accuracyType);
