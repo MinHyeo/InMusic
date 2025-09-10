@@ -102,8 +102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbeadf74934bf684ca90b36fa1b48d49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  channel: 0
-  noteScore: 0
   targetTime: 0
 --- !u!61 &-2072253460022066997
 BoxCollider2D:

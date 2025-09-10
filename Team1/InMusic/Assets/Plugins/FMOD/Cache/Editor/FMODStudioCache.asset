@@ -547,7 +547,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: 8266136176636543780}
   cacheVersion: 131849
-  cacheTime: 638925575527552825
+  cacheTime: 638926007399672429
   SerializableEventsDict:
   - key: event:/Musics/Invincible
     index: 0
@@ -613,7 +613,7 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/UI.bank
   Name: UI
   StudioPath: bank:/UI
-  lastModified: 638925575527552825
+  lastModified: 638926007399672429
   FileSizes:
   - Name: Desktop
     Value: 19232
@@ -855,10 +855,10 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Musics.bank
   Name: Musics
   StudioPath: bank:/Musics
-  lastModified: 638925575526795764
+  lastModified: 638926006047823097
   FileSizes:
   - Name: Desktop
-    Value: 34014432
+    Value: 34014656
   Exists: 1
 --- !u!114 &3878065494926741006
 MonoBehaviour:
@@ -1064,7 +1064,7 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638925575424854426
+  lastModified: 638926005956251531
   FileSizes:
   - Name: Desktop
     Value: 1590
@@ -1084,7 +1084,7 @@ MonoBehaviour:
   Path: FMOD/InMusic/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638925575424894603
+  lastModified: 638926005956261517
   FileSizes:
   - Name: Desktop
     Value: 1450
