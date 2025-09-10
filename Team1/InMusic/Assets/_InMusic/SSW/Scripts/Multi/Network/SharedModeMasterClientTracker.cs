@@ -35,8 +35,12 @@ public class SharedModeMasterClientTracker : NetworkBehaviour
             _wasLocalPlayerMasterClient = isCurrentlyMasterClient;
             
             // UI 업데이트를 약간 지연시켜 네트워크 동기화 완료 후 실행
-            Invoke(nameof(NotifyMasterClientChanged), 0.1f);
+            Invoke(nameof(SetMasterClientChangedFlagAfterDelay), 0.1f);
         }
+    }
+    private void SetMasterClientChangedFlagAfterDelay()
+    {
+        _masterClientChangedFlag = true;
     }
 
     public static bool NotifyMasterClientChanged()
