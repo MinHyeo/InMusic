@@ -172,6 +172,18 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
+        Scene loadedScene = SceneManager.GetActiveScene();
+        if (loadedScene.name == "MultiRoomScene_InMusic")
+        {
+            if (runner.IsSharedModeMasterClient)
+            {
+                if (!runner.SessionInfo.IsOpen)
+                {
+                    runner.SessionInfo.IsOpen = true;
+                    Debug.Log("[NetworkManager] Session is now OPEN again on scene load.");
+                }
+            }
+        }
         OnGamePlayLoadingCompleted?.Invoke();
         //throw new NotImplementedException();
     }
@@ -248,7 +260,7 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
 
         entryScript.UpdateRoom(session);
 
-        newEntry.SetActive(session.IsVisible);
+        newEntry.SetActive(session.IsVisible && session.IsOpen);
     }
 
     private void CreateEntryUI(SessionInfo session)
@@ -270,7 +282,7 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
         sessionListUIDictionary.Add(session.Name, newEntry);
         entryScript.CreateRoom(session);
 
-        newEntry.SetActive(session.IsVisible);
+        newEntry.SetActive(session.IsVisible && session.IsOpen);
     }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)

@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Linq;
 using SongList;
+using UnityEngine.SceneManagement;
 
 namespace Play
 {
@@ -303,7 +304,7 @@ namespace Play
             RPC_LeaveMultiPlay();
             
             // 로비로 이동
-            NetworkManager.runnerInstance.LoadScene("MultiLobbyScene_InMusic");
+            SceneManager.LoadScene("MultiLobbyScene_InMusic");
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
