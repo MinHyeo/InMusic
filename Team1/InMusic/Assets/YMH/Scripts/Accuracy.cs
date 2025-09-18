@@ -5,10 +5,10 @@ namespace Play
 {
     public enum AccuracyType
     {
-        Great = 0,
-        Good,
-        Bad,
-        Miss
+        Great = 100,
+        Good = 75,
+        Bad = 50,
+        Miss = 0
     }
 
     public class Accuracy : MonoBehaviour
@@ -41,7 +41,10 @@ namespace Play
             //텍스트 글자 변경
             accuarcy.text = type.ToString().ToLower();
             //텍스트 색 변경
-            accuarcy.color = accuaryColors[(int)type];
+            if (type == AccuracyType.Great) accuarcy.color = accuaryColors[0];
+            else if (type == AccuracyType.Good) accuarcy.color = accuaryColors[1];
+            else if (type == AccuracyType.Bad) accuarcy.color = accuaryColors[2];
+            else if (type == AccuracyType.Miss) accuarcy.color = accuaryColors[3];;
 
             //정확도 표시
             if (!isShow)

@@ -209,7 +209,7 @@ namespace Play
 
             if (closestNote != null)
             {
-                float timeDifference = Mathf.Abs(pressTime - closestNote.targetTime);
+                float timeDifference = Mathf.Abs(pressTime - closestNote.TargetTime);
 
                 if (timeDifference <= greateThreshold)
                 {
@@ -316,7 +316,7 @@ namespace Play
             }
 
             //점수 계산 및 표시
-            scoreManager.AddScore(noteScore, percent, accuracyResult);
+            scoreManager.AddScore(noteScore, accuracyResult);
         }
 
         #region Pause

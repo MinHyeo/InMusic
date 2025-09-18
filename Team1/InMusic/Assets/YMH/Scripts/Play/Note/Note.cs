@@ -7,23 +7,20 @@ namespace Play
 {
     public class Note : MonoBehaviour
     {
-        public IObjectPool<GameObject> Pool { get; set; }
-
         //노트 변수
         private int noteId;
         private int channel;
         private float speed;
         private float noteScore;
         private bool isHited = false;
-        private bool isMatch = false;
-
-        public float targetTime;
+        private float targetTime;
 
         //외부 접근용 변수
-        public int NoteId { get { return noteId; } }
-        public int Channel { get { return channel; } }
-        public float Speed { get { return speed; } }
-        public float NoteScore { get { return noteScore; } }
+        public int NoteId => noteId;
+        public int Channel => channel;
+        public float Speed => speed;
+        public float NoteScore => noteScore;
+        public float TargetTime => targetTime;
 
         public void Initialize(int noteId, int channel, float speed, float noteScore, float travelTime, bool isMatch = false)
         {
@@ -33,7 +30,6 @@ namespace Play
             this.noteScore = noteScore;
             targetTime = travelTime + Time.time;
             isHited = false;
-            this.isMatch = isMatch;
         }
 
         private void Update()
@@ -69,18 +65,6 @@ namespace Play
                 {
                     case GameState.GamePlay:
                         PlayManager.Instance.HandleNoteHit(this, AccuracyType.Miss, 0);
-                        break;
-                    case GameState.MultiGamePlay:
-                        if (isMatch)
-                        {
-                            MatchController.Instance.ShowKeyEffect(channel, AccuracyType.Miss, 0, noteId);
-                        }
-                        else
-                        {
-                            MultiPlayManager.Instance.HandleNoteHit(channel, this, AccuracyType.Miss, 0, noteId);
-                        }
-                        break;
-                    default:
                         break;
                 }
             }

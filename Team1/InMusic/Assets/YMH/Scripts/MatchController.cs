@@ -25,26 +25,28 @@ namespace Play
             leftText.SetActive(false);
         }
 
-        public void ShowKeyEffect(int channel, AccuracyType accuracyType, float percent, int noteId)
+        public void ShowOpponentHitResult(AccuracyType accuracyType, int channel, int noteId = 1)
         {
-            Note targetNote = TimelineController.Instance.GetClosestNoteById(noteId);
-            if (targetNote != null)
+            // 판정 결과에 따라 상대방의 HP를 조절하고 시각적 이펙트를 보여줍니다.
+            switch (accuracyType)
             {
-                // 노트에 대한 판정 처리
-                float score = targetNote.Hit(1);
-                
-                switch (accuracyType)
-                {
-                    case AccuracyType.Miss:
-                        isDead = matchHpBar.SetHp(-10);
+                case AccuracyType.Miss:
+                    if (matchHpBar.SetHp(-10))
+                    {
+                        // 상대방 HP가 0이 되면 사망 처리
                         MatchPlayerDeath();
-                        break;
-                    default:
-                        matchHpBar.SetHp(5);
+                    }
+                    break;
+
+                // Great, Good, Bad 판정일 경우
+                default:
+                    matchHpBar.SetHp(5);
+                    // 상대방의 키 입력 이펙트를 활성화합니다.
+                    if (channel >= 11 && channel <= 14)
+                    {
                         keyEffectObjects[channel - 11].SetActive(true);
-                        break;
-                }
-                MultiScoreComparison.Instance.UpdateMatchScore(score, percent, accuracyType);
+                    }
+                    break;
             }
         }
 

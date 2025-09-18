@@ -45,14 +45,14 @@ namespace Play
             accuracyText.text = "0.00%";
         }
 
-        public void AddScore(float noteScore, float percent, AccuracyType accuracyResult)
+        public void AddScore(float noteScore, AccuracyType accuracyResult)
         {
             //점수 계산
-            score += noteScore * (percent / 100);
+            score += noteScore * ((float)accuracyResult / 100);
             scoreText.text = ((int)score).ToString();
 
             //정확도 계산
-            totalAccuracy += percent;
+            totalAccuracy += (int)accuracyResult;
             noteCount += 1;
             accuracy = totalAccuracy / noteCount;
             accuracyText.text = accuracy.ToString("F2") + "%";
@@ -63,7 +63,8 @@ namespace Play
             comboScript.ChangeInCombo(accuracyResult);
 
             //정확도 별 입력 횟수 저장
-            inputCount[(int)accuracyResult] += 1;
+            int index = System.Array.IndexOf(System.Enum.GetValues(typeof(AccuracyType)), accuracyResult);
+            inputCount[index] += 1;
         }
 
         public void SetRank()

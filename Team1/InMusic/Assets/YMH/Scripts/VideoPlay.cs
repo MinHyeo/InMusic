@@ -42,12 +42,11 @@ namespace Play
         {
             videoPlayer.Stop();
 
-            // RenderTexture 초기화 (검은 화면으로 덮기)
-            // RenderTexture activeRenderTexture = RenderTexture.active;
-            // RenderTexture.active = renderTexture;
-            // GL.Clear(true, true, Color.black);
-            // RenderTexture.active = activeRenderTexture;
-            videoPlayer.clip = null;
+            //RenderTexture 초기화 (검은 화면으로 덮기)
+            RenderTexture activeRenderTexture = RenderTexture.active;
+            RenderTexture.active = renderTexture;
+            GL.Clear(true, true, Color.black);
+            RenderTexture.active = activeRenderTexture;
         }
     }
 }

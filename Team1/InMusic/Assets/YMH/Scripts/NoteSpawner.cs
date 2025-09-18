@@ -41,7 +41,7 @@ namespace Play
             {
                 if (note.Channel == channel)
                 {
-                    float timeDifference = Mathf.Abs(note.targetTime - pressTime);
+                    float timeDifference = Mathf.Abs(note.TargetTime - pressTime);
                     if (timeDifference < minTimeDifference)
                     {
                         minTimeDifference = timeDifference;
