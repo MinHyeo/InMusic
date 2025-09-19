@@ -162,20 +162,6 @@ namespace Play
                 }
             }
         }
-
-        /// <summary>
-        /// 호스트가 호출하며, 놓친 노트를 처리하고 모든 클라이언트에게 알립니다.
-        /// </summary>
-        public void ProcessMissedNote(MultiNote note)
-        {
-            if (!Object.HasStateAuthority) return;
-
-            // 노트의 상태를 Miss로 변경하는 것은 노트 자신이 하도록 위임합니다.
-            note.ProcessMiss();
-            
-            // 모든 클라이언트에게 Miss가 발생했음을 알립니다.
-            RPC_BroadcastHitResult(note.Owner, AccuracyType.Miss, 0, note.Channel);
-        }
         
         // 이 함수는 MultiNoteSpawner의 ProcessPlayerInput에서 호출됩니다.
         [Rpc(RpcSources.StateAuthority, RpcTargets.All)]

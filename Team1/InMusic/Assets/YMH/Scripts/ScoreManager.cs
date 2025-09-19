@@ -63,8 +63,10 @@ namespace Play
             comboScript.ChangeInCombo(accuracyResult);
 
             //정확도 별 입력 횟수 저장
-            int index = System.Array.IndexOf(System.Enum.GetValues(typeof(AccuracyType)), accuracyResult);
-            inputCount[index] += 1;
+            if (accuracyResult == AccuracyType.Great) inputCount[0] += 1;
+            else if (accuracyResult == AccuracyType.Good) inputCount[1] += 1;
+            else if (accuracyResult == AccuracyType.Bad) inputCount[2] += 1;
+            else if (accuracyResult == AccuracyType.Miss) inputCount[3] += 1;
         }
 
         public void SetRank()
