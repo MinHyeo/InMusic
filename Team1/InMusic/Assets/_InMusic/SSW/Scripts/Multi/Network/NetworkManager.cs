@@ -212,28 +212,46 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
 
     private void DeleteOldSessionsFromUI(List<SessionInfo> sessionList)
     {
-        var keysToRemove = new List<string>();
+        //var keysToRemove = new List<string>();
+        bool isContained = false;
+        GameObject uiToDelete = null;
 
+        //foreach (var kvp in sessionListUIDictionary)
         foreach (var kvp in sessionListUIDictionary)
         {
             string sessionKey = kvp.Key;
 
-            var sessionInfo = sessionList.Find(s => s.Name == sessionKey);
-
-            if (sessionInfo == null || !sessionInfo.IsOpen)
+            foreach (SessionInfo sessionInfo in sessionList)
             {
-                keysToRemove.Add(sessionKey);
+                if (sessionInfo.Name == sessionKey)
+                {
+                    isContained = true;
+                    break;
+                }
+            }
+            // string sessionKey = kvp.Key;
+
+            // var sessionInfo = sessionList.Find(s => s.Name == sessionKey);
+
+            // if (sessionInfo == null || !sessionInfo.IsOpen)
+            // {
+            //     keysToRemove.Add(sessionKey);
+            // }
+            if (!isContained)
+            {
+                uiToDelete = kvp.Value;
+                sessionListUIDictionary.Remove(sessionKey);
             }
         }
 
-        foreach (var key in keysToRemove)
-        {
-            if (sessionListUIDictionary.TryGetValue(key, out GameObject uiToDelete))
-            {
-                Destroy(uiToDelete);
-                sessionListUIDictionary.Remove(key);
-            }
-        }
+        // foreach (var key in keysToRemove)
+        // {
+        //     if (sessionListUIDictionary.TryGetValue(key, out GameObject uiToDelete))
+        //     {
+        //         Destroy(uiToDelete);
+        //         sessionListUIDictionary.Remove(key);
+        //     }
+        // }
     }
 
     private void CompareLists(List<SessionInfo> sessionList)
