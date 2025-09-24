@@ -165,11 +165,10 @@ namespace Play
             do
             {
                 bgmInstance.getPlaybackState(out state);
-                yield return null; // �� �����Ӹ��� Ȯ��
+                yield return null; // 다음 프레임까지 대기
             } while (state != FMOD.Studio.PLAYBACK_STATE.STOPPED);
 
-            UnityEngine.Debug.Log("�뷡�� �������ϴ�!");
-            onComplete?.Invoke(); // �ݹ� ����
+            onComplete?.Invoke(); // 재생 완료
         }
         #endregion
 
