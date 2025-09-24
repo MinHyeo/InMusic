@@ -217,6 +217,10 @@ public class ReadyStartController : MonoBehaviour
         {
             foreach (var player in allPlayers)
             {
+                if (player == null || player.Object == null || !player.Object.IsValid)
+                {
+                    continue; 
+                }
                 // SharedModeMasterClient가 아닌 플레이어 확인
                 bool isSharedModeMasterClient = SharedModeMasterClientTracker.IsPlayerSharedModeMasterClient(player.Object.InputAuthority);
                 

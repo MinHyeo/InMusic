@@ -64,7 +64,7 @@ public class SharedModeMasterClientTracker : NetworkBehaviour
     /// </summary>
     public static bool IsPlayerSharedModeMasterClient(PlayerRef player)
     {
-        if (LocalInstance == null)
+        if (LocalInstance.Object.StateAuthority == null)
             return false;
 
         return LocalInstance.Object.StateAuthority == player;
