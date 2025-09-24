@@ -108,7 +108,7 @@ namespace Play
                 {
                     if (measureLineSpawn == null) continue;
 
-                    coroutines.Add(StartCoroutine(measureLineSpawn.SpawnMeasureLine(speed, unitySpawnDelay, judgementLines[0].position.y)));
+                    //coroutines.Add(StartCoroutine(measureLineSpawn.SpawnMeasureLine(speed, unitySpawnDelay, judgementLines[0].position.y)));
                 }
             }
 
@@ -173,7 +173,7 @@ namespace Play
 
         public void RemoveLine(GameObject line, int isMatch = 0)
         {
-            measureLineSpawners[isMatch].RemoveLine(line);
+            //measureLineSpawners[isMatch].RemoveLine(line);
         }
 
         public void StopAllSpawnCoroutines()
@@ -191,13 +191,13 @@ namespace Play
 
         public void ClearAll()
         {
-            foreach (IMeasureLineSpawn measureLineSpawner in measureLineSpawners)
-            {
-                if (measureLineSpawner != null)
-                {
-                    measureLineSpawner.ClearAll();
-                }
-            }
+            // foreach (IMeasureLineSpawn measureLineSpawner in measureLineSpawners)
+            // {
+            //     if (measureLineSpawner != null)
+            //     {
+            //         measureLineSpawner.ClearAll();
+            //     }
+            // }
 
             foreach (INoteSpawn noteSpawner in noteSpawners)
             {

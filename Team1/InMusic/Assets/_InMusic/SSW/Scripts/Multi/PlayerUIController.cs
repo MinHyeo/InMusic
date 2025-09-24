@@ -51,8 +51,7 @@ public class PlayerUIController : MonoBehaviour
         var players = MultiRoomManager.Instance?.GetAllPlayers() ?? new List<PlayerStateController>();
         Debug.Log($"[PlayerUIController] Found {players.Count} players");
         
-
-        players.RemoveAll(p => p == null || p.Object == null || !p.Object.IsValid);
+        players.RemoveAll(p => p == null  || p.Object == null || !p.Object.IsValid);
         var sortedPlayers = new List<PlayerStateController>(players);
         sortedPlayers.Sort((a, b) => a.Object.InputAuthority.PlayerId.CompareTo(b.Object.InputAuthority.PlayerId));
         
