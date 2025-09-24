@@ -31,6 +31,8 @@ namespace Play
 
         public void Exit()
         {
+            Time.timeScale = 1;
+            
             GameManager.Instance.SetGameState(GameState.MainMenu);
             SceneManager.LoadScene("MainLobbyScene_InMusic");
         }

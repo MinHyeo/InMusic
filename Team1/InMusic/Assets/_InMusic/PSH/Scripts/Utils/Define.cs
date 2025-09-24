@@ -11,7 +11,7 @@ public class Define
         Enter,
         Esc,
         Guide,
-        Setting,
+        //Setting,
         Any
     }
 

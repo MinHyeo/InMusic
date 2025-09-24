@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using System.Collections;
 using System.Timers;
+using Play;
 
 public class BackgroundController : MonoBehaviour
 {
@@ -50,7 +51,7 @@ public class BackgroundController : MonoBehaviour
     void Update()
     {
         if( _bgVideo.clip != null) {
-            if ( _bgVideo.time >= 80f && _resetCoroutine == null)
+            if ( _bgVideo.time >= 84f && _resetCoroutine == null)
             {
                 _resetCoroutine = StartCoroutine(ResetBackgroundTimeCoroutine());
             }
@@ -108,6 +109,9 @@ public class BackgroundController : MonoBehaviour
             _bgVideo.clip = vclip;
             _bgVideo.audioOutputMode = VideoAudioOutputMode.None;
             _bgVideo.Play();
+            // 사운드 플레이?
+            SoundManager.Instance.SongInit(songName, PlayStyle.Highlight);
+            SoundManager.Instance.Play();
             _bgVideo.time = 60f;
         }
 

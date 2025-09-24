@@ -32,15 +32,15 @@ namespace Play
             multiMiss.Init();
         }
 
-        public void UpdateMyScore(float score, float percent, AccuracyType accuracyType)
+        public void UpdateMyScore(float score, AccuracyType accuracyType)
         {
-            MyScoreManager.AddScore(score, percent, accuracyType);
+            MyScoreManager.AddScore(score, accuracyType);
             UpdateComparisonUI();
         }
 
-        public void UpdateMatchScore(float score, float percent, AccuracyType accuracyType)
+        public void UpdateMatchScore(float score, AccuracyType accuracyType)
         {
-            MatchScoreManager.AddScore(score, percent, accuracyType);
+            MatchScoreManager.AddScore(score, accuracyType);
             UpdateComparisonUI();
         }
 

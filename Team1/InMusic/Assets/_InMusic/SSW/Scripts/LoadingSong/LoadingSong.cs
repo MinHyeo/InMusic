@@ -35,13 +35,19 @@ public class LoadingSong : MonoBehaviour
 
     private bool isDataReady = false;
     
-    public static LoadingSong Instance {
-        get {
-            if (_instance == null) {
+    public static LoadingSong Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
                 LoadingSong instance = FindFirstObjectByType<LoadingSong>();
-                if(instance == null) {
+                if(instance == null)
+                {
                     Debug.LogError("LoadingSong이 씬에 배치되어 있지 않음");
-                } else {
+                }
+                else
+                {
                     _instance = instance;
                 }
             }
@@ -49,13 +55,17 @@ public class LoadingSong : MonoBehaviour
         }
     }
 
-    private void Awake() {
-        if (_instance == null) {
-        _instance = this;
-        DontDestroyOnLoad(gameObject);
-        _bgController = BackgroundController.Instance;
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+            _bgController = BackgroundController.Instance;
 
-        } else if (_instance != this) {
+        }
+        else if (_instance != this)
+        {
             Destroy(gameObject);
             return;
         }
@@ -77,7 +87,8 @@ public class LoadingSong : MonoBehaviour
         songTitle = SongTitle;
         artist = Artist;
 
-        if (dotCoroutine != null) {
+        if (dotCoroutine != null)
+        {
             StopCoroutine(dotCoroutine);
             dotCoroutine = null;
         }
@@ -114,13 +125,17 @@ public class LoadingSong : MonoBehaviour
             yield return null;
             UpdateProgressTextAndPosition();
 
-            if(operation.progress < 0.87f) {
+            if (operation.progress < 0.87f)
+            {
                 _loadingBar.fillAmount = operation.progress;
-            } else {
+            }
+            else
+            {
                 timer += Time.unscaledDeltaTime / 3;
                 _loadingBar.fillAmount = Mathf.Lerp(0.87f, 1f, timer);
 
-                if(_loadingBar.fillAmount >= 1f) {
+                if (_loadingBar.fillAmount >= 1f)
+                {
                     operation.allowSceneActivation = true;
 
                     //씬 활성화될 때까지 대기
@@ -162,12 +177,14 @@ public class LoadingSong : MonoBehaviour
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        if(arg0.name == loadSceneName) {
+        if(arg0.name == loadSceneName)
+        {
             Debug.Log($"씬 {loadSceneName} 로딩 완료");
             StartCoroutine(Fade(false));
             SceneManager.sceneLoaded -= OnSceneLoaded;
 
-            if (dotCoroutine != null) {
+            if (dotCoroutine != null)
+            {
                 StopCoroutine(dotCoroutine);
                 dotCoroutine = null;
                 isDataReady = false;

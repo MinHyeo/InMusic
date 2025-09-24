@@ -87,10 +87,10 @@ public class InputManager : MonoBehaviour
             uIKeyPress.Invoke(Define.UIControl.Guide);
         }
         //F10: Setting
-        if (Input.GetKeyDown(KeyCode.F10))
-        {
-            uIKeyPress.Invoke(Define.UIControl.Setting);
-        }
+        // if (Input.GetKeyDown(KeyCode.F10))
+        // {
+        //     uIKeyPress.Invoke(Define.UIControl.Setting);
+        // }
         yield return null;
     }
 
@@ -143,11 +143,11 @@ public class InputManager : MonoBehaviour
         {
             uIKeyPress.Invoke(Define.UIControl.Guide);
         }
-        //F10: Setting
-        if (Input.GetKeyDown(KeyCode.F10))
-        {
-            uIKeyPress.Invoke(Define.UIControl.Setting);
-        }
+        // //F10: Setting
+        // if (Input.GetKeyDown(KeyCode.F10))
+        // {
+        //     uIKeyPress.Invoke(Define.UIControl.Setting);
+        // }
     }
 
     //�ǹ� ����

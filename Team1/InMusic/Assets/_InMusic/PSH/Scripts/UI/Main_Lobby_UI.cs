@@ -121,9 +121,9 @@ public class Main_Lobby_UI : UI_Base
             case Define.UIControl.Guide:
                 ButtonEvent("KeyGuide");
                 break;
-            case Define.UIControl.Setting:
-                ButtonEvent("Gear");
-                break;
+            // case Define.UIControl.Setting:
+            //     ButtonEvent("Gear");
+            //     break;
         }
     }
     public void GetChangeSignal() {
