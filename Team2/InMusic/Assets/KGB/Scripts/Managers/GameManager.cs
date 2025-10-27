@@ -44,14 +44,16 @@ public class GameManager : MonoBehaviour, IGameManager
 
     void Awake()
     {
+        Debug.Log($"[GameManager] Awake() in {SceneManager.GetActiveScene().name}");
         if (Instance == null)
         {
             Instance = this;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
     }
 
@@ -92,7 +94,8 @@ public class GameManager : MonoBehaviour, IGameManager
 
    public void InitializeGame()
     {
-
+        Debug.Log($"[GameManagerProvider] Instance={GameManagerProvider.Instance}, GameManager.Instance={GameManager.Instance}");
+        Debug.Log($"[GameManager] Initializing... pauseUI={pauseUI}, gameoverUI={gameoverUI}");
         pauseUI.SetActive(false);
         gameoverUI.SetActive(false);
         if (playManager.musicSound.clip.loadState == AudioDataLoadState.Unloaded)

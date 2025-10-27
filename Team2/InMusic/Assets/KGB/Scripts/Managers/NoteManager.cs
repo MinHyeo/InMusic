@@ -37,14 +37,14 @@ public class NoteManager : MonoBehaviour
 
     void Awake()
     {
-        // ΩÃ±€≈Ê ¿ŒΩ∫≈œΩ∫ º≥¡§
         if (Instance == null)
         {
             Instance = this;
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
     }
     void Start()
@@ -201,7 +201,14 @@ public class NoteManager : MonoBehaviour
     {
 
     }
-
+    void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+            Debug.Log("[NoteManager] Instance cleared on destroy");
+        }
+    }
 
 
 }
