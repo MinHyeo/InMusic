@@ -24,6 +24,7 @@ public class Waiting_Room_UI : UI_Base_PSH
     [SerializeField] PlayerStatusUIController playerStatusController;
     [SerializeField] bool isOwner; //방장 유무
     [SerializeField] bool canStart;
+    [SerializeField] bool otherPlayerExist = false;
     [SerializeField] NetworkObject localPlayerObject;
     [SerializeField] NetworkObject otherPlayerObject;
 
@@ -65,8 +66,11 @@ public class Waiting_Room_UI : UI_Base_PSH
     //p2 초기화
     void PlayerEnter(PlayerRef playerRef, NetworkObject networkObject)
     {
-        otherPlayerObject = networkObject;
         PlayerInfo playerInfo = networkObject.GetComponent<PlayerInfo>();
+        if (playerInfo.PlayerRole == PlayerInfo.PlayerType.Host) 
+            return;
+        otherPlayerExist = true;
+        otherPlayerObject = networkObject;
         playerStatusController.SetP2Object(networkObject.gameObject);
         playerStatusController.SetPlayerName(1, playerInfo.PlayerName.ToString());
         playerStatusController.SetPlayerStatus(1, false, false);
@@ -77,7 +81,7 @@ public class Waiting_Room_UI : UI_Base_PSH
     void PlayerLeft(PlayerRef playerRef)
     {
         Debug.Log($"플레이어 나감: {playerRef.PlayerId}");
-
+        otherPlayerExist = false;
         if (playerRef.PlayerId != 2)
         {
             //세션 연결 끊기
@@ -289,23 +293,30 @@ public class Waiting_Room_UI : UI_Base_PSH
     public void UpdateAllPlayerStatus()
     {
         PlayerInfo me = localPlayerObject.GetComponent<PlayerInfo>();
-        PlayerInfo you = otherPlayerObject.GetComponent<PlayerInfo>();
+        PlayerInfo you = null;
         Debug.Log($"내 상태: 준비 {me.IsReady} 방장 {me.IsOwner}");
-        Debug.Log($"너 상태: 준비 {you.IsReady} 방장{you.IsOwner}");
 
         isOwner = me.IsOwner;
+
+        if (otherPlayerExist) {
+            you = otherPlayerObject.GetComponent<PlayerInfo>();
+            Debug.Log($"너 상태: 준비 {you.IsReady} 방장{you.IsOwner}");
+        }
 
         if (me.PlayerRole == PlayerInfo.PlayerType.Host)
         {
             playerStatusController.SetPlayerStatus(0, me.IsReady, isOwner);
-            playerStatusController.SetPlayerStatus(1, you.IsReady, you.IsOwner);
             playerStatusController.SetRoomOwner(isOwner);
+            if(otherPlayerExist)
+                playerStatusController.SetPlayerStatus(1, you.IsReady, you.IsOwner);
         }
         else
         {
             playerStatusController.SetPlayerStatus(1, me.IsReady, isOwner);
-            playerStatusController.SetPlayerStatus(0, you.IsReady, you.IsOwner);
-            playerStatusController.SetRoomOwner(you.IsOwner);
+            if (otherPlayerExist) {
+                playerStatusController.SetPlayerStatus(0, you.IsReady, you.IsOwner);
+                playerStatusController.SetRoomOwner(you.IsOwner);
+            }
         }
 
         if (you.IsReady && me.IsReady && curMusicItem.GetComponent<MusicItem>().HasBMS)
@@ -314,17 +325,12 @@ public class Waiting_Room_UI : UI_Base_PSH
             Debug.Log("시작 가능");
         }
         else
-        {
             canStart = false;
-        }
 
-        if (isOwner) {
+        if (isOwner) 
             InitOwnerReadyButton();
-        }
         else
-        {
             InitClintReadyButton();
-        }
     }
 
     #region Player Controll

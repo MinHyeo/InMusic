@@ -1833,7 +1833,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 327107594}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 949884793}
+        m_TargetAssemblyTypeName: GameOverUI, Assembly-CSharp
+        m_MethodName: Restart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &327107594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2545,7 +2557,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 460565828}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 949884793}
+        m_TargetAssemblyTypeName: GameOverUI, Assembly-CSharp
+        m_MethodName: Exit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &460565828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4301,7 +4325,6 @@ MonoBehaviour:
   - {fileID: 719971134}
   - {fileID: 719971133}
   - {fileID: 719971132}
-  keys: 64000000660000006a0000006b000000
 --- !u!61 &719971132
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6928,7 +6951,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1430499787}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 949884793}
+        m_TargetAssemblyTypeName: GameOverUI, Assembly-CSharp
+        m_MethodName: MusicSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1430499787
 MonoBehaviour:
   m_ObjectHideFlags: 0

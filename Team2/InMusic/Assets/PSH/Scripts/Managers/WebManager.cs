@@ -110,6 +110,7 @@ public class WebManager : MonoBehaviour
     #region 로그 가져오기
     public void GetMusicLogs()
     {
+        GameManager_PSH.Data.isLogReady = false;
         StartCoroutine(GetLogsFromServer(GameManager_PSH.Data.GetPlayerID()));
     }
 
