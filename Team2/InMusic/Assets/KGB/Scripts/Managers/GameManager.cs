@@ -44,14 +44,16 @@ public class GameManager : MonoBehaviour, IGameManager
 
     void Awake()
     {
+        Debug.Log($"[GameManager] Awake() in {SceneManager.GetActiveScene().name}");
         if (Instance == null)
         {
             Instance = this;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
     }
 
@@ -72,7 +74,7 @@ public class GameManager : MonoBehaviour, IGameManager
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(!pauseUI.activeSelf)
+            if (!pauseUI.activeSelf)
                 PauseGame();
         }
     }
@@ -83,16 +85,16 @@ public class GameManager : MonoBehaviour, IGameManager
         //Debug.Log(path + "/BMS");
         //curBMS = BMSManager.Instance.ParseBMS(path+"/BMS");
         curBMS = GameManager_PSH.Instance.GetComponent<MusicData>().BMS;
-        
     }
     public void SetResourcePath(string path) //선택한 노래 경로받아서 저장
     {
         resourcePath = path;
     }
 
-   public void InitializeGame()
+    public void InitializeGame()
     {
-
+        Debug.Log($"[GameManagerProvider] Instance={GameManagerProvider.Instance}, GameManager.Instance={GameManager.Instance}");
+        Debug.Log($"[GameManager] Initializing... pauseUI={pauseUI}, gameoverUI={gameoverUI}");
         pauseUI.SetActive(false);
         gameoverUI.SetActive(false);
         if (playManager.musicSound.clip.loadState == AudioDataLoadState.Unloaded)
@@ -117,7 +119,6 @@ public class GameManager : MonoBehaviour, IGameManager
         maxCombo = 0;   //최대 콤보수
         combo = 0; //현재 콤포
         LoadingScreen.Instance.SceneReady();
-        
 
         StartGame();
         Debug.Log("Game Initialized");
@@ -169,11 +170,10 @@ public class GameManager : MonoBehaviour, IGameManager
         totalScore += scoreToAdd;
         totalNotesPlayed++;
         accuracy = Mathf.Clamp(accuracy - accuracyPenalty, 0f, 100f);
-        if(curHP <= 0)
+        if (curHP <= 0)
         {
             GameOver();
         }
-
         // 마지막 노트에서 점수 조정
         if (totalNotesPlayed == totalNotes)
         {
@@ -211,7 +211,7 @@ public class GameManager : MonoBehaviour, IGameManager
     {
         await Task.Delay(3000);
         resultUI.InitResult();
-        
+
     }
     private async void ResumCount()
     {
@@ -226,7 +226,7 @@ public class GameManager : MonoBehaviour, IGameManager
         playManager.musicSound.Play();
         if (playManager.videoPlayer.clip != null)
             playManager.videoPlayer.Play();
-     }
+    }
 
     public void PauseGame()
     {
@@ -245,8 +245,7 @@ public class GameManager : MonoBehaviour, IGameManager
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Time.timeScale = 1f; // 씬 로드 후 타임스케일 초기화
-
+        Time.timeScale = 1f; // 씬 로드 후 타임스케일 초기
     }
 
     private void OnDestroy()

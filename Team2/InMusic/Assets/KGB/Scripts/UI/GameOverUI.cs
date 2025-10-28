@@ -59,11 +59,11 @@ public class GameOverUI : MonoBehaviour
     }
     public void MusicSelect()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(2);
     }
     public void Exit()
     {
-        SceneManager.LoadScene(2); //메인화면으로 가야함 임시로 선택화면
+        SceneManager.LoadScene(0); 
     }
 
     private void UpdateButtonSelection()

@@ -37,14 +37,14 @@ public class NoteManager : MonoBehaviour
 
     void Awake()
     {
-        // 싱글톤 인스턴스 설정
         if (Instance == null)
         {
             Instance = this;
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
     }
     void Start()
@@ -90,8 +90,8 @@ public class NoteManager : MonoBehaviour
     {
         for (int i = 0; i < lineCount; i++)
         {
-            
-            Vector3 spawnPosition = new Vector3(spawnArea.position.x, i * lineInterval - noteOffset+ startPositionY+ spawnArea.position.y, 0);
+
+            Vector3 spawnPosition = new Vector3(spawnArea.position.x, i * lineInterval - noteOffset + startPositionY + spawnArea.position.y, 0);
 
             GameObject measureLine = measureLinePool.GetObject();
             measureLine.transform.position = spawnPosition;
@@ -120,7 +120,7 @@ public class NoteManager : MonoBehaviour
 
                 if (noteID != "00") // 노트가 있는 경우만 처리
                 {
-                   
+
                     float beatPosition = (float)i / divisions;
                     float yPosition = noteData.measure * lineInterval + +(lineInterval / divisions) * i + startPositionY + spawnArea.position.y;
 
@@ -128,7 +128,7 @@ public class NoteManager : MonoBehaviour
                     if (noteID == "02")
                     {
                         // "02"일 때 프리팹 생성 //노래를 시작시키는 투명노트
-                        GameObject specialNote = Instantiate(songStartNote, new Vector3(xPosition, yPosition-1f, 0), Quaternion.identity, spawnArea);
+                        GameObject specialNote = Instantiate(songStartNote, new Vector3(xPosition, yPosition - 1f, 0), Quaternion.identity, spawnArea);
                         specialNote.GetComponent<ScrollDown>().SetScrollSpeed(baseScrollSpeed);
                         specialNote.SetActive(true);
                     }
@@ -164,7 +164,6 @@ public class NoteManager : MonoBehaviour
             Debug.LogWarning("No GameManager instance found.");
         }
     }
-
     private float GetChannelPosition(int channel)
     {
         switch (channel)
@@ -197,11 +196,14 @@ public class NoteManager : MonoBehaviour
             return notePrefab1; // 기본 값
     }
 
-    void UpdateMeasureLines()
+    void UpdateMeasureLines() {}
+
+    void OnDestroy()
     {
-
+        if (Instance == this)
+        {
+            Instance = null;
+            Debug.Log("[NoteManager] Instance cleared on destroy");
+        }
     }
-
-
-
 }
