@@ -59,7 +59,7 @@ public class GameOverUI : MonoBehaviour
     }
     public void MusicSelect()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(1);
     }
     public void Exit()
     {
