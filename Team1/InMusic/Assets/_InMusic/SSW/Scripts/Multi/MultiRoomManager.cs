@@ -88,10 +88,6 @@ public class MultiRoomManager : Managers.Singleton<MultiRoomManager>
             Debug.Log("[MultiRoomManager] PlayerUIController found! Forcing UI refresh due to player left");
             uiController.ForceRefreshAllSlots();
         }
-        else
-        {
-            Debug.LogError("[MultiRoomManager] PlayerUIController NOT FOUND!");
-        }
     }
 
     public void DestroyRoomManager()

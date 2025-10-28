@@ -19,7 +19,7 @@ namespace Play
             ObjectPoolManager.Instance.CreatePool(note2Prefab);
         }
 
-        public IEnumerator SpawnNote(int noteId, int channel, float spawnTime, float speed, int noteCount, float travelTime)
+        public IEnumerator SpawnNote(int noteId, int channel, float spawnTime, float speed, int noteCount, float travelTime, bool isMatch = false)
         {
             yield return new WaitForSeconds(spawnTime - Time.time);
 
@@ -28,7 +28,7 @@ namespace Play
             note.transform.position = noteSpawnPoints[channel - 11].position;
 
             Note noteScript = note.GetComponent<Note>();
-            noteScript.Initialize(noteId, channel, speed, 1000000 / noteCount, travelTime);
+            noteScript.Initialize(noteId, channel, speed, 1000000 / noteCount, travelTime, isMatch);
             activeNotes.Add(noteScript);
         }
 
@@ -41,7 +41,7 @@ namespace Play
             {
                 if (note.Channel == channel)
                 {
-                    float timeDifference = Mathf.Abs(note.targetTime - pressTime);
+                    float timeDifference = Mathf.Abs(note.TargetTime - pressTime);
                     if (timeDifference < minTimeDifference)
                     {
                         minTimeDifference = timeDifference;

@@ -108,7 +108,7 @@ namespace Play
                 {
                     if (measureLineSpawn == null) continue;
 
-                    coroutines.Add(StartCoroutine(measureLineSpawn.SpawnMeasureLine(speed, unitySpawnDelay, judgementLines[0].position.y)));
+                    //coroutines.Add(StartCoroutine(measureLineSpawn.SpawnMeasureLine(speed, unitySpawnDelay, judgementLines[0].position.y)));
                 }
             }
 
@@ -136,11 +136,18 @@ namespace Play
                     float noteAppearTime = barTime + ((measureInterval / divisions) / 1000) * i;
                     float spawnTime = songStartTime + noteAppearTime - travelTime;
 
-                    foreach (INoteSpawn noteSpawner in noteSpawners)
+                    // foreach (INoteSpawn noteSpawner in noteSpawners)
+                    // {
+                    //     if (noteSpawner == null) continue;
+
+                    //     coroutines.Add(StartCoroutine(noteSpawner.SpawnNote(noteId, channel, spawnTime, speed, noteCount, travelTime)));
+                    // }
+                    for (int j = 0; j < noteSpawners.Length; j++)
                     {
+                        INoteSpawn noteSpawner = noteSpawners[j];
                         if (noteSpawner == null) continue;
 
-                        coroutines.Add(StartCoroutine(noteSpawner.SpawnNote(noteId, channel, spawnTime, speed, noteCount, travelTime)));
+                        coroutines.Add(StartCoroutine(noteSpawner.SpawnNote(noteId, channel, spawnTime, speed, noteCount, travelTime, j == 1)));
                     }
                     noteId++;
                 }
@@ -166,7 +173,7 @@ namespace Play
 
         public void RemoveLine(GameObject line, int isMatch = 0)
         {
-            measureLineSpawners[isMatch].RemoveLine(line);
+            //measureLineSpawners[isMatch].RemoveLine(line);
         }
 
         public void StopAllSpawnCoroutines()
@@ -184,13 +191,13 @@ namespace Play
 
         public void ClearAll()
         {
-            foreach (IMeasureLineSpawn measureLineSpawner in measureLineSpawners)
-            {
-                if (measureLineSpawner != null)
-                {
-                    measureLineSpawner.ClearAll();
-                }
-            }
+            // foreach (IMeasureLineSpawn measureLineSpawner in measureLineSpawners)
+            // {
+            //     if (measureLineSpawner != null)
+            //     {
+            //         measureLineSpawner.ClearAll();
+            //     }
+            // }
 
             foreach (INoteSpawn noteSpawner in noteSpawners)
             {

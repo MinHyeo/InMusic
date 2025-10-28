@@ -20,7 +20,7 @@ public class SharedModeMasterClientTracker : NetworkBehaviour
         // 로컬 플레이어가 SharedModeMasterClient인지 즉시 확인
         if (Runner.IsSharedModeMasterClient)
         {
-            Debug.Log($"[SharedModeMasterClientTracker] 🔴 LOCAL PLAYER IS SHARED MODE MASTER CLIENT!");
+            Debug.Log($"[SharedModeMasterClientTracker] LOCAL PLAYER IS SHARED MODE MASTER CLIENT!");
         }
     }
 
@@ -35,8 +35,12 @@ public class SharedModeMasterClientTracker : NetworkBehaviour
             _wasLocalPlayerMasterClient = isCurrentlyMasterClient;
             
             // UI 업데이트를 약간 지연시켜 네트워크 동기화 완료 후 실행
-            Invoke(nameof(NotifyMasterClientChanged), 0.1f);
+            Invoke(nameof(SetMasterClientChangedFlagAfterDelay), 0.1f);
         }
+    }
+    private void SetMasterClientChangedFlagAfterDelay()
+    {
+        _masterClientChangedFlag = true;
     }
 
     public static bool NotifyMasterClientChanged()
@@ -60,7 +64,7 @@ public class SharedModeMasterClientTracker : NetworkBehaviour
     /// </summary>
     public static bool IsPlayerSharedModeMasterClient(PlayerRef player)
     {
-        if (LocalInstance == null)
+        if (LocalInstance.Object.StateAuthority == null)
             return false;
 
         return LocalInstance.Object.StateAuthority == player;

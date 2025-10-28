@@ -4,6 +4,7 @@ using System;
 using SongList;
 using UI_BASE_PSH;
 using SSW;
+using Play;
 
 
 public class SingleMenuController : MonoBehaviour
@@ -65,6 +66,7 @@ public class SingleMenuController : MonoBehaviour
             Debug.Log("[SingleMenuController] No active network runner found.");
             LoadMainScene();
         }
+        SoundManager.Instance.End();
         Debug.Log("Back Button Clicked");
     }
     private void LoadMainScene()

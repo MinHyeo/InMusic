@@ -172,6 +172,18 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
+        Scene loadedScene = SceneManager.GetActiveScene();
+        if (loadedScene.name == "MultiRoomScene_InMusic")
+        {
+            if (runner.IsSharedModeMasterClient)
+            {
+                if (!runner.SessionInfo.IsOpen)
+                {
+                    runner.SessionInfo.IsOpen = true;
+                    Debug.Log("[NetworkManager] Session is now OPEN again on scene load.");
+                }
+            }
+        }
         OnGamePlayLoadingCompleted?.Invoke();
         //throw new NotImplementedException();
     }
@@ -198,30 +210,28 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
         CompareLists(sessionList);
     }
 
-    //
     private void DeleteOldSessionsFromUI(List<SessionInfo> sessionList)
     {
-        bool isContained = false;
-        GameObject uiToDelete = null;
+        var keysToRemove = new List<string>();
 
-        foreach (KeyValuePair<string, GameObject> kvp in sessionListUIDictionary)
+        foreach (var kvp in sessionListUIDictionary)
         {
             string sessionKey = kvp.Key;
 
-            foreach (SessionInfo sessionInfo in sessionList)
-            {
-                if (sessionInfo.Name == sessionKey)
-                {
-                    isContained = true;
-                    break;
-                }
-            }
+            var sessionInfo = sessionList.Find(s => s.Name == sessionKey);
 
-            if (!isContained)
+            if (sessionInfo == null || !sessionInfo.IsOpen)
             {
-                uiToDelete = kvp.Value;
-                sessionListUIDictionary.Remove(sessionKey);
+                keysToRemove.Add(sessionKey);
+            }
+        }
+
+        foreach (var key in keysToRemove)
+        {
+            if (sessionListUIDictionary.TryGetValue(key, out GameObject uiToDelete))
+            {
                 Destroy(uiToDelete);
+                sessionListUIDictionary.Remove(key);
             }
         }
     }
@@ -230,6 +240,11 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
     {
         foreach (SessionInfo session in sessionList)
         {
+            if (!session.IsOpen || !session.IsVisible)
+            {
+                continue;
+            }
+
             if (sessionListUIDictionary.ContainsKey(session.Name))
             {
                 UpdateEntryUI(session);
@@ -248,7 +263,7 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
 
         entryScript.UpdateRoom(session);
 
-        newEntry.SetActive(session.IsVisible);
+        newEntry.SetActive(session.IsVisible && session.IsOpen);
     }
 
     private void CreateEntryUI(SessionInfo session)
@@ -270,7 +285,7 @@ public class NetworkManager : Singleton<NetworkManager>, INetworkRunnerCallbacks
         sessionListUIDictionary.Add(session.Name, newEntry);
         entryScript.CreateRoom(session);
 
-        newEntry.SetActive(session.IsVisible);
+        newEntry.SetActive(session.IsVisible && session.IsOpen);
     }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)

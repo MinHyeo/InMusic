@@ -110,8 +110,18 @@ namespace Play
             //�뷡 ���̶���Ʈ ����
             if (style == PlayStyle.Highlight)
             {
-                int startTimeMilliseconds = Mathf.RoundToInt(startTimeSeconds * 1000);
-                bgmInstance.setTimelinePosition(startTimeMilliseconds);
+                bgmInstance.setTimelinePosition(startTimeSeconds * 1000);
+                //bgmInstance.setParameterByName("BGM_Loop", 0f);
+                RuntimeManager.StudioSystem.setParameterByName("BGM_Loop", 0f);
+                bgmInstance.getParameterByName("BGM_Loop", out float value);
+                UnityEngine.Debug.Log($"Highlight Play {value}");
+            }
+            else
+            {
+                //bgmInstance.setParameterByName("BGM_Loop", 1f);
+                RuntimeManager.StudioSystem.setParameterByName("BGM_Loop", 1f);
+                bgmInstance.getParameterByName("BGM_Loop", out float value);
+                UnityEngine.Debug.Log($"Highlight Play {value}");
             }
         }
 
@@ -155,11 +165,10 @@ namespace Play
             do
             {
                 bgmInstance.getPlaybackState(out state);
-                yield return null; // �� �����Ӹ��� Ȯ��
+                yield return null; // 다음 프레임까지 대기
             } while (state != FMOD.Studio.PLAYBACK_STATE.STOPPED);
 
-            UnityEngine.Debug.Log("�뷡�� �������ϴ�!");
-            onComplete?.Invoke(); // �ݹ� ����
+            onComplete?.Invoke(); // 재생 완료
         }
         #endregion
 
