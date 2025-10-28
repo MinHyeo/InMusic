@@ -9,6 +9,7 @@ public class Single_Lobby_UI : UI_Base_PSH
 
     [Header("현재 선택한 음악 항목 확인")]
     [SerializeField] private GameObject curMusicItem;
+    [SerializeField] private bool HasBMS;
 
     [Header("선택한 음악의 정보 확인")]
     [SerializeField] private GameObject musicInfo;
@@ -81,6 +82,7 @@ public class Single_Lobby_UI : UI_Base_PSH
         curMusicItem = listItem.gameObject;
         curMusicItem.GetComponent<MusicItem>().ItemSelect();
         mInfo.UpdateInfo(curMusicItem.GetComponent<MusicItem>());
+        SetBMS();
     }
 
     private void OnTriggerExit2D(Collider2D listItem)
@@ -105,15 +107,8 @@ public class Single_Lobby_UI : UI_Base_PSH
                 break;
             case "Enter":
                 if (curMusicItem.GetComponent<MusicItem>().HasBMS) {
-                    //키 입력 이벤트 제거
-                    GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
-
-                    //다음 씬에 넘겨줄 MusicData 값 설정
-                    GameManager_PSH.Data.SetData(curMusicItem.GetComponent<MusicItem>());
-
                     //SceneManager.LoadScene(1);
                     LoadingScreen.Instance.LoadScene("KGB_SinglePlay", GameManager_PSH.Data.GetData());
-                    //LoadingScreen.Instance.LoadScene("KGB_SinglePlay");
                 }
                 else
                 {
@@ -154,6 +149,25 @@ public class Single_Lobby_UI : UI_Base_PSH
             case Define_PSH.UIControl.Setting:
                 ButtonEvent("Gear");
                 break;
+        }
+    }
+
+    void SetBMS()
+    {
+        if (curMusicItem.GetComponent<MusicItem>().HasBMS)
+        {
+            GameManager_PSH.Input.RemoveUIKeyEvent(SingleLobbyKeyEvent);
+            //다음 씬에 넘겨줄 MusicData 값 설정
+            GameManager_PSH.Data.SetData(curMusicItem.GetComponent<MusicItem>());
+            //게임 시작
+            Debug.Log("BMS 할당 완료");
+            HasBMS = true;
+        }
+        else
+        {
+            //popupUI = GameManager_PSH.Resource.Instantiate("Notice_UI");
+            Debug.LogWarning("BMS 파일이 없는 곡");
+            HasBMS = false;
         }
     }
 

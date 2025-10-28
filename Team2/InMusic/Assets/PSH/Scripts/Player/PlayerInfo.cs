@@ -4,7 +4,8 @@ using System; // Action을 사용하기 위해 추가
 
 public class PlayerInfo : NetworkBehaviour
 {
-    public enum PlayerType{
+    public enum PlayerType
+    {
         Host = 0,
         Client = 1
     }
@@ -12,9 +13,9 @@ public class PlayerInfo : NetworkBehaviour
 
     [Networked]
     public NetworkString<_16> PlayerName { get; set; } // 16자 제한
-    
+
     [Networked]
-    public PlayerType PlayerRole{get; set;}
+    public PlayerType PlayerRole { get; set; }
 
     [Networked, OnChangedRender(nameof(OnLoadStateChangedRender))]
     public bool IsLoaded { get; set; } = false;
@@ -22,35 +23,29 @@ public class PlayerInfo : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnStateChangedRender))]
     public bool IsOwner { get; set; } = false;
 
-    [Networked ,OnChangedRender(nameof(OnStateChangedRender))]
+    [Networked, OnChangedRender(nameof(OnStateChangedRender))]
     // 플레이어 준비 상태
     public bool IsReady { get; set; }
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void Rpc_SetReady(bool readyState)
-    {
-        //서버는 IsReady [Networked] 변수를 업데이트, 이 변경은 Fusion에 의해 자동으로 동기화
-        IsReady = readyState;
-        Debug.Log($"서버에서 {PlayerName.ToString()}의 준비 상태를 {IsReady}로 설정.");
-    }
-
+    /// <summary>
+    /// 방장 넘기기용 RPC 통신
+    /// </summary>
+    /// <param name="setOwner"></param>
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void Rpc_SetOwner(bool setOwner)
-    {
+    public void Rpc_SetOwner(bool setOwner){
         IsOwner = setOwner;
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void Rpc_InitReady()
-    {
+    public void Rpc_InitReady(){
         IsReady = false;
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.InputAuthority)]
-    public void Rpc_CheckLoad()
-    {
-        GameObject gamePlayeySceneRespawner= GameObject.Find("PlayerRespawner");
-        if (gamePlayeySceneRespawner == null) {
+    public void Rpc_CheckLoad(){
+        GameObject gamePlayeySceneRespawner = GameObject.Find("PlayerRespawner");
+        if (gamePlayeySceneRespawner == null)
+        {
             Debug.Log("현재 다른 씬");
             return;
         }
@@ -61,7 +56,8 @@ public class PlayerInfo : NetworkBehaviour
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
     public void Rpc_KickUser(RpcInfo info = default)
     {
-        if (info.Source == NetworkManager.runnerInstance.LocalPlayer) {
+        if (info.Source == NetworkManager.runnerInstance.LocalPlayer)
+        {
             return;
         }
         GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI");
@@ -74,7 +70,6 @@ public class PlayerInfo : NetworkBehaviour
             Debug.LogWarning("Waiting_Room_UI GameObject를 찾을 수 없습니다.");
         }
     }
-
     public override void Spawned()
     {
         if (Object.HasInputAuthority)
@@ -83,7 +78,8 @@ public class PlayerInfo : NetworkBehaviour
             Debug.Log($"로컬 플레이어({Object.InputAuthority.PlayerId}) 이름 설정: {PlayerName}");
             //초기 준비 상태 설정
             IsReady = false;
-            if (GameManager_PSH.PlayerRole) {
+            if (GameManager_PSH.PlayerRole)
+            {
                 PlayerRole = PlayerType.Host;
                 IsOwner = true;
             }
@@ -98,13 +94,14 @@ public class PlayerInfo : NetworkBehaviour
         IsLoaded = true;
     }
 
-    public void InitReady() {
+    public void InitReady()
+    {
         Rpc_InitReady();
     }
 
-    public void OnStateChangedRender() 
+    public void OnStateChangedRender()
     {
-        GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI"); 
+        GameObject waitingRoomUIManager = GameObject.Find("Waiting_Room_UI");
         if (waitingRoomUIManager != null)
         {
             waitingRoomUIManager.GetComponent<Waiting_Room_UI>().UpdateAllPlayerStatus();
@@ -115,8 +112,8 @@ public class PlayerInfo : NetworkBehaviour
         }
     }
 
-    public void OnLoadStateChangedRender() {
+    public void OnLoadStateChangedRender()
+    {
         Rpc_CheckLoad();
     }
-
 }
